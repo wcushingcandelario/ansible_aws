@@ -1,0 +1,8 @@
+---
+- name: Upgrade OneView using MySQL
+  shell: java -cp {{ ovc_install_dir }}/installFiles/OVC_Install/*:{{ jetty_dir }}/lib/ext/mysql-connector-java-5.1.34-bin.jar com.oneview.tools.OVCInstaller -u -s silentInstaller.properties -y
+  args:
+        chdir: "{{ ovc_install_dir }}/installFiles/OVC_Install"
+  sudo_user: jetty
+
+

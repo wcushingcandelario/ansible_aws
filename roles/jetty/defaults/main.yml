@@ -1,0 +1,7 @@
+---
+jetty_version: '9.3.7.v20160115'
+jetty_src_dir: /usr/src
+jetty_dst_dir: /opt
+jetty_group_name: jetty
+jetty_user_login: jetty 
+jetty_dir: /opt/jetty

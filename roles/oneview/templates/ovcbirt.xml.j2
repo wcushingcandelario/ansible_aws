@@ -1,0 +1,27 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="reportac" class="org.eclipse.jetty.webapp.WebAppContext">
+	<Set name="contextPath">/OVCBIRT</Set>
+	<Set name="war">{{ html_root }}/ovcdashboard/webapps/OVCBIRT.war</Set>
+	<Set name="extractWAR">true</Set>
+
+
+	<New class="org.eclipse.jetty.plus.jndi.Resource">
+		<Arg>
+			<Ref id="reportac"/>
+		</Arg>
+		<Arg>jdbc/ds</Arg>
+		<Arg>
+			
+			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
+				<Set name="URL">{{ ovcDB_scheme }}://{{ ovcDB_host }}:{{ ovcDB_port }}/{{ ovcDB_db }}</Set>
+				<Set name="user">root</Set>
+				<Set name="password">root</Set>
+			
+			</New>
+		</Arg>
+	</New> 
+
+</Configure>
+

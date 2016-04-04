@@ -1,0 +1,8 @@
+- name: NGINX | Installing NGINX
+  yum:
+    name: nginx
+    state: latest
+  register: yumoutput
+
+- name: debug
+  debug: var=yumoutput

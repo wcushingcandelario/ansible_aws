@@ -1,0 +1,70 @@
+---
+# Commented out lines are being referenced from either a higher level,
+# or are being referenced from the hosts inventory/dynamically built from other variables
+# ie: webapps_dir is defined in a j2 template
+
+ovc_install_dir: /opt/ovc
+ovcServer_port: 8080
+ovcServer_scheme: http
+ovc_pos_url: "{{ inventory_hostname }}"
+
+ecommerce_fromClient_context: yacceleratorstorefront
+ecommerce_fromClient_logout_relative_url: /en/logout
+
+ecommerce_fromServer_baseSiteId: apparel-uk
+
+ecommerce_vendor: 1
+
+mailServer_encrypted_password: RbNGPpJVCZ6CIIvlQ8d/cg==
+mailServer_from: donotreply@company.com
+mailServer_smtp_auth: true
+mailServer_smtp_host: smtp.gmail.com
+mailServer_smtp_port: 587
+mailServer_smtp_starttls_enable: true
+mailServer_username: donotreply@company.com
+
+#oort_cloud: "http://poscluster1.ovcdemo.com:8080/cometd,http://poscluster2.ovcdemo.com:8080/cometd"
+#oort_url: "http://poscluster1.ovcdemo.com:8080/cometd"
+
+ovcDB_auto_generate: true
+ovcDB_db: xdb
+ovcDB_driver: com.mysql.jdbc.Driver
+ovcDB_encrypted_password: 3cMK44+lA2o\=
+ovcDB_host: 127.0.0.1
+ovcDB_params: autoReconnect=true
+ovcDB_port: 3306
+ovcDB_scheme: jdbc:mysql
+ovcDB_type: mysql
+ovcDB_username: root
+ovcDB_password: root
+
+#MongoDB configurations
+
+ovcNOSQLDB_host: 127.0.0.1
+ovcNOSQLDB_port: 27017
+ovcNOSQLDB_db: xdb
+ovcNOSQLDB_username: root
+ovcNOSQLDB_encrypted_password: 3cMK44+lA2o\=
+ovcNOSQLDB_connectionsPerHost: 20
+ovcNOSQLDB_maxWaitTime: 5000
+ovcNOSQLDB_connectTimeout: 5000
+ovcNOSQLDB_socketTimeout: 5000
+
+ecommerce_fromServer_host: demo.demo.com
+ecommerce_fromClient_host: demo.demo.com
+
+ecommerce_fromServer_port: 443
+ecommerce_fromClient_port: 443
+
+ecommerce_fromServer_scheme: https
+ecommerce_fromClient_scheme: https
+
+jetty_contexXml_create: false
+jetty_sysProps_append: true
+jetty_loginConf_create: true
+
+#####################################
+
+posMClientSyncUpdater_store: OvcStore
+ovc_dashboard_locale: America/New_York
+html_root: /var/www/html

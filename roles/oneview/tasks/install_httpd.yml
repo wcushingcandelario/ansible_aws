@@ -1,0 +1,66 @@
+---
+# These tasks install http and the php modules.
+
+- name: Install PHP packages
+  yum: name={{ item }} state=present
+  with_items:
+   - httpd24
+   - php55
+   - freetds
+   - php55-devel
+   - php55-common
+   - php55-mysqlnd
+   - php55-pdo
+   - php55-odbc
+   - php55-xml
+   - php55-mbstring
+   - php55-pdo
+  sudo: yes
+
+- name: Create "{{ webserver_user }}" group
+  group:
+    name="{{ webserver_user }}"
+    state=present
+    system=yes
+  sudo: yes
+
+- name: Create "{{ webserver_user }}" user
+  user:
+    name="{{ webserver_user }}"
+    group="{{ webserver_user }}"
+    state=present
+    system=yes
+  sudo: yes
+
+- name: Setup Apache httpd.conf
+  template:
+    src=httpd.conf.j2
+    dest=/etc/httpd/conf/httpd.conf
+    owner=root
+    group=root
+    mode=0644
+  sudo: yes
+
+- name: Enable freetds when using MS-SQL
+  template:
+    src=freetds.conf.j2
+    dest=/etc/freetds.conf
+    owner=root
+    group=root
+    mode=0644
+  when: "{{ ovcDB_scheme | search('.*sqlserver.*') }}"
+  sudo: yes
+
+- name: httpd service started
+  service: name=httpd state=started enabled=yes
+  sudo: yes
+
+
+#- name: Place PHP test template
+#  template:
+#    src=index.php.j2
+#    dest={{ html_root}}/index.php
+#    owner="{{ webserver_user }}"
+#    group="{{ webserver_user }}"
+#    mode=0644
+#  sudo: yes

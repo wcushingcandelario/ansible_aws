@@ -1,0 +1,8 @@
+---
+- include: install_httpd.yml
+  when: ansible_distribution == 'Amazon'
+
+- include: install_httpd_el7.yml
+  when: ansible_distribution == 'CentOS'
+
+- include: install_dashboard.yml

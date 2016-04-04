@@ -1,0 +1,70 @@
+ecommerce.fromClient.context={{ ecommerce_fromClient_context }}
+ecommerce.fromClient.host={{ ecommerce_fromClient_host }}
+ecommerce.fromClient.logout_relative_url={{ ecommerce_fromClient_logout_relative_url }}
+ecommerce.fromClient.port={{ ecommerce_fromClient_port }}
+ecommerce.fromClient.scheme={{ ecommerce_fromClient_scheme }}
+
+ecommerce.fromServer.baseSiteId={{ ecommerce_fromServer_baseSiteId }}
+ecommerce.fromServer.host={{ ecommerce_fromServer_host }}
+ecommerce.fromServer.port={{ ecommerce_fromServer_port }}
+ecommerce.fromServer.scheme={{ ecommerce_fromServer_scheme }}
+
+ecommerce.vendor={{ ecommerce_vendor }}
+
+install.dir={{ ovc_install_dir }}
+
+jdbcDriverJar.file={{ ovc_install_dir }}/installFiles/mysql-connector-java-5.1.34-bin.jar
+
+mailServer.encrypted.password={{ mailServer_encrypted_password }}
+mailServer.from={{ mailServer_from }}
+mailServer.smtp.auth={{ mailServer_smtp_auth }}
+mailServer.smtp.host={{ mailServer_smtp_host }}
+mailServer.smtp.port={{ mailServer_smtp_port }}
+mailServer.smtp.starttls.enable={{ mailServer_smtp_starttls_enable }}
+mailServer.username={{ mailServer_username }}
+
+{% if oort_cloud is defined %}
+oort.cloud={{ oort_cloud }}
+oort.url={{ hostvars[inventory_hostname]['inventory_hostname'] }}
+{% endif %}
+
+ovcDB.auto_generate={{ ovcDB_auto_generate }}
+ovcDB.db={{ ovcDB_db }}
+ovcDB.driver={{ ovcDB_driver }}
+ovcDB.encrypted.password={{ ovcDB_encrypted_password }}
+ovcDB.host={{ ovcDB_host }}
+ovcDB.params={{ ovcDB_params }}
+ovcDB.port={{ ovcDB_port }}
+ovcDB.scheme={{ ovcDB_scheme }}
+ovcDB.type={{ ovcDB_type }}
+ovcDB.username={{ ovcDB_username }}
+
+ovcNOSQLDB.host={{ ovcNOSQLDB_host }}
+ovcNOSQLDB.port={{ ovcNOSQLDB_port }}
+ovcNOSQLDB.db={{ ovcNOSQLDB_db }}
+ovcNOSQLDB.username={{ ovcNOSQLDB_username }}
+ovcNOSQLDB.encrypted.password={{ ovcNOSQLDB_encrypted_password }}
+ovcNOSQLDB.connectionsPerHost={{ ovcNOSQLDB_connectionsPerHost }}
+ovcNOSQLDB.maxWaitTime={{ ovcNOSQLDB_maxWaitTime }}
+ovcNOSQLDB.connectTimeout={{ ovcNOSQLDB_connectTimeout }}
+ovcNOSQLDB.socketTimeout={{ ovcNOSQLDB_socketTimeout }}
+
+{% if ovc_server_url is defined %}
+ovcServer.host={{ ovc_server_url }}
+{% elif ovc_server_url is not defined %}
+ovcServer.host={{ inventory_hostname }}
+{% endif %}
+ovcServer.port={{ ovcServer_port }}
+ovcServer.scheme={{ ovcServer_scheme }}
+
+jetty.dir={{ jetty_dir }}
+{% if upgrade_version_from is defined %}
+jetty.contextXml.create=false
+jetty.sysProps.append=false
+jetty.loginConf.create=false
+upgrade.version.from={{ upgrade_version_from }}
+{% else %}
+jetty.contextXml.create={{ jetty_contexXml_create }}
+jetty.sysProps.append={{ jetty_sysProps_append }}
+jetty.loginConf.create={{ jetty_loginConf_create }}
+{% endif %}

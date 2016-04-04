@@ -1,0 +1,10 @@
+- name: Finding latest Amazon Linux ami
+  ec2_ami_find:
+    name: "amzn-ami-hvm-*.0.x86_64-gp2"
+    sort: name
+    sort_order: descending
+    region: "{{ region }}" 
+    sort_end: 1
+  register: ami_find
+
+#- debug: msg="{{ ami_find.results }}"

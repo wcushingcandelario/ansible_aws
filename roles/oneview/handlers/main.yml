@@ -1,0 +1,15 @@
+---
+# Handler for the webtier: handlers are called by other plays.
+# See http://docs.ansible.com/playbooks_intro.html for more information about handlers.
+
+- name: Restart iptables
+  service: name=iptables state=restarted
+  sudo: yes
+  
+- name: Restart Apache
+  service: name=httpd state=restarted
+  sudo: yes
+
+- name: Restart Jetty
+  service: name=jetty state=restarted
+  sudo: yes

@@ -1,0 +1,15 @@
+---
+
+- name: Launch latest AWS Linux EC2 instance
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+      SSHKey: yec-production
+      InstanceType: t2.micro
+      SecurityGroupID: sg-e1bce884
+      VPCSubnetID: subnet-362ac56f
+      IAMRole: logmanagement
+  roles:
+      - find_ami
+      - launch_build

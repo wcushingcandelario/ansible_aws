@@ -1,0 +1,196 @@
+---
+# This playbook will install the OneView Server.
+- name: Stop Jetty
+  service:
+    name: jetty
+    state: stopped
+    enabled: yes
+  when: "upgrade_version_from is not defined"
+  sudo: yes
+
+- name: Clear Jetty logs
+  command: "rm -f *log*"
+  args:
+    chdir: "{{ jetty_dir }}/logs"
+  when: "upgrade_version_from is not defined"
+  sudo_user: jetty
+
+- name: Delete OVC Root Directory
+  file:
+    path="{{ ovc_install_dir }}"
+    state=absent
+  when: "upgrade_version_from is not defined"
+  sudo: yes
+
+- name: Delete OVC Install Files Directory
+  file:
+    path="{{ ovc_install_dir }}/installFiles"
+    state=absent
+  when: "upgrade_version_from is defined"
+  sudo: yes
+
+- name: Create OVC Install Files Directory
+  file:
+    path="{{ ovc_install_dir }}/installFiles"
+    mode=g+rw
+    state=directory
+    owner=jetty
+    group=jetty
+  sudo: yes
+
+- name: Download OneView Install from S3
+  #command: "aws s3 cp s3://ovc-releases/{{ ovc_version }}/oneview-install-{{ ovc_version }}.zip {{ ovc_server_user_dir }}/oneview-install.zip"
+  command: "aws s3 cp s3://ovc-releases/{{ ovc_version }}/oneview-install.zip {{ ovc_server_user_dir }}/oneview-install.zip"
+  #s3: 
+    #bucket: ovc-releases
+    #object: "/{{ ovc_version }}/oneview-install.zip"
+    #dest: "{{ ovc_server_user_dir }}/oneview-install.zip"
+    #mode: get
+  when: s3install is defined
+  sudo: yes
+
+- name: Make jetty user own OVC Install zip when downloaded from S3
+  file:
+    path: "{{ ovc_server_user_dir }}/oneview-install.zip"
+    mode: ug+rw
+    owner: jetty
+    group: jetty
+  when: s3install is defined
+  sudo: yes
+
+- name: Copy MySQL JAR to jetty
+  copy:
+    src: mysql-connector-java-5.1.34-bin.jar
+    dest: "{{ jetty_dir }}/lib/ext/mysql-connector-java-5.1.34-bin.jar"
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Copy Nevado shaded jar to jetty
+  copy:
+    src: nevado-shaded-1.3.2.3.jar
+    dest: "{{ jetty_dir }}/lib/ext/nevado-shaded-1.3.2.3.jar"
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Copy OneView install file
+  copy:
+    src: oneview-install.zip
+    dest: "{{ ovc_server_user_dir }}/oneview-install.zip"
+    owner: jetty
+    group: jetty
+    mode: ug+rw
+  when: s3install is not defined
+  sudo: yes
+
+- name: Unzip oneview-install
+  unarchive:
+    copy: no
+    src: "{{ ovc_server_user_dir }}/oneview-install.zip"
+    dest: "{{ ovc_install_dir }}/installFiles/"
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Make jetty user own OVC Install
+  file:
+    path: "{{ ovc_install_dir }}/installFiles"
+    mode: ug+rw
+    recurse: yes
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Create silentInstaller file
+  template:
+    src: silentInstaller.properties.j2
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Install/silentInstaller.properties"
+    owner: jetty
+  sudo: yes
+
+- name: Create jetty context.xml file
+  template:
+    src: context.xml.j2
+    dest: "{{ jetty_dir }}/webapps/context.xml"
+    owner: jetty
+  sudo: yes
+
+- name: Create jetty pos.d contexts directory
+  file:
+    path="{{ jetty_dir }}/contexts/pos.d"
+    state=directory
+    mode=ug+rw
+    owner=jetty
+    group=jetty
+  sudo: yes
+
+- name: Create jetty pos.d webapps directory
+  file:
+    path="{{ jetty_dir }}/webapps/pos.d"
+    state=directory
+    mode=ug+rw
+    owner=jetty
+    group=jetty
+  sudo: yes
+
+- name: Create jetty pos-override.xml file
+  template:
+    src: pos-override.xml.j2
+    dest: "{{ jetty_dir }}/webapps/pos.d/pos-override.xml"
+    owner: jetty
+  sudo: yes
+
+- name: Install OneView
+  include: oneview-install-command.yml
+  when: "upgrade_version_from is not defined"
+
+- name: Upgrade OneView
+  include: oneview-upgrade-command.yml
+  when: "upgrade_version_from is defined"
+
+- name: Copy MySQL JAR to ovc/lib/ext
+  copy:
+    src: mysql-connector-java-5.1.34-bin.jar
+    dest: "{{ ovc_install_dir }}/lib/ext/mysql-connector-java-5.1.34-bin.jar"
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Make OVC init script executable
+  file:
+    path: "{{ ovc_install_dir }}/bin/initOVCServer.sh"
+    mode: ug+rwx
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Set the Hybris store to import from in tools.properties
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
+    state: present
+    regexp: "posMClientSyncUpdater.store.*"
+    line: "posMClientSyncUpdater.store={{ posMClientSyncUpdater_store }}"
+  sudo: yes
+
+
+- name: Add jetty VM arguments
+  lineinfile:
+    dest: "{{ jetty_dir }}/start.ini"
+    state: present
+    line: "-Dovc.config.dir={{ ovc_install_dir }}/Platform-Dynamic-Objects/config"
+  sudo: yes
+
+- name: Import ONLY from OvcElecStore when importing from electronics
+  template:
+    src: locationWhiteList.ovccfg.j2
+    dest: "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationWhiteList.ovccfg"
+  sudo_user: jetty
+  when: "{{ ecommerce_fromServer_baseSiteId | search('.*electronics.*') }}"
+
+- name: Start Jetty
+  service:
+    name: jetty
+    state: started
+    enabled: yes
+  sudo: yes

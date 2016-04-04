@@ -1,0 +1,45 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+    
+- name: Install ntp 
+  yum: name=ntp state=present
+  tags: ntp
+
+- name: Install unzip 
+  yum: name=unzip state=present
+  tags: unzip
+
+- name: Configure ntp file
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  tags: ntp
+  notify: restart ntp
+  sudo: yes
+
+- name: Start the ntp service
+  service: name=ntpd state=started enabled=yes
+  tags: ntp
+  sudo: yes
+  
+# - name: Remove localtime file from CentOS
+    # file: 
+      # path: "/etc/localtime"
+      # state: absent
+  # sudo: yes
+  
+# - name: Stat timezone localtime file
+  # stat:
+    # path: "/etc/localtime"
+  # sudo: yes
+  # register: localtime
+  
+# - name: Delete timezone localtime if not Eastern
+  # file:
+    # dest: "/etc/localtime"
+    # state: absent
+  # sudo: yes
+  # when: localtime.stat.islnk != true
+      
+- name: Install OpenJDK7
+  yum: name=java-1.7.0-openjdk-devel.x86_64 state=present
+  sudo: yes
+  

@@ -1,0 +1,174 @@
+---
+- name: Create jetty group
+  group:
+    name: "{{ jetty_group_name }}"
+    state: present
+    system: yes
+  become: yes
+  become_user: root
+
+- name: Create jetty user
+  user:
+    name: "{{ jetty_user_login }}"
+    state: present
+    comment: 'Jetty server user'
+    createhome: no
+    group: "{{ jetty_group_name }}"
+    home: "{{ jetty_dir }}"
+    shell: /bin/bash
+    system: yes
+  become: yes
+  become_user: root
+
+- name: Update ec2-user to include jetty group
+  user:
+    name: ec2-user
+    groups: "{{ jetty_group_name }}"
+    append: yes
+  become: yes
+  become_user: root
+
+- stat:
+    path: "{{ jetty_src_dir }}/jetty"
+  become: yes
+  become_user: root
+  register: jetty_package
+
+- name: Copy jetty install file
+  copy:
+    src: jetty-distribution-{{ jetty_version }}.tar.gz
+    dest: "{{ jetty_src_dir }}/jetty-distribution-{{ jetty_version }}.tar.gz"
+    owner: jetty
+    group: jetty
+  become: yes
+  become_user: root
+
+# - name: Download distribution tarball
+#   get_url:
+#     url: "http://eclipse.org/downloads/download.php?file=/jetty/{{ jetty_version }}/dist/jetty-distribution-{{ jetty_version }}.tar.gz&r=1"
+#     dest: "{{ jetty_src_dir }}"
+#   when: jetty_package.stat.exists == False
+#   become: yes
+#   become_user: root
+
+- name: Unpack distribution
+  shell: "tar zxf {{ jetty_src_dir }}/jetty-distribution-{{ jetty_version }}.tar.gz && chown -R {{ jetty_user_login }}:{{ jetty_group_name}} jetty-distribution-{{ jetty_version }}"
+  args:
+    chdir: "{{ jetty_dst_dir }}"
+    creates: "{{ jetty_dst_dir}}/jetty-distribution-{{ jetty_version }}"
+  when: jetty_package.stat.exists == False
+  become: yes
+  become_user: root
+
+- name: Create jetty symlink directory
+  file:
+    src: "{{ jetty_dst_dir }}/jetty-distribution-{{ jetty_version}}"
+    dest: "{{ jetty_dst_dir }}/jetty"
+    state: link
+  become: yes
+  become_user: root
+
+- name: Set jetty directory permissions
+  file:
+    path: "{{ jetty_dst_dir }}/jetty-distribution-{{ jetty_version}}"
+    mode: g+s
+  become: yes
+  become_user: root
+
+- name: Create init script link
+  file:
+    src: "{{ jetty_dst_dir}}/jetty/bin/jetty.sh"
+    dest: /etc/init.d/jetty
+    state: link
+  become: yes
+  become_user: root
+
+- name: Remove test.war
+  file:
+    path: "{{ jetty_dst_dir}}/jetty/webapps/test.war"
+    state: absent
+  become: yes
+  become_user: root
+
+- name: Remove test.xml
+  file:
+    path: "{{ jetty_dst_dir}}/jetty/contexts/test.xml"
+    state: absent
+  become: yes
+  become_user: root
+
+
+- name: Create default configuration file
+  template:
+    src: default-jetty.j2
+    dest: /etc/default/jetty
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart Jetty
+  become: yes
+  become_user: root
+
+- name: Comment exec reference in jettys start.ini
+  lineinfile:
+    dest: "{{ jetty_dst_dir}}/jetty/start.ini"
+    state: present
+    regexp: ".*--module=home-base-warning"
+    line: "# --module=home-base-warning"
+  become: yes
+  become_user: root
+
+- name: Add modules in jettys start.ini
+  lineinfile:
+    dest: "{{ jetty_dst_dir}}/jetty/start.ini"
+    state: present
+    line: "{{ item.line }}"
+  with_items:
+    - { line: '--module=logging'}
+    - { line: '--module=servlets'}
+    - { line: '--module=jaas'}
+    - { line: '--module=logging'}
+  become: yes
+  become_user: root
+
+- name: Copy logging.mod file
+  copy:
+    src: logging.mod
+    dest: "{{ jetty_dst_dir }}/jetty/modules/logging.mod"
+    owner: jetty
+    group: jetty
+  become: yes
+  become_user: root
+
+- name: Copy logback.xml file
+  copy:
+    src: logback.xml
+    dest: "{{ jetty_dst_dir }}/jetty/resources/logback.xml"
+    owner: jetty
+    group: jetty
+  become: yes
+  become_user: root
+
+- name: Copy jetty-logging.properties file
+  copy:
+    src: jetty-logging.properties
+    dest: "{{ jetty_dst_dir }}/jetty/resources/jetty-logging.properties"
+    owner: jetty
+    group: jetty
+  become: yes
+  become_user: root
+
+- name: Enable Jetty to start on boot
+  service:
+    name: jetty
+    state: stopped
+    enabled: yes
+  become: yes
+  become_user: root
+
+- name: Pull jetty logging jars
+  command: "java -jar start.jar --add-to-start=logging"
+  args:
+    chdir: "{{ jetty_dir }}"
+  become: yes
+  become_user: jetty

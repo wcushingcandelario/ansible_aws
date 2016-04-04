@@ -1,0 +1,82 @@
+---
+# These tasks will install the OneView Dashboard
+
+- name: Delete OVC Dashboard Directory
+  file:
+    path: "{{ html_root }}/ovcdashboard"
+    state: absent
+  sudo: yes
+
+- name: Create OVC Dashboard Directory
+  file:
+    path: "{{ html_root }}"
+    mode: g+rw
+    state: directory
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+  sudo: yes
+
+- name: Make jetty user own ovcdashboard.zip
+  file:
+    path: "{{ ovc_install_dir }}/installFiles/OVC_Dashboard/ovcdashboard.zip"
+    mode: ug+rw
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Unzip OVC Dashboard
+  unarchive:
+    copy: no
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Dashboard/ovcdashboard.zip"
+    dest: "{{ html_root }}"
+    mode: ug+x
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+  sudo: yes
+
+- name: Setup database connection
+  template:
+    src: database.php.j2
+    dest: "{{ html_root }}/ovcdashboard/app/Config/database.php"
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+  sudo: yes
+
+- name: Configure PHP settings
+  template:
+    src: setting_var.php.j2
+    dest: "{{ html_root }}/ovcdashboard/app/Config/setting_var.php"
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+  sudo: yes
+
+- name: Set PHP timezone
+  lineinfile:
+    dest: /etc/php.ini
+    state: present
+    line: "date.timezone = {{ ovc_dashboard_locale }}"
+  sudo: yes
+
+- name: Create ovcbirt.xml context file
+  template:
+    src: ovcbirt.xml.j2
+    dest: "{{ jetty_dir }}/webapps/ovcbirt.xml"
+  sudo_user: jetty
+
+- name: Make jetty user own OVCBirt.war
+  file:
+    path: "{{ html_root }}/ovcdashboard/webapps/OVCBIRT.war"
+    mode: ug+rw
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Set ovcdashboard/app to 777
+  file:
+    path: "{{ html_root }}/ovcdashboard/app"
+    mode: a+rwx
+    recurse: yes
+    state: directory
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+  sudo: yes

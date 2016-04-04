@@ -1,0 +1,8 @@
+- hosts: just_created
+  remote_user: ec2-user
+  sudo: yes
+  roles:
+    - common
+#    - db
+    - jetty
+    - oneview

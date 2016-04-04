@@ -1,0 +1,28 @@
+- name: launch RDS instance
+  local_action:
+    module: rds
+    command: create
+    instance_name: "{{ environment }}"
+    vpc_security_groups: "{{ rds_security_group }}"
+    upgrade: yes
+    subnet: "{{ rds_subnet_group }}"
+    region: "{{ region }}"
+    ## The next 4 settings are dependant on whether it is prod or preprod. Preprod doesn't need multiAZ. 
+    multi_zone: "{{ multirdszone }}"
+    maint_window: Sat:22:00-Sat:23:15
+    backup_window: 00:00-01:00
+#    force_failover: no
+    publicly_accessible: no
+    db_engine: MySQL
+    size: 10
+    instance_type: db.m1.small
+    wait: yes
+    wait_timeout: 1200
+    username: mysql_admin
+    password: 1nsecure
+    tags:
+      Environment: ovc-{{ environment }}
+      Application: ovc
+  register: rds_instance
+
+- debug: msg="{{ rds_instance }}"

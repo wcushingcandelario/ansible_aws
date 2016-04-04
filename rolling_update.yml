@@ -1,0 +1,41 @@
+--
+- name: Update a running auto scaling configuration with a new ami
+  hosts: 127.0.0.1
+
+  vars:
+    new_image_id:
+      # The instance id to create a new image of to update {{ deploy_type }} auto scaling group with
+    new_lc_name:
+      #  The new Launch Config name. Example, 2015-02-17_{{ deploy_type }}
+
+  tasks:
+  - ec2_lc:
+      name: "{{ new_lc_name }}"
+      image_id: "{{ new_image_id }}"
+      key_name: yec-production
+      region: us-east-1
+      security_groups: sg-a10c21c4
+      instance_type: t2.medium
+      instance_monitoring: yes
+      assign_public_ip: yes
+      instance_profile_name: logmanagement
+      user_data: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
+    register: debuglaunch
+  - name: debug script copy
+    debug: "var=debuglaunch"
+
+
+  - ec2_asg:
+      name: "{{ asg_name }}"
+      launch_config_name: "{{ new_lc_name }}"
+      replace_all_instances: yes
+      health_check_type: ELB
+      min_size: 2
+      max_size: 5
+      desired_capacity: 2
+      region: us-east-1
+      tags:
+        - Name: "{{ deploy_type }}"
+    register: asgupdate
+  - name: debug auto scaling update
+    debug: "var=asglaunch"

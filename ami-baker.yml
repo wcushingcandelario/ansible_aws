@@ -1,0 +1,82 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+  - find_ami
+  tasks:
+#  - include_vars: roles/ec2-create/defaults/main.yml
+
+  - name: launch temporary instance
+    local_action:
+      module: ec2
+      assign_public_ip: yes
+      region: "{{ region }}"
+      key_name: "{{ key }}"
+      group_id: "{{ ovc_security_groups }}"
+      instance_type: "{{ instance_type }}"
+      vpc_subnet_id: "{{ vpc_subnet_public }}"
+      image: "{{ ami_find.results[0].ami_id }}"
+      wait: yes
+      instance_profile_name: CodeDeploy-EC2
+      #wait_timeout: 500
+      exact_count: 1
+      count_tag:
+        role: ami_builder
+      instance_tags:
+        role: ami_builder
+        Name: ami_builder       
+    register: ami_instance
+
+  #- name: waiting for ssh to start
+  #  wait_for: port=22 host={{ ami_instance.tagged_instances.0.public_ip }} timeout=300
+  #            search_regex=OpenSSH
+  - name: wait for ssh to come up
+    wait_for: host={{ item.private_ip }} delay=60 port=22 state=started timeout=320
+    with_items: ami_instance.instances
+
+  - name: add host to group
+    add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created
+
+- hosts: just_created
+#- hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
+  remote_user: ec2-user
+  become: sudo
+  roles:
+    - common
+    #- db
+    - jetty
+    - oneview
+
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: bundle ami
+    local_action:
+      module: ec2_ami
+      instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+      region: "{{ region }}"
+      state: present
+      description: This was provisioned {{ ansible_date_time.iso8601 }}
+      name: ovc-{{ ansible_date_time.epoch }}
+      wait: yes
+    register: amioutput
+
+  - name: terminate temporary instance
+    local_action:
+      module: ec2
+      state: absent
+      region: "{{ region }}"
+      instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+
+  - name: debug
+    debug: var=amioutput
+
+  # - name: create vars file with  new ami info
+  #   copy:
+  #     content: |
+  #            image_id: {{ amioutput.image_id }}
+  #            lc_suffix: {{ ansible_date_time.epoch }}
+  #     dest: vars/settings.yml
+    # when: deploy is defined and deploy|bool == True
