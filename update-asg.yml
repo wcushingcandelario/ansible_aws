@@ -12,13 +12,13 @@
   - ec2_lc:
       name: "{{ new_lc_name }}"
       image_id: "{{ new_image_id }}"
-      key_name: yec-production
-      region: us-east-1
-      security_groups: sg-a10c21c4
-      instance_type: t2.medium
+      key_name: "{{ keyname }}"
+      region: "{{ region }}"
+      security_groups: "{{ securitygroup }}"
+      instance_type: "{{ instancetype }}" 
       instance_monitoring: yes
       assign_public_ip: yes
-      instance_profile_name: logmanagement
+      instance_profile_name: "{{ IAMROLE }}"
       user_data: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
     register: debuglaunch
   - name: debug script copy

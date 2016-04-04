@@ -5,11 +5,11 @@
   connection: local
 
   vars:
-      SSHKey: yec-production
-      InstanceType: t2.micro
-      SecurityGroupID: sg-e1bce884
-      VPCSubnetID: subnet-362ac56f
-      IAMRole: logmanagement
+      SSHKey: "{{ sshkey }}"
+      InstanceType: "{{ instancetype }}"
+      SecurityGroupID: "{{ securitygroup }}"
+      VPCSubnetID: "{{ subnetID }}"
+      IAMRole: "{{ IAMROLE }}"
   roles:
       - find_ami
       - launch_build
