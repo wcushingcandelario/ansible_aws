@@ -7,7 +7,7 @@
   vars:
       SSHKey: "{{ sshkey }}"
       InstanceType: "{{ instancetype }}"
-      SecurityGroupID: "{{ securitygroup }}"
+      SecurityGroupID: "{{ ovc_security_groups }}"
       VPCSubnetID: "{{ subnetID }}"
       IAMRole: "{{ IAMROLE }}"
   roles:

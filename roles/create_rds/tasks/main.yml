@@ -2,7 +2,7 @@
   local_action:
     module: rds
     command: create
-    instance_name: "{{ environment }}"
+    instance_name: "{{ environment_name }}"
     vpc_security_groups: "{{ rds_security_group }}"
     upgrade: yes
     subnet: "{{ rds_subnet_group }}"
@@ -21,7 +21,7 @@
     username: mysql_admin
     password: 1nsecure
     tags:
-      Environment: ovc-{{ environment }}
+      Environment: ovc-{{ environment_name }}
       Application: ovc
   register: rds_instance
 

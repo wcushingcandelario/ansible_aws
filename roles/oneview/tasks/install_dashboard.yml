@@ -62,6 +62,7 @@
     src: ovcbirt.xml.j2
     dest: "{{ jetty_dir }}/webapps/ovcbirt.xml"
   sudo_user: jetty
+  sudo: yes
 
 - name: Make jetty user own OVCBirt.war
   file:

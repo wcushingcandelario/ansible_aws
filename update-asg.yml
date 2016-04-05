@@ -14,7 +14,7 @@
       image_id: "{{ new_image_id }}"
       key_name: "{{ keyname }}"
       region: "{{ region }}"
-      security_groups: "{{ securitygroup }}"
+      security_groups: "{{ ovc_security_groups }}"
       instance_type: "{{ instancetype }}" 
       instance_monitoring: yes
       assign_public_ip: yes
@@ -33,7 +33,7 @@
       min_size: 2
       max_size: 5
       desired_capacity: 2
-      region: us-east-1
+      region: "{{ region }}"
       tags:
         - Name: "{{ deploy_type }}"
     register: asgupdate

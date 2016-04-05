@@ -29,14 +29,15 @@ mailServer_username: donotreply@company.com
 ovcDB_auto_generate: true
 ovcDB_db: xdb
 ovcDB_driver: com.mysql.jdbc.Driver
-ovcDB_encrypted_password: 3cMK44+lA2o\=
-ovcDB_host: 127.0.0.1
+ovcDB_encrypted_password: O1a/vWM7eekCFD6PEhnqUg==
+#ovcDB_host: 127.0.0.1
+ovcDB_host: utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
 ovcDB_params: autoReconnect=true
 ovcDB_port: 3306
 ovcDB_scheme: jdbc:mysql
 ovcDB_type: mysql
-ovcDB_username: root
-ovcDB_password: root
+ovcDB_username: mysql_admin
+ovcDB_password: 1nsecure
 
 #MongoDB configurations
 

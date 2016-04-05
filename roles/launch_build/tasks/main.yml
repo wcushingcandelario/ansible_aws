@@ -5,10 +5,10 @@
     instance_type: "{{ InstanceType }}"
     key_name: "{{ SSHKey }}"
     wait: yes
-    region: us-east-1
+    region: "{{ region }}"
     group_id: "{{ SecurityGroupID }}"
     vpc_subnet_id: "{{ VPCSubnetID }}"
-    instance_profile_name: "{{ IAMRole }}"
+    instance_profile_name: "{{ IAMROLE }}"
     assign_public_ip: yes
     user_data: "{{ lookup('file', 'userdata-' + deploy_type ) }}"
     instance_tags:

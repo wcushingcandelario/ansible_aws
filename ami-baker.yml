@@ -59,7 +59,7 @@
       region: "{{ region }}"
       state: present
       description: This was provisioned {{ ansible_date_time.iso8601 }}
-      name: ovc-{{ ansible_date_time.epoch }}
+      name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
       wait: yes
     register: amioutput
 
