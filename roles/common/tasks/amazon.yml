@@ -1,25 +1,10 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-#- name: Install ntp
-  #yum: name=ntp state=present
-  #tags: ntp
-#
-#- name: Install unzip
-  #yum: name=unzip state=present
-  #tags: unzip
+- name: Patch the server before anything. 
+  yum: name=* state=latest
+  sudo: yes
 
-#- name: Configure ntp file
-  #template: src=ntp.conf.j2 dest=/etc/ntp.conf
-  #tags: ntp
-  #notify: restart ntp
-  #sudo: yes
-#
-#- name: Start the ntp service
-  #service: name=ntpd state=started enabled=yes
-  #tags: ntp
-  #sudo: yes
-#
 - name: Set the timezone to Eastern
   lineinfile:
     dest: "/etc/sysconfig/clock"

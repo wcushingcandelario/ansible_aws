@@ -1,8 +1,10 @@
 ---
+
+- name: first make sure dest exists. 
+  file: dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config state=directory
+
 - name: Copy out the unifiedConfig files
-  copy: src=templates/unifiedConfig.properties.* dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/
-#roles/mongod/files/secret dest={{ mongodb_datadir_prefix }}/secret owner=mongod group=mongod mode=0400
-
-- name: Copy out the tools properties files
-  copy: src=templates/tools.properties.* dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/
-
+  copy: src={{ item }} dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/ owner=jetty
+  with_fileglob:
+    - /opt/ansible/playbooks/roles/oneview/files/*.properties.*
+  sudo: yes

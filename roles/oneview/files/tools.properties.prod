@@ -1,0 +1,20 @@
+#Updated by OVCInstaller
+#Thu Apr 07 10:56:35 EDT 2016
+posMClientSyncUpdater.store=OvcStore
+importFiles.postProductsImportsDir=eCommerceImportFiles2
+eComServer.baseSiteId=apparel-uk
+posMClientSyncUpdater.browser=true
+calendarDataImport.encrypted.password=1D6DfFDrZTJ2/Tt17Fn2l4tj+MlBjtnm+CR4NGge5+tey6ynSbEyAoFBDvVmipoN
+ovcServer.prop_dir=/opt/ovc/Platform-Dynamic-Objects/config
+importFiles.externalUserDir=importDefaultExternalUser
+importFiles.rootLocationsDir=importRootLocations
+ovcServer.webcontext=
+ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
+appDataImporter.async=false
+calendarDataImport.username=eCommerce
+appDataImporter.useLocalHashcodes=true
+importFiles.standaloneImportsDir=eCommerceImportFiles
+eComServer.encrypted.password=lHl7Wgn7Z0YCFD6PEhnqUg\=\=
+eComServer.retailerId=defaultRetailer
+ovcServer.customer-all=ovc-all
+eComServer.username=eCommerce

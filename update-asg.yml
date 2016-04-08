@@ -6,7 +6,8 @@
 
   vars:
     #new_image_id:
-    userdata: scripts/{{ deploy_type }}-user_data.sh
+    #userdata: scripts/{{ deploy_type }}-user_data.sh
+    userdata: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
     new_lc_name: lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}
 
   tasks:
@@ -18,11 +19,17 @@
     include_vars: vars/prod.yml
     when: deploy_type == "prod"
 
+  - name: find latest version of ovc ami
+    roles: 
+      - findovcami
+    when: new_image_id is undefined
+
   - name: create new Launch Config
     local_action:
       module: ec2_lc
       name: "{{ new_lc_name }}"
       image_id: "{{ new_image_id }}"
+      #image_id: "{{ ami_find.results[0].ami_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: "{{ ovc_security_groups }}"

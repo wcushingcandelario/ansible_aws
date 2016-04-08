@@ -8,3 +8,6 @@
   register: ami_find
 
 - debug: msg="{{ ami_find.results }}"
+
+- vars: 
+  new_image_id: "{{ ami_find.results[0].ami_id }}"
