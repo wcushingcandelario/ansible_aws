@@ -70,3 +70,7 @@
   tags: fail2ban
   notify: restart fail2ban
   sudo: yes
+
+- name: create www-data user
+  user: name=www-data comment="apache user" 
+  sudo: yes

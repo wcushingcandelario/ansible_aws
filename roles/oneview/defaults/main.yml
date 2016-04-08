@@ -69,3 +69,4 @@ jetty_loginConf_create: true
 posMClientSyncUpdater_store: OvcStore
 ovc_dashboard_locale: America/New_York
 html_root: /var/www/html
+webserver_user: www-data

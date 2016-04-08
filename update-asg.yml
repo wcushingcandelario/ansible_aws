@@ -1,41 +1,57 @@
---
+---
 - name: Update a running auto scaling configuration with a new ami
-  hosts: 127.0.0.1
+  hosts: localhost
+  connection: local
+  #gather_facts: False
 
   vars:
-    new_image_id:
-      # The instance id to create a new image of to update {{ deploy_type }} auto scaling group with
-    new_lc_name:
-      #  The new Launch Config name. Example, 2015-02-17_{{ deploy_type }}
+    #new_image_id:
+    new_lc_name: lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}
 
   tasks:
-  - ec2_lc:
+  - name: include pre-prod vars if pre-prod
+    include_vars: vars/pre-prod.yml
+    when: deploy_type == "pre-prod"  
+
+  - name: include prod vars if prod
+    include_vars: vars/prod.yml
+    when: deploy_type == "prod"
+
+  - name: create new Launch Config
+    local_action:
+      module: ec2_lc
       name: "{{ new_lc_name }}"
       image_id: "{{ new_image_id }}"
-      key_name: "{{ keyname }}"
+      key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: "{{ ovc_security_groups }}"
-      instance_type: "{{ instancetype }}" 
+      instance_type: "{{ instance_type }}" 
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
-      user_data: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
+      #user_data: "{{ lookup('file', deploy_type + '-user_data.sh') }}"
     register: debuglaunch
+
   - name: debug script copy
     debug: "var=debuglaunch"
 
 
-  - ec2_asg:
+  - name: update autoscaling group
+    local_action:
+      module: ec2_asg
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
       replace_all_instances: yes
+      replace_batch_size: 1
+      wait_for_instances: true
       health_check_type: ELB
       min_size: 2
       max_size: 5
-      desired_capacity: 2
+      desired_capacity: "{{ asg_desired_capacity }}"
       region: "{{ region }}"
       tags:
         - Name: "{{ deploy_type }}"
+    #until: asgupdate.viable_instances|int >= asg_desired_capacity|int
     register: asgupdate
   - name: debug auto scaling update
-    debug: "var=asglaunch"
+    debug: "var=asgupdate"

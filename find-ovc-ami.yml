@@ -1,0 +1,9 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+  - findovcami
+  #tasks:
+  #- shell: uptime
+    #register: output
+  #- debug: msg="{{ output }}" 

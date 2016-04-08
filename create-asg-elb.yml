@@ -1,5 +1,5 @@
 ---
-- name: Update a running auto scaling configuration with a new ami
+- name: Create a new ELB, Launch Config and Auto scaling group based on existing AMI
   hosts: localhost
   connection: local
   gather_facts: False
@@ -17,46 +17,56 @@
       region: "{{ region }}"
       connection_draining_timeout: 120
       idle_timeout: 300
-      subnets: "{{ elb-subnets }}"
+      subnets: "{{ elbsubnets }}"
       listeners:
       - protocol: http
         load_balancer_port: 80
         instance_port: 80
       health_check:
         ping_protocol: http # options are http, https, ssl, tcp
-        ping_port: 80
-        ping_path: "/index.html" # not required for tcp or ssl
+        ping_port: 8080
+        ping_path: "/" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
         unhealthy_threshold: 2
         healthy_threshold: 10
-      access_logs:
-        interval: 5 # minutes (defaults to 60)
-        s3_location: "sglogs" # This value is required if access_logs is set
-        s3_prefix: "ELBlogs"
+#      access_logs:
+#        interval: 5 # minutes (defaults to 60)
+#        s3_location: "sglogs" # This value is required if access_logs is set
+#        s3_prefix: "{{ deploy_type }}ELBlogs"
     register: elb_new
+ 
+  - name: debug elb create
+    debug: "var=elb_new"
 
 
   - name: create launch config
-    local_action:ec2_lc:
+    local_action:
+      module: ec2_lc
       name: "{{ new_lc_name }}"
       image_id: "{{ new_image_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
-      security_groups: "{{ ovc_security_groups }}"
+      security_groups: ["{{ ovc_security_groups }}"]
+      #classic_link_vpc_id: "vpc-ccb0b5a9" 
       instance_type: "{{ instance_type }}" 
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
-      user_data: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
+#      user_data: "{{ lookup('file', '/opt/ansible/playbooks/scripts/' + deploy_type + '-user_data.sh') }}"
     register: debuglaunch
+ 
   - name: debug script copy
     debug: "var=debuglaunch"
 
 
-  - ec2_asg:
+  - name: create auto scaling group
+    local_action: 
+      module: ec2_asg
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
+      vpc_zone_identifier: "{{ elbsubnets }}"
+      load_balancers: "{{ deploy_type }}"
       replace_all_instances: yes
       health_check_type: ELB
       min_size: 2
@@ -65,6 +75,7 @@
       region: "{{ region }}"
       tags:
         - Name: "{{ deploy_type }}-{{ ovc_version }}"
-    register: asgupdate
+    register: asglaunch
+
   - name: debug auto scaling update
     debug: "var=asglaunch"
