@@ -1,0 +1,8 @@
+---
+- name: Copy out the unifiedConfig files
+  copy: src=templates/unifiedConfig.properties.* dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/
+#roles/mongod/files/secret dest={{ mongodb_datadir_prefix }}/secret owner=mongod group=mongod mode=0400
+
+- name: Copy out the tools properties files
+  copy: src=templates/tools.properties.* dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/
+

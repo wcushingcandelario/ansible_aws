@@ -5,6 +5,8 @@
 - include: dashboard.yml
   tags: dashboard
 
+- include: config.yml
+
 - name: Start Jetty
   service:
     name: jetty

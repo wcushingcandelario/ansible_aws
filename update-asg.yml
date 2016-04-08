@@ -6,6 +6,7 @@
 
   vars:
     #new_image_id:
+    userdata: scripts/{{ deploy_type }}-user_data.sh
     new_lc_name: lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}
 
   tasks:
@@ -29,7 +30,7 @@
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
-      #user_data: "{{ lookup('file', deploy_type + '-user_data.sh') }}"
+      user_data: "{{ userdata }}"
     register: debuglaunch
 
   - name: debug script copy
