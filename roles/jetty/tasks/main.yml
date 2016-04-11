@@ -1,6 +1,4 @@
 ---
-- include: ssl.yml
-
 - name: Create jetty group
   group:
     name: "{{ jetty_group_name }}"
@@ -29,6 +27,8 @@
     append: yes
   become: yes
   become_user: root
+
+- include: ssl.yml
 
 - stat:
     path: "{{ jetty_src_dir }}/jetty"
