@@ -63,12 +63,12 @@
       wait: yes
     register: amioutput
 
-  #- name: terminate temporary instance
-    #local_action:
-      #module: ec2
-      #state: absent
-      #region: "{{ region }}"
-      #instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+  - name: terminate temporary instance
+    local_action:
+      module: ec2
+      state: absent
+      region: "{{ region }}"
+      instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
 
   - name: debug
     debug: var=amioutput
