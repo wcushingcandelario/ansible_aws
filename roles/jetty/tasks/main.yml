@@ -1,4 +1,6 @@
 ---
+- include: ssl.yml
+
 - name: Create jetty group
   group:
     name: "{{ jetty_group_name }}"
