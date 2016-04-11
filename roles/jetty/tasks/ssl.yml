@@ -1,0 +1,24 @@
+---
+- name: Copy the wildcard cert 
+  copy: 
+    src: 6eb20afcb39167a3.crt
+    dest: /etc/ssl/certs/
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Copy the chain certs
+  copy:
+    src: gd_bundle-g2-g1.crt
+    dest: /etc/ssl/certs/
+    owner: jetty
+    group: jetty
+  sudo: yes
+
+- name: Copy the key
+  copy:
+    src: ovchosting.noencrypt.key
+    dest: /etc/ssl/certs/
+    owner: jetty
+    group: jetty
+  sudo: yes
