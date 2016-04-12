@@ -3,13 +3,22 @@
   include_vars: "ssl-secrets.yml"
   no_log: true
 
-- name: Jetty server | Copy SSL keys
+- name: Jetty Server
   copy: 
-    dest="{{ item.key }}"
-    content="{{ item.value.content }}"
-    owner="{{ item.value.owner }}"
-    group="{{ item.value.group }}"
-    mode="{{ item.value.mode }}"
-  with_dict: ssl_secret_files
+    src: ovchosting_co_uk.tar.gz
+    dest: /var/tmp/ovchosting_co_uk.tar.gz
+
+- name: untar the jetty certs
+  shell: cd /etc/ssl/certs ; tar xzvf /var/tmp/ovchosting_co_uk.tar.gz ; chown root. /etc/ssl/certs/*
   sudo: yes
-  no_log: true 
+
+#- name: Jetty server | Copy SSL keys
+  #copy: 
+    #dest: "{{ item.key }}"
+    #content: "{{ item.value.content }}"
+    #owner: "{{ item.value.owner }}"
+    #group: "{{ item.value.group }}"
+    #mode: "{{ item.value.mode }}"
+  #with_dict: ssl_secret_files
+  #sudo: yes
+##  no_log: true 
