@@ -1,26 +1,15 @@
 ---
-- include_vars: certs.yml
+- name: Jetty Server | Load SSL Keys
+  include_vars: "ssl-secrets.yml"
+  no_log: true
 
-- name: Copy the wildcard cert 
+- name: Jetty server | Copy SSL keys
   copy: 
-    content: "{{ 6eb20afcb39167a3.crt }}"
-    dest: /etc/ssl/certs/6eb20afcb39167a3.crt
-    owner: jetty
-    group: jetty
+    dest="{{ item.key }}"
+    content="{{ item.value.content }}"
+    owner="{{ item.value.owner }}"
+    group="{{ item.value.group }}"
+    mode="{{ item.value.mode }}"
+  with_dict: ssl_secret_files
   sudo: yes
-
-- name: Copy the chain certs
-  copy:
-    content: "{{ gd_bundle-g2-g1.crt }}"
-    dest: /etc/ssl/certs/gd_bundle-g2-g1.crt
-    owner: jetty
-    group: jetty
-  sudo: yes
-
-- name: Copy the key
-  copy:
-    src: "{{ ovchosting.noencrypt.key }}"
-    dest: /etc/ssl/certs/ovchosting.noencrypt.key
-    owner: jetty
-    group: jetty
-  sudo: yes
+#  no_log: true 
