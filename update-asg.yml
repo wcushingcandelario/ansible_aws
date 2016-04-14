@@ -6,8 +6,8 @@
 
   vars:
     #new_image_id:
-    userdata: scripts/{{ deploy_type }}-user_data.sh
-    #userdata: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
+    #userdata: scripts/{{ deploy_type }}-user_data.sh
+    userdata: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
     new_lc_name: lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}
 
   tasks:

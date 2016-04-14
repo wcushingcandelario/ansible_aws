@@ -2,14 +2,14 @@
 
 export ENV=pre-prod
 
-mv /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties.ORIG
+cp /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties.ORIG
 
-mv /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties.$ENV /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
-
-
-mv /opt/ovc/Platform-Dynamic-Objects/config/tools.properties /opt/ovc/Platform-Dynamic-Objects/config/tools.properties.ORIG
-
-mv /opt/ovc/Platform-Dynamic-Objects/config/tools.properties.$ENV /opt/ovc/Platform-Dynamic-Objects/config/tools.properties
+sudo mv /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties.$ENV /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
 
 
-/etc/init.d/jetty restart
+cp /opt/ovc/Platform-Dynamic-Objects/config/tools.properties /opt/ovc/Platform-Dynamic-Objects/config/tools.properties.ORIG
+
+sudo mv /opt/ovc/Platform-Dynamic-Objects/config/tools.properties.$ENV /opt/ovc/Platform-Dynamic-Objects/config/tools.properties
+
+
+sudo /etc/init.d/jetty restart

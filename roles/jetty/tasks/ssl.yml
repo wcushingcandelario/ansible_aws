@@ -1,7 +1,7 @@
 ---
-- name: Jetty Server | Load SSL Keys
-  include_vars: "ssl-secrets.yml"
-  no_log: true
+#- name: Jetty Server | Load SSL Keys
+ # include_vars: "ssl-secrets.yml"
+ # no_log: true
 
 - name: Jetty Server
   copy: 

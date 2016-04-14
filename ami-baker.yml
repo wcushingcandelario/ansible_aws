@@ -1,8 +1,15 @@
 - hosts: localhost
   connection: local
   gather_facts: False
-  include_vars: vars/ami-baker-defaults.yml
-  roles:
+
+  tasks:
+  - name: Include the default variables and find ami
+    include_vars: vars/ami-baker-defaults.yml
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  roles: 
   - find_ami
 
   tasks:
@@ -41,6 +48,8 @@
 #- hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
   remote_user: ec2-user
   become: sudo
+  pre_tasks:
+    - include_vars: vars/ami-baker-defaults.yml
   roles:
     - common
     #- db
