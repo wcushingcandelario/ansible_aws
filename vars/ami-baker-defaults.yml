@@ -1,0 +1,11 @@
+---
+region: eu-west-1 
+key: G2-Oneview 
+ovc_security_groups: sg-5e4aaf39 
+instance_type: t2.micro 
+vpc_subnet_public: subnet-8d9790d4 
+jetty_user_login: jetty
+jetty_dir: /opt/jetty
+ovc_server_user_dir: /home/jetty
+webserver_user: httpd
+s3install: true

@@ -11,24 +11,36 @@
     new_lc_name: lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}
 
   tasks:
-  #- name: find latest OVC ami
-    #roles:
-    #- { role: findovcami, when: new_image_id is undefined }
-
   - name: include pre-prod vars if pre-prod
     include_vars: vars/pre-prod.yml
-    when: deploy_type == "pre-prod"  
+    when: deploy_type == "pre-prod"
 
   - name: include prod vars if prod
     include_vars: vars/prod.yml
     when: deploy_type == "prod"
 
+  - name: find latest OVC ami
+    ec2_ami_find:
+      name: "ovc-{{ ovc_version }}*"
+      sort: name
+      sort_order: descending
+      region: "{{ region }}"
+      sort_end: 1
+    when: new_image_id is undefined
+    register: ami_find
+  - debug: msg="{{ ami_find.results }}"
+
+  #- vars:
+  #  new_image_id: "{{ ami_find.results[0].ami_id }}"
+    #roles:
+    #- { role: findovcami, when: new_image_id is undefined }
+
   - name: create new Launch Config
     local_action:
       module: ec2_lc
       name: "{{ new_lc_name }}"
-      image_id: "{{ new_image_id }}"
-      #image_id: "{{ ami_find.results[0].ami_id }}"
+      #image_id: "{{ new_image_id }}"
+      image_id: "{{ ami_find.results[0].ami_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: "{{ ovc_security_groups }}"

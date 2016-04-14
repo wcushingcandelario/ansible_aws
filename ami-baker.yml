@@ -1,11 +1,11 @@
 - hosts: localhost
   connection: local
   gather_facts: False
+  include_vars: vars/ami-baker-defaults.yml
   roles:
   - find_ami
-  tasks:
-#  - include_vars: roles/ec2-create/defaults/main.yml
 
+  tasks:
   - name: launch temporary instance
     local_action:
       module: ec2
