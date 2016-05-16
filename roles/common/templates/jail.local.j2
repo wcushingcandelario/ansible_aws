@@ -141,8 +141,8 @@ maxretry = 5
 
 # bsd-ipfw is ipfw used by BSD. It uses ipfw tables.
 # table number must be unique.
-#
-# This will create a deny rule for that table ONLY if a rule
+# 
+# This will create a deny rule for that table ONLY if a rule 
 # for the table doesn't ready exist.
 #
 [ssh-bsd-ipfw]
@@ -205,7 +205,7 @@ bantime  = 1800
 
 [apache-badbots]
 
-enabled  = true
+enabled  = false
 filter   = apache-badbots
 action   = iptables-multiport[name=BadBots, port="http,https"]
            sendmail-buffered[name=BadBots, lines=5, dest=you@example.com]
@@ -368,12 +368,12 @@ maxretry = 10
 # log-warning = 2
 [mysqld-iptables]
 
-enabled  = true
+enabled  = false
 filter   = mysqld-auth
 action   = iptables[name=mysql, port=3306, protocol=tcp]
            sendmail-whois[name=MySQL, dest=root, sender=fail2ban@example.com]
 logpath  = /var/log/mysqld.log
-maxretry = 3
+maxretry = 5
 
 
 # Jail for more extended banning of persistent abusers
@@ -400,3 +400,5 @@ filter = sshd
 action = pf
 logpath  = /var/log/sshd.log
 maxretry=5
+
+

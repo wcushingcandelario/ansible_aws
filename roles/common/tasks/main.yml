@@ -1,7 +1,51 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
-  - include: amazon.yml
-    when: ansible_distribution == 'Amazon'
+- name: Install common packages for all platforms before platform based customisations
+  yum: name={{ item }} state=present
+  with_items:
+    - gcc
+    - python-devel
+    - redhat-lsb-core
+    - python-setuptools
+    - libselinux-python
+    - libsemanage-python
+    - ntp
+    - unzip
+  become: yes
+  become_user: root
 
-  - include: centos.yml
-    when: ansible_distribution == 'CentOS' 
+- name: Re-run setup
+  action: setup
+
+- name: Configure ntp file
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  tags: ntp
+  notify: restart ntp
+  become: yes
+  become_user: root
+
+- name: Start the ntp service
+  service: name=ntpd state=started enabled=yes
+  tags: ntp
+  become: yes
+  become_user: root
+
+- include: amazon.yml
+  when: ansible_distribution == 'Amazon'
+
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
+
+- name: Un-Install OpenJDK7
+  yum: name=java-1.7.0 state=absent
+  become: yes
+  become_user: root
+
+- name: Install common packages for all platforms after platform based customisations
+  yum: name={{ item }} state=present
+  with_items:
+    - python-pip
+    - java-1.8.0
+    - java-1.8.0-openjdk-devel
+  become: yes
+  become_user: root

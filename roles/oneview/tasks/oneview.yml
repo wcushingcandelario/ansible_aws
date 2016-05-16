@@ -39,13 +39,7 @@
   sudo: yes
 
 - name: Download OneView Install from S3
-  #command: "aws s3 cp s3://ovc-releases/{{ ovc_version }}/oneview-install-{{ ovc_version }}.zip {{ ovc_server_user_dir }}/oneview-install.zip"
   command: "aws s3 cp s3://ovc-releases/{{ ovc_version }}/oneview-install.zip {{ ovc_server_user_dir }}/oneview-install.zip"
-  #s3: 
-    #bucket: ovc-releases
-    #object: "/{{ ovc_version }}/oneview-install.zip"
-    #dest: "{{ ovc_server_user_dir }}/oneview-install.zip"
-    #mode: get
   when: s3install is defined
   sudo: yes
 
@@ -65,15 +59,6 @@
     owner: jetty
     group: jetty
   sudo: yes
-
-- name: Copy Nevado shaded jar to jetty
-  copy:
-    src: nevado-shaded-1.3.2.3.jar
-    dest: "{{ jetty_dir }}/lib/ext/nevado-shaded-1.3.2.3.jar"
-    owner: jetty
-    group: jetty
-  sudo: yes
-
 - name: Copy OneView install file
   copy:
     src: oneview-install.zip
@@ -102,30 +87,36 @@
     group: jetty
   sudo: yes
 
+- name: Copy Nevado shaded jar to jetty
+  shell: cp nevado* {{ jetty_dir }}/lib/ext/
+  args:
+    chdir: "{{ ovc_install_dir }}/installFiles/OVC_Install"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Make jetty user own Nevado JAR
+  file:
+    path: "{{ item }}"
+    mode: ug+rw
+    owner: jetty
+    group: jetty
+  with_fileglob:
+    - "{{ jetty_dir }}/lib/ext/nevado*"
+  sudo: yes
+
 - name: Create silentInstaller file
   template:
     src: silentInstaller.properties.j2
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Install/silentInstaller.properties"
-    owner: jetty
-  sudo: yes
+  sudo_user: jetty
 
 - name: Create jetty context.xml file
   template:
     src: context.xml.j2
     dest: "{{ jetty_dir }}/webapps/context.xml"
-    owner: jetty
-  sudo: yes
+  sudo_user: jetty
 
-- name: Create jetty pos.d contexts directory
-  file:
-    path="{{ jetty_dir }}/contexts/pos.d"
-    state=directory
-    mode=ug+rw
-    owner=jetty
-    group=jetty
-  sudo: yes
-
-- name: Create jetty pos.d webapps directory
+- name: Create jetty pos.d directory
   file:
     path="{{ jetty_dir }}/webapps/pos.d"
     state=directory
@@ -138,8 +129,7 @@
   template:
     src: pos-override.xml.j2
     dest: "{{ jetty_dir }}/webapps/pos.d/pos-override.xml"
-    owner: jetty
-  sudo: yes
+  sudo_user: jetty
 
 - name: Install OneView
   include: oneview-install-command.yml

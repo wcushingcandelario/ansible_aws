@@ -4,5 +4,6 @@
   args:
         chdir: "{{ ovc_install_dir }}/installFiles/OVC_Install"
   sudo_user: jetty
+  sudo: yes
 
 
