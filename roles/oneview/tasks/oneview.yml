@@ -183,4 +183,6 @@
     name: jetty
     state: started
     enabled: yes
+  tags:
+    - startjetty
   sudo: yes

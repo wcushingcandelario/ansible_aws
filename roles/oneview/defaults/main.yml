@@ -15,7 +15,7 @@ ecommerce_fromServer_baseSiteId: apparel-uk
 
 ecommerce_vendor: 1
 
-mailServer_encrypted_password: RbNGPpJVCZ6CIIvlQ8d/cg==
+mailServer_encrypted_password: aSQQsm2SaMY05MFsEIQL/A==
 mailServer_from: donotreply@company.com
 mailServer_smtp_auth: true
 mailServer_smtp_host: smtp.gmail.com
@@ -29,19 +29,19 @@ mailServer_username: donotreply@company.com
 ovcDB_auto_generate: true
 ovcDB_db: xdb
 ovcDB_driver: com.mysql.jdbc.Driver
-ovcDB_encrypted_password: O1a/vWM7eekCFD6PEhnqUg==
+ovcDB_encrypted_password: aSQQsm2SaMY05MFsEIQL/A==
 #ovcDB_host: 127.0.0.1
-ovcDB_host: utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
 ovcDB_params: autoReconnect=true
 ovcDB_port: 3306
 ovcDB_scheme: jdbc:mysql
 ovcDB_type: mysql
-ovcDB_username: mysql_admin
-ovcDB_password: 1nsecure
+ovcDB_username: root
+ovcDB_password: 0n3v13w123
 
 #MongoDB configurations
 
-ovcNOSQLDB_host: 127.0.0.1
+ovcNOSQLDB_host: 10.33.232.10
 ovcNOSQLDB_port: 27017
 ovcNOSQLDB_db: xdb
 ovcNOSQLDB_username: root
@@ -51,14 +51,14 @@ ovcNOSQLDB_maxWaitTime: 5000
 ovcNOSQLDB_connectTimeout: 5000
 ovcNOSQLDB_socketTimeout: 5000
 
-ecommerce_fromServer_host: demo.demo.com
-ecommerce_fromClient_host: demo.demo.com
 
+ecommerce_fromServer_host: ws-uat.dev.wickes-tills.co.uk
 ecommerce_fromServer_port: 443
-ecommerce_fromClient_port: 443
-
 ecommerce_fromServer_scheme: https
+ecommerce_fromClient_host: ws-uat.dev.wickes-tills.co.uk
+ecommerce_fromClient_port: 443
 ecommerce_fromClient_scheme: https
+
 
 jetty_contexXml_create: false
 jetty_sysProps_append: true
@@ -70,3 +70,9 @@ posMClientSyncUpdater_store: OvcStore
 ovc_dashboard_locale: America/New_York
 html_root: /var/www/html
 webserver_user: www-data
+
+sqs_endpoint: sqs.eu-west-1.amazonaws.com
+sqs_queue_url: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
+
+sqs_access_key_id: test
+sqs_access_secret_id: testsecret

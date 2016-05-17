@@ -17,19 +17,6 @@
 - name: Re-run setup
   action: setup
 
-- name: Configure ntp file
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
-  tags: ntp
-  notify: restart ntp
-  become: yes
-  become_user: root
-
-- name: Start the ntp service
-  service: name=ntpd state=started enabled=yes
-  tags: ntp
-  become: yes
-  become_user: root
-
 - include: amazon.yml
   when: ansible_distribution == 'Amazon'
 
