@@ -1,0 +1,100 @@
+---
+#- hosts: localhost
+#  connection: local
+#  gather_facts: False
+#
+#  tasks:
+#  - name: Include the default variables and find ami
+#    include_vars: vars/mongo-{{ env }}-defaults.yml
+
+#create first server
+- name: Create first server
+  hosts: localhost
+  vars:
+    count: 01
+  connection: local
+  gather_facts: False
+  roles:
+   - find_ami
+   - create_server
+
+  tasks:
+   - name: Clear hosts template
+     file: path=/opt/ansible/playbooks/roles/mongoinstall/templates/hosts state=absent
+
+   - name: add host to group
+     add_host: name={{ item.private_ip }} groups=just_created
+     with_items: ami_instance.instances
+ 
+   - name: create hosts file
+     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
+     with_items: ami_instance.instances
+
+#create second server
+- name: Create second server
+  hosts: localhost
+  vars:
+    count: 02
+  connection: local
+  gather_facts: False
+  roles:
+   - create_server
+
+  tasks:
+   - name: add host to group
+     add_host: name={{ item.private_ip }} groups=just_created
+     with_items: ami_instance.instances
+
+   - name: create hosts file
+     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
+     with_items: ami_instance.instances
+
+#create third server
+- name: Create third server
+  hosts: localhost
+  vars:
+    count: 03
+  connection: local
+  gather_facts: False
+  roles:
+   - create_server
+
+  tasks:
+   - name: add host to group
+     add_host: name={{ item.private_ip }} groups=just_created
+     with_items: ami_instance.instances
+
+   - name: create hosts file
+     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts; chown -R awx.awx /opt/ansible/playbooks
+     with_items: ami_instance.instances
+
+- name: Install mongo
+  hosts: just_created
+  remote_user: ec2-user
+  sudo: yes
+  roles:
+    - mongoinstall
+  tasks: 
+    - name: Start mongo on Primary server
+      shell: mongod --config /etc/mongod.conf
+      when: inventory_hostname == groups.just_created[0]
+
+    - name: Initiate mongo on Primary Server
+      shell: mongod --eval "printjson(rs.initiate())"
+      when: inventory_hostname == groups.just_created[0]
+
+    - name: Verify configuration on Primary Server
+      shell: mongod --eval "printjson(rs.conf())"
+      when: inventory_hostname == groups.just_created[0]
+
+    - name: Start mongo on Other Servers
+      shell: mongod --config /etc/mongod.conf
+      when: inventory_hostname != groups.just_created[0]
+
+    - name: Add mongodb02 to the cluster
+      shell: mongod --eval "printjson(rs.add"mongodb02:27017")"
+      when: inventory_hostname == groups.just_created[0]
+
+    - name: Add mongodb03 to the cluster
+      shell: mongod --eval "printjson(rs.add"mongodb03:27017")"
+      when: inventory_hostname == groups.just_created[0]
