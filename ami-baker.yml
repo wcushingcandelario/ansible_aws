@@ -59,6 +59,7 @@
     - common
     #- db
     - jetty
+    - mongodb
     - oneview
     - install_customizations_tp
 

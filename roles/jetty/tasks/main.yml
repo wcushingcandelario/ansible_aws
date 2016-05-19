@@ -107,7 +107,6 @@
     owner: root
     group: root
     mode: 0644
-  notify: Restart Jetty
   become: yes
   become_user: root
 
