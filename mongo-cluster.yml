@@ -29,7 +29,7 @@
  
    - name: create hosts file
     # shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
      with_items: ami_instance.instances
 
    - name: wait for ssh to come up
@@ -53,7 +53,7 @@
 
    - name: create hosts file
     # shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
      with_items: ami_instance.instances
 
 #create third server
@@ -73,7 +73,7 @@
 
    - name: create hosts file
     # shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts; chown -R awx.awx /opt/ansible/playbooks
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts; chown -R bill.bill /home/bill/git/travisperkins-ansible/
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts; chown -R bill.bill /home/bill/git/travisperkins-ansible/
      with_items: ami_instance.instances
 
 - name: Install mongo
