@@ -20,16 +20,14 @@
 
   tasks:
    - name: Clear hosts template
-    # file: path=/opt/ansible/playbooks/roles/mongoinstall/templates/hosts state=absent
-     file: path=/home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts state=absent
+     file: path=hosts state=absent
 
    - name: add host to group
      add_host: name={{ item.private_ip }} groups=just_created
      with_items: ami_instance.instances
- 
+
    - name: create hosts file
-    # shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> hosts
      with_items: ami_instance.instances
 
    - name: wait for ssh to come up
@@ -52,8 +50,7 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-    # shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> hosts
      with_items: ami_instance.instances
 
 #create third server
@@ -72,8 +69,7 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-    # shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts; chown -R awx.awx /opt/ansible/playbooks
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts; chown -R bill.bill /home/bill/git/travisperkins-ansible/
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> hosts
      with_items: ami_instance.instances
 
 - name: Install mongo
@@ -85,19 +81,17 @@
   tasks:
     - name: Get IP Address
       shell: "ifconfig | grep 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | grep -v 127.0.0.1"
-      register: priv_ip 
+      register: priv_ip
 
     - name: Start mongo on Primary server
       shell: mongod --config /etc/mongod.conf
       when: inventory_hostname == groups.just_created[0]
 
     - name: Initiate mongo on Primary Server
-#      shell: mongod --eval "printjson(rs.initiate())"
       shell: "mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.initiate())' "
       when: inventory_hostname == groups.just_created[0]
 
     - name: Verify configuration on Primary Server
-     # shell: mongod --eval "printjson(rs.conf())"
       shell: "mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.conf())' "
       when: inventory_hostname == groups.just_created[0]
 
@@ -106,11 +100,9 @@
       when: inventory_hostname != groups.just_created[0]
 
     - name: Add mongodb02 to the cluster
-     # shell: mongod --eval "printjson(rs.add"mongodb02:27017")"
       shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("mongodb02:27017"))'
       when: inventory_hostname == groups.just_created[0]
 
     - name: Add mongodb03 to the cluster
-    #  shell: mongod --eval "printjson(rs.add"mongodb03:27017")"
       shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("mongodb03:27017"))'
       when: inventory_hostname == groups.just_created[0]

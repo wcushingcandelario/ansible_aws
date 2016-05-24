@@ -21,4 +21,3 @@
 - name: wait for ssh to come up
   wait_for: host={{ item.private_ip }} delay=60 port=22 state=started timeout=320
   with_items: ami_instance.instances
-
