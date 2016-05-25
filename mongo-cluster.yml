@@ -78,10 +78,8 @@
   sudo: yes
   roles:
     - mongoinstall
+
   tasks:
-    - name: Get IP Address
-      shell: "ifconfig | grep 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | grep -v 127.0.0.1"
-      register: priv_ip
 
     - name: Start mongo on Primary server
       shell: mongod --config /etc/mongod.conf
@@ -100,10 +98,9 @@
       when: inventory_hostname != groups.just_created[0]
 
     - name: Add mongodb02 to the cluster
-      shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("{{ priv_ip.stdout }}:27017"))'
-      when: inventory_hostname != groups.just_created[0]
-      with_items: ami_instance.instances
+      shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[1] }}:27017"))'
+      when: inventory_hostname == groups.just_created[1]
 
-    #- name: Add mongodb03 to the cluster
-    #  shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("{{ priv_ip.stdout }}:27017"))'
-    #  when: inventory_hostname == groups.just_created[0]
+    - name: Add mongodb03 to the cluster
+      shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[2] }}:27017"))'
+      when: inventory_hostname == groups.just_created[2]
