@@ -100,9 +100,9 @@
       when: inventory_hostname != groups.just_created[0]
 
     - name: Add mongodb02 to the cluster
-      shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("mongodb02:27017"))'
+      shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("{{ priv_ip.stdout }}:27017"))'
       when: inventory_hostname == groups.just_created[0]
 
     - name: Add mongodb03 to the cluster
-      shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("mongodb03:27017"))'
+      shell: mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.add("{{ priv_ip.stdout }}:27017"))'
       when: inventory_hostname == groups.just_created[0]
