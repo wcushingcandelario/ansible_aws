@@ -107,7 +107,6 @@
     owner: root
     group: root
     mode: 0644
-  notify: Restart Jetty
   become: yes
   become_user: root
 
@@ -160,6 +159,13 @@
   become: yes
   become_user: root
 
+- name: Pull jetty logging jars
+  command: "java -jar start.jar --add-to-start=logging"
+  args:
+    chdir: "{{ jetty_dir }}"
+  become: yes
+  become_user: jetty
+
 - name: Enable Jetty to start on boot
   service:
     name: jetty
@@ -167,10 +173,3 @@
     enabled: yes
   become: yes
   become_user: root
-
-- name: Pull jetty logging jars
-  command: "java -jar start.jar --add-to-start=logging"
-  args:
-    chdir: "{{ jetty_dir }}"
-  become: yes
-  become_user: jetty

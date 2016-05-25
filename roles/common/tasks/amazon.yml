@@ -1,9 +1,14 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-- name: Patch the server before anything. 
-  yum: name=* state=latest
-  sudo: yes
+- name: Set the timezone to Eastern
+  lineinfile:
+    dest: "/etc/sysconfig/clock"
+    state: present
+    regexp: "ZONE=.*"
+    line: "ZONE=America/New_York"
+  become: yes
+  become_user: root
 
 - name: Set the timezone to Eastern
   lineinfile:
@@ -11,19 +16,22 @@
     state: present
     regexp: "ZONE=.*"
     line: "ZONE=America/New_York"
-  sudo: yes
+  become: yes
+  become_user: root
 
 - name: Stat timezone localtime file
   stat:
     path: "/etc/localtime"
-  sudo: yes
+  become: yes
+  become_user: root
   register: localtime
 
 - name: Delete timezone localtime if not Eastern
   file:
     dest: "/etc/localtime"
     state: absent
-  sudo: yes
+  become: yes
+  become_user: root
   when: localtime.stat.islnk != true
 
 - name: Create timezone link of localtime to Eastern
@@ -31,31 +39,18 @@
     dest: "/etc/localtime"
     src: "/usr/share/zoneinfo/America/New_York"
     state: link
-  sudo: yes
-
-- name: Un-Install OpenJDK7
-  yum: name=java-1.7.0 state=absent
-  sudo: yes
-
-- name: Install OpenJDK8 JRE
-  yum: name=java-1.8.0 state=present
-  sudo: yes
-
-- name: Install OpenJDK8 JDK
-  yum: name=java-1.8.0-openjdk-devel state=present
-  sudo: yes
+  become: yes
+  become_user: root
 
 - name: Install fail2ban
   yum: name=fail2ban state=present
   tags: fail2ban
-  sudo: yes
+  become: yes
+  become_user: root
 
 - name: Configure fail2ban
   template: src=jail.local.j2 dest=/etc/fail2ban/jail.local
   tags: fail2ban
   notify: restart fail2ban
-  sudo: yes
-
-- name: create www-data user
-  user: name=www-data comment="apache user" 
-  sudo: yes
+  become: yes
+  become_user: root

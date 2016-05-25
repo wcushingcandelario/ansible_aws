@@ -7,16 +7,6 @@
 
 - include: config.yml
 
-- name: Start Jetty
-  service:
-    name: jetty
-    state: started
-    enabled: yes
-  tags: importers
-  sudo: yes
-
 - include: importers.yml
-  tags: importers
-  notify:
-    - Restart Jetty
-    - Restart Apache
+  tags:
+    - importers

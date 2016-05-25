@@ -1,7 +1,9 @@
 ---
 
 - name: Restart Jetty
+  tags: startjetty
   service:
     name=jetty
     state=restarted
-  sudo: yes
+  become: yes
+  become_user: root
