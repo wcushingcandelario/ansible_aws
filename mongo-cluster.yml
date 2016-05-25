@@ -20,14 +20,18 @@
 
   tasks:
    - name: Clear hosts template
-     file: path=/opt/ansible/playbooks/roles/mongoinstall/templates/hosts state=absent
+     file: path=hosts state=absent
 
    - name: add host to group
      add_host: name={{ item.private_ip }} groups=just_created
      with_items: ami_instance.instances
- 
+
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> hosts
+     with_items: ami_instance.instances
+
+   - name: wait for ssh to come up
+     wait_for: host={{ item.private_ip }} delay=60 port=22 state=started timeout=320
      with_items: ami_instance.instances
 
 #create second server
@@ -46,7 +50,7 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> hosts
      with_items: ami_instance.instances
 
 #create third server
@@ -65,26 +69,28 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts; chown -R awx.awx /opt/ansible/playbooks
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> hosts
      with_items: ami_instance.instances
 
 - name: Install mongo
   hosts: just_created
   remote_user: ec2-user
-  sudo: yes
+  become: yes 
   roles:
     - mongoinstall
-  tasks: 
+
+  tasks:
+
     - name: Start mongo on Primary server
       shell: mongod --config /etc/mongod.conf
       when: inventory_hostname == groups.just_created[0]
 
     - name: Initiate mongo on Primary Server
-      shell: mongod --eval "printjson(rs.initiate())"
+      shell: "mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.initiate())' "
       when: inventory_hostname == groups.just_created[0]
 
     - name: Verify configuration on Primary Server
-      shell: mongod --eval "printjson(rs.conf())"
+      shell: "mongo --host {{ priv_ip.stdout }} --eval 'printjson(rs.conf())' "
       when: inventory_hostname == groups.just_created[0]
 
     - name: Start mongo on Other Servers
@@ -92,9 +98,9 @@
       when: inventory_hostname != groups.just_created[0]
 
     - name: Add mongodb02 to the cluster
-      shell: mongod --eval "printjson(rs.add"mongodb02:27017")"
-      when: inventory_hostname == groups.just_created[0]
+      shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[1] }}:27017"))'
+      when: inventory_hostname == groups.just_created[1]
 
     - name: Add mongodb03 to the cluster
-      shell: mongod --eval "printjson(rs.add"mongodb03:27017")"
-      when: inventory_hostname == groups.just_created[0]
+      shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[2] }}:27017"))'
+      when: inventory_hostname == groups.just_created[2]

@@ -3,6 +3,7 @@
   gather_facts: False
 #  roles:
 #  - find_ami
+
   tasks:
   - shell: uptime
     register: output
