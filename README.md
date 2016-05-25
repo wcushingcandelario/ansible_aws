@@ -62,5 +62,9 @@ Running the update-asg.yml will do the following.
   
   This will not need to be run frequently. It is made available in case you need to stand up a new autoscaled Staging, preprod, production or other environment. 
 
-  
-  
+### Run Playbooks from the command line
+PREREQUISITES: The .vault_pass.txt file MUST be accessible from your user account
+
+To run the playbook, you must *first* have placed the OVC install package in the 'ovc-travisperkins-releases' under a directory with the name as the version, for example: '5.2.0'.  The AMI Baker needs to also skip two tags, 'startjetty' and 'importers' so that Jetty is not started and the importers are not run.  To run the playbook, execute the following, assuming the .vault_pass.txt is in the ~/.ssh folder.
+
+	ansible-playbook ami-baker.yml -e "ovc_version=5.2.0" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags startjetty,importers

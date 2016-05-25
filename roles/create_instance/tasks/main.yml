@@ -15,16 +15,15 @@
       role: ami_builder
     instance_tags:
       role: ami_builder
-      Name: OneViewSourceImage 
+      Name: OneViewSourceImage
   register: ami_instance
 
 - debug: msg="{{  ami_instance.tagged_instances.0.public_ip }}"
 #  with_items: "{{ ami_instance.results }}"
 
 - name: Wait for SSH to come up
-  wait_for: host={{ ami_instance.tagged_instances.0.public_ip }} port=22 state=started
+  wait_for: host={{ ami_instance.tagged_instances.0.private_ip }} port=22 state=started
   when: ami_instance|changed
 
 - name: add host to group
-  add_host: name={{ ami_instance.tagged_instances.0.public_ip }} groups=just_created
-
+  add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created

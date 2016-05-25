@@ -1,9 +1,8 @@
 ---
 
-- name: Restart Jetty
-  tags: startjetty
+- name: Restart Mongod
   service:
-    name=jetty
+    name=mongod
     state=restarted
   become: yes
   become_user: root
