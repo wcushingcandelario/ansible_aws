@@ -75,7 +75,7 @@
 - name: Install mongo
   hosts: just_created
   remote_user: ec2-user
-  sudo: yes
+  become: yes 
   roles:
     - mongoinstall
 
