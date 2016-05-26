@@ -98,3 +98,12 @@
     - name: Add mongodb03 to the cluster
       shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[2] }}:27017"))'
       when: inventory_hostname == groups.just_created[2]
+
+    - name: Copy setAuth.js to Primary
+      src: setAuth.js
+      dest: /opt/setAuth.js
+      when: inventory_hostname == groups.just_created[0]
+
+    - name: Execute setAuth.js
+      shell: mongo --host {{ groups.just_created[0] }} < /opt/setAuth.js
+      when: inventory_hostname == groups.just_created[0]
