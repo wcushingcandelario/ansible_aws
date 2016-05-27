@@ -1,0 +1,8 @@
+---
+region: eu-west-1 
+key: G2-Oneview 
+ovc_security_groups: sg-3b866f5c 
+instance_type: t2.micro 
+asg_name: ovcpreprod 
+IAMROLE: CodeDeploy-EC2
+asg_desired_capacity: 2
