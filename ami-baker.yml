@@ -62,6 +62,7 @@
     - mongodb
     - oneview
     - install_customizations_tp
+    - nginx_proxy
 
 - hosts: localhost
   connection: local
