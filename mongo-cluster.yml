@@ -139,9 +139,13 @@
       when: inventory_hostname == groups.just_created[2]
 
     - name: Copy setAuth.js to Primary
-      src: setAuth.js
-      dest: /opt/setAuth.js
+      copy:
+        src: setAuth.js
+        dest: /opt/setAuth.js
+        mode: 0644
       when: inventory_hostname == groups.just_created[0]
+      become: yes
+      become_user: root
 
     - name: Execute setAuth.js
       shell: mongo --host {{ groups.just_created[0] }} < /opt/setAuth.js
