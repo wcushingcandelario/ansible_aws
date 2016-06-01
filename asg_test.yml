@@ -1,0 +1,22 @@
+---
+
+
+- name: Testing ASG play
+  hosts: localhost
+  remote_user: ec2-user
+  gather_facts: False
+
+  tasks:
+  - include_vars: vars/ami-baker-defaults.yml
+  - include_vars: vars/settings.yml
+
+# install ASG
+- include: create-asg-elb.yml
+  vars:
+   ovc_version: "5.2.0"
+   deploy_type: "preprodelb"
+   elbsubnets: "subnet-9520cef1,subnet-dd6b7daa,subnet-e9a689b0"
+   ovc_security_groups: "sg-887dc9ef"
+   IAMROLE: "CodeDeploy-EC2"
+   asg_name: "preprod_asg"
+   new_lc_name: "preprod_lc1"

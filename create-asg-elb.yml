@@ -24,7 +24,7 @@
         instance_port: 80
       health_check:
         ping_protocol: http # options are http, https, ssl, tcp
-        ping_port: 8080
+        ping_port: 22
         ping_path: "/" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
@@ -44,7 +44,7 @@
     local_action:
       module: ec2_lc
       name: "{{ new_lc_name }}"
-      image_id: "{{ new_image_id }}"
+      image_id: "{{ image_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: ["{{ ovc_security_groups }}"]

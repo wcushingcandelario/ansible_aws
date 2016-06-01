@@ -1,0 +1,18 @@
+---
+
+#ELB variables
+deploy_type: "preprod_elb"
+elbsubnets: "subnet-9520cef1,subnet-dd6b7daa,subnet-e9a689b0"
+
+#Launch Cofig variables
+new_lc_name: "preprod_lc"
+ovc_security_groups: "sg-887dc9ef"
+IAMROLE: "CodeDeploy-EC2"
+
+#ASG variables
+asg_name: "preprod_asg"
+
+
+#   ovc_version: set in site.yml
+
+
