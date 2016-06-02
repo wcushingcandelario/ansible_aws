@@ -1,7 +1,5 @@
 ---
-
-
-- name: Testing ASG play
+- name: ASG and ELB Deploy
   hosts: localhost
   remote_user: ec2-user
   gather_facts: False

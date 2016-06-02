@@ -4,19 +4,17 @@
   remote_user: ec2-user
   gather_facts: False
 
-  tasks:
-  - name: include mongo defaults
-    include_vars: vars/pre-prod/mongo-defaults.yml
+#  tasks:
+#  - name: include mongo defaults
+#    include_vars: vars/pre-prod/mongo-defaults.yml
 
 # install Mongo Cluster
-- include: mongo-cluster.yml
-  vars:
-   cluster_name: "npcluster"
+#- include: mongo-cluster.yml
+#  vars:
+#   cluster_name: "npcluster"
 
 # install ami-builder
 - include: ami-baker.yml
   vars:
    ovc_version: "5.2.0"
 
-# install ELB and ASG
-- include: asg_main.yml

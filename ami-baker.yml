@@ -45,7 +45,7 @@
   #   with_items: ami_instance.instances
 
   - name: wait for ssh to come up
-    wait_for: host={{ item.private_ip }} delay=5 port=22 state=started timeout=320
+    wait_for: host={{ item.private_ip }} delay=90 port=22 state=started timeout=640
     with_items: ami_instance.instances
 
   - name: add host to group
@@ -110,7 +110,7 @@
             image_id: {{ amioutput.image_id }}
             lc_suffix: {{ ansible_date_time.epoch }}
      dest: vars/settings.yml
-     overwrite: yes
-     become: yes
-     become_user: root
+     force: yes
+     #become: yes
+    # become_user: root
     when: deploy is defined and deploy|bool == True
