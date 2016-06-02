@@ -185,15 +185,14 @@
       shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[2] }}:27017"))'
       when: inventory_hostname == groups.just_created[2]
 
-<<<<<<< HEAD
+
     - name: Copy setAuth.js to Primary
       copy:
         src: setAuth.js
-=======
+
     - name: Copy to Primary
       copy:
         src: roles/mongoinstall/files/setAuth.js
->>>>>>> billcopy
         dest: /opt/setAuth.js
         mode: 0644
       when: inventory_hostname == groups.just_created[0]
