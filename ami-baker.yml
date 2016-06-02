@@ -92,6 +92,8 @@
     - oneview
     - install_customizations_tp
     - nginx_proxy
+    - Datadog.datadog
+    - datadog_config
 
 #- hosts: localhost
 #  connection: local

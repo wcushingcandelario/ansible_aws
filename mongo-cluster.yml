@@ -159,6 +159,7 @@
   become_user: root
   roles:
     - mongoinstall
+    - Datadog.datadog
 
   tasks:
     - name: Start mongo on Primary server
