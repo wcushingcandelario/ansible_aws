@@ -6,9 +6,11 @@
   - name: Include the default variables and find ami
     include_vars: vars/ami-baker-defaults.yml
 
-- hosts: localhost
+- name: fill in blank
+  hosts: localhost
   connection: local
   gather_facts: False
+
   roles:
   - find_ami
 
@@ -43,12 +45,13 @@
   #   with_items: ami_instance.instances
 
   - name: wait for ssh to come up
-    wait_for: host={{ item.private_ip }} delay=5 port=22 state=started timeout=320
+    wait_for: host={{ item.private_ip }} delay=90 port=22 state=started timeout=640
     with_items: ami_instance.instances
 
   - name: add host to group
     add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created
 
+<<<<<<< HEAD
   - name: Add new Route53 entry
     route53:
       command: "create"
@@ -62,7 +65,23 @@
       overwrite: yes
     with_items: ami_instance.instances
 
+- hosts: just_created
+=======
+#  - name: Add new Route53 entry
+#    route53:
+#      command: "create"
+#      zone: "preprod-int.ovchosting.co.uk"
+#      hosted_zone_id: "Z3M7I9GRTY3KIG"
+#      private_zone: "true"
+#      record: "ami-builder.preprod-int.ovchosting.co.uk"
+#      type: "A"
+#      ttl: 7200
+#      value: "{{ item.private_ip }}"
+#      overwrite: yes
+#    with_items: ami_instance.instances
+
 - hosts: just_created[3]
+>>>>>>> billcopy
 #- hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
   remote_user: ec2-user
   become: sudo
@@ -77,43 +96,38 @@
     - install_customizations_tp
     - nginx_proxy
 
-- hosts: localhost
-  connection: local
+#- hosts: localhost
+#  connection: local
 
   tasks:
+  - name: bundle ami
+    local_action:
+      module: ec2_ami
+      instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+      region: "{{ region }}"
+      state: present
+      description: This was provisioned {{ ansible_date_time.iso8601 }}
+      name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
+      wait: yes
+    register: amioutput
 
-  # - name: bundle ami
-  #   local_action:
-  #     module: ec2_ami
-  #     instance_id: "{{ ami_instance.tagged_instances.0.id }}"
-  #     region: "{{ region }}"
-  #     state: present
-  #     description: This was provisioned {{ ansible_date_time.iso8601 }}
-  #     name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
-  #     wait: yes
-  #   register: amioutput
-  #
-  # - name: terminate temporary instance
-  #   local_action:
-  #     module: ec2
-  #     state: absent
-  #     region: "{{ region }}"
-  #     instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
-  #
-  # - name: debug
-  #   debug: var=amioutput
+  - name: terminate temporary instance
+    local_action:
+      module: ec2
+      state: absent
+      region: "{{ region }}"
+      instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+  
+  - name: debug
+    debug: var=amioutput
 
-
-
-
-
-
-
-
-  # - name: create vars file with  new ami info
-  #   copy:
-  #     content: |
-  #            image_id: {{ amioutput.image_id }}
-  #            lc_suffix: {{ ansible_date_time.epoch }}
-  #     dest: vars/settings.yml
-    # when: deploy is defined and deploy|bool == True
+  - name: create vars file with  new ami info
+    copy:
+     content: |
+            image_id: {{ amioutput.image_id }}
+            lc_suffix: {{ ansible_date_time.epoch }}
+     dest: vars/settings.yml
+     force: yes
+     #become: yes
+    # become_user: root
+    when: deploy is defined and deploy|bool == True
