@@ -1,0 +1,114 @@
+- name: Add the datadog user (dd-agent) to the apache group
+  user:
+    name: dd-agent
+    append: yes
+    groups: apache
+
+- name: Install http_check.yaml to /etc/dd-agent/conf.d
+  copy:
+    src: http_check.yaml
+    dest: /etc/dd-agent/conf.d/http_check.yaml
+    backup: yes
+    force: yes
+    mode: 0644
+  become: yes
+  become_user: root
+
+- name: Install pid_check.py to /etc/dd-agent/checks.d/
+  copy:
+    src: pid_check.py
+    dest: /etc/dd-agent/checks.d/pid_check.py
+    backup: yes
+    force: yes
+    mode: 0755
+  become: yes
+  become_user: root
+
+- name: Install pid_check.yaml to /etc/dd-agent/conf.d
+  copy:
+    src: pid_check.yaml
+    dest: /etc/dd-agent/conf.d/pid_check.yaml
+    backup: yes
+    force: yes
+    mode: 0644
+  become: yes
+  become_user: root
+
+- name: Install check_jetty_standalone.py to /usr/bin
+  copy:
+    src: check_jetty_standalone.py
+    dest: /usr/bin/check_jetty_standalone
+    backup: yes
+    force: yes
+    mode: 0755
+  become: yes
+  become_user: root
+
+- name: Add JXM to Jetty
+  command: "java -jar start.jar --add-to-start=jmx"
+  args:
+    chdir: "{{ jetty_dir }}"
+  become: yes
+  become_user: jetty
+
+- name: Add JXM remote to Jetty
+  command: "java -jar start.jar --add-to-start=jmx-remote"
+  args:
+    chdir: "{{ jetty_dir }}"
+  become: yes
+  become_user: jetty
+
+- name: Install java_check.yaml to /etc/dd-agent/conf.d
+  copy:
+    src: java_check.yaml
+    dest: /etc/dd-agent/conf.d/java_check.yaml
+    backup: yes
+    force: yes
+    mode: 0644
+  become: yes
+  become_user: root
+
+- name: Install 09-server-status.conf to /etc/httpd/conf.modules.d/
+  copy:
+    src: 09-server-status.conf
+    dest: /etc/httpd/conf.modules.d/09-server-status.conf
+    backup: yes
+    force: yes
+    mode: 0644
+  become: yes
+  become_user: root
+
+- name: Install apache.yaml to /etc/dd-agent/conf.d
+  copy:
+    src: apache.yaml
+    dest: /etc/dd-agent/conf.d/apache.yaml
+    backup: yes
+    force: yes
+    mode: 0644
+  become: yes
+  become_user: root
+
+- name: Customise dd-agent/datadog.conf with dogstream lines
+  lineinfile:
+    dest: /etc/dd-agent/datadog.conf
+    line: "dogstreams: {{ item }}"
+  with_items:
+    - /var/log/messages
+    - /var/log/httpd/access_log
+    - /var/log/httpd/error_log
+
+- name: Enable additional_checksd if it is disabled
+  lineinfile:
+    dest: /etc/dd-agent/datadog.conf
+#    regexp: "# additional_checksd: /etc/dd-agent/checks.d/"
+    line: "additional_checksd: /etc/dd-agent/checks.d/"
+
+- name: Restart datadog-agent
+  service:
+    name: datadog-agent
+    state: restarted
+
+- name: Restart httpd
+  service:
+    name: httpd
+    state: restarted
