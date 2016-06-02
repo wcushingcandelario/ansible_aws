@@ -1,4 +1,6 @@
 ---
+- name: This play will install the ami-builder and mongo cluster
+
 - name: This play will deploy mongo-cluster and ami-builder
   hosts: localhost
   remote_user: ec2-user
@@ -10,11 +12,14 @@
 
 # install Mongo Cluster
 - include: mongo-cluster.yml
-  vars:
-   cluster_name: "npcluster"
+
 
 # install ami-builder
 - include: ami-baker.yml
   vars:
    ovc_version: "5.2.0"
+
+
+# install ELB and ASG
+- include: asg_main.yml
 

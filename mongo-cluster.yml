@@ -37,8 +37,21 @@
        overwrite: yes
      with_items: ami_instance.instances
 
+  - name: Add new Route53 entry
+    route53:
+     command: "create"
+     zone: "preprod-int.ovchosting.co.uk"
+     hosted_zone_id: "Z3M7I9GRTY3KIG"
+     private_zone: "true"
+     record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+     type: "A"
+     ttl: 7200
+     value: "{{ groups.just_created[0] }}"
+     overwrite: yes
+    with_items: ami_instance.instances
+
    - name: wait for ssh to come up
-     wait_for: host={{ item.private_ip }} delay=60 port=22 state=started timeout=320
+     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=940
      with_items: ami_instance.instances
 
 #create second server
@@ -73,6 +86,23 @@
        overwrite: yes
      with_items: ami_instance.instances
 
+   - name: wait for ssh to come up
+     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=1040
+     with_items: ami_instance.instances
+
+   - name: Add new Route53 entry
+     route53:
+      command: "create"
+      zone: "preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      private_zone: "true"
+      record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+      type: "A"
+      ttl: 7200
+      value: "{{ groups.just_created[1] }}"
+      overwrite: yes
+     with_items: ami_instance.instances
+
 #create third server
 - name: Create third server
   hosts: localhost
@@ -103,6 +133,23 @@
        ttl: 7200
        value: "{{ groups.just_created[2] }}"
        overwrite: yes
+     with_items: ami_instance.instances
+
+   - name: wait for ssh to come up
+     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=1040
+     with_items: ami_instance.instances
+
+  - name: Add new Route53 entry
+     route53:
+      command: "create"
+      zone: "preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      private_zone: "true"
+      record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+      type: "A"
+      ttl: 7200
+      value: "{{ groups.just_created[2] }}"
+      overwrite: yes
      with_items: ami_instance.instances
 
 - name: Install mongo
@@ -138,6 +185,11 @@
     - name: Add mongodb03 to the cluster
       shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[2] }}:27017"))'
       when: inventory_hostname == groups.just_created[2]
+
+
+    - name: Copy setAuth.js to Primary
+      copy:
+        src: setAuth.js
 
     - name: Copy to Primary
       copy:
