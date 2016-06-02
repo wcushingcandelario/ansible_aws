@@ -75,6 +75,7 @@
       region: "{{ region }}"
       tags:
         - Name: "{{ deploy_type }}-{{ ovc_version }}"
+        - monitor: true
     register: asglaunch
 
   - name: debug auto scaling update
