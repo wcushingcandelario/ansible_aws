@@ -10,7 +10,7 @@
 
   tasks:
   - name: create ELB
-    local_action: 
+    local_action:
       module: ec2_elb_lb
       name: "{{ deploy_type }}"
       state: present
@@ -35,7 +35,7 @@
 #        s3_location: "sglogs" # This value is required if access_logs is set
 #        s3_prefix: "{{ deploy_type }}ELBlogs"
     register: elb_new
- 
+
   - name: debug elb create
     debug: "var=elb_new"
 
@@ -48,20 +48,20 @@
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: ["{{ ovc_security_groups }}"]
-      #classic_link_vpc_id: "vpc-ccb0b5a9" 
-      instance_type: "{{ instance_type }}" 
+      #classic_link_vpc_id: "vpc-ccb0b5a9"
+      instance_type: "{{ instance_type }}"
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
 #      user_data: "{{ lookup('file', '/opt/ansible/playbooks/scripts/' + deploy_type + '-user_data.sh') }}"
     register: debuglaunch
- 
+
   - name: debug script copy
     debug: "var=debuglaunch"
 
 
   - name: create auto scaling group
-    local_action: 
+    local_action:
       module: ec2_asg
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
