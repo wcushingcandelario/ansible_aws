@@ -39,6 +39,26 @@
   - name: debug elb create
     debug: "var=elb_new"
 
+  - name: Get ELB details after creation
+    local_action:
+      module: ec2_elb_facts
+      names:
+        - "{{ deploy_type }}"
+      region: "{{ region }}"
+    register: elb_facts
+
+  - name: Add new Route53 entry
+    route53:
+      command: "create"
+      zone: "preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      private_zone: "true"
+      record: "app.preprod-int.ovchosting.co.uk"
+      type: "CNAME"
+      ttl: 7200
+      value: "{{ elb_facts.elbs.0.dns_name }}"
+      overwrite: yes
+
 
   - name: create launch config
     local_action:
