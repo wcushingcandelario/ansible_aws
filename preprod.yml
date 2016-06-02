@@ -1,5 +1,9 @@
 ---
+<<<<<<< HEAD
 - name: This play will install the ami-builder and mongo cluster
+=======
+- name: This play will deploy mongo-cluster and ami-builder
+>>>>>>> billcopy
   hosts: localhost
   remote_user: ec2-user
   gather_facts: False
@@ -10,6 +14,7 @@
 
 # install Mongo Cluster
 - include: mongo-cluster.yml
+<<<<<<< HEAD
 #  vars:
 #   region: "eu-west-1"
 #   key: "ovc-travis"
@@ -18,8 +23,18 @@
 #   instance_type: "t2.medium"
 #   env: preprod-int.ovchosting.co.uk
 #   cluster_name: "npcluster"
+=======
+  vars:
+   cluster_name: "npcluster"
+>>>>>>> billcopy
 
 # install ami-builder
 - include: ami-baker.yml
   vars:
    ovc_version: "5.2.0"
+<<<<<<< HEAD
+=======
+
+# install ELB and ASG
+- include: asg_main.yml
+>>>>>>> billcopy
