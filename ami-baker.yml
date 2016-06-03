@@ -94,6 +94,8 @@
     - nginx_proxy
     - Datadog.datadog
     - datadog_config
+  vars:
+    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
 #- hosts: localhost
 #  connection: local
