@@ -50,10 +50,10 @@
   - name: Add new Route53 entry
     route53:
       command: "create"
-      zone: "preprod-int.ovchosting.co.uk"
-      hosted_zone_id: "Z3M7I9GRTY3KIG"
-      private_zone: "true"
-      record: "app.preprod-int.ovchosting.co.uk"
+      zone: "ovchosting.co.uk"
+      hosted_zone_id: "ZGA6351G25S1B"
+      private_zone: "false"
+      record: "preprod-app.ovchosting.co.uk"
       type: "CNAME"
       ttl: 7200
       value: "{{ elb_facts.elbs.0.dns_name }}"
