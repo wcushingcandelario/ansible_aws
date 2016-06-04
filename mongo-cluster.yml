@@ -160,6 +160,8 @@
   roles:
     - mongoinstall
     - Datadog.datadog
+  vars:
+    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
   tasks:
     - name: Start mongo on Primary server
