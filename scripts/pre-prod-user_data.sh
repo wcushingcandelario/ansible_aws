@@ -3,6 +3,8 @@
 exec 1>/root/userdata.log 2>&1
 set -x
 
+/bin/date
+
 export ENV=pre-prod
 
 
