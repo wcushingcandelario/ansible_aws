@@ -19,5 +19,5 @@ export FILE_NAME=/var/www/html/ovcdashboard/app/Config/setting_var.php
 cp $FILE_NAME $FILE_NAME.ORIG
 sudo mv $FILE_NAME.$ENV $FILE_NAME
 
-sudo /etc/init.d/jetty restart
-sudo /etc/init.d/httpd restart
+sudo /sbin/service jetty restart
+sudo /sbin/service httpd restart
