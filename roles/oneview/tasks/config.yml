@@ -9,3 +9,10 @@
     - env_files/*.properties.*
   become: yes
   become_user: root
+
+- name: Copy out the unifiedConfig files
+  copy: src={{ item }} dest=/var/www/html/ovcdashboard/app/Config/ owner=www-data
+  with_fileglob:
+    - env_files/*.php.*
+  become: yes
+  become_user: root
