@@ -1,6 +1,6 @@
 ---
 
-- name: first make sure dest exists. 
+- name: first make sure dest exists.
   file: dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config state=directory
 
 - name: Copy out the unifiedConfig files
