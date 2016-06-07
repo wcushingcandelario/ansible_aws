@@ -2,14 +2,14 @@
 
 export ENV=pre-prod
 
-cp /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties.ORIG
 
-sudo mv /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties.$ENV /opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
+export FILE_NAME=/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
+cp $FILE_NAME $FILE_NAME.ORIG
+sudo mv $FILE_NAME.$ENV $FILE_NAME
 
-
-cp /opt/ovc/Platform-Dynamic-Objects/config/tools.properties /opt/ovc/Platform-Dynamic-Objects/config/tools.properties.ORIG
-
-sudo mv /opt/ovc/Platform-Dynamic-Objects/config/tools.properties.$ENV /opt/ovc/Platform-Dynamic-Objects/config/tools.properties
+export FILE_NAME=/opt/ovc/Platform-Dynamic-Objects/config/tools.properties
+cp $FILE_NAME $FILE_NAME.ORIG
+sudo mv $FILE_NAME.$ENV $FILE_NAME
 
 
 sudo /etc/init.d/jetty restart
