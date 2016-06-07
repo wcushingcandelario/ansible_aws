@@ -1,0 +1,16 @@
+<?php
+class DATABASE_CONFIG {
+
+        public $default = array(
+
+                'datasource' => 'Database/Mysql',
+                'persistent' => false,
+                'host' => 'rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com', # FIXME: Needs changing.
+                'login' => 'root',
+                'password' => '0n3v13w123',
+                'database' => 'xdb',
+                'prefix' => '',
+        );
+
+
+}
