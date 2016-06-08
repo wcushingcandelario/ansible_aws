@@ -13,7 +13,6 @@
     local_action:
       module: ec2_elb_lb
       name: "{{ deploy_type }}"
-#      security_group_ids: 'sg-5e4aaf39,sg-ea93378d'
       state: present
       region: "{{ region }}"
       connection_draining_timeout: 120
