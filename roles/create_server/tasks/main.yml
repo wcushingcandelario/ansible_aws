@@ -16,9 +16,9 @@
     instance_tags:
       role: mongodb
       Name: mongodb-{{ env }}
+      monitor: true
   register: ami_instance
 
 - name: wait for ssh to come up
   wait_for: host={{ item.private_ip }} delay=60 port=22 state=started timeout=320
   with_items: ami_instance.instances
-

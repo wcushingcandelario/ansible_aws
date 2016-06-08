@@ -1,11 +1,5 @@
 ---
-#- hosts: localhost
-#  connection: local
-#  gather_facts: False
-#
-#  tasks:
-#  - name: Include the default variables and find ami
-#    include_vars: vars/mongo-{{ env }}-defaults.yml
+# Mongo playbook will install a three server cluster
 
 #create first server
 - name: Create first server
@@ -20,14 +14,44 @@
 
   tasks:
    - name: Clear hosts template
-     file: path=/opt/ansible/playbooks/roles/mongoinstall/templates/hosts state=absent
+     file: path=/home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts state=absent
 
    - name: add host to group
      add_host: name={{ item.private_ip }} groups=just_created
      with_items: ami_instance.instances
- 
+
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     with_items: ami_instance.instances
+
+   - name: Add new Route53 entry
+     route53:
+       command: "create"
+       zone: "preprod-int.ovchosting.co.uk"
+       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       private_zone: "true"
+       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       type: "A"
+       ttl: 7200
+       value: "{{ groups.just_created[0] }}"
+       overwrite: yes
+     with_items: ami_instance.instances
+   
+   - name: Add new Route53 entry
+     route53:
+       command: "create"
+       zone: "preprod-int.ovchosting.co.uk"
+       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       private_zone: "true"
+       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       type: "A"
+       ttl: 7200
+       value: "{{ groups.just_created[0] }}"
+       overwrite: yes
+     with_items: ami_instance.instances
+
+   - name: wait for ssh to come up
+     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=940
      with_items: ami_instance.instances
 
 #create second server
@@ -46,7 +70,37 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     with_items: ami_instance.instances
+
+   - name: Add new Route53 entry
+     route53:
+       command: "create"
+       zone: "preprod-int.ovchosting.co.uk"
+       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       private_zone: "true"
+       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       type: "A"
+       ttl: 7200
+       value: "{{ groups.just_created[1] }}"
+       overwrite: yes
+     with_items: ami_instance.instances
+
+   - name: wait for ssh to come up
+     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=940
+     with_items: ami_instance.instances
+
+   - name: Add new Route53 entry
+     route53:
+      command: "create"
+      zone: "preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      private_zone: "true"
+      record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+      type: "A"
+      ttl: 7200
+      value: "{{ groups.just_created[1] }}"
+      overwrite: yes
      with_items: ami_instance.instances
 
 #create third server
@@ -65,26 +119,61 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb{{ count }}.ovcdemo.com mongodb{{ count }}" >> /opt/ansible/playbooks/roles/mongoinstall/templates/hosts; chown -R awx.awx /opt/ansible/playbooks
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     with_items: ami_instance.instances
+
+   - name: Add new Route53 entry
+     route53:
+       command: "create"
+       zone: "preprod-int.ovchosting.co.uk"
+       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       private_zone: "true"
+       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       type: "A"
+       ttl: 7200
+       value: "{{ groups.just_created[2] }}"
+       overwrite: yes
+     with_items: ami_instance.instances
+
+   - name: wait for ssh to come up
+     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=940
+     with_items: ami_instance.instances
+
+   - name: Add new Route53 entry
+     route53:
+      command: "create"
+      zone: "preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      private_zone: "true"
+      record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+      type: "A"
+      ttl: 7200
+      value: "{{ groups.just_created[2] }}"
+      overwrite: yes
      with_items: ami_instance.instances
 
 - name: Install mongo
   hosts: just_created
   remote_user: ec2-user
-  sudo: yes
+  become: yes
+  become_user: root
   roles:
     - mongoinstall
-  tasks: 
+    - Datadog.datadog
+  vars:
+    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
+
+  tasks:
     - name: Start mongo on Primary server
       shell: mongod --config /etc/mongod.conf
       when: inventory_hostname == groups.just_created[0]
 
     - name: Initiate mongo on Primary Server
-      shell: mongod --eval "printjson(rs.initiate())"
+      shell: "mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.initiate())' "
       when: inventory_hostname == groups.just_created[0]
 
     - name: Verify configuration on Primary Server
-      shell: mongod --eval "printjson(rs.conf())"
+      shell: "mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.conf())' "
       when: inventory_hostname == groups.just_created[0]
 
     - name: Start mongo on Other Servers
@@ -92,9 +181,27 @@
       when: inventory_hostname != groups.just_created[0]
 
     - name: Add mongodb02 to the cluster
-      shell: mongod --eval "printjson(rs.add"mongodb02:27017")"
-      when: inventory_hostname == groups.just_created[0]
+      shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[1] }}:27017"))'
+      when: inventory_hostname == groups.just_created[1]
 
     - name: Add mongodb03 to the cluster
-      shell: mongod --eval "printjson(rs.add"mongodb03:27017")"
+      shell: mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.add("{{ groups.just_created[2] }}:27017"))'
+      when: inventory_hostname == groups.just_created[2]
+
+
+  #  - name: Copy setAuth.js to Primary
+  #    copy:
+  #      src: setAuth.js
+
+    - name: Copy to Primary
+      copy:
+        src: roles/mongoinstall/files/setAuth.js
+        dest: /opt/setAuth.js
+        mode: 0644
+      when: inventory_hostname == groups.just_created[0]
+      become: yes
+      become_user: root
+
+    - name: Execute setAuth.js
+      shell: mongo --host {{ groups.just_created[0] }} < /opt/setAuth.js
       when: inventory_hostname == groups.just_created[0]

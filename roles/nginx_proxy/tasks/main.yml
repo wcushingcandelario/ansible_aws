@@ -39,3 +39,11 @@
     state: restarted
   become: yes
   become_user: root
+
+- name: Start NGINX (confirm it has been started)
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  become: yes
+  become_user: root

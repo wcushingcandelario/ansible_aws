@@ -10,7 +10,7 @@
 
   tasks:
   - name: create ELB
-    local_action: 
+    local_action:
       module: ec2_elb_lb
       name: "{{ deploy_type }}"
       state: present
@@ -18,13 +18,14 @@
       connection_draining_timeout: 120
       idle_timeout: 300
       subnets: "{{ elbsubnets }}"
+      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8"
       listeners:
       - protocol: http
         load_balancer_port: 80
         instance_port: 80
       health_check:
-        ping_protocol: http # options are http, https, ssl, tcp
-        ping_port: 8080
+        ping_protocol: tcp # options are http, https, ssl, tcp
+        ping_port: 22
         ping_path: "/" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
@@ -35,33 +36,57 @@
 #        s3_location: "sglogs" # This value is required if access_logs is set
 #        s3_prefix: "{{ deploy_type }}ELBlogs"
     register: elb_new
- 
+
   - name: debug elb create
     debug: "var=elb_new"
+
+  - name: Get ELB details after creation
+    local_action:
+      module: ec2_elb_facts
+      names:
+        - "{{ deploy_type }}"
+      region: "{{ region }}"
+    register: elb_facts
+
+  - name: Add new Route53 entry
+    route53:
+      command: "create"
+      zone: "ovchosting.co.uk"
+      hosted_zone_id: "ZGA6351G25S1B"
+      private_zone: "false"
+      record: "preprod-app.ovchosting.co.uk"
+      type: "CNAME"
+      ttl: 7200
+      value: "{{ elb_facts.elbs.0.dns_name }}"
+      overwrite: yes
 
 
   - name: create launch config
     local_action:
       module: ec2_lc
       name: "{{ new_lc_name }}"
-      image_id: "{{ new_image_id }}"
+      image_id: "{{ image_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: ["{{ ovc_security_groups }}"]
-      #classic_link_vpc_id: "vpc-ccb0b5a9" 
-      instance_type: "{{ instance_type }}" 
+      #classic_link_vpc_id: "vpc-ccb0b5a9"
+      instance_type: "{{ instance_type }}"
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
-#      user_data: "{{ lookup('file', '/opt/ansible/playbooks/scripts/' + deploy_type + '-user_data.sh') }}"
+# Note
+#    Lookups are executed with a cwd relative to the role or play, as opposed to
+#   local tasks which are executed with the cwd of the executed script.
+# http://docs.ansible.com/ansible/playbooks_lookups.html
+      user_data: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
     register: debuglaunch
- 
+
   - name: debug script copy
     debug: "var=debuglaunch"
 
 
   - name: create auto scaling group
-    local_action: 
+    local_action:
       module: ec2_asg
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
@@ -75,6 +100,7 @@
       region: "{{ region }}"
       tags:
         - Name: "{{ deploy_type }}-{{ ovc_version }}"
+        - monitor: true
     register: asglaunch
 
   - name: debug auto scaling update
