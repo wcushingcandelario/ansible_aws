@@ -5,7 +5,7 @@ set -x
 
 /bin/date
 
-export ENV=pre-prod
+export ENV=prod
 
 
 export FILE_NAME=/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties

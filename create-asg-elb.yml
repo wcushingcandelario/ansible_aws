@@ -75,7 +75,11 @@
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
-#      user_data: "{{ lookup('file', '/opt/ansible/playbooks/scripts/' + deploy_type + '-user_data.sh') }}"
+# Note
+#    Lookups are executed with a cwd relative to the role or play, as opposed to
+#   local tasks which are executed with the cwd of the executed script.
+# http://docs.ansible.com/ansible/playbooks_lookups.html
+      user_data: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
     register: debuglaunch
 
   - name: debug script copy

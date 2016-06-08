@@ -1,0 +1,36 @@
+<?php
+        /* Please use HTML Code for currency symobol (http://character-code.com/currency-html-codes.php) */
+
+        $config['setting'] = array(
+
+
+                'DBURL' => 'com.mysql.jdbc.Driver://rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com:3306/xdb', # FIXME: Needs changing.
+                'DBType' => 'MySQL',
+                'DBUserId' => 'root',
+                'DBPassword' => '0n3v13w123',
+                'REPORT_URL' => 'http://10.33.235.117:8080/OVCBIRT/',
+                'REPORT_d3_URL' => 'http://10.33.235.117:8080/json/',
+                'REPORT_DESIGN_PATH' => '/var/www/html/ovcdashboard/app/Config/reports/',
+                'PROCESS_DESIGNER_URL' => 'http://apparel.ovcdemo.com:8080/OVCFramework/designer/index.html',
+        );
+        $config['deploy_changes'] = array(
+                'OVC_SERVICE_URL'=> 'http://10.33.235.117:8080/json/process/execute/',
+                'Authorization' => 'YWRtaW46bmltZGE=',
+                'X-Ovc-Duuid' => 'posMClient-web',
+                'syncMode' => 'appDataRefresh',
+        );
+        $config['ecommerce_data'] = array(
+                'syncMode' => 'eComRefresh',
+        );
+        $config['service_type'] = array(
+        'DEPLOY_CHANGES_SERVICE' => 'SynchronizeData',
+        'USER_CHANGES_SERVICE' => 'NotifyUserUpdate',
+        'DEPLOY_PRICE_SUBMIT_MODE' => 'ApplyPriceChanges'
+       );
+        $config['sales_person'] = array(
+                'OVC_SERVICE_URL'=> 'http://10.33.235.117:8080/json/transaction/',
+                'Authorization' => 'ZUNvbW1lcmNlOmNoYW5nZW1l',
+                'Get_Transaction' => 'getTransactions',
+                'Update_sales' => 'updateSalesPerson'
+        );
+?>
