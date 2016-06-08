@@ -13,13 +13,13 @@
     local_action:
       module: ec2_elb_lb
       name: "{{ deploy_type }}"
-      security_group_ids: 'sg-5e4aaf39,sg-ea93378d'
+#      security_group_ids: 'sg-5e4aaf39,sg-ea93378d'
       state: present
       region: "{{ region }}"
       connection_draining_timeout: 120
       idle_timeout: 300
       subnets: "{{ elbsubnets }}"
-      security_group_ids: ["{{ ovc_security_groups }}"]
+      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8"
       listeners:
       - protocol: http
         load_balancer_port: 80

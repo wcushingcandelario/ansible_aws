@@ -14,6 +14,7 @@
    ovc_version: "5.2.0"
    deploy_type: "preprodelb"
    elbsubnets: "subnet-9520cef1,subnet-dd6b7daa,subnet-e9a689b0"
+   intsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
    ovc_security_groups: "sg-887dc9ef"
    IAMROLE: "CodeDeploy-EC2"
    asg_name: "preprod_asg"
