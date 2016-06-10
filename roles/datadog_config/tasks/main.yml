@@ -98,19 +98,27 @@
     - /var/log/messages
     - /var/log/httpd/access_log
     - /var/log/httpd/error_log
+  become: yes
+  become_user: root
 
 - name: Enable additional_checksd if it is disabled
   lineinfile:
     dest: /etc/dd-agent/datadog.conf
 #    regexp: "# additional_checksd: /etc/dd-agent/checks.d/"
     line: "additional_checksd: /etc/dd-agent/checks.d/"
+  become: yes
+  become_user: yes
 
 - name: Restart datadog-agent
   service:
     name: datadog-agent
     state: restarted
+  become: yes
+  become_user: root
 
 - name: Restart httpd
   service:
     name: httpd
     state: restarted
+  become: yes
+  become_user: root
