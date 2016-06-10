@@ -14,14 +14,15 @@
 
   tasks:
    - name: Clear hosts template
-     file: path=files/hosts state=absent
+     file: path=templates/hosts state=absent
 
    - name: add host to group
      add_host: name={{ item.private_ip }} groups=just_created
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> files/hosts
+     # Use copy command
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> templates/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
@@ -70,7 +71,7 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> files/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> templates/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
@@ -119,7 +120,7 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> templates/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
