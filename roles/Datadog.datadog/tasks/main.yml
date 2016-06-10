@@ -20,15 +20,23 @@
 - template: src=process.yaml.j2 dest=/etc/dd-agent/conf.d/process.yaml
   when: datadog_process_checks is defined
   notify: restart datadog
+  become: yes
+  become_user: root
 
 - debug: 'msg="[DEPRECATION NOTICE] Using `datadog_process_checks` is deprecated, use `process` under `datadog_checks` instead"'
   when: datadog_process_checks is defined
+  become: yes
+  become_user: root
 
 - service: name=datadog-agent state=started enabled=yes
   when: datadog_enabled
+  become: yes
+  become_user: root
 
 - service: name=datadog-agent state=stopped enabled=no
   when: not datadog_enabled
+  become: yes
+  become_user: root
 
 - name: Create a configuration file for each Datadog check
   template:
@@ -39,3 +47,5 @@
   with_items: datadog_checks.keys()
   notify:
    - restart datadog-agent
+  become: yes
+  become_user: root
