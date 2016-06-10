@@ -3,6 +3,8 @@
     name: dd-agent
     append: yes
     groups: apache
+  become: yes
+  become_user: root
 
 - name: Install http_check.yaml to /etc/dd-agent/conf.d
   copy:
