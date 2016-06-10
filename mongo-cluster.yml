@@ -14,14 +14,14 @@
 
   tasks:
    - name: Clear hosts template
-     file: path=/home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts state=absent
+     file: path=files/hosts state=absent
 
    - name: add host to group
      add_host: name={{ item.private_ip }} groups=just_created
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> files/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
@@ -70,7 +70,7 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> /home/bill/git/travisperkins-ansible/roles/mongoinstall/templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> files/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
@@ -160,6 +160,7 @@
   roles:
     - mongoinstall
     - Datadog.datadog
+
   vars:
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
