@@ -113,12 +113,12 @@
   service:
     name: datadog-agent
     state: restarted
-  become: yes
-  become_user: root
+ #become: yes
+ # become_user: root
 
 - name: Restart httpd
   service:
     name: httpd
     state: restarted
-  become: yes
-  become_user: root
+ # become: yes
+ # become_user: root
