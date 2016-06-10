@@ -5,13 +5,11 @@
 - include: pkg-redhat.yml
   when: ansible_os_family == "RedHat"
 
-- name: Datadog Continued
+- name: Create main Datadog agent configuration file
   hosts: localhost
   remote_user: ec2-user
   become: yes
   become_user: root
-
-- name: Create main Datadog agent configuration file
   template:
     src=datadog.conf.j2
     dest=/etc/dd-agent/datadog.conf
