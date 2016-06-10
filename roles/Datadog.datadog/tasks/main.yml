@@ -6,10 +6,6 @@
   when: ansible_os_family == "RedHat"
 
 - name: Create main Datadog agent configuration file
-  hosts: localhost
-  remote_user: ec2-user
-  become: yes
-  become_user: root
   template:
     src=datadog.conf.j2
     dest=/etc/dd-agent/datadog.conf
@@ -17,6 +13,8 @@
     group={{ datadog_group }}
     mode=0755
   notify: restart datadog-agent
+  become: yes
+  become_user: root
 
 # DEPRECATED: Remove specific handling of the process check for next major release
 - template: src=process.yaml.j2 dest=/etc/dd-agent/conf.d/process.yaml
