@@ -106,8 +106,8 @@
     dest: /etc/dd-agent/datadog.conf
 #    regexp: "# additional_checksd: /etc/dd-agent/checks.d/"
     line: "additional_checksd: /etc/dd-agent/checks.d/"
-#  become: yes
-#  become_user: yes
+   become: sudo
+ #  become_user: root
 
 - name: Restart datadog-agent
   service:
