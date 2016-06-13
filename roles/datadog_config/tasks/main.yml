@@ -67,8 +67,8 @@
     backup: yes
     force: yes
     mode: 0644
-#  become: yes
-#  become_user: root
+  become: yes
+  become_user: root
 
 - name: Install 09-server-status.conf to /etc/httpd/conf.modules.d/
   copy:
