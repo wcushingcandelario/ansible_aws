@@ -43,8 +43,8 @@
     backup: yes
     force: yes
     mode: 0755
-#  become: yes
-#  become_user: root
+  become: yes
+  become_user: root
 
 - name: Add JXM to Jetty
   command: "java -jar start.jar --add-to-start=jmx"
