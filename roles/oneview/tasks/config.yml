@@ -18,3 +18,10 @@
     - env_files/setting_var.php.*
   become: yes
   become_user: root
+
+- name: Copy out the unifiedConfig files
+  copy: src={{ item }} dest=/opt/ovc/posWebapp/WEB-INF/ owner=jetty
+  with_fileglob:
+    - cometd/war.xml.patch.*
+  become: yes
+  become_user: root
