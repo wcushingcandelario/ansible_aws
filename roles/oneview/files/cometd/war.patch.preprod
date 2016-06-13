@@ -1,0 +1,29 @@
+--- ./original.xml	2016-06-13 12:20:51.000000000 +0100
++++ ./preprod.xml	2016-06-13 13:09:12.000000000 +0100
+@@ -166,23 +166,22 @@
+   	</welcome-file-list>
+ 
+ 
+-	<!-- Configure cometd cluster if necessary (replace with above OORTConfiguration
+ 	<servlet>
+ 		<servlet-name>oort</servlet-name>
+ 		<servlet-class>org.cometd.oort.OortStaticConfigServlet</servlet-class>
+ 		<init-param>
+ 			<param-name>oort.url</param-name>
+-			<param-value>http://this_host:port/cometd</param-value>
++			<param-value>http://this_host:8080/cometd</param-value>
+ 		</init-param>
+ 		<init-param>
+             <param-name>oort.cloud</param-name>
+-            <param-value>http://remote_host1:port/cometd,http://remote_host2:port/cometd</param-value>
++            <param-value>http://10.33.235.97:8080/cometd,http://10.33.235.98:8080/cometd,http://10.33.235.99:8080/cometd,http://10.33.235.100:8080/cometd,http://10.33.235.101:8080/cometd,http://10.33.235.102:8080/cometd,http://10.33.235.103:8080/cometd,http://10.33.235.104:8080/cometd,http://10.33.235.105:8080/cometd,http://10.33.235.106:8080/cometd,http://10.33.235.107:8080/cometd,http://10.33.235.108:8080/cometd,http://10.33.235.109:8080/cometd,http://10.33.235.110:8080/cometd,http://10.33.235.111:8080/cometd,http://10.33.235.112:8080/cometd,http://10.33.235.113:8080/cometd,http://10.33.235.114:8080/cometd,http://10.33.235.115:8080/cometd,http://10.33.235.116:8080/cometd,http://10.33.235.117:8080/cometd,http://10.33.235.118:8080/cometd,http://10.33.235.119:8080/cometd,http://10.33.235.120:8080/cometd,http://10.33.235.121:8080/cometd,http://10.33.235.122:8080/cometd,http://10.33.235.123:8080/cometd,http://10.33.235.124:8080/cometd,http://10.33.235.125:8080/cometd,http://10.33.235.126:8080/cometd</param-value>
+         </init-param>
+ 		<init-param>
+             <param-name>oort.channels</param-name>
+             <param-value>/**</param-value>
+         </init-param>
+ 		<load-on-startup>3</load-on-startup>
+-	</servlet-->
++	</servlet>
+ 
+ </web-app>
