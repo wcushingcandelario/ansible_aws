@@ -13,8 +13,8 @@
     backup: yes
     force: yes
     mode: 0644
-#  become: yes
-#  become_user: root
+  become: yes
+  become_user: root
 
 - name: Install pid_check.py to /etc/dd-agent/checks.d/
   copy:
