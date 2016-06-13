@@ -25,7 +25,9 @@ cp $FILE_NAME $FILE_NAME.ORIG
 sudo mv $FILE_NAME.$ENV $FILE_NAME
 
 export FILE_NAME=/opt/ovc/posWebapp/WEB-INF/web.xml
+export LOCAL_IP=curl http://169.254.169.254/latest/meta-data/local-ipv4
 sudo /usr/bin/patch $FILE_NAME $FILE_NAME.patch.$ENV
+sed -i.bak "s/this_host\:8080/$LOCAL_IP\:8080/" $FILE_NAME
 
 
 sudo /sbin/service jetty restart
