@@ -98,8 +98,8 @@
     - /var/log/messages
     - /var/log/httpd/access_log
     - /var/log/httpd/error_log
-#  become: yes
-#  become_user: root
+  become: yes
+  become_user: root
 
 - name: Enable additional_checksd if it is disabled
   lineinfile:
