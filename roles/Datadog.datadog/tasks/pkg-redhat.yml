@@ -7,7 +7,9 @@
 
 - name: Copy repo file into place
   template: src=datadog.repo.j2 dest=/etc/yum.repos.d/datadog.repo
- # owner=root group=root mode=0644
+    owner=root
+    group=root
+    mode=0644
   become: yes
   become_user: root
 
