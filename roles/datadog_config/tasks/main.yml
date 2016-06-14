@@ -120,5 +120,5 @@
   service:
     name: httpd
     state: restarted
- # become: yes
- # become_user: root
+  become: yes
+  become_user: root
