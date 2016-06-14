@@ -87,8 +87,8 @@
     backup: yes
     force: yes
     mode: 0644
-#  become: yes
-#  become_user: root
+  become: yes
+  become_user: root
 
 - name: Customise dd-agent/datadog.conf with dogstream lines
   lineinfile:
