@@ -79,18 +79,17 @@
 #      overwrite: yes
 #    with_items: ami_instance.instances
 
-- hosts: just_created[3]
+- hosts: just_created[0]
 #- hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
   remote_user: ec2-user
   become: yes
   become_user: root
+
   pre_tasks:
     - include_vars: vars/ami-baker-defaults.yml
   roles:
     - common
-    #- db
     - jetty
-#    - mongodb
     - oneview
     - install_customizations_tp
     - nginx_proxy
