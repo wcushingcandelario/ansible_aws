@@ -3,7 +3,7 @@
 ecommerce.fromClient.scheme=https
 mailServer.smtp.starttls.enable=True
 mailServer.from=donotreply@company.com
-oort.url=
+#oort.url=
 ecommerce.fromClient.logout_relative_url=/en/logout
 ecommerce.vendor=1
 ecommerce.fromClient.port=443
@@ -31,7 +31,7 @@ ovcDB.username=root
 ovcNOSQLDB.connectTimeout=5000
 ovcDB.scheme=jdbc\:mysql
 ecommerce.fromServer.port=443
-ovcDB.host=rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+ovcDB.host=preprod-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
 ovcDB.driver=com.mysql.jdbc.Driver
 mailServer.smtp.port=587
 MESSAGE_COUNTER=10
