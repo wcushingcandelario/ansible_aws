@@ -18,8 +18,8 @@
     instance_type: db.m1.small
     wait: yes
     wait_timeout: 1200
-    username: mysql_admin
-    password: 1nsecure
+    username: root
+    password: 0n3v13w123
     tags:
       Environment: ovc-{{ environment_name }}
       Application: ovc
