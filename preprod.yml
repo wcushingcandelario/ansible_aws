@@ -18,7 +18,6 @@
    ovc_security_groups: sg-5bbc1f3c
    vpc_subnet_public: subnet-0a75a06e
    instance_type: t2.medium
-   instance_type_asg: m4.xlarge
    env: preprod-int.ovchosting.co.uk
    cluster_name: npcluster
 
@@ -30,4 +29,5 @@
 
 # install ELB and ASG
 - include: asg_main.yml
-
+  vars:
+    instance_type_asg: m4.xlarge
