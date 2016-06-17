@@ -44,7 +44,7 @@
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: "{{ ovc_security_groups }}"
-      instance_type: "{{ instance_type }}" 
+      instance_type: "{{ instance_type_asg }}" 
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"

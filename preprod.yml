@@ -6,20 +6,21 @@
   remote_user: ec2-user
   gather_facts: False
 
-#  tasks:
-#  - name: include mongo defaults
-#    include_vars: vars/pre-prod/mongo-defaults.yml
+  tasks:
+  - name: include mongo defaults
+    include_vars: vars/pre-prod/mongo-defaults.yml
 
 # install Mongo Cluster
-#- include: mongo-cluster.yml
-#  vars:  
-#   region: eu-west-1
-#   key: ovc-travis
-#   ovc_security_groups: sg-5bbc1f3c
-#   vpc_subnet_public: subnet-0a75a06e
-#   instance_type: t2.medium
-#   env: preprod-int.ovchosting.co.uk
-#   cluster_name: npcluster
+- include: mongo-cluster.yml
+  vars:  
+   region: eu-west-1
+   key: ovc-travis
+   ovc_security_groups: sg-5bbc1f3c
+   vpc_subnet_public: subnet-0a75a06e
+   instance_type: t2.medium
+   instance_type_asg: m4.xlarge
+   env: preprod-int.ovchosting.co.uk
+   cluster_name: npcluster
 
 # install ami-builder
 - include: ami-baker.yml

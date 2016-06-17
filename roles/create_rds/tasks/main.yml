@@ -14,8 +14,9 @@
 #    force_failover: no
     publicly_accessible: no
     db_engine: MySQL
-    size: 10
-    instance_type: db.m1.small
+    db_name: xdb
+    size: 100
+    instance_type: db.m4.large
     wait: yes
     wait_timeout: 1200
     username: root
