@@ -19,3 +19,4 @@
    IAMROLE: "CodeDeploy-EC2"
    asg_name: "preprod_asg"
    new_lc_name: "preprod_lc1"
+   instance_type_asg: m4.xlarge
