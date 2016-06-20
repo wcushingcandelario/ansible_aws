@@ -4,7 +4,7 @@
   file: dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config state=directory
 
 - name: Copy out the unifiedConfig files
-  copy: src={{ item }} dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/ owner=jetty
+  copy: src={{ item }} dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/ owner=jetty group=www-data
   with_fileglob:
     - env_files/unifiedConfig.properties.*
     - env_files/tools.properties.*
@@ -12,7 +12,14 @@
   become_user: root
 
 - name: Copy out the unifiedConfig files
-  copy: src={{ item }} dest=/var/www/html/ovcdashboard/app/Config/ owner=www-data
+  copy: src={{ item }} dest=/opt/jetty/webapps/ owner=jetty group=jetty
+  with_fileglob:
+    - env_files/context.xml.*
+  become: yes
+  become_user: root
+
+- name: Copy out the unifiedConfig files
+  copy: src={{ item }} dest=/var/www/html/ovcdashboard/app/Config/ owner=www-data group=www-data
   with_fileglob:
     - env_files/database.php.*
     - env_files/setting_var.php.*
@@ -20,7 +27,7 @@
   become_user: root
 
 - name: Copy the war.xml patch files
-  copy: src={{ item }} dest=/opt/ovc/posWebapp/WEB-INF/ owner=jetty
+  copy: src={{ item }} dest=/opt/ovc/posWebapp/WEB-INF/ owner=jetty group=jetty
   with_fileglob:
     - cometd/web.xml.patch.*
   become: yes

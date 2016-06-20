@@ -33,7 +33,7 @@
 		<Arg>
 
 			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-				<Set name="URL">jdbc:mysql://preprod-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com:3306/xdb</Set>
+				<Set name="URL">jdbc:mysql://!!!!FIX ME HOSTNAME HERE!!!!:3306/xdb</Set>
 				<Set name="user">root</Set>
 				<Set name="password">0n3v13w123</Set>
 			</New>
