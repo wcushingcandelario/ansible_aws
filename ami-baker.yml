@@ -84,13 +84,12 @@
   remote_user: ec2-user
   become: yes
   become_user: root
+
   pre_tasks:
     - include_vars: vars/ami-baker-defaults.yml
   roles:
     - common
-    #- db
     - jetty
-#    - mongodb
     - oneview
     - install_customizations_tp
     - nginx_proxy

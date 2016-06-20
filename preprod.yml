@@ -29,4 +29,5 @@
 
 # install ELB and ASG
 - include: asg_main.yml
-
+  vars:
+    instance_type_asg: m4.xlarge
