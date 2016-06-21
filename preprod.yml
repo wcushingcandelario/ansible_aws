@@ -22,12 +22,12 @@
    cluster_name: npcluster
 
 # install ami-builder
-#- include: ami-baker.yml
-#  vars:
-#   ovc_version: "5.2.0"
+- include: ami-baker.yml
+  vars:
+   ovc_version: "5.2.0"
 
 
 # install ELB and ASG
-#- include: asg_main.yml
-#  vars:
-#    instance_type_asg: m4.xlarge
+- include: asg_main.yml
+  vars:
+    instance_type_asg: m4.xlarge
