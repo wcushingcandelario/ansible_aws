@@ -98,6 +98,28 @@
   vars:
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
+- hosts: just_created[3]
+  name: Make some cake [REMOVE ME FOR 5.3]
+  tasks:
+    - name: Do a replace on the php -> cake
+      lineinfile:
+        dest: /var/www/html/ovcdashboard/app/Config/core.php
+        regexp: "*\'defaults\' => \'php\'"
+        line: "        'defaults' => 'cake'"
+        state: present
+    - name: Add final block for bootstrap.php
+      blockinfile:
+        dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
+        insertafter: EOF
+        state: present
+        content: |
+        $dir = TMP.'sessions';
+        if (!is_dir($dir)) {
+          mkdir($dir, 0755, true);
+        }
+        if(is_writable($dir)){
+          chmod($dir, 0755);
+        }
 - hosts: localhost
   connection: local
 
