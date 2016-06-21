@@ -20,6 +20,10 @@ export FILE_NAME=/var/www/html/ovcdashboard/app/Config/database.php
 cp $FILE_NAME $FILE_NAME.ORIG
 sudo mv $FILE_NAME.$ENV $FILE_NAME
 
+export FILE_NAME=/opt/jetty/webapps/context.xml
+cp $FILE_NAME $FILE_NAME.ORIG
+sudo mv $FILE_NAME.$ENV $FILE_NAME
+
 export FILE_NAME=/var/www/html/ovcdashboard/app/Config/setting_var.php
 cp $FILE_NAME $FILE_NAME.ORIG
 sudo mv $FILE_NAME.$ENV $FILE_NAME
