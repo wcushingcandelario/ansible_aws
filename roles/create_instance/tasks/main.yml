@@ -27,3 +27,16 @@
 
 - name: add host to group
   add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created
+
+- name: Add new Route53 entry
+    route53:
+      command: "create"
+      zone: "preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      private_zone: "true"
+      record: "preprod-pos.preprod-int.ovchosting.co.uk"
+      type: "A"
+      ttl: 7200
+      value: "{{ item.private_ip }}"
+      overwrite: yes
+    with_items: ami_instance

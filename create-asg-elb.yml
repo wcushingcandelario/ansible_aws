@@ -4,9 +4,6 @@
   connection: local
   gather_facts: False
 
-  #vars:
-    #new_image_id:
-    #new_lc_name:
 
   tasks:
   - name: create ELB
@@ -21,13 +18,19 @@
       subnets: "{{ elbsubnets }}"
       security_group_ids: "sg-887dc9ef,sg-9fbd1ef8"
       listeners:
-      - protocol: http
+      - protocol: tcp
         load_balancer_port: 80
         instance_port: 80
+      - protocol: tcp
+        load_balancer_port: 443
+        instance_port: 443
+      - protocol: tcp
+        load_balancer_port: 8888
+        instance_port: 8888
       health_check:
-        ping_protocol: tcp # options are http, https, ssl, tcp
-        ping_port: 22
-        ping_path: "/" # not required for tcp or ssl
+        ping_protocol: http # options are http, https, ssl, tcp
+        ping_port: 80
+        ping_path: "/ovcdashboard/login" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
         unhealthy_threshold: 2
@@ -49,17 +52,17 @@
       region: "{{ region }}"
     register: elb_facts
 
-  - name: Add new Route53 entry
-    route53:
-      command: "create"
-      zone: "ovchosting.co.uk"
-      hosted_zone_id: "ZGA6351G25S1B"
-      private_zone: "false"
-      record: "preprod-pos.preprod-int.ovchosting.co.uk"
-      type: "CNAME"
-      ttl: 7200
-      value: "{{ elb_facts.elbs.0.dns_name }}"
-      overwrite: yes
+#  - name: Add new Route53 entry
+#    route53:
+#      command: "create"
+#      zone: "ovchosting.co.uk"
+#      hosted_zone_id: "ZGA6351G25S1B"
+#      private_zone: "true"
+#      record: "preprod-pos.preprod-int.ovchosting.co.uk"
+#      type: "CNAME"
+#      ttl: 7200
+#      value: "{{ elb_facts.elbs.0.dns_name }}"
+#      overwrite: yes
 
 
   - name: create launch config
@@ -101,6 +104,7 @@
       tags:
         - Name: "{{ deploy_type }}-{{ ovc_version }}"
         - monitor: true
+        - environment: preprod
     register: asglaunch
 
   - name: debug auto scaling update

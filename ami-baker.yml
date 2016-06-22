@@ -28,7 +28,6 @@
       image: "{{ ami_find.results[0].ami_id }}"
       wait: yes
       instance_profile_name: CodeDeploy-EC2
-      #wait_timeout: 500
       exact_count: 1
       count_tag:
         role: ami_builder
@@ -36,14 +35,6 @@
         role: ami_builder
         Name: ami_builder
     register: ami_instance
-
-  #- name: waiting for ssh to start
-  #  wait_for: port=22 host={{ ami_instance.tagged_instances.0.public_ip }} timeout=300
-  #            search_regex=OpenSSH
-
-  # - name: wait for ssh to come up
-  #   wait_for: host={{ item.private_ip }} delay=5 port=22 state=started timeout=320
-  #   with_items: ami_instance.instances
 
   - name: wait for ssh to come up
     wait_for: host={{ item.private_ip }} delay=90 port=22 state=started timeout=640
@@ -65,22 +56,7 @@
 #      overwrite: yes
 #    with_items: ami_instance.instances
 
-
-#  - name: Add new Route53 entry
-#    route53:
-#      command: "create"
-#      zone: "preprod-int.ovchosting.co.uk"
-#      hosted_zone_id: "Z3M7I9GRTY3KIG"
-#      private_zone: "true"
-#      record: "ami-builder.preprod-int.ovchosting.co.uk"
-#      type: "A"
-#      ttl: 7200
-#      value: "{{ item.private_ip }}"
-#      overwrite: yes
-#    with_items: ami_instance.instances
-
 - hosts: just_created[3]
-#- hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
   remote_user: ec2-user
   become: yes
   become_user: root
@@ -90,6 +66,7 @@
   roles:
     - common
     - jetty
+    - filebeat
     - oneview
     - install_customizations_tp
     - nginx_proxy
@@ -99,12 +76,16 @@
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
 - hosts: just_created[3]
+  remote_user: ec2-user
+  become: yes
+  become_user: root
+
   name: Make some cake [REMOVE ME FOR 5.3]
   tasks:
     - name: Do a replace on the php -> cake
       lineinfile:
         dest: /var/www/html/ovcdashboard/app/Config/core.php
-        regexp: "*\'defaults\' => \'php\'"
+        regexp: ".*\'defaults\' => \'php\'"
         line: "        'defaults' => 'cake'"
         state: present
     - name: Add final block for bootstrap.php
@@ -113,13 +94,14 @@
         insertafter: EOF
         state: present
         content: |
-        $dir = TMP.'sessions';
-        if (!is_dir($dir)) {
-          mkdir($dir, 0755, true);
-        }
-        if(is_writable($dir)){
-          chmod($dir, 0755);
-        }
+          $dir = TMP.'sessions';
+          if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+          }  
+          if(is_writable($dir)){
+            chmod($dir, 0755);
+          }
+
 - hosts: localhost
   connection: local
 
@@ -152,6 +134,4 @@
             lc_suffix: {{ ansible_date_time.epoch }}
      dest: vars/settings.yml
      force: yes
-     #become: yes
-    # become_user: root
     when: deploy is defined and deploy|bool == True
