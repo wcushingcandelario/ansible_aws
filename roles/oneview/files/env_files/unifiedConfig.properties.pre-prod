@@ -14,7 +14,7 @@ ovcNOSQLDB.maxWaitTime=5000
 ovcServer.port=8080
 mailServer.smtp.host=smtp.gmail.com
 mailServer.encrypted.password=aSQQsm2SaMY05MFsEIQL/A\=\=
-ovcNOSQLDB.host=mongodb01.preprod-int.ovchosting.co.uk
+ovcNOSQLDB.host=mongodb-preprod01.ovchosting.co.uk
 TIMEOUT=10000
 ovcDB.port=3306
 oort.cloud=
@@ -26,7 +26,7 @@ ovcNOSQLDB.socketTimeout=5000
 ovcNOSQLDB.connectionsPerHost=20
 ovcDB.db=xdb
 ovcServer.scheme=http
-ovcServer.host=preprod-pos.preprod-int.ovchosting.co.uk
+ovcServer.host=preprod.ovchosting.co.uk
 ovcDB.username=root
 ovcNOSQLDB.connectTimeout=5000
 ovcDB.scheme=jdbc\:mysql

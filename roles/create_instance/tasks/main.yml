@@ -31,10 +31,10 @@
 - name: Add new Route53 entry
     route53:
       command: "create"
-      zone: "preprod-int.ovchosting.co.uk"
-      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      zone: "ovchosting.co.uk"
+      hosted_zone_id: "Z3A98VA7X0SL0T"
       private_zone: "true"
-      record: "preprod-pos.preprod-int.ovchosting.co.uk"
+      record: "preprod.ovchosting.co.uk"
       type: "A"
       ttl: 7200
       value: "{{ item.private_ip }}"

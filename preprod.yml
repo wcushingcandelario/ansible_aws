@@ -18,7 +18,7 @@
    ovc_security_groups: sg-5bbc1f3c
    vpc_subnet_public: subnet-0a75a06e
    instance_type: m4.large
-   env: preprod-int.ovchosting.co.uk
+   env: preprod.ovchosting.co.uk
    cluster_name: preprod_cluster
 
 # install ami-builder
