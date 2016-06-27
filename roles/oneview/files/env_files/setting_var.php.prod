@@ -8,13 +8,13 @@
                 'DBType' => 'MySQL',
                 'DBUserId' => 'root',
                 'DBPassword' => '0n3v13w123',
-                'REPORT_URL' => 'http://prod-pos.preprod-int.ovchosting.co.uk:8080/OVCBIRT/',
-                'REPORT_d3_URL' => 'http://prod-pos.preprod-int.ovchosting.co.uk:8080/json/',
+                'REPORT_URL' => 'https://prod-pos.preprod-int.ovchosting.co.uk/OVCBIRT/',
+                'REPORT_d3_URL' => 'https://prod-pos.preprod-int.ovchosting.co.uk/json/',
                 'REPORT_DESIGN_PATH' => '/var/www/html/ovcdashboard/app/Config/reports/',
                 'PROCESS_DESIGNER_URL' => 'http://apparel.ovcdemo.com:8080/OVCFramework/designer/index.html',
         );
         $config['deploy_changes'] = array(
-                'OVC_SERVICE_URL'=> 'http://prod-pos.preprod-int.ovchosting.co.uk:8080/json/process/execute/',
+                'OVC_SERVICE_URL'=> 'https://prod-pos.preprod-int.ovchosting.co.uk/json/process/execute/',
                 'Authorization' => 'YWRtaW46bmltZGE=',
                 'X-Ovc-Duuid' => 'posMClient-web',
                 'syncMode' => 'appDataRefresh',
@@ -28,7 +28,7 @@
         'DEPLOY_PRICE_SUBMIT_MODE' => 'ApplyPriceChanges'
        );
         $config['sales_person'] = array(
-                'OVC_SERVICE_URL'=> 'http://prod-pos.preprod-int.ovchosting.co.uk:8080/json/transaction/',
+                'OVC_SERVICE_URL'=> 'https://prod-pos.preprod-int.ovchosting.co.uk/json/transaction/',
                 'Authorization' => 'ZUNvbW1lcmNlOmNoYW5nZW1l',
                 'Get_Transaction' => 'getTransactions',
                 'Update_sales' => 'updateSalesPerson'
