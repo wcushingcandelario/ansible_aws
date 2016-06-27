@@ -1,0 +1,64 @@
+---
+#
+# install/run filebeat elk client
+#
+
+- name: Copy filebeat yum repo file
+  copy:
+    src=filebeat.repo
+    dest=/etc/yum.repos.d/filebeat.repo
+    owner=root
+    group=root
+    mode=0644
+  when: "filebeat is defined"
+  become: true
+
+- name: Import Filebeat GPG Key
+  rpm_key: key=http://packages.elastic.co/GPG-KEY-elasticsearch
+    state=present
+  when: "filebeat is defined"
+
+- name: Install filebeat rpms
+  yum: name={{ item }} state=present
+  become: true
+  with_items:
+    - filebeat
+  when: "filebeat is defined"
+
+- name: Generate filebeat configuration template
+  template:
+    src=filebeat.yml.j2
+    dest=/etc/filebeat/filebeat.yml
+    owner=root
+    group=root
+    mode=0644
+  when: "filebeat is defined"
+  become: true
+  #register: filebeat_needs_restart
+
+- name: Check ELK server SSL client certificate
+  stat: path=/etc/pki/tls/certs/logstash-forwarder.crt
+  ignore_errors: true
+  register: elk_client_ssl_cert_exists
+  when: "filebeat is defined"
+
+- name: Install ELK server SSL client certificate
+  copy:
+    src=logstash-forwarder.crt
+    dest=/etc/pki/tls/certs/logstash-forwarder.crt
+    owner=root
+    group=root
+    mode=0644
+  when: "filebeat is defined"
+  become: true
+
+#- name: Start filebeat service
+#  command: systemctl start filebeat.service
+#  ignore_errors: true
+#  become: true
+#  when: "filebeat is defined"
+
+- name: Setup filebeat service
+  service: name=filebeat state=started enabled=true
+  become: true
+  when: "filebeat is defined"

@@ -22,18 +22,18 @@
 
    - name: create hosts file
      # Use copy command
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb-preprod0{{ count }}.ovchosting.co.uk mongodb-preprod0{{ count }}" >> templates/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
      route53:
        command: "create"
-       zone: "preprod-int.ovchosting.co.uk"
-       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       zone: "ovchosting.co.uk"
+       hosted_zone_id: "Z3A98VA7X0SL0T"
        private_zone: "true"
-       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       record: "mongodb-preprod0{{ count }}.ovchosting.co.uk"
        type: "A"
-       ttl: 7200
+       ttl: 60
        value: "{{ groups.just_created[0] }}"
        overwrite: yes
      with_items: ami_instance.instances
@@ -41,12 +41,12 @@
    - name: Add new Route53 entry
      route53:
        command: "create"
-       zone: "preprod-int.ovchosting.co.uk"
-       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       zone: "ovchosting.co.uk"
+       hosted_zone_id: "Z3A98VA7X0SL0T"
        private_zone: "true"
-       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       record: "mongodb-preprod0{{ count }}.ovchosting.co.uk"
        type: "A"
-       ttl: 7200
+       ttl: 60
        value: "{{ groups.just_created[0] }}"
        overwrite: yes
      with_items: ami_instance.instances
@@ -71,18 +71,18 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb-preprod0{{ count }}.ovchosting.co.uk mongodb-preprod0{{ count }}" >> templates/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
      route53:
        command: "create"
-       zone: "preprod-int.ovchosting.co.uk"
-       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       zone: "ovchosting.co.uk"
+       hosted_zone_id: "Z3A98VA7X0SL0T"
        private_zone: "true"
-       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       record: "mongodb-preprod0{{ count }}.ovchosting.co.uk"
        type: "A"
-       ttl: 7200
+       ttl: 60
        value: "{{ groups.just_created[1] }}"
        overwrite: yes
      with_items: ami_instance.instances
@@ -94,12 +94,12 @@
    - name: Add new Route53 entry
      route53:
       command: "create"
-      zone: "preprod-int.ovchosting.co.uk"
-      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      zone: "ovchosting.co.uk"
+      hosted_zone_id: "Z3A98VA7X0SL0T"
       private_zone: "true"
-      record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+      record: "mongodb-preprod0{{ count }}.ovchosting.co.uk"
       type: "A"
-      ttl: 7200
+      ttl: 60
       value: "{{ groups.just_created[1] }}"
       overwrite: yes
      with_items: ami_instance.instances
@@ -120,18 +120,18 @@
      with_items: ami_instance.instances
 
    - name: create hosts file
-     shell: echo "{{ item.private_ip }} mongodb0{{ count }}.preprod-int.ovchosting.co.uk mongodb0{{ count }}" >> templates/hosts
+     shell: echo "{{ item.private_ip }} mongodb-preprod0{{ count }}.ovchosting.co.uk mongodb-preprod0{{ count }}" >> templates/hosts
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
      route53:
        command: "create"
-       zone: "preprod-int.ovchosting.co.uk"
-       hosted_zone_id: "Z3M7I9GRTY3KIG"
+       zone: "ovchosting.co.uk"
+       hosted_zone_id: "Z3A98VA7X0SL0T"
        private_zone: "true"
-       record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+       record: "mongodb-preprod0{{ count }}.ovchosting.co.uk"
        type: "A"
-       ttl: 7200
+       ttl: 60
        value: "{{ groups.just_created[2] }}"
        overwrite: yes
      with_items: ami_instance.instances
@@ -143,12 +143,12 @@
    - name: Add new Route53 entry
      route53:
       command: "create"
-      zone: "preprod-int.ovchosting.co.uk"
-      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      zone: "ovchosting.co.uk"
+      hosted_zone_id: "Z3A98VA7X0SL0T"
       private_zone: "true"
-      record: "mongodb0{{ count }}.preprod-int.ovchosting.co.uk"
+      record: "mongodb-preprod0{{ count }}.ovchosting.co.uk"
       type: "A"
-      ttl: 7200
+      ttl: 60
       value: "{{ groups.just_created[2] }}"
       overwrite: yes
      with_items: ami_instance.instances
