@@ -34,7 +34,7 @@
         healthy_threshold: 10
     register: elb_new
 
-    - name: debug elb create
+  - name: debug elb create
     debug: "var=elb_new"
 
   - name: create second ELB
