@@ -52,6 +52,12 @@
         - protocol: https
           load_balancer_port: 443
           instance_port: 80
+        - stickiness:
+            type: application
+            enabled: yes
+            expiration: 3600  
+
+
         health_check:
           ping_protocol: http # options are http, https, ssl, tcp
           ping_port: 8080
@@ -83,7 +89,7 @@
       private_zone: "true"
       record: "preprod-dash.ovchosting.co.uk"
       type: "CNAME"
-      ttl: 7200
+      ttl: 300
       value: "{{ elb_facts.elbs.0.dns_name }}"
       overwrite: yes
 
