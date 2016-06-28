@@ -55,7 +55,7 @@
         - stickiness:
             type: application
             enabled: yes
-            expiration: 3600  
+            expiration: 3600
 
 
         health_check:
@@ -69,8 +69,8 @@
           healthy_threshold: 10
     register: elb_two
 
-  - name: debug elb create
-    debug: "var=elb_two"
+    - name: debug elb create
+      debug: "var=elb_two"
 
   - name: Get ELB details after creation
     local_action:
