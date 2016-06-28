@@ -37,7 +37,7 @@
   - name: debug elb create
   debug: "var=elb_new"
 
-  - name: createe second ELB
+  - name: create second ELB
     local_action:
       module: ec2_elb_lb
       name: "{{ deploy_dash }}"
