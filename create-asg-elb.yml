@@ -35,7 +35,7 @@
     register: elb_new
 
     - name: debug elb create
-      debug: "var=elb_new"
+    debug: "var=elb_new"
 
     - name: create second ELB
       local_action:
@@ -55,9 +55,6 @@
         - stickiness:
             type: application
             enabled: yes
-            expiration: 3600
-
-
         health_check:
           ping_protocol: http # options are http, https, ssl, tcp
           ping_port: 8080
@@ -70,7 +67,7 @@
     register: elb_two
 
     - name: debug elb create
-      debug: "var=elb_two"
+    debug: "var=elb_two"
 
   - name: Get ELB details after creation
     local_action:
