@@ -75,17 +75,17 @@
       region: "{{ region }}"
     register: elb_facts
 
-#  - name: Add new Route53 entry
-#    route53:
-#      command: "create"
-#      zone: "ovchosting.co.uk"
-#      hosted_zone_id: "Z3A98VA7X0SL0T"
-#      private_zone: "true"
-#      record: "preprod.ovchosting.co.uk"
-#      type: "CNAME"
-#      ttl: 7200
-#      value: "{{ elb_facts.elbs.0.dns_name }}"
-#      overwrite: yes
+  - name: Add new Route53 entry
+    route53:
+      command: "create"
+      zone: "ovchosting.co.uk"
+      hosted_zone_id: "Z3A98VA7X0SL0T"
+      private_zone: "true"
+      record: "preprod-dash.ovchosting.co.uk"
+      type: "CNAME"
+      ttl: 7200
+      value: "{{ elb_facts.elbs.0.dns_name }}"
+      overwrite: yes
 
 
   - name: create launch config
@@ -104,7 +104,7 @@
 #    Lookups are executed with a cwd relative to the role or play, as opposed to
 #   local tasks which are executed with the cwd of the executed script.
 # http://docs.ansible.com/ansible/playbooks_lookups.html
-      user_data: "{{ lookup('file', 'scripts/' + 'preprod' + '-user_data.sh') }} {{ lookup('file', 'scripts/' + 'preprod' + '-route53_update.sh') }}"
+      user_data: "{{ lookup('file', 'scripts/' + 'preprod' + '-user_data.sh') }}"
     register: debuglaunch
 
   - name: debug script copy
