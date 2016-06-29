@@ -15,6 +15,11 @@ filebeat:
         - /var/log/*.log
         - /var/log/messages
 
+    -
+      paths:
+        - /var/log/nginx/*.log
+      document_type: nginx
+
       # Configure the file encoding for reading files with international characters
       # following the W3C recommendation for HTML5 (http://www.w3.org/TR/encoding).
       # Some sample encodings:
