@@ -15,6 +15,7 @@
       name: "{{ deploy_type }}"
       state: present
       region: "{{ region }}"
+      scheme: internal
       connection_draining_timeout: 120
       idle_timeout: 300
       subnets: "{{ elbsubnets }}"
@@ -54,7 +55,7 @@
       zone: "ovchosting.co.uk"
       hosted_zone_id: "ZGA6351G25S1B"
       private_zone: "false"
-      record: "preprod-app.ovchosting.co.uk"
+      record: "preprod-pos.preprod-int.ovchosting.co.uk"
       type: "CNAME"
       ttl: 7200
       value: "{{ elb_facts.elbs.0.dns_name }}"
@@ -69,7 +70,6 @@
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: ["{{ ovc_security_groups }}"]
-      #classic_link_vpc_id: "vpc-ccb0b5a9"
       instance_type: "{{ instance_type }}"
       instance_monitoring: yes
       assign_public_ip: yes
@@ -78,7 +78,7 @@
 #    Lookups are executed with a cwd relative to the role or play, as opposed to
 #   local tasks which are executed with the cwd of the executed script.
 # http://docs.ansible.com/ansible/playbooks_lookups.html
-      user_data: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
+      user_data: "{{ lookup('file', 'scripts/' + 'preprod' + '-user_data.sh') }}"
     register: debuglaunch
 
   - name: debug script copy
