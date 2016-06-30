@@ -88,6 +88,12 @@
         regexp: ".*\'defaults\' => \'php\'"
         line: "        'defaults' => 'cake'"
         state: present
+    - name: Replace http with https
+      lineinfile:
+        dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
+        regexp: ".*SITE_URL.*http:" 
+        line: "define('SITE_URL',\"https:"
+        state: present
     - name: Add final block for bootstrap.php
       blockinfile:
         dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
@@ -97,7 +103,7 @@
           $dir = TMP.'sessions';
           if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
-          }  
+          }
           if(is_writable($dir)){
             chmod($dir, 0755);
           }
