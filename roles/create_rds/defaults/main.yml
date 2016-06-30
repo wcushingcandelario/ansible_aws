@@ -1,7 +1,0 @@
----
-
-environment_name: preprod-rds
-rds_security_group: sg-5bbc1f3c 
-rds_subnet_group: pre-prod-rds
-region: eu-west-1
-multirdszone: no
