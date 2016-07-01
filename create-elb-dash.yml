@@ -16,20 +16,24 @@
       connection_draining_timeout: 120
       idle_timeout: 300
       subnets: "{{ elbsubnets }}"
-      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8"
+      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
       listeners:
-      - protocol: https
-        load_balancer_port: 443
+      - protocol: http
+        load_balancer_port: 80
         instance_protocol: http
         instance_port: 80
+      - protocol: https
+        load_balancer_port: 443
+        instance_protocol: https
+        instance_port: 443
         ssl_certificate_id: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
       stickiness:
         type: loadbalancer
         enabled: yes
         expiration: 300
       health_check:
-        ping_protocol: http # options are http, https, ssl, tcp
-        ping_port: 80
+        ping_protocol: https # options are http, https, ssl, tcp
+        ping_port: 443
         ping_path: "/ovcdashboard/login" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
