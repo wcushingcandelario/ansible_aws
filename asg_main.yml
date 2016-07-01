@@ -8,8 +8,34 @@
   - include_vars: vars/ami-baker-defaults.yml
   - include_vars: vars/settings.yml
 
+# install ELB POS
+- include: create-elb-pos.yml
+  vars:
+    ovc_version: "5.2.0"
+    deploy_type: "PreProd-POS"
+    deploy_dash: "PreProd-Dash"
+    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
+    ovc_security_groups: "sg-887dc9ef"
+    IAMROLE: "CodeDeploy-EC2"
+    asg_name: "preprod_autoscale"
+    new_lc_name: "preprod_config"
+    instance_type_asg: m4.xlarge
+
+# install ELB DASH
+- include: create-elb-dash.yml
+  vars:
+    ovc_version: "5.2.0"
+    deploy_type: "PreProd-POS"
+    deploy_dash: "PreProd-Dash"
+    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
+    ovc_security_groups: "sg-887dc9ef"
+    IAMROLE: "CodeDeploy-EC2"
+    asg_name: "preprod_autoscale"
+    new_lc_name: "preprod_config"
+    instance_type_asg: m4.xlarge
+
 # install ASG
-- include: create-asg-elb.yml
+- include: create-auto.yml
   vars:
    ovc_version: "5.2.0"
    deploy_type: "PreProd-POS"

@@ -1,0 +1,52 @@
+---
+
+- name: create LC
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+  - name: create launch config
+    local_action:
+      module: ec2_lc
+      name: "{{ new_lc_name }}"
+      image_id: "{{ image_id }}"
+      key_name: "{{ key }}"
+      region: "{{ region }}"
+      security_groups: ["{{ ovc_security_groups }}"]
+      instance_type: "{{ instance_type_asg }}"
+      instance_monitoring: yes
+      assign_public_ip: yes
+      instance_profile_name: "{{ IAMROLE }}"
+# Note
+#    Lookups are executed with a cwd relative to the role or play, as opposed to
+#   local tasks which are executed with the cwd of the executed script.
+# http://docs.ansible.com/ansible/playbooks_lookups.html
+      user_data: "{{ lookup('file', 'scripts/' + 'preprod' + '-user_data.sh') }}"
+    register: debuglaunch
+
+  - name: debug script copy
+    debug: "var=debuglaunch"
+
+
+  - name: create auto scaling group
+    local_action:
+      module: ec2_asg
+      name: "{{ asg_name }}"
+      launch_config_name: "{{ new_lc_name }}"
+      vpc_zone_identifier: "{{ elbsubnets }}"
+      load_balancers: "{{ deploy_type }},{{ deploy_dash }}"
+      replace_all_instances: yes
+      health_check_type: ELB
+      min_size: 2
+      max_size: 5
+      desired_capacity: 2
+      region: "{{ region }}"
+      tags:
+        - Name: "{{ deploy_type }}-{{ ovc_version }}"
+        - monitor: true
+        - environment: preprod
+    register: asglaunch
+
+  - name: debug auto scaling update
+    debug: "var=asglaunch"
