@@ -4,9 +4,6 @@
   connection: local
   gather_facts: False
 
-  #vars:
-    #new_image_id:
-    #new_lc_name:
 
   tasks:
   - name: create ELB
@@ -21,31 +18,63 @@
       subnets: "{{ elbsubnets }}"
       security_group_ids: "sg-887dc9ef,sg-9fbd1ef8"
       listeners:
-      - protocol: http
-        load_balancer_port: 80
-        instance_port: 80
+      - protocol: tcp
+        load_balancer_port: 443
+        instance_port: 443
+      - protocol: tcp
+        load_balancer_port: 8080
+        instance_port: 8080
       health_check:
-        ping_protocol: tcp # options are http, https, ssl, tcp
-        ping_port: 22
-        ping_path: "/" # not required for tcp or ssl
+        ping_protocol: http # options are http, https, ssl, tcp
+        ping_port: 8080
+        ping_path: "/ovcpos" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
         unhealthy_threshold: 2
         healthy_threshold: 10
-#      access_logs:
-#        interval: 5 # minutes (defaults to 60)
-#        s3_location: "sglogs" # This value is required if access_logs is set
-#        s3_prefix: "{{ deploy_type }}ELBlogs"
     register: elb_new
 
   - name: debug elb create
     debug: "var=elb_new"
+
+  - name: create second ELB
+    local_action:
+      module: ec2_elb_lb
+      name: "{{ deploy_dash }}"
+      state: present
+      region: "{{ region }}"
+      scheme: internal
+      connection_draining_timeout: 120
+      idle_timeout: 300
+      subnets: "{{ elbsubnets }}"
+      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8"
+      listeners:
+      - protocol: https
+        load_balancer_port: 443
+        instance_port: 80
+      - stickiness:
+        type: application
+        enabled: yes
+        health_check:
+          ping_protocol: http # options are http, https, ssl, tcp
+          ping_port: 8080
+          ping_port: 80
+          ping_path: "/ovcdashboard/login" # not required for tcp or ssl
+          response_timeout: 5 # seconds
+          interval: 30 # seconds
+          unhealthy_threshold: 2
+          healthy_threshold: 10
+    register: elb_two
+
+    - name: debug elb createe
+    debug: "var=elb_two"
 
   - name: Get ELB details after creation
     local_action:
       module: ec2_elb_facts
       names:
         - "{{ deploy_type }}"
+        - "{{ deploy_dash }}"
       region: "{{ region }}"
     register: elb_facts
 
@@ -53,11 +82,11 @@
     route53:
       command: "create"
       zone: "ovchosting.co.uk"
-      hosted_zone_id: "ZGA6351G25S1B"
-      private_zone: "false"
-      record: "preprod-pos.preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3A98VA7X0SL0T"
+      private_zone: "true"
+      record: "preprod-dash.ovchosting.co.uk"
       type: "CNAME"
-      ttl: 7200
+      ttl: 300
       value: "{{ elb_facts.elbs.0.dns_name }}"
       overwrite: yes
 
@@ -70,7 +99,7 @@
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: ["{{ ovc_security_groups }}"]
-      instance_type: "{{ instance_type }}"
+      instance_type: "{{ instance_type_asg }}"
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
@@ -91,7 +120,8 @@
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
       vpc_zone_identifier: "{{ elbsubnets }}"
-      load_balancers: "{{ deploy_type }}"
+      load_balancers: "{{ 'deploy_type', 'deploy_dash' }}"
+      load_balancers: ["{{ 'deploy_type', 'deploy_dash' }}"]
       replace_all_instances: yes
       health_check_type: ELB
       min_size: 2
@@ -101,6 +131,7 @@
       tags:
         - Name: "{{ deploy_type }}-{{ ovc_version }}"
         - monitor: true
+        - environment: preprod
     register: asglaunch
 
   - name: debug auto scaling update

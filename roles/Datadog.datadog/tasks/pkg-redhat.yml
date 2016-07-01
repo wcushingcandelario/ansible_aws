@@ -1,0 +1,20 @@
+---
+#- name: DataDog-Agent
+#  hosts: localhost
+#  remote_user: ec2-user
+#  become: yes
+#  become_user: root
+
+- name: Copy repo file into place
+  template: src=datadog.repo.j2 dest=/etc/yum.repos.d/datadog.repo
+    owner=root
+    group=root
+    mode=0644
+  become: yes
+  become_user: root
+
+- name: Install datadog-agent package
+  yum: name=datadog-agent state=latest
+  become: yes
+  become_user: root
+

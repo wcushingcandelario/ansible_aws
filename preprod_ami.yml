@@ -14,7 +14,7 @@
 #   cluster_name: "npcluster"
 
 # install ami-builder
-- include: ami-baker.yml
+- include: ami-baker_test.yml
   vars:
    ovc_version: "5.2.0"
 

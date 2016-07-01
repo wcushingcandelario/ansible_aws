@@ -43,20 +43,20 @@
   - name: add host to group
     add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created
 
-#  - name: Add new Route53 entry
-#    route53:
-#      command: "create"
-#      zone: "preprod-int.ovchosting.co.uk"
-#      hosted_zone_id: "Z3M7I9GRTY3KIG"
-#      private_zone: "true"
-#      record: "ami-builder.preprod-int.ovchosting.co.uk"
-#      type: "A"
-#      ttl: 7200
-#      value: "{{ item.private_ip }}"
-#      overwrite: yes
-#    with_items: ami_instance.instances
+  - name: Add new Route53 entry
+    route53:
+      command: "create"
+      zone: "preprod-int.ovchosting.co.uk"
+      hosted_zone_id: "Z3M7I9GRTY3KIG"
+      private_zone: "true"
+      record: "preprod-pos.preprod-int.ovchosting.co.uk"
+      type: "A"
+      ttl: 7200
+      value: "{{ item.private_ip }}"
+      overwrite: yes
+    with_items: ami_instance.instances
 
-- hosts: just_created[3]
+- hosts: just_created[0]
   remote_user: ec2-user
   become: yes
   become_user: root
@@ -65,17 +65,18 @@
     - include_vars: vars/ami-baker-defaults.yml
   roles:
     - common
-    - jetty
     - filebeat
+    - jetty
     - oneview
     - install_customizations_tp
     - nginx_proxy
     - Datadog.datadog
     - datadog_config
+ 
   vars:
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
-- hosts: just_created[3]
+- hosts: just_created[0]
   remote_user: ec2-user
   become: yes
   become_user: root
@@ -93,7 +94,7 @@
         dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
         insertafter: EOF
         state: present
-        content: |
+       content: |
           $dir = TMP.'sessions';
           if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
@@ -117,21 +118,23 @@
       wait: yes
     register: amioutput
 
-  - name: terminate temporary instance
-    local_action:
-      module: ec2
-      state: absent
-      region: "{{ region }}"
-      instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+#  - name: terminate temporary instance
+#    local_action:
+#      module: ec2
+#      state: absent
+#      region: "{{ region }}"
+#      instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
 
-  - name: debug
-    debug: var=amioutput
+#  - name: debug
+#    debug: var=amioutput
 
-  - name: create vars file with  new ami info
-    copy:
-     content: |
-            image_id: {{ amioutput.image_id }}
-            lc_suffix: {{ ansible_date_time.epoch }}
-     dest: vars/settings.yml
-     force: yes
-    when: deploy is defined and deploy|bool == True
+#  - name: create vars file with  new ami info
+#    copy:
+#     content: |
+#            image_id: {{ amioutput.image_id }}
+#            lc_suffix: {{ ansible_date_time.epoch }}
+#     dest: vars/settings.yml
+#     force: yes
+     #become: yes
+    # become_user: root
+ #   when: deploy is defined and deploy|bool == True
