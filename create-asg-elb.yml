@@ -24,22 +24,6 @@
       health_check:
         ping_protocol: http # options are http, https, ssl, tcp
         ping_port: 80
-        ping_path: "/ovcdashboard/login" # not required for tcp or ssl
-        response_timeout: 5 # seconds
-        interval: 30 # seconds
-        unhealthy_threshold: 2
-        healthy_threshold: 10
-      health_check:
-        ping_protocol: http # options are http, https, ssl, tcp
-        ping_port: 8080
-        ping_path: "/" # not required for tcp or ssl
-        response_timeout: 5 # seconds
-        interval: 30 # seconds
-        unhealthy_threshold: 2
-        healthy_threshold: 10
-      health_check:
-        ping_protocol: http # options are http, https, ssl, tcp
-        ping_port: 9080
         ping_path: "/" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
@@ -74,22 +58,6 @@
         health_check:
           ping_protocol: http # options are http, https, ssl, tcp
           ping_port: 80
-          ping_path: "/ovcdashboard/login" # not required for tcp or ssl
-          response_timeout: 5 # seconds
-          interval: 30 # seconds
-          unhealthy_threshold: 2
-          healthy_threshold: 10
-        health_check:
-          ping_protocol: http # options are http, https, ssl, tcp
-          ping_port: 8080
-          ping_path: "/" # not required for tcp or ssl
-          response_timeout: 5 # seconds
-          interval: 30 # seconds
-          unhealthy_threshold: 2
-          healthy_threshold: 10
-        health_check:
-          ping_protocol: http # options are http, https, ssl, tcp
-          ping_port: 9080
           ping_path: "/" # not required for tcp or ssl
           response_timeout: 5 # seconds
           interval: 30 # seconds
