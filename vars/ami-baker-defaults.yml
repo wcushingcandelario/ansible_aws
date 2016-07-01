@@ -2,8 +2,7 @@
 region: eu-west-1
 key: ovc-travis
 ovc_security_groups: sg-71bc1f16
-instance_type: t2.medium
-#vpc_subnet_public: subnet-8d9790d4
+instance_type: m4.large
 vpc_subnet_public: subnet-cae8ffbd
 jetty_user_login: jetty
 jetty_dir: /opt/jetty

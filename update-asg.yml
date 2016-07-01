@@ -12,7 +12,7 @@
 
   tasks:
   - name: include pre-prod vars if pre-prod
-    include_vars: vars/pre-prod.yml
+    include_vars: vars/ami-baker-defaults.yml
     when: deploy_type == "pre-prod"
 
   - name: include prod vars if prod
@@ -44,10 +44,10 @@
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: "{{ ovc_security_groups }}"
-      instance_type: "{{ instance_type }}" 
+      instance_type: "{{ instance_type_asg }}" 
       instance_monitoring: yes
       assign_public_ip: yes
-      instance_profile_name: "{{ IAMROLE }}"
+    #  instance_profile_name: "{{ IAMROLE }}"
       user_data: "{{ userdata }}"
     register: debuglaunch
 

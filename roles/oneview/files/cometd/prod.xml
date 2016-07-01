@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3.0.xsd"
+         version="3.0"
+         metadata-complete="false">
+
+	<filter>
+		<filter-name>cross-origin</filter-name>
+		<filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
+		<init-param>
+			<param-name>allowedHeaders</param-name>
+			<param-value>X-Requested-With,Content-Type,Accept,Origin,Authorization,X-Ovc-Duuid</param-value>
+		</init-param>
+		<init-param>
+			<param-name>allowCredentials</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>chainPreflight</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>cross-origin</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>device-validation</filter-name>
+		<filter-class>com.oneview.server.servlets.DeviceValidationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>device-validation</filter-name>
+		<url-pattern>/json/login/login</url-pattern>
+	</filter-mapping>
+
+	<resource-ref>
+		<res-ref-name>jdbc/ds</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>OVCRealm</realm-name>
+	</login-config>
+
+	<servlet>
+		<description>JAX-RS Tools Generated - Do not modify</description>
+		<servlet-name>JAX-RS Servlet</servlet-name>
+		<servlet-class>com.oneview.server.jaxrs.JaxRsContainer</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>
+			 	io.swagger.jaxrs.listing,com.oneview.server.jaxrs,com.oneview.server.posmclient.jaxrs
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>
+				com.oneview.server.security.PermissionsAllowedDynamicFeature,
+				org.glassfish.jersey.jackson.JacksonFeature,
+				org.glassfish.jersey.media.multipart.MultiPartFeature,
+				com.oneview.server.jaxrs.ExceptionHandler
+			</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JAX-RS Servlet</servlet-name>
+		<url-pattern>/json/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- <servlet>
+    <servlet-name>DefaultJaxrsConfig</servlet-name>
+    <servlet-class>io.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>
+    <init-param>
+      <param-name>api.version</param-name>
+      <param-value>5.2.0-SNAPSHOT</param-value>
+    </init-param>
+    <init-param>
+      <param-name>swagger.api.title</param-name>
+      <param-value>OVC webservices</param-value>
+    </init-param>
+    <init-param>
+      <param-name>swagger.api.basepath</param-name>
+      <param-value>http://localhost:8080/json</param-value>
+    </init-param>
+    <init-param>
+	  <param-name>swagger.config.reader</param-name>
+	  <param-value>com.wordnik.swagger.sample.CustomConfigReader</param-value>
+	</init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet> -->
+
+  <servlet>
+    <servlet-name>SwaggerBootstrap</servlet-name>
+    <servlet-class>com.oneview.server.posmclient.jaxrs.SwaggerBootStrap</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
+   <!--  <servlet>
+    <servlet-name>SwaggerBootstrap</servlet-name>
+    <servlet-class>com.oneview.server.posmclient.jaxrs.SwaggerBootstrap</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet> -->
+
+	<servlet>
+		<description>For static files</description>
+		<display-name>OVCHttpServlet</display-name>
+		<servlet-name>OVCHttpServlet</servlet-name>
+		<servlet-class>com.oneview.server.servlets.OVCHttpServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OVCHttpServlet</servlet-name>
+		<url-pattern>/web/*</url-pattern>
+		<url-pattern>/dynamicclob/*</url-pattern>
+		<url-pattern>/dynamicblob/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description>Servlet for cometd endpoints</description>
+		<display-name>AnnotationCometdServlet</display-name>
+		<servlet-name>AnnotationCometdServlet</servlet-name>
+		<servlet-class>org.cometd.annotation.AnnotationCometDServlet</servlet-class>
+		<init-param>
+			<param-name>transports</param-name>
+			<param-value>org.cometd.websocket.server.WebSocketTransport</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cometdURLMapping</param-name>
+			<param-value>/cometd/*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value>com.oneview.server.posmclient.services.cometd.POSMClientCometdServer</param-value>
+		</init-param>
+		<init-param>
+			<param-name>maxInterval</param-name>
+			<param-value>900000</param-value>
+		</init-param>
+		<init-param>
+			<param-name>logLevel</param-name>
+			<param-value>1</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AnnotationCometdServlet</servlet-name>
+		<url-pattern>/cometd/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>OORTConfiguration</servlet-name>
+		<servlet-class>com.oneview.server.cometd.OORTConfigurationServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>seti</servlet-name>
+		<servlet-class>org.cometd.oort.SetiServlet</servlet-class>
+		<load-on-startup>4</load-on-startup>
+	</servlet>
+
+	<welcome-file-list>
+	   <welcome-file>index.html</welcome-file>
+  	</welcome-file-list>
+
+
+	<servlet>
+		<servlet-name>oort</servlet-name>
+		<servlet-class>org.cometd.oort.OortStaticConfigServlet</servlet-class>
+		<init-param>
+			<param-name>oort.url</param-name>
+			<param-value>http://this_host:8080/cometd</param-value>
+		</init-param>
+		<init-param>
+            <param-name>oort.cloud</param-name>
+            <param-value>https://10.33.184.97/cometd,https://10.33.184.98/cometd,https://10.33.184.99/cometd,https://10.33.184.100/cometd,https://10.33.184.101/cometd,https://10.33.184.102/cometd,https://10.33.184.103/cometd,https://10.33.184.104/cometd,https://10.33.184.105/cometd,https://10.33.184.106/cometd,https://10.33.184.107/cometd,https://10.33.184.108/cometd,https://10.33.184.109/cometd,https://10.33.184.110/cometd,https://10.33.184.111/cometd,http://10.33.184.112/cometd,http://10.33.184.113/cometd,http://10.33.184.114/cometd,http://10.33.184.115/cometd,http://10.33.184.116/cometd,http://10.33.184.117/cometd,http://10.33.184.118/cometd,http://10.33.184.119/cometd,http://10.33.184.120/cometd,http://10.33.184.121/cometd,http://10.33.184.122/cometd,http://10.33.184.123/cometd,http://10.33.184.124/cometd,http://10.33.184.125/cometd,http://10.33.184.126/cometd</param-value>
+        </init-param>
+		<init-param>
+            <param-name>oort.channels</param-name>
+            <param-value>/**</param-value>
+        </init-param>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+
+</web-app>
