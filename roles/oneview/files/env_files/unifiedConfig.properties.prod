@@ -8,7 +8,7 @@ ecommerce.fromClient.logout_relative_url=/en/logout
 ecommerce.vendor=1
 ecommerce.fromClient.port=443
 ecommerce.fromClient.context=yacceleratorstorefront
-ecommerce.fromServer.host=ws-prod.dev.wickes-tills.co.uk # FIXME: Incorrect
+ecommerce.fromServer.host=ws.wickes-tills.co.uk
 ovcDB.params=autoReconnect\=true
 ovcNOSQLDB.maxWaitTime=5000
 ovcServer.port=443
@@ -21,7 +21,7 @@ oort.cloud=
 ovcNOSQLDB.encrypted.password=3cMK44+lA2o\=
 mailServer.smtp.auth=True
 ecommerce.fromServer.baseSiteId=apparel-uk
-ecommerce.fromClient.host=ws-prod.dev.wickes-tills.co.uk # FIXME: Incorrect
+ecommerce.fromClient.host=ws.wickes-tills.co.uk
 ovcNOSQLDB.socketTimeout=5000
 ovcNOSQLDB.connectionsPerHost=20
 ovcDB.db=xdb
