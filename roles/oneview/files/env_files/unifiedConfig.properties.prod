@@ -11,7 +11,7 @@ ecommerce.fromClient.context=yacceleratorstorefront
 ecommerce.fromServer.host=ws-prod.dev.wickes-tills.co.uk # FIXME: Incorrect
 ovcDB.params=autoReconnect\=true
 ovcNOSQLDB.maxWaitTime=5000
-ovcServer.port=8080
+ovcServer.port=443
 mailServer.smtp.host=smtp.gmail.com
 mailServer.encrypted.password=aSQQsm2SaMY05MFsEIQL/A\=\=
 ovcNOSQLDB.host=mongodb01.prod-int.ovchosting.co.uk
