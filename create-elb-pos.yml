@@ -25,8 +25,8 @@
         load_balancer_port: 8080
         instance_port: 8080
       health_check:
-        ping_protocol: http # options are http, https, ssl, tcp
-        ping_port: 80
+        ping_protocol: https # options are http, https, ssl, tcp
+        ping_port: 443
         ping_path: "/ovcdashboard/login" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds

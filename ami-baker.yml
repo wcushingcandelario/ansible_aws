@@ -88,6 +88,12 @@
         regexp: ".*\'defaults\' => \'php\'"
         line: "        'defaults' => 'cake'"
         state: present
+    - name: Set Dashboard to HTTPS
+      lineinfile:
+        dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
+        regexp: ".*SITE_URL',\"http:"
+        line: "define('SITE_URL',\"https://$_SERVER[HTTP_HOST]/ovcdashboard/\");"
+        state: present
     - name: Add final block for bootstrap.php
       blockinfile:
         dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
