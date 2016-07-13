@@ -2,8 +2,8 @@
 #Tue Jun 07 15:45:15 EDT 2016
 posMClientSyncUpdater.store=All
 importFiles.postProductsImportsDir=eCommerceImportFiles2
-eComServer.baseSiteId=apparel-uk
-importer_mode=develop
+eComServer.baseSiteId=wickesStores
+importer_mode=production
 custDataImporter.ignoreJsonValidationErrors=true
 posMClientSyncUpdater.browser=true
 calendarDataImport.encrypted.password=1D6DfFDrZTJ2/Tt17Fn2l4tj+MlBjtnm+CR4NGge5+tey6ynSbEyAoFBDvVmipoN

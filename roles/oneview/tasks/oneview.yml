@@ -44,8 +44,8 @@
   become_user: root
 
 - name: Download OneView Install from S3
-  command: "aws s3 cp s3://ovc-releases/{{ ovc_version }}/oneview-install.zip {{ ovc_server_user_dir }}/oneview-install.zip"
-  when: s3install is defined
+  command: "aws s3 cp s3://{{ s3_bucket | default('ovc-release') }}/{{ ovc_version }}/oneview-install.zip {{ ovc_server_user_dir }}/oneview-install.zip"
+  when: s3install is defined and s3install
   become: yes
   become_user: root
 
@@ -55,7 +55,7 @@
     mode: ug+rw
     owner: jetty
     group: jetty
-  when: s3install is defined
+  when: s3install is defined and s3install
   become: yes
   become_user: root
 
@@ -74,7 +74,7 @@
     owner: jetty
     group: jetty
     mode: ug+rw
-  when: s3install is not defined
+  when: s3install is not defined or not s3install
   become: yes
   become_user: root
 

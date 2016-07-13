@@ -81,3 +81,5 @@
     owner: "{{ webserver_user }}"
     group: "{{ webserver_user }}"
   sudo: yes
+  notify:
+    - Restart Apache

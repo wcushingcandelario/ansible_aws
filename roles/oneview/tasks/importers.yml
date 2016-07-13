@@ -6,7 +6,7 @@
   become_user: jetty
   register: initilization
 #  ignore_errors: yes
-  async:  600
+  # async:  600
   notify: Restart Jetty
   tags:
     - importers
