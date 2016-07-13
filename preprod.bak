@@ -1,0 +1,33 @@
+---
+#- name: This play will install the ami-builder and mongo cluster
+
+- name: This play will deploy mongo-cluster and ami-builder
+  hosts: localhost
+  remote_user: ec2-user
+  gather_facts: False
+
+  tasks:
+  - name: include mongo defaults
+    include_vars: vars/pre-prod/mongo-defaults.yml
+
+# install Mongo Cluster
+- include: mongo-cluster.yml
+  vars:  
+   region: eu-west-1
+   key: ovc-travis
+   ovc_security_groups: sg-5bbc1f3c
+   vpc_subnet_public: subnet-0a75a06e
+   instance_type: m4.large
+   env: preprod.ovchosting.co.uk
+   cluster_name: preprod_cluster
+
+# install ami-builder
+- include: ami-baker.yml
+  vars:
+   ovc_version: "5.2.0"
+
+
+# install ELB and ASG
+- include: asg_main.yml
+  vars:
+    instance_type_asg: m4.xlarge
