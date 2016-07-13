@@ -22,3 +22,4 @@ eComServer.retailerId=defaultRetailer
 import.endpoint.temp.location=/tmp
 eComServer.username=eCommerce
 ovcServer.customer-all=tp-all
+importFiles.staffDiscountImportFiles=staffDiscountImportFiles
