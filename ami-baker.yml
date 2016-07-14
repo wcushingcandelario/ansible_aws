@@ -80,34 +80,6 @@
   become: yes
   become_user: root
 
-  name: Make some cake [REMOVE ME FOR 5.3]
-  tasks:
-    - name: Do a replace on the php -> cake
-      lineinfile:
-        dest: /var/www/html/ovcdashboard/app/Config/core.php
-        regexp: ".*\'defaults\' => \'php\'"
-        line: "        'defaults' => 'cake'"
-        state: present
-    - name: Set Dashboard to HTTPS
-      lineinfile:
-        dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
-        regexp: ".*SITE_URL',\"http:"
-        line: "define('SITE_URL',\"https://$_SERVER[HTTP_HOST]/ovcdashboard/\");"
-        state: present
-    - name: Add final block for bootstrap.php
-      blockinfile:
-        dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
-        insertafter: EOF
-        state: present
-        content: |
-          $dir = TMP.'sessions';
-          if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-          }
-          if(is_writable($dir)){
-            chmod($dir, 0755);
-          }
-
 - hosts: localhost
   connection: local
 
