@@ -15,6 +15,9 @@
     include_vars: vars/ami-baker-defaults.yml
     when: deploy_type == "preprod"
 
+  - name: debug
+    debug: var=deploy_type  
+
   - name: include prod vars if prod
     include_vars: vars/prod.yml
     when: deploy_type == "prod"
