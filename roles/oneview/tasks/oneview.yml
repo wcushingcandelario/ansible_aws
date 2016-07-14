@@ -44,7 +44,7 @@
   become_user: root
 
 - name: Download OneView Install from S3
-  command: "aws s3 cp s3://{{ s3_bucket | default('ovc-release') }}/{{ ovc_version }}/oneview-install.zip {{ ovc_server_user_dir }}/oneview-install.zip"
+  command: "aws s3 cp s3://{{ s3_bucket }}/{{ ovc_version }}/oneview-install.zip {{ ovc_server_user_dir }}/oneview-install.zip"
   when: s3install is defined and s3install
   become: yes
   become_user: root

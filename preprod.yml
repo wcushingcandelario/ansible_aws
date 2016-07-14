@@ -26,8 +26,8 @@
 # install ami-builder
 - include: ami-baker.yml
 #- include: ami-baker_test.yml
-#  vars:
-#   ovc_version: "5.2.0"
+  vars:
+   ovc_version: "5.4.0"
 
 
 # install ELB and ASG
