@@ -16,7 +16,7 @@
     when: deploy_type == "preprod"
 
   - name: debug
-    debug: var=deploy_type  
+    debug: var=deploy_type
 
   - name: include prod vars if prod
     include_vars: vars/prod.yml
@@ -72,7 +72,8 @@
       desired_capacity: "{{ asg_desired_capacity }}"
       region: "{{ region }}"
       tags:
-        - Name: "{{ deploy_type }}"
+        - Name: "{{ deploy_type }}-{{ ovc_version }}"
+      #  - Name: "{{ deploy_type }}"
     #until: asgupdate.viable_instances|int >= asg_desired_capacity|int
     register: asgupdate
   - name: debug auto scaling update
