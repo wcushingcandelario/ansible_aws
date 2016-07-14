@@ -10,3 +10,7 @@
 - include: importers.yml
   tags:
     - importers
+    - coreimporters
+  notify:
+    - Restart Jetty
+    - Restart Apache

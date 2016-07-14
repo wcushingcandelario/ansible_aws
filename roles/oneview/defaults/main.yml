@@ -15,7 +15,7 @@ ecommerce_fromServer_baseSiteId: apparel-uk
 
 ecommerce_vendor: 1
 
-mailServer_encrypted_password: aSQQsm2SaMY05MFsEIQL/A==
+mailServer_encrypted_password: RbNGPpJVCZ6CIIvlQ8d/cg==
 mailServer_from: donotreply@company.com
 mailServer_smtp_auth: true
 mailServer_smtp_host: smtp.gmail.com
@@ -29,7 +29,7 @@ mailServer_username: donotreply@company.com
 ovcDB_auto_generate: true
 ovcDB_db: xdb
 ovcDB_driver: com.mysql.jdbc.Driver
-ovcDB_encrypted_password: aSQQsm2SaMY05MFsEIQL/A==
+ovcDB_encrypted_password: L3Q5kQqII0OlaJ9FGCaukQ==
 #ovcDB_host: 127.0.0.1
 ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
 ovcDB_params: autoReconnect=true
@@ -45,7 +45,7 @@ ovcNOSQLDB_host: mongodb-preprod01.ovchosting.co.uk
 ovcNOSQLDB_port: 27017
 ovcNOSQLDB_db: xdb
 ovcNOSQLDB_username: root
-ovcNOSQLDB_encrypted_password: 3cMK44+lA2o\=
+ovcNOSQLDB_encrypted_password: pS6Uu4KU3B9G9FRg5IlnBg==
 ovcNOSQLDB_connectionsPerHost: 20
 ovcNOSQLDB_maxWaitTime: 5000
 ovcNOSQLDB_connectTimeout: 5000
@@ -76,3 +76,5 @@ sqs_queue_url: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
 
 sqs_access_key_id: test
 sqs_access_secret_id: testsecret
+
+s3_bucket: ovc-travisperkins-releases

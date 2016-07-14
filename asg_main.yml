@@ -11,7 +11,7 @@
 # install ELB POS
 - include: create-elb-pos.yml
   vars:
-    ovc_version: "5.2.0"
+    ovc_version: "5.4.0"
     deploy_type: "PreProd-POS"
     deploy_dash: "PreProd-Dash"
     elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
@@ -24,7 +24,7 @@
 # install ELB DASH
 - include: create-elb-dash.yml
   vars:
-    ovc_version: "5.2.0"
+    ovc_version: "5.4.0"
     deploy_type: "PreProd-POS"
     deploy_dash: "PreProd-Dash"
     elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
@@ -37,7 +37,7 @@
 # install ASG
 - include: create-auto.yml
   vars:
-   ovc_version: "5.2.0"
+   ovc_version: "5.4.0"
    deploy_type: "PreProd-POS"
    deploy_dash: "PreProd-Dash"
    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"

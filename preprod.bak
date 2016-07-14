@@ -1,7 +1,5 @@
 ---
-
 #- name: This play will install the ami-builder and mongo cluster
-
 
 - name: This play will deploy mongo-cluster and ami-builder
   hosts: localhost
@@ -14,7 +12,7 @@
 
 # install Mongo Cluster
 - include: mongo-cluster.yml
-  vars:
+  vars:  
    region: eu-west-1
    key: ovc-travis
    ovc_security_groups: sg-5bbc1f3c
@@ -25,9 +23,8 @@
 
 # install ami-builder
 - include: ami-baker.yml
-#- include: ami-baker_test.yml
-#  vars:
-#   ovc_version: "5.2.0"
+  vars:
+   ovc_version: "5.2.0"
 
 
 # install ELB and ASG
