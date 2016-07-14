@@ -11,3 +11,4 @@ jetty_dir: /opt/jetty
 ovc_server_user_dir: /opt/ovc
 webserver_user: www-data
 s3install: true
+asg_desired_capacity: 2
