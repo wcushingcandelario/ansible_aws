@@ -28,12 +28,12 @@
       sort_end: 1
     when: new_image_id is undefined
     register: ami_find
-  - debug: msg="{{ ami_find.results }}"
+#- debug: msg="{{ ami_find.results }}"
 
-  #- vars:
-  #  new_image_id: "{{ ami_find.results[0].ami_id }}"
-    #roles:
-    #- { role: findovcami, when: new_image_id is undefined }
+#  - vars:
+#    new_image_id: "{{ ami_find.results[0].ami_id }}"
+#    roles:
+#    - { role: findovcami, when: new_image_id is undefined }
 
   - name: create new Launch Config
     local_action:
@@ -44,7 +44,7 @@
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: "{{ ovc_security_groups }}"
-      instance_type: "{{ instance_type_asg }}" 
+      instance_type: "{{ instance_type_asg }}"
       instance_monitoring: yes
       assign_public_ip: yes
     #  instance_profile_name: "{{ IAMROLE }}"
