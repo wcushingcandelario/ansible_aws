@@ -13,7 +13,7 @@
   tasks:
   - name: include pre-prod vars if pre-prod
     include_vars: vars/ami-baker-defaults.yml
-    when: deploy_type == "pre-prod"
+    when: deploy_type == "preprod"
 
   - name: include prod vars if prod
     include_vars: vars/prod.yml
