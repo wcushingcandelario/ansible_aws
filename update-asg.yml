@@ -63,6 +63,7 @@
       module: ec2_asg
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
+      load_balancers: "{{ deploy_type }},{{ deploy_dash }}"
       replace_all_instances: yes
       replace_batch_size: 1
       wait_for_instances: true

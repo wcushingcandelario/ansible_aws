@@ -6,6 +6,8 @@ instance_type: m4.large
 instance_type_asg: m4.xlarge
 asg_name: "preprod_autoscale"
 vpc_subnet_public: subnet-cae8ffbd
+deploy_type: "PreProd-POS"
+deploy_dash: "PreProd-Dash"
 jetty_user_login: jetty
 jetty_dir: /opt/jetty
 ovc_server_user_dir: /opt/ovc
