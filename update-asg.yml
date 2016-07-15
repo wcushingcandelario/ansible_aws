@@ -13,7 +13,10 @@
   tasks:
   - name: include pre-prod vars if pre-prod
     include_vars: vars/ami-baker-defaults.yml
-    when: deploy_type == "pre-prod"
+    when: deploy_type == "preprod"
+
+  - name: debug
+    debug: var=deploy_type
 
   - name: include prod vars if prod
     include_vars: vars/prod.yml
@@ -28,12 +31,12 @@
       sort_end: 1
     when: new_image_id is undefined
     register: ami_find
-  - debug: msg="{{ ami_find.results }}"
+#- debug: msg="{{ ami_find.results }}"
 
-  #- vars:
-  #  new_image_id: "{{ ami_find.results[0].ami_id }}"
-    #roles:
-    #- { role: findovcami, when: new_image_id is undefined }
+#  - vars:
+#    new_image_id: "{{ ami_find.results[0].ami_id }}"
+#    roles:
+#    - { role: findovcami, when: new_image_id is undefined }
 
   - name: create new Launch Config
     local_action:
@@ -44,7 +47,7 @@
       key_name: "{{ key }}"
       region: "{{ region }}"
       security_groups: "{{ ovc_security_groups }}"
-      instance_type: "{{ instance_type_asg }}" 
+      instance_type: "{{ instance_type_asg }}"
       instance_monitoring: yes
       assign_public_ip: yes
     #  instance_profile_name: "{{ IAMROLE }}"
@@ -60,16 +63,18 @@
       module: ec2_asg
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
+      load_balancers: "{{ deploy_type }},{{ deploy_dash }}"
       replace_all_instances: yes
       replace_batch_size: 1
-      wait_for_instances: true
+      #wait_for_instances: true
       health_check_type: ELB
       min_size: 2
       max_size: 5
       desired_capacity: "{{ asg_desired_capacity }}"
       region: "{{ region }}"
       tags:
-        - Name: "{{ deploy_type }}"
+        - Name: "{{ deploy_type }}-{{ ovc_version }}"
+      #  - Name: "{{ deploy_type }}"
     #until: asgupdate.viable_instances|int >= asg_desired_capacity|int
     register: asgupdate
   - name: debug auto scaling update
