@@ -1,0 +1,24 @@
+- name: Copy package into place
+  copy:
+    src: https://cloud.mongodb.com/download/agent/backup/mongodb-mms-backup-agent-latest.x86_64.rpm
+    dest: /tmp/mongodb-mms-backup-agent-latest.x86_64.rpm
+
+- name: Install package
+  yum:
+    name: /tmp/mongodb-mms-backup-agent-latest.x86_64.rpm
+    state: present
+
+- name:
+  lineinfile:
+    regexp: mmsApiKey\=
+    line: mmsApiKey=25198105b01633367f6f135c235ae476
+
+- name: Enable service
+  service:
+    name: mongodb-mms-backup-agent
+    status: enabled
+
+- name: Start service
+  service:
+    name: mongodb-mms-backup-agent
+    status: started
