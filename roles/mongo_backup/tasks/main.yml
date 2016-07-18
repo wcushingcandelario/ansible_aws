@@ -1,6 +1,6 @@
 - name: Copy package into place
-  copy:
-    src: https://cloud.mongodb.com/download/agent/backup/mongodb-mms-backup-agent-latest.x86_64.rpm
+  get_url:
+    url: https://cloud.mongodb.com/download/agent/backup/mongodb-mms-backup-agent-latest.x86_64.rpm
     dest: /tmp/mongodb-mms-backup-agent-latest.x86_64.rpm
 
 - name: Install package
