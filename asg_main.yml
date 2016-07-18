@@ -12,7 +12,7 @@
 - include: create-elb-pos.yml
   vars:
     ovc_version: "5.4.0"
-    deploy_type: "{{ deploy_type }}-POS"
+    deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
     elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
     ovc_security_groups: "sg-887dc9ef"
@@ -25,7 +25,7 @@
 - include: create-elb-dash.yml
   vars:
     ovc_version: "5.4.0"
-    deploy_type: "{{ deploy_type }}-POS"
+    deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
     elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
     ovc_security_groups: "sg-887dc9ef"
@@ -38,7 +38,7 @@
 - include: create-auto.yml
   vars:
    ovc_version: "5.4.0"
-   deploy_type: "{{ deploy_type }}-POS"
+   deploy_pos: "{{ deploy_type }}-POS"
    deploy_dash: "{{ deploy_type }}-Dash"
    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
    ovc_security_groups: "sg-887dc9ef"

@@ -35,7 +35,7 @@
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
       vpc_zone_identifier: "{{ elbsubnets }}"
-      load_balancers: "{{ deploy_type }},{{ deploy_dash }}"
+      load_balancers: "{{ deploy_pos }},{{ deploy_dash }}"
       replace_all_instances: yes
       health_check_type: ELB
       min_size: 2

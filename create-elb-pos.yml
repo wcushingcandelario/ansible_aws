@@ -9,14 +9,14 @@
   - name: create ELB
     local_action:
       module: ec2_elb_lb
-      name: "{{ deploy_type }}"
+      name: "{{ deploy_pos }}"
       state: present
       region: "{{ region }}"
       scheme: internal
       connection_draining_timeout: 120
       idle_timeout: 300
       subnets: "{{ elbsubnets }}"
-      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8"
+      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
       listeners:
       - protocol: tcp
         load_balancer_port: 443
@@ -45,7 +45,7 @@
     local_action:
       module: ec2_elb_facts
       names:
-        - "{{ deploy_type }}"
+        - "{{ deploy_pos }}"
       region: "{{ region }}"
     register: elb_facts
 
