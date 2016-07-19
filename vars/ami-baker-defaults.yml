@@ -10,3 +10,4 @@ ovc_server_user_dir: /opt/ovc
 webserver_user: www-data
 s3install: true
 instance_type_asg: m4.xlarge
+asg_name: "preprod_autoscale"
