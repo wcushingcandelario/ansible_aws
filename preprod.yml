@@ -24,17 +24,26 @@
     key: ovc-travis
     ovc_security_groups: sg-71bc1f16
     instance_type: m4.large
-    instance_type_asg: m4.xlarge
     asg_name: "preprod_autoscale"
     vpc_subnet_public: subnet-cae8ffbd
     deploy_pos: "PreProd-POS"
     deploy_dash: "PreProd-Dash"
+    deploy_type: "preprod"
     jetty_user_login: jetty
     jetty_dir: /opt/jetty
     ovc_server_user_dir: /opt/ovc
     webserver_user: www-data
     s3install: true
     asg_desired_capacity: 2
+    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
 
 - name: Install ELB and ASG
   include: asg_main.yml
+  vars:
+    IAMROLE: "CodeDeploy-EC2"
+    ovc_version: "5.4.0"
+    ovc_security_groups: sg-71bc1f16
+    deploy_pos: "PreProd-POS"
+    deploy_dash: "PreProd-Dash"
+    deploy_type: "preprod"
+    instance_type_asg: m4.xlarge
