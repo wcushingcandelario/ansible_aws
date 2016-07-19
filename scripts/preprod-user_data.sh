@@ -7,6 +7,8 @@ set -x
 
 export ENV=pre-prod
 
+export LOCAL_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+echo $LOCAL_IP $HOSTNAME >> /etc/hosts
 
 export FILE_NAME=/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
 cp $FILE_NAME $FILE_NAME.ORIG
