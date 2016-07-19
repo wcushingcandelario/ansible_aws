@@ -10,10 +10,10 @@
     userdata: "{{ lookup('file', 'scripts/' + deploy_type + '-user_data.sh') }}"
     new_lc_name: lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}
 
-#  tasks:
-#  - name: include pre-prod vars if pre-prod
-#    include_vars: vars/ami-baker-defaults.yml
-#    when: deploy_type == "preprod"
+  tasks:
+  - name: include pre-prod vars if pre-prod
+    include_vars: vars/ami-baker-defaults.yml
+    when: deploy_type == "preprodTT"
 
   - name: debug
     debug: var=deploy_type
