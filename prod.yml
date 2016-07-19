@@ -35,14 +35,14 @@
     webserver_user: www-data
     s3install: true
     asg_desired_capacity: 2
-    elbsubnets: "x,y,z"
+    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
 
 - name: Install ELB and ASG
   include: asg_main.yml
   vars:
     IAMROLE: "CodeDeploy-EC2"
     ovc_version: "5.4.0"
-    ovc_security_groups: sg-71bc1f16
+    ovc_security_groups: sg-5e4aaf39 #FIXME
     deploy_pos: "Prod-POS"
     deploy_dash: "Prod-Dash"
     deploy_type: "prod"
