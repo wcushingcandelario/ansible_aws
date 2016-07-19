@@ -38,6 +38,9 @@
 #        s3_prefix: "{{ deploy_type }}ELBlogs"
     register: elb_new
 
+  - name: Pause for 1 minute
+    pause: minutes=1
+
   - name: debug elb create
     debug: "var=elb_new"
 
