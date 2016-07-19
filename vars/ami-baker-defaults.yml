@@ -11,3 +11,4 @@ webserver_user: www-data
 s3install: true
 instance_type_asg: m4.xlarge
 asg_name: "preprod_autoscale"
+asg_desired_capacity: 2
