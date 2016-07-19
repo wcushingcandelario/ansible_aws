@@ -47,3 +47,4 @@
     deploy_dash: "Prod-Dash"
     deploy_type: "prod"
     instance_type_asg: m4.xlarge
+    security_group_ids: "x,y,z"
