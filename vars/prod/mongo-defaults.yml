@@ -1,7 +1,0 @@
-region: eu-west-1
-key: ovc-travis
-ovc_security_groups: sg-5bbc1f3c # FIXME: Wrong
-vpc_subnet_public: subnet-0a75a06e # FIXME: Wrong
-instance_type: t2.medium
-env: prod.ovchosting.co.uk
-cluster_name: prod_cluster
