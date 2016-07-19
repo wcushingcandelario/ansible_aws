@@ -10,8 +10,8 @@
   vars:
    region: eu-west-1
    key: ovc-travis
-   ovc_security_groups: sg-5bbc1f3c # FIXME: Wrong
-   vpc_subnet_public: subnet-0a75a06e # FIXME: Wrong
+   ovc_security_groups: sg-5e4aaf39 # FIXME: Wrong
+   vpc_subnet_public: subnet-bc9790e5 # FIXME: Wrong
    instance_type: m4.large
    env: prod.ovchosting.co.uk
    cluster_name: prod_cluster
@@ -22,11 +22,11 @@
     ovc_version: "5.4.0"
     region: eu-west-1
     key: ovc-travis
-    ovc_security_groups: sg-71bc1f16
+    ovc_security_group: sg-5e4aaf39  #FIXME
     instance_type: m4.large
     instance_type_asg: m4.xlarge
     asg_name: "Prod_autoscale"
-    vpc_subnet_public: subnet-cae8ffbd
+    vpc_subnet_public: subnet-bc9790e5 #FIXME
     deploy_pos: "Prod-POS"
     deploy_dash: "Prod-Dash"
     jetty_user_login: jetty
