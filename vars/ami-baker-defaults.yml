@@ -12,3 +12,11 @@ s3install: true
 instance_type_asg: m4.xlarge
 asg_name: "preprod_autoscale"
 asg_desired_capacity: 2
+deploy_type: "PreProd-POS"
+deploy_dash: "PreProd-Dash"
+elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
+ovc_security_groups: "sg-887dc9ef"
+IAMROLE: "CodeDeploy-EC2"
+asg_name: "preprod_autoscale"
+new_lc_name: "preprod_config"
+instance_type_asg: m4.xlarge
