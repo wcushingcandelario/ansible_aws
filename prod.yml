@@ -3,6 +3,8 @@
 #- name: This play will install the ami-builder and mongo cluster
 
 - name: Install RDS
+  connection: local
+  hosts: localhost
   roles:
     - create_rds
   tags:
