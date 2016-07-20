@@ -2,7 +2,23 @@
 
 #- name: This play will install the ami-builder and mongo cluster
 
+
+- name: Install Utility RDS
+  connection: local
+  hosts: localhost
+  roles:
+    - create_rds
+  tags:
+    - rds_util
+  vars:
+  environment_name: util-rds
+  rds_security_group: sg-5bbc1f3c
+  rds_subnet_group: "uat1 rds subnet group"
+  multirdszone: no
+
 - name: Install RDS
+  connection: local
+  hosts: localhost
   roles:
     - create_rds
   tags:
@@ -37,9 +53,9 @@
     region: eu-west-1
     key: ovc-travis
     ovc_security_groups: sg-71bc1f16
+    vpc_subnet_public: subnet-cae8ffbd
     instance_type: m4.large
     asg_name: "preprod_autoscale"
-    vpc_subnet_public: subnet-cae8ffbd
     deploy_pos: "PreProd-POS"
     deploy_dash: "PreProd-Dash"
     deploy_type: "preprod"
