@@ -2,6 +2,17 @@
 
 #- name: This play will install the ami-builder and mongo cluster
 
+- name: Install RDS
+  roles:
+    - create_rds
+  tags:
+    - rds
+  vars:
+    environment_name: prod-util-rds
+    rds_security_group: sg-be2081d9
+    rds_subnet_group: prod-util-rds
+    multirdszone: yes
+
 - name: Install Mongo Cluster
   include: mongo-cluster.yml
   remote_user: ec2-user
