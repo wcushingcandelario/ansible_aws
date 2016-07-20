@@ -15,6 +15,7 @@
    instance_type: m4.large
    env: prod.ovchosting.co.uk
    cluster_name: prod_cluster
+   deploy_type: "prod"
 
 - name: install ami-builder
   include: ami-baker.yml
