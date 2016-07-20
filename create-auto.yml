@@ -13,7 +13,7 @@
       image_id: "{{ image_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
-      security_groups: ["{{ ovc_security_groups }}"]
+      security_groups: "{{ ovc_security_groups }}"
       instance_type: "{{ instance_type_asg }}"
       instance_monitoring: yes
       assign_public_ip: yes
@@ -24,6 +24,10 @@
 # http://docs.ansible.com/ansible/playbooks_lookups.html
       user_data: "{{ lookup('file', 'scripts/' + '{{ deploy_type }}' + '-user_data.sh') }}"
     register: debuglaunch
+
+  - name: ovc_security_groups
+    debug: "var=ovc_security_groups"
+    
 
   - name: debug script copy
     debug: "var=debuglaunch"

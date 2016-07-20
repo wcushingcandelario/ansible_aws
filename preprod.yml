@@ -5,6 +5,8 @@
 - name: Install Mongo Cluster
   include: mongo-cluster.yml
   remote_user: ec2-user
+  tags:
+    - mongo
   vars:
    region: eu-west-1
    key: ovc-travis
@@ -16,6 +18,8 @@
 
 - name: install ami-builder
   include: ami-baker.yml
+  tags:
+    - bake_ami
   vars:
     ovc_version: "5.4.0"
     region: eu-west-1
@@ -36,12 +40,14 @@
 
 - name: Install ELB and ASG
   include: asg_main.yml
+  tags:
+    - asg
   vars:
     IAMROLE: "CodeDeploy-EC2"
     region: eu-west-1
     key: ovc-travis
     ovc_version: "5.4.0"
-    ovc_security_groups: sg-71bc1f16
+    ovc_security_groups: ['sg-71bc1f16']
     deploy_pos: "PreProd-POS"
     deploy_dash: "PreProd-Dash"
     deploy_type: "preprod"
