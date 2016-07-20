@@ -53,8 +53,6 @@
   become: yes
   become_user: root
 
-  pre_tasks:
-    - include_vars: vars/ami-baker-defaults.yml
   roles:
     - common
     - jetty

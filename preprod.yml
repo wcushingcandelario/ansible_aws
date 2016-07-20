@@ -4,9 +4,7 @@
 
 - name: Install Mongo Cluster
   include: mongo-cluster.yml
-  hosts: localhost
   remote_user: ec2-user
-  gather_facts: False
   vars:
    region: eu-west-1
    key: ovc-travis
@@ -40,6 +38,7 @@
   include: asg_main.yml
   vars:
     IAMROLE: "CodeDeploy-EC2"
+    region: eu-west-1
     ovc_version: "5.4.0"
     ovc_security_groups: sg-71bc1f16
     deploy_pos: "PreProd-POS"
