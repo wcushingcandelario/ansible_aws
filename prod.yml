@@ -4,9 +4,9 @@
 
 - name: Install Mongo Cluster
   include: mongo-cluster.yml
-  hosts: localhost
   remote_user: ec2-user
-  gather_facts: False
+  tags:
+    - mongo
   vars:
    region: eu-west-1
    key: ovc-travis
@@ -18,6 +18,8 @@
 
 - name: install ami-builder
   include: ami-baker.yml
+  tags:
+    - bake_ami
   vars:
     ovc_version: "5.4.0"
     region: eu-west-1
@@ -35,16 +37,20 @@
     webserver_user: www-data
     s3install: true
     asg_desired_capacity: 2
-    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
 
 - name: Install ELB and ASG
   include: asg_main.yml
+  tags:
+    - asg
   vars:
     IAMROLE: "CodeDeploy-EC2"
+    region: eu-west-1
+    key: ovc-travis
     ovc_version: "5.4.0"
     ovc_security_groups: sg-5e4aaf39 #FIXME
     deploy_pos: "Prod-POS"
     deploy_dash: "Prod-Dash"
     deploy_type: "prod"
     instance_type_asg: m4.xlarge
-    security_group_ids: "x,y,z"
+    security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
+    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
