@@ -39,6 +39,7 @@
   vars:
     IAMROLE: "CodeDeploy-EC2"
     region: eu-west-1
+    key: ovc-travis
     ovc_version: "5.4.0"
     ovc_security_groups: sg-71bc1f16
     deploy_pos: "PreProd-POS"
