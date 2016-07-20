@@ -32,7 +32,7 @@
         enabled: yes
         expiration: 300
       health_check:
-        ping_protocol: https # options are http, https, ssl, tcp
+        ping_protocol: tcp # options are http, https, ssl, tcp
         ping_port: 443
         ping_path: "/ovcdashboard/login" # not required for tcp or ssl
         response_timeout: 5 # seconds
