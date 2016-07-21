@@ -42,8 +42,8 @@
       load_balancers: "{{ deploy_pos }},{{ deploy_dash }}"
       replace_all_instances: yes
       health_check_type: ELB
-      min_size: {{ min_size }}
-      max_size: {{ max_size }}
+      min_size: "{{ min_size }}"
+      max_size: "{{ max_size }}"
       desired_capacity: 2
       region: "{{ region }}"
       tags:
