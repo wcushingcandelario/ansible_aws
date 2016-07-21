@@ -83,7 +83,7 @@
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
     asg_name: "{{ deploy_type }}_autoscale"
-    new_lc_name: "{{ deploy_type }}_config"
+    new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
     min_size: 2
     max_size: 5
     instance_type_asg: m4.xlarge
