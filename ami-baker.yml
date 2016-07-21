@@ -48,7 +48,7 @@
 #      overwrite: yes
 #    with_items: ami_instance.instances
 
-- hosts: just_created[3]
+- hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
   remote_user: ec2-user
   become: yes
   become_user: root
@@ -65,7 +65,7 @@
   vars:
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
-- hosts: just_created[3]
+- hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
   remote_user: ec2-user
   become: yes
   become_user: root
