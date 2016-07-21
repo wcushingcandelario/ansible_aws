@@ -37,9 +37,7 @@
   vars:
    region: eu-west-1
    key: ovc-travis
- #  ovc_security_groups: sg-be2081d9 # FIXME: Wrong
- #  vpc_subnet_public: subnet-1d719879 # FIXME: Wrong
-   ovc_security_groups: sg-b12180d6
+   ovc_security_groups: sg-be2081d9
    vpc_subnet_public: subnet-1d719879
    instance_type: m4.large
    env: prod.ovchosting.co.uk
