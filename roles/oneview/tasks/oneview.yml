@@ -202,9 +202,9 @@
 - name: Start Jetty
   service:
     name: jetty
-    state: started
+    state: restarted
     enabled: yes
-#  tags:
-#    - startjetty
+  tags:
+    - startjetty
   become: yes
   become_user: root
