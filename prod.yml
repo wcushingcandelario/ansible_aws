@@ -49,11 +49,10 @@
   tags:
     - bake_ami
   vars:
-    ovc_version: "5.4.0"
     region: eu-west-1
     key: ovc-travis
-    ovc_security_groups: sg-71bc1f16 # Build in non-prod, deploy to prod.
-    vpc_subnet_public: subnet-d4a14fb0 # Build in non-prod, deploy to prod.
+    ovc_security_groups: sg-b12180d6 # Build in non-prod, deploy to prod.
+    vpc_subnet_public: subnet-0abd536e # Build in non-prod, deploy to prod.
     instance_type: m4.large
     asg_name: "Prod_autoscale"
     deploy_pos: "Prod-POS"
@@ -90,8 +89,6 @@
     IAMROLE: "CodeDeploy-EC2"
     region: eu-west-1
     key: ovc-travis
-    ovc_version: "5.4.0"
-#    ovc_security_groups: ['sg-b12180d6'] #FIXME
     ovc_security_groups: ['sg-b12180d6']
     deploy_type: "prod"
     deploy_pos: "{{ deploy_type }}-POS"
