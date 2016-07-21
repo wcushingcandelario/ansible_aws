@@ -68,6 +68,21 @@
     s3install: true
     asg_desired_capacity: 2
 
+- name: Find AMI ID
+  hosts: localhost
+  connection: local
+  when: image_id is undefined
+  roles:
+    - findovcami
+  register: found_ami
+
+- name: Add AMI ID to facts
+  hosts: localhost
+  connection: local
+  when: image_id is undefined
+  set_fact:
+    image_id: {{ found_ami.ami_find.results[0].ami_id }}
+
 - name: Install ELB and ASG
   include: asg_main.yml
   tags:
