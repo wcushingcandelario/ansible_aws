@@ -31,7 +31,8 @@ ovcDB_db: xdb
 ovcDB_driver: com.mysql.jdbc.Driver
 ovcDB_encrypted_password: L3Q5kQqII0OlaJ9FGCaukQ==
 #ovcDB_host: 127.0.0.1
-ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+#ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+ovcDB_host: prod-util-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
 ovcDB_params: autoReconnect=true
 ovcDB_port: 3306
 ovcDB_scheme: jdbc:mysql
