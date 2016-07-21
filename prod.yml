@@ -39,8 +39,8 @@
    key: ovc-travis
  #  ovc_security_groups: sg-be2081d9 # FIXME: Wrong
  #  vpc_subnet_public: subnet-1d719879 # FIXME: Wrong
-   ovc_security_groups: sg-5bbc1f3c # Temp for testing
-   vpc_subnet_public: subnet-0a75a06e # Temp for testing
+   ovc_security_groups: sg-b12180d6
+   vpc_subnet_public: subnet-1d719879
    instance_type: m4.large
    env: prod.ovchosting.co.uk
    cluster_name: prod_cluster
@@ -55,7 +55,7 @@
     region: eu-west-1
     key: ovc-travis
     ovc_security_groups: sg-71bc1f16 # Build in non-prod, deploy to prod.
-    vpc_subnet_public: subnet-cae8ffbd # Build in non-prod, deploy to prod.
+    vpc_subnet_public: subnet-d4a14fb0 # Build in non-prod, deploy to prod.
     instance_type: m4.large
     asg_name: "Prod_autoscale"
     deploy_pos: "Prod-POS"
@@ -94,7 +94,7 @@
     key: ovc-travis
     ovc_version: "5.4.0"
 #    ovc_security_groups: ['sg-b12180d6'] #FIXME
-    ovc_security_groups: ['sg-71bc1f16'] # Temp for testing
+    ovc_security_groups: ['sg-b12180d6']
     deploy_type: "prod"
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
@@ -103,6 +103,5 @@
     min_size: 2
     max_size: 5
     instance_type_asg: m4.xlarge
-    security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16" # Temp for testing
-#    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
-    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0" # Temp for testing
+    security_group_ids: "sg-12e5a275,sg-655eff02,sg-b12180d6"
+    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
