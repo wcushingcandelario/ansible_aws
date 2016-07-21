@@ -72,7 +72,7 @@
 		<Arg>
 			<New class="org.skyscreamer.nevado.jms.destination.NevadoQueue">
 				<Arg>destination1</Arg>
-				<Set name="queueUrl">https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1</Set>
+				<Set name="queueUrl">https://sqs.eu-west-1.amazonaws.com/063725663692/PreProd-Queue</Set>
 			</New>
 		</Arg>
 	</New>
