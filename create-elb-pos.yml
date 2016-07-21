@@ -16,7 +16,7 @@
       connection_draining_timeout: 120
       idle_timeout: 300
       subnets: "{{ elbsubnets }}"
-      security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
+      security_group_ids: "{{ security_group_ids }}"
       listeners:
       - protocol: tcp
         load_balancer_port: 443
@@ -25,7 +25,7 @@
         load_balancer_port: 8080
         instance_port: 8080
       health_check:
-        ping_protocol: https # options are http, https, ssl, tcp
+        ping_protocol: tcp # options are http, https, ssl, tcp
         ping_port: 443
         ping_path: "/ovcdashboard/login" # not required for tcp or ssl
         response_timeout: 5 # seconds
