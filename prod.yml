@@ -24,9 +24,9 @@
   tags:
     - rds
   vars:
-    environment_name: prod-util-rds
+    environment_name: prod-rds
     rds_security_group: sg-be2081d9
-    rds_subnet_group: prod-util-rds
+    rds_subnet_group: prod-rds
     multirdszone: yes
 
 - name: Install Mongo Cluster
