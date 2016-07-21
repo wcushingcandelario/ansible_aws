@@ -7,26 +7,11 @@
   tasks:
   - include_vars: vars/settings.yml
 
-# install ELB POS
-- include: create-elb-pos.yml
-  vars:
-    deploy_pos: "{{ deploy_type }}-POS"
-    deploy_dash: "{{ deploy_type }}-Dash"
-    asg_name: "{{ deploy_type }}_autoscale"
-    new_lc_name: "{{ deploy_type }}_config"
+- name: Create ELB for POS
+  include: create-elb-pos.yml
 
-# install ELB DASH
-- include: create-elb-dash.yml
-  vars:
-    deploy_pos: "{{ deploy_type }}-POS"
-    deploy_dash: "{{ deploy_type }}-Dash"
-    asg_name: "{{ deploy_type }}_autoscale"
-    new_lc_name: "{{ deploy_type }}_config"
+- name: Create ELB for Dashboard
+  include: create-elb-dash.yml
 
-# install ASG
-- include: create-auto.yml
-  vars:
-   deploy_pos: "{{ deploy_type }}-POS"
-   deploy_dash: "{{ deploy_type }}-Dash"
-   asg_name: "{{ deploy_type }}_autoscale"
-   new_lc_name: "{{ deploy_type }}_config"
+- name: Create Launch Config and Auto Scaling Group
+  include: create-auto.yml

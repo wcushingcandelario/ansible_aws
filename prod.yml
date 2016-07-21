@@ -55,7 +55,7 @@
     region: eu-west-1
     key: ovc-travis
     ovc_security_groups: sg-71bc1f16 # Build in non-prod, deploy to prod.
-    vpc_subnet_public: subnet-cae8ffbd # Build in non-prod, deploy to prod.    
+    vpc_subnet_public: subnet-cae8ffbd # Build in non-prod, deploy to prod.
     instance_type: m4.large
     asg_name: "Prod_autoscale"
     deploy_pos: "Prod-POS"
@@ -79,9 +79,13 @@
     ovc_version: "5.4.0"
 #    ovc_security_groups: ['sg-b12180d6'] #FIXME
     ovc_security_groups: ['sg-71bc1f16'] # Temp for testing
-    deploy_pos: "Prod-POS"
-    deploy_dash: "Prod-Dash"
     deploy_type: "prod"
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+    asg_name: "{{ deploy_type }}_autoscale"
+    new_lc_name: "{{ deploy_type }}_config"
+    min_size: 2
+    max_size: 5
     instance_type_asg: m4.xlarge
     security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16" # Temp for testing
 #    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"

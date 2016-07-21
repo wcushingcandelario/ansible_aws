@@ -76,9 +76,13 @@
     key: ovc-travis
     ovc_version: "5.4.0"
     ovc_security_groups: ['sg-71bc1f16']
-    deploy_pos: "PreProd-POS"
-    deploy_dash: "PreProd-Dash"
     deploy_type: "preprod"
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+    asg_name: "{{ deploy_type }}_autoscale"
+    new_lc_name: "{{ deploy_type }}_config"
+    min_size: 2
+    max_size: 5
     instance_type_asg: m4.xlarge
     security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
     elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
