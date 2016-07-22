@@ -86,7 +86,7 @@
 
   - name: Set image_id
     set_fact:
-      image_id: {{ amioutput.image_id }}
+      image_id: "{{ amioutput.image_id }}"
 
   - name: create vars file with  new ami info
     copy:
