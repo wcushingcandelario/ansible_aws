@@ -64,6 +64,7 @@
     webserver_user: www-data
     s3install: true
     asg_desired_capacity: 2
+    ovcDB_host: prod-util-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
 
 - name: Find AMI ID
   hosts: localhost
