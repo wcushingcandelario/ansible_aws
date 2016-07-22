@@ -41,8 +41,7 @@ ovcDB_password: 0n3v13w123
 
 #MongoDB configurations
 
-#ovcNOSQLDB_host: mongodb-preprod01.ovchosting.co.uk
-ovcNOSQLDB_host: mongodb-prod01.ovchosting.co.uk
+ovcNOSQLDB_host: mongodb-preprod01.ovchosting.co.uk
 ovcNOSQLDB_port: 27017
 ovcNOSQLDB_db: xdb
 ovcNOSQLDB_username: root

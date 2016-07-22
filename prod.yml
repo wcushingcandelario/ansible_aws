@@ -65,6 +65,7 @@
     s3install: true
     asg_desired_capacity: 2
     ovcDB_host: prod-util-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+    ovcNOSQLDB_host: mongodb-prod01.ovchosting.co.uk
 
 - name: Find AMI ID
   hosts: localhost
