@@ -49,7 +49,6 @@
   tags:
     - bake_ami
   vars:
-    ovc_version: "5.4.0"
     region: eu-west-1
     key: ovc-travis
     ovc_security_groups: sg-71bc1f16
