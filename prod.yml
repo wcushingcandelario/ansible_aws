@@ -80,8 +80,9 @@
   hosts: localhost
   connection: local
   when: image_id is undefined
-  set_fact:
-    image_id: {{ found_ami.ami_find.results[0].ami_id }}
+  tasks:
+    set_fact:
+      - image_id: {{ found_ami.ami_find.results[0].ami_id }}
 
 - name: Install ELB and ASG
   include: asg_main.yml
