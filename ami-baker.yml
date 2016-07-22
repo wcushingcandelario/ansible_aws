@@ -38,7 +38,11 @@
   - name: Add host to group just_baked
     add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_baked
 
+<<<<<<< HEAD
 - hosts: just_baked
+=======
+- hosts: just_created[3]
+>>>>>>> 1385619... changed justcreated from 0 to 3
   remote_user: ec2-user
   become: yes
   become_user: root
@@ -55,7 +59,11 @@
   vars:
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
+<<<<<<< HEAD
 - hosts: just_baked
+=======
+- hosts: just_created[3]
+>>>>>>> 1385619... changed justcreated from 0 to 3
   remote_user: ec2-user
   become: yes
   become_user: root
