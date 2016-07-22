@@ -75,6 +75,8 @@
   tags:
     - asg
     - find_ovc_ami
+  vars:
+   region: eu-west-1
 
 - name: Add AMI ID to facts
   hosts: localhost
