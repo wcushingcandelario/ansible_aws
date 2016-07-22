@@ -1,4 +1,4 @@
-- name: fill in blank
+- name: Build temporary instance
   hosts: localhost
   remote_user: ec2-user
   connection: local
