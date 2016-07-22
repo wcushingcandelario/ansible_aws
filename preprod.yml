@@ -72,6 +72,9 @@
   connection: local
   roles:
     - findovcami
+  tags:
+    - asg
+    - find_ovc_ami
 
 - name: Add AMI ID to facts
   hosts: localhost
@@ -81,6 +84,9 @@
       set_fact:
         image_id: "{{ ami_find.results[0].ami_id }}"
       when: image_id is undefined
+  tags:
+    - asg
+    - find_ovc_ami
 
 - name: Install ELB and ASG
   include: asg_main.yml

@@ -7,4 +7,5 @@
     sort_end: 1
   register: ami_find
 
-- debug: msg="{{ ami_find.results }}"
+- name: AMI ID found
+  debug: "var=ami_find.results"
