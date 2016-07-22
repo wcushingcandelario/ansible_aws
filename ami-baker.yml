@@ -35,6 +35,9 @@
   - name: Add host to group just_created
     add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created
 
+  - name: Add host to group just_baked
+    add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_baked
+
 - hosts: just_baked
   remote_user: ec2-user
   become: yes
