@@ -70,18 +70,17 @@
 - name: Find AMI ID
   hosts: localhost
   connection: local
-  when: image_id is undefined
   roles:
     - findovcami
-  register: found_ami
 
 - name: Add AMI ID to facts
   hosts: localhost
   connection: local
-  when: image_id is undefined
   tasks:
-    set_fact:
-      - image_id: "{{ found_ami.ami_find.results[0].ami_id }}"
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: "{{ ami_find.results[0].ami_id }}"
+      when: image_id is undefined
 
 - name: Install ELB and ASG
   include: asg_main.yml
