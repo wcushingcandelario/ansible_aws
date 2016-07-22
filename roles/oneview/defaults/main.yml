@@ -31,8 +31,7 @@ ovcDB_db: xdb
 ovcDB_driver: com.mysql.jdbc.Driver
 ovcDB_encrypted_password: L3Q5kQqII0OlaJ9FGCaukQ==
 #ovcDB_host: 127.0.0.1
-#ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
-ovcDB_host: prod-util-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
 ovcDB_params: autoReconnect=true
 ovcDB_port: 3306
 ovcDB_scheme: jdbc:mysql
@@ -42,8 +41,7 @@ ovcDB_password: 0n3v13w123
 
 #MongoDB configurations
 
-#ovcNOSQLDB_host: mongodb-preprod01.ovchosting.co.uk
-ovcNOSQLDB_host: mongodb-prod01.ovchosting.co.uk
+ovcNOSQLDB_host: mongodb-preprod01.ovchosting.co.uk
 ovcNOSQLDB_port: 27017
 ovcNOSQLDB_db: xdb
 ovcNOSQLDB_username: root
