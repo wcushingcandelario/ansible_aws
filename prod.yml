@@ -14,7 +14,7 @@
     environment_name: prod-util-rds
     rds_security_group: sg-be2081d9
     rds_subnet_group: prod-util-rds
-    multirdszone: yes
+    multirdszone: no
 
 - name: Install RDS
   connection: local
