@@ -11,10 +11,10 @@
   tags:
     - rds_util
   vars:
-  environment_name: util-rds
-  rds_security_group: sg-5bbc1f3c
-  rds_subnet_group: "uat1 rds subnet group"
-  multirdszone: no
+    environment_name: util-rds
+    rds_security_group: sg-5bbc1f3c
+    rds_subnet_group: "uat1 rds subnet group"
+    multirdszone: no
 
 - name: Install RDS
   connection: local
