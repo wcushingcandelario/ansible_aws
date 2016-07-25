@@ -40,9 +40,9 @@
    ovc_security_groups: sg-5bbc1f3c
    vpc_subnet_public: subnet-0a75a06e
    instance_type: m4.large
-   env: preprod.ovchosting.co.uk
-   cluster_name: preprod_cluster
    deploy_type: "preprod"
+   env: {{ deploy_type }}.ovchosting.co.uk
+   cluster_name: {{ deploy_type }}_cluster
 
 - name: install ami-builder
   include: ami-baker.yml
@@ -54,10 +54,10 @@
     ovc_security_groups: sg-71bc1f16
     vpc_subnet_public: subnet-cae8ffbd
     instance_type: m4.large
-    asg_name: "preprod_autoscale"
-    deploy_pos: "PreProd-POS"
-    deploy_dash: "PreProd-Dash"
     deploy_type: "preprod"
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+    asg_name: "{{ deploy_type }}_autoscale"
     jetty_user_login: jetty
     jetty_dir: /opt/jetty
     ovc_server_user_dir: /opt/ovc
