@@ -1,20 +1,4 @@
 ---
-- name: This play will deploy mongo-cluster and ami-builder
-  hosts: localhost
-  remote_user: ec2-user
-  gather_facts: False
 
-#  tasks:
-#  - name: include mongo defaults
-#    include_vars: vars/pre-prod/mongo-defaults.yml
-
-# install Mongo Cluster
-#- include: mongo-cluster.yml
-#  vars:
-#   cluster_name: "npcluster"
-
-# install ami-builder
-- include: ami-baker_test.yml
-  vars:
-   ovc_version: "5.2.0"
-
+- pause:
+  prompt: Instead of running this playbook please run preprod.yml with `--tags bake_ami --skip-tags terminate_ami`
