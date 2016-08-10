@@ -1,12 +1,4 @@
-- hosts: localhost
-  connection: local
-  gather_facts: False
-
-  tasks:
-  - name: Include the default variables and find ami
-    include_vars: vars/ami-baker-defaults.yml
-
-- name: fill in blank
+- name: Build temporary instance
   hosts: localhost
   remote_user: ec2-user
   connection: local
@@ -40,29 +32,17 @@
     wait_for: host={{ item.private_ip }} delay=90 port=22 state=started timeout=640
     with_items: ami_instance.instances
 
-  - name: add host to group
+  - name: Add host to group just_created
     add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created
 
-#  - name: Add new Route53 entry
-#    route53:
-#      command: "create"
-#      zone: "preprod-int.ovchosting.co.uk"
-#      hosted_zone_id: "Z3M7I9GRTY3KIG"
-#      private_zone: "true"
-#      record: "ami-builder.preprod-int.ovchosting.co.uk"
-#      type: "A"
-#      ttl: 7200
-#      value: "{{ item.private_ip }}"
-#      overwrite: yes
-#    with_items: ami_instance.instances
+  - name: Add host to group just_baked
+    add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_baked
 
-- hosts: just_created[3]
+- hosts: just_baked
   remote_user: ec2-user
   become: yes
   become_user: root
 
-  pre_tasks:
-    - include_vars: vars/ami-baker-defaults.yml
   roles:
     - common
     - jetty
@@ -75,38 +55,10 @@
   vars:
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
-- hosts: just_created[3]
+- hosts: just_baked
   remote_user: ec2-user
   become: yes
   become_user: root
-
-  name: Make some cake [REMOVE ME FOR 5.3]
-  tasks:
-    - name: Do a replace on the php -> cake
-      lineinfile:
-        dest: /var/www/html/ovcdashboard/app/Config/core.php
-        regexp: ".*\'defaults\' => \'php\'"
-        line: "        'defaults' => 'cake'"
-        state: present
-    - name: Set Dashboard to HTTPS
-      lineinfile:
-        dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
-        regexp: ".*SITE_URL',\"http:"
-        line: "define('SITE_URL',\"https://$_SERVER[HTTP_HOST]/ovcdashboard/\");"
-        state: present
-    - name: Add final block for bootstrap.php
-      blockinfile:
-        dest: /var/www/html/ovcdashboard/app/Config/bootstrap.php
-        insertafter: EOF
-        state: present
-        content: |
-          $dir = TMP.'sessions';
-          if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-          }
-          if(is_writable($dir)){
-            chmod($dir, 0755);
-          }
 
 - hosts: localhost
   connection: local
@@ -129,9 +81,15 @@
       state: absent
       region: "{{ region }}"
       instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+    tags:
+      - terminate_ami
 
   - name: debug
     debug: var=amioutput
+
+  - name: Set image_id
+    set_fact:
+      image_id: "{{ amioutput.image_id }}"
 
   - name: create vars file with  new ami info
     copy:

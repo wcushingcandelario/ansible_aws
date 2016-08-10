@@ -30,10 +30,10 @@
   become: yes
   become_user: root
 
-- name: Remove TPExtensions-X.Y.Z.jar
+- name: Remove TP jars
   file: path="{{ item }}" state=absent
   with_fileglob:
-    - "{{ jetty_dir }}/lib/ext/TPExtensions*"
+    - "{{ jetty_dir }}/lib/ext/TP*"
   become: yes
   become_user: root
 
@@ -46,7 +46,7 @@
 
 - name: Download tpdata.tar.gz from S3
   command: "aws s3 cp s3://ovc-travisperkins-releases/{{ ovc_version }}/tpdata.tar.gz {{ ovc_server_user_dir }}/installFiles/tpdata.tar.gz"
-  when: s3install is defined
+  when: s3install is defined and s3install
   become: yes
   become_user: root
 
@@ -56,7 +56,7 @@
     mode: ug+rw
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_group_name }}"
-  when: s3install is defined
+  when: s3install is defined and s3install
   become: yes
   become_user: root
 
@@ -67,7 +67,7 @@
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_group_name }}"
-  when: s3install is defined
+  when: s3install is defined and s3install
   become: yes
   become_user: root
 
@@ -75,7 +75,7 @@
   unarchive:
     src: tpdata.tar.gz
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
-  when: s3install is not defined
+  when: s3install is not defined or not s3install
   become: yes
   become_user: "{{ jetty_user_login }}"
 
@@ -87,10 +87,18 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Copy importRootLocations Files
+- name: Copy eCommerce Import Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/importRootLocations/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
+  delegate_to: "{{ inventory_hostname }}"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Copy staffDiscountImportFiles Files
+  synchronize:
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/staffDiscountImportFiles/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -135,45 +143,70 @@
   become_user: root
 
 - name: Download TPExtensions from S3
-  command: "aws s3 cp s3://ovc-travisperkins-releases/{{ ovc_version }}/TPExtensions-{{ ovc_version }}.jar {{ jetty_dir }}/lib/ext/TPExtensions-{{ ovc_version }}.jar"
-  when: s3install is defined
+  command: "aws s3 cp s3://ovc-travisperkins-releases/{{ ovc_version }}/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
+  when: s3install is defined and s3install
+  become: yes
+  become_user: jetty
+
+- name: Download TPPopulators from S3
+  command: "aws s3 cp s3://ovc-travisperkins-releases/{{ ovc_version }}/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
+  when: s3install is defined and s3install
   become: yes
   become_user: jetty
 
 - name: Copy TPExtensions Jar to jetty
   copy:
-    src: "TPExtensions-{{ ovc_version }}.jar"
-    dest: "{{ ovc_install_dir }}/lib/ext/TPExtensions-{{ ovc_version }}.jar"
+    src: "TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
+    dest: "{{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_user_login }}"
     mode: 0644
-  when: s3install is not defined
+  when: s3install is not defined or not s3install
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Update Jetty context.xml to include TPExtensions
+- name: Copy TPPopulators Jar to jetty
+  copy:
+    src: "TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
+    dest: "{{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_user_login }}"
+    mode: 0644
+  when: ((s3install is not defined) or (s3install == false))
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Update Jetty context.xml to include TPExtensions and TPPopulators
   lineinfile:
     dest: "{{ jetty_dir }}/webapps/context.xml"
     insertafter: '<Set name="overrideDescriptor">.*'
-    line: '<Set name="extraClasspath">{{ jetty_dir }}/lib/ext/TPExtensions-{{ ovc_version }}.jar</Set>'
+    line: '<Set name="extraClasspath">{{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar;{{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar</Set>'
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Update Jetty context.xml to include Plain Text SQS with region
-  replace:
-    dest: "{{ jetty_dir }}/webapps/context.xml"
-    regexp: .*org\.skyscreamer\.nevado\.jms\.connector\.amazonaws.*[^\n]*\n.*Set>
-    replace: '\t\t\t<New class="org.skyscreamer.nevado.jms.connector.amazonaws.PlainTextAmazonSQSConnectorFactory"/>  </Set>  <Set name="awsSQSEndpoint">{{ sqs_endpoint }}</Set>'
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-- name: Update Jetty context.xml to include SQS Queue URL
-  lineinfile:
-    dest: "{{ jetty_dir }}/webapps/context.xml"
-    regexp: '<Set name="queueUrl">.*'
-    line: '<Set name="queueUrl">{{ sqs_queue_url }}</Set>'
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Update Jetty context.xml to include Plain Text SQS with region
+#   replace:
+#     dest: "{{ jetty_dir }}/webapps/context.xml"
+#     regexp: .*org\.skyscreamer\.nevado\.jms\.connector\.amazonaws.*[^\n]*\n.*Set>
+#     replace: '\t\t\t<New class="org.skyscreamer.nevado.jms.connector.amazonaws.PlainTextAmazonSQSConnectorFactory"/>  </Set>  <Set name="awsSQSEndpoint">{{ sqs_endpoint }}</Set>'
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
+#
+# - name: Update Jetty context.xml to set awsSQSEndpoint
+#   replace:
+#     dest: "{{ jetty_dir }}/webapps/context.xml"
+#     regexp: .*org\.skyscreamer\.nevado\.jms\.connector\.amazonaws.*[^\n]*\n.*Set>
+#     replace: '\t\t\t<New class="org.skyscreamer.nevado.jms.connector.amazonaws.PlainTextAmazonSQSConnectorFactory"/>  </Set>  <Set name="awsSQSEndpoint">{{ sqs_endpoint }}</Set>'
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
+#
+# - name: Update Jetty context.xml to include SQS Queue URL
+#   lineinfile:
+#     dest: "{{ jetty_dir }}/webapps/context.xml"
+#     regexp: '<Set name="queueUrl">.*'
+#     line: '<Set name="queueUrl">{{ sqs_queue_url }}</Set>'
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
 - name: Edit Jetty start.ini to add plus module
   lineinfile:
@@ -224,6 +257,25 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Update unifiedconfig.properties to include hybris OCC configs
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^export.products.url=.*', line: 'export.products.url=v2/%s/ovc/products/paginated' }
+    - { regexp: '^catalogs.url=.*', line: 'catalogs.url=/v2/%s/ovc/merchandisingGroups/All' }
+    - { regexp: '^stores.url=.*', line: 'stores.url=/v2/%s/ovc/locations/All' }
+    - { regexp: '^export.stock.url=.*', line: 'export.stock.url=v2/%s/ovc/storestock/%s' }
+    - { regexp: '^ecommerce.fromServer.occ.type=.*', line: 'ecommerce.fromServer.occ.type=1' }
+    - { regexp: '^oAuth.required=.*', line: 'oAuth.required=false' }
+    - { regexp: '^products.import.pageSize=.*', line: 'products.import.pageSize=1500' }
+    - { regexp: '^others.import.pageSize=.*', line: 'others.import.pageSize=1500' }
+    - { regexp: '^secure.occhost.context=.*', line: 'secure.occhost.context=/omnicommercewebservices' }
+
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
 - name: Create initDevAll.sh
   command: "cp initOVCServer.sh initDevAll.sh"
   args:
@@ -241,6 +293,23 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Create initStaffDiscount.sh
+  command: "cp initOVCServer.sh initStaffDiscount.sh"
+  args:
+    chdir: "{{ ovc_install_dir }}/bin"
+    creates: "{{ ovc_install_dir }}/bin/initStaffDiscount.sh"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Set initStaffDiscount.sh to run staffData
+  replace:
+    dest: "{{ ovc_install_dir }}/bin/initStaffDiscount.sh"
+    regexp: "eComInit"
+    replace: "staffData"
+    backup: no
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
 - name: Cleanup MIME files via devAll
   lineinfile:
     dest: "{{ ovc_install_dir }}/bin/initDevAll.sh"
@@ -254,13 +323,6 @@
     line: 'find /tmp/ -type f -name "initialDB*" -exec rm {} \;'
   become: yes
   become_user: "{{ jetty_user_login }}"
-
-# DIDN'T WORK:
-#- name: Import TP SQL
-#  mysql_db:
-#   state: import
-#    name: xdb
-#    target: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/sql/tp-alters-4120-mysql.sql"
 
 - stat:
     path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/sql/tp-alters-{{ ovc_version }}-mysql.sql"
@@ -304,69 +366,3 @@
     - startjetty
   become: yes
   become_user: root
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # Dumps all databases to hostname.sql
-# - name: Backup DB
-#   mysql_db:
-#     state: dump
-#     name: xdb
-#     target: /opt/ovc/xdb_back.sql
-#     login_user: root
-#     login_password: root
-#   become: yes
-#   become_user: root
-#
-# - name: Import DB
-#   mysql_db:
-#     state: import
-#     name: xdb
-#     target: /home/ec2-user/MySQL/xdb_dt.sql
-#     login_user: root
-#     login_password: root
-#   become: yes
-#   become_user: root
-#
-# - name: Executing clob tbl truncate
-#   command: mysql -u root -proot xdb -e "truncate table xdb.clob_tbl"
-#   become: yes
-#   become_user: root
-#
-# - name: Start Jetty
-#   service:
-#     name: jetty
-#     state: started
-#   become: yes
-#   become_user: root
-#
-# - name: Remove temp Hash File
-#   file: path="{{ ovc_install_dir }}/Platform-Dynamic-Objects/temp/" state=absent
-#   become: yes
-#   become_user: root
-#
-#
-# - name: Run init script
-#   command: sh initOVCServer.sh
-#   args:
-#       chdir: "{{ ovc_install_dir }}/bin/"
-#   become: yes
-#   become_user: root

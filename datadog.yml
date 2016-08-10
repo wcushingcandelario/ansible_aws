@@ -1,7 +1,4 @@
-- name: Install mongo
-  hosts: tag_aws_testing
-  remote_user: ec2-user
-  become: yes
-  become_user: root
-  roles:
-    - Datadog.datadog
+---
+
+- pause:
+  prompt: Instead of running this playbook please run <env>.yml with --tags bake_ami --skip-tags terminate_ami` 

@@ -13,7 +13,7 @@
       image_id: "{{ image_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
-      security_groups: ["{{ ovc_security_groups }}"]
+      security_groups: "{{ ovc_security_groups }}"
       instance_type: "{{ instance_type_asg }}"
       instance_monitoring: yes
       assign_public_ip: yes
@@ -22,8 +22,12 @@
 #    Lookups are executed with a cwd relative to the role or play, as opposed to
 #   local tasks which are executed with the cwd of the executed script.
 # http://docs.ansible.com/ansible/playbooks_lookups.html
-      user_data: "{{ lookup('file', 'scripts/' + 'preprod' + '-user_data.sh') }}"
+      user_data: "{{ lookup('file', 'scripts/' + '{{ deploy_type }}' + '-user_data.sh') }}"
     register: debuglaunch
+
+  - name: ovc_security_groups
+    debug: "var=ovc_security_groups"
+
 
   - name: debug script copy
     debug: "var=debuglaunch"
@@ -35,17 +39,17 @@
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
       vpc_zone_identifier: "{{ elbsubnets }}"
-      load_balancers: "{{ deploy_type }},{{ deploy_dash }}"
+      load_balancers: "{{ deploy_pos }},{{ deploy_dash }}"
       replace_all_instances: yes
       health_check_type: ELB
-      min_size: 2
-      max_size: 5
+      min_size: "{{ min_size }}"
+      max_size: "{{ max_size }}"
       desired_capacity: 2
       region: "{{ region }}"
       tags:
         - Name: "{{ deploy_type }}-{{ ovc_version }}"
         - monitor: true
-        - environment: preprod
+        - environment: "{{ deploy_type }}"
     register: asglaunch
 
   - name: debug auto scaling update

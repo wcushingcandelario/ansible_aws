@@ -1,33 +1,111 @@
 ---
+
 #- name: This play will install the ami-builder and mongo cluster
 
-- name: This play will deploy mongo-cluster and ami-builder
+
+- name: Install Utility RDS
+  connection: local
   hosts: localhost
+  roles:
+    - create_rds
+  tags:
+    - rds_util
+  vars:
+    environment_name: prod-util-rds
+    rds_security_group: sg-be2081d9
+    rds_subnet_group: prod-util-rds
+    multirdszone: no
+
+- name: Install RDS
+  connection: local
+  hosts: localhost
+  roles:
+    - create_rds
+  tags:
+    - rds
+  vars:
+    environment_name: prod-rds
+    rds_security_group: sg-be2081d9
+    rds_subnet_group: prod-rds
+    multirdszone: yes
+
+- name: Install Mongo Cluster
+  include: mongo-cluster.yml
   remote_user: ec2-user
-  gather_facts: False
-
-  tasks:
-  - name: include mongo defaults
-    include_vars: vars/prod/mongo-defaults.yml
-
-# install Mongo Cluster
-- include: mongo-cluster.yml
+  tags:
+    - mongo
   vars:
    region: eu-west-1
    key: ovc-travis
-   ovc_security_groups: sg-5bbc1f3c # FIXME: Wrong
-   vpc_subnet_public: subnet-0a75a06e # FIXME: Wrong
+   ovc_security_groups: sg-be2081d9
+   vpc_subnet_public: subnet-1d719879
    instance_type: m4.large
-   env: prod.ovchosting.co.uk
-   cluster_name: prod_cluster
+   deploy_type: "prod"
+   env: {{ deploy_type }}.ovchosting.co.uk
+   cluster_name: {{ deploy_type }}_cluster
 
-# install ami-builder
-- include: ami-baker.yml
+- name: install ami-builder
+  include: ami-baker.yml
+  tags:
+    - bake_ami
   vars:
-   ovc_version: "5.2.0"
+    region: eu-west-1
+    key: ovc-travis
+    ovc_security_groups: sg-b12180d6 # Build in non-prod, deploy to prod.
+    vpc_subnet_public: subnet-0abd536e # Build in non-prod, deploy to prod.
+    instance_type: m4.large
+    deploy_type: "prod"
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+    asg_name: "{{ deploy_type }}_autoscale"
+    jetty_user_login: jetty
+    jetty_dir: /opt/jetty
+    ovc_server_user_dir: /opt/ovc
+    webserver_user: www-data
+    s3install: true
+    asg_desired_capacity: 2
+    ovcDB_host: prod-util-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+    ovcNOSQLDB_host: mongodb-prod01.ovchosting.co.uk
 
-
-# install ELB and ASG
-- include: asg_main.yml
+- name: Find AMI ID
+  hosts: localhost
+  connection: local
+  roles:
+    - findovcami
+  tags:
+    - asg
+    - find_ovc_ami
   vars:
+   region: eu-west-1
+
+- name: Add AMI ID to facts
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: "{{ ami_find.results[0].ami_id }}"
+      when: image_id is undefined
+  tags:
+    - asg
+    - find_ovc_ami
+
+- name: Install ELB and ASG
+  include: asg_main.yml
+  tags:
+    - asg
+  vars:
+    IAMROLE: "CodeDeploy-EC2"
+    region: eu-west-1
+    key: ovc-travis
+    ovc_security_groups: ['sg-b12180d6']
+    deploy_type: "prod"
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+    asg_name: "{{ deploy_type }}_autoscale"
+    new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
+    min_size: 2
+    max_size: 5
     instance_type_asg: m4.xlarge
+    security_group_ids: "sg-12e5a275,sg-655eff02,sg-b12180d6"
+    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"

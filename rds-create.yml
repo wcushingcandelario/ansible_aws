@@ -1,5 +1,4 @@
-- hosts: localhost
-  connection: local
-  gather_facts: False
-  roles: 
-   - create_rds
+---
+
+- pause:
+  prompt: Instead of running this playbook please run <env>.yml with `--tags rds` or `--tags rds_util`

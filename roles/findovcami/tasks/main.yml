@@ -3,11 +3,9 @@
     name: "ovc-{{ ovc_version }}*"
     sort: name
     sort_order: descending
-    region: "{{ region }}" 
+    region: "{{ region }}"
     sort_end: 1
   register: ami_find
 
-- debug: msg="{{ ami_find.results }}"
-
-- vars: 
-  new_image_id: "{{ ami_find.results[0].ami_id }}"
+- name: AMI ID found
+  debug: "var=ami_find.results"

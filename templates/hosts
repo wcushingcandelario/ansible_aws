@@ -1,3 +1,3 @@
-10.33.232.22 mongodb01.preprod-int.ovchosting.co.uk mongodb01
-10.33.232.8 mongodb02.preprod-int.ovchosting.co.uk mongodb02
-10.33.232.26 mongodb03.preprod-int.ovchosting.co.uk mongodb03
+10.33.232.21 mongodb-preprod01.ovchosting.co.uk mongodb-preprod01
+10.33.232.29 mongodb-preprod02.ovchosting.co.uk mongodb-preprod02
+10.33.232.12 mongodb-preprod03.ovchosting.co.uk mongodb-preprod03
