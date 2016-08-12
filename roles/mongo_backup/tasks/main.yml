@@ -12,13 +12,10 @@
   lineinfile:
     regexp: mmsApiKey\=
     line: mmsApiKey=25198105b01633367f6f135c235ae476
+    dest: /etc/mongodb-mms/backup-agent.config
 
-- name: Enable service
+- name: Enable and service
   service:
     name: mongodb-mms-backup-agent
-    status: enabled
-
-- name: Start service
-  service:
-    name: mongodb-mms-backup-agent
-    status: started
+    state: started
+    enabled: yes
