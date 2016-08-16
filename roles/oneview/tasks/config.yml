@@ -12,7 +12,7 @@
   become_user: root
 
 - name: Copy out the unifiedConfig files
-  template: src={{ item }} dest=/opt/jetty/webapps/ owner=jetty group=jetty
+  copy: src={{ item }} dest=/opt/jetty/webapps/ owner=jetty group=jetty
   with_fileglob:
     - env_files/context.xml.*
   become: yes
