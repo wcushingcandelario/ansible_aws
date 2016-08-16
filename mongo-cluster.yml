@@ -161,7 +161,7 @@
   roles:
     - mongoinstall
     - Datadog.datadog
-#    - mongo_backup
+    - mongo_backup
   vars:
     datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
