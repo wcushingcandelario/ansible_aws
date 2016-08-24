@@ -44,6 +44,7 @@
       health_check_type: ELB
       min_size: "{{ min_size }}"
       max_size: "{{ max_size }}"
+      wait_timeout: 1200
       desired_capacity: 2
       region: "{{ region }}"
       tags:

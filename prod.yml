@@ -41,8 +41,8 @@
    vpc_subnet_public: subnet-1d719879
    instance_type: m4.large
    deploy_type: "prod"
-   env: {{ deploy_type }}.ovchosting.co.uk
-   cluster_name: {{ deploy_type }}_cluster
+   env: "{{ deploy_type }}.ovchosting.co.uk"
+   cluster_name: "{{ deploy_type }}_cluster"
 
 - name: Run ami-baker
   include: ami-baker.yml

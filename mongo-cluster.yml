@@ -52,7 +52,7 @@
      with_items: ami_instance.instances
 
    - name: wait for ssh to come up
-     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=940
+     wait_for: host={{ item.private_ip }} delay=300 port=22 state=started timeout=1200
      with_items: ami_instance.instances
 
 #create second server
@@ -88,7 +88,7 @@
      with_items: ami_instance.instances
 
    - name: wait for ssh to come up
-     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=940
+     wait_for: host={{ item.private_ip }} delay=300 port=22 state=started timeout=1200
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
@@ -137,7 +137,7 @@
      with_items: ami_instance.instances
 
    - name: wait for ssh to come up
-     wait_for: host={{ item.private_ip }} delay=190 port=22 state=started timeout=940
+     wait_for: host={{ item.private_ip }} delay=300 port=22 state=started timeout=1200
      with_items: ami_instance.instances
 
    - name: Add new Route53 entry
