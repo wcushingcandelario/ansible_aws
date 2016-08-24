@@ -50,6 +50,7 @@
         - Name: "{{ deploy_type }}-{{ ovc_version }}"
         - monitor: true
         - environment: "{{ deploy_type }}"
+        - role: webapp
     register: asglaunch
 
   - name: debug auto scaling update

@@ -8,7 +8,7 @@
 	<Set name="extractWAR">false</Set>
 
 	<Set name="overrideDescriptor">/opt/jetty/webapps/pos.d/pos-override.xml</Set>
-<Set name="extraClasspath">/opt/ovc/lib/ext/TPExtensions-5.5.0.jar;/opt/ovc/lib/ext/TPPopulators-5.5.0.jar</Set>
+<Set name="extraClasspath">/opt/ovc/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar;/opt/ovc/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar</Set>
 
 	<Set name="securityHandler">
 		<New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
@@ -59,8 +59,8 @@
 					<New class="org.skyscreamer.nevado.jms.connector.oneviewcommerce.ShadedPlainTextAmazonSQSConnectorFactory"/>
 				</Set>
 				<Set name="awsSQSEndpoint">sqs.eu-west-1.amazonaws.com</Set>
-				<Set name="awsAccessKey">test</Set>
-				<Set name="awsSecretKey">testsecret</Set>
+				<Set name="AKIAIRXSVO6KHXYX77HA">test</Set>
+				<Set name="awsSecretKey">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</Set>
 			</New>
 		</Arg>
 	</New>
