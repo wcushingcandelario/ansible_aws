@@ -129,6 +129,7 @@
     - { line: '--module=servlets'}
     - { line: '--module=jaas'}
     - { line: '--module=logging'}
+    - { line: '-Dovc.isBatchNode=true'}
   become: yes
   become_user: root
 
