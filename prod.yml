@@ -3,7 +3,7 @@
 #- name: This play will install the ami-builder and mongo cluster
 
 
-- name: Install Utility RDS
+- name: Create Utility RDS
   connection: local
   hosts: localhost
   roles:
@@ -16,7 +16,7 @@
     rds_subnet_group: prod-util-rds
     multirdszone: no
 
-- name: Install RDS
+- name: Create RDS
   connection: local
   hosts: localhost
   roles:
@@ -29,7 +29,7 @@
     rds_subnet_group: prod-rds
     multirdszone: yes
 
-- name: Install Mongo Cluster
+- name: Build Mongo Cluster
   include: mongo-cluster.yml
   remote_user: ec2-user
   tags:
@@ -44,7 +44,7 @@
    env: {{ deploy_type }}.ovchosting.co.uk
    cluster_name: {{ deploy_type }}_cluster
 
-- name: install ami-builder
+- name: Run ami-baker
   include: ami-baker.yml
   tags:
     - bake_ami
@@ -90,12 +90,12 @@
     - asg
     - find_ovc_ami
 
-- name: Install ELB and ASG
+- name: Create ELB and ASG
   include: asg_main.yml
   tags:
     - asg
   vars:
-    IAMROLE: "CodeDeploy-EC2"
+    IAMROLE: "ProdAppServer"
     region: eu-west-1
     key: ovc-travis
     ovc_security_groups: ['sg-b12180d6']
