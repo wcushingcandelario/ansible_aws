@@ -59,8 +59,6 @@
 					<New class="org.skyscreamer.nevado.jms.connector.oneviewcommerce.ShadedPlainTextAmazonSQSConnectorFactory"/>
 				</Set>
 				<Set name="awsSQSEndpoint">sqs.eu-west-1.amazonaws.com</Set>
-				<Set name="awsAccessKey">test</Set>
-				<Set name="awsSecretKey">testsecret</Set>
 			</New>
 		</Arg>
 	</New>
