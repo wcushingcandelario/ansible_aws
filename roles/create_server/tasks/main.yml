@@ -17,6 +17,7 @@
       role: mongodb
       Name: mongodb-{{ env }}
       monitor: true
+      environment: {{ deploy_type }}
   register: ami_instance
 
 - name: wait for ssh to come up
