@@ -4,7 +4,7 @@
         $config['setting'] = array(
 
 
-                'DBURL' => 'com.mysql.jdbc.Driver://prod-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com:3306/xdb', # FIXME: Needs changing.
+                'DBURL' => 'com.mysql.jdbc.Driver://prod-mysql.ovchosting.co.uk:3306/xdb',
                 'DBType' => 'MySQL',
                 'DBUserId' => 'root',
                 'DBPassword' => '0n3v13w123',
