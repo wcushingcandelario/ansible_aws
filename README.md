@@ -1,70 +1,124 @@
 # travisperkins-ansible
+
 Ansible Playbooks for TravisPerkins
 
-▽
-# travisperkins-ansible
-Ansible Playbooks for TravisPerkins
+The playbooks are designed to manage the autoscaling environment for the OVC
+application for TravisPerkins
 
-The playbooks are designed to manage the autoscaling environment for the OVC application for TravisPerkins
+These playbooks are available to run from ansible tower.
 
-These playbooks are available to run from ansible tower. 
+## Run Playbooks from the command line
 
-### ami-baker.yml
+**PREREQUISITES:**
 
-First in the process is the ami-baker.yml
-It does the following:
+-   The .vault_pass.txt file MUST be accessible from your user account.
+-   You almost definitely want to skip importers.
 
-	1. Creates a server
-	2. Installs the necessary application, 
-	3. Installs configuration 
-	4. Starts services
-	3. Bundles the server into an AMI
-	4. Destroys the server
-  
-  To run this playbook from the command line, you will need to include the vault password, as the automation pushes out the SSL keys encrypted and the vault password will decrypt the keys after pushing it out to the server. 
-  Here is an example command line: 
-  
-	ansible-playbook ami-baker.yml --extra-vars "ovc_version=4.12.0" --vault-password-file ~/.vault_pass.txt
+## Building Whole Environments
 
-  This needs to be run from the Ansible Utility tower server as that is where the file exists, /root/.vault_pass.txt 
-  
-  In addition to specifying the vault password, you always need the ovc_version or the job will fail. This will determine what version of code to get from S3 to install on the new server. 
-  
-  The other variables available are set in the file vars/ami-baker-defaults.yml  
-  
-### update-asg.yml
+If you run a playbook in without any tags or  skip-tags then you will get an
+entire environment built with the settings default to that playbook.
 
-After you have built a new AMI, you will want to use it in a working autoscaling group. You can do this with update-asg.yml
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt
+
+### Skip Mongo
+
+You may want to skip Mongo if it is already installed.
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,mongo
+
+### Skip RDS
+
+You may want to skip Mongo if it is already installed.
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds,rds_util
+
+## Updating Specific Components
+
+The playbooks are designed to be able to build specific components of any
+environment without requiring a complete environment build out.
+
+### Building RDS
+
+This command will install the production database RDS. Notably:
+
+-   If the databases already exist it will do **nothing** and **will not**
+    install a new database but simply continue on.
+
+-   Disabling these tags can speed up the play but not by much.
+
+-   This must be run during the rollout
 
 
-This playbook takes a few arguments. 
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=rds,rds_util
 
-	1. It needs the deploy_type . This needs to be pre-prod or prod. If other deploy_types are needed then we will need to refactor the playbook. 
-	2. It also requires the ovc_version, as that is how it searches for AMI's. 
-	3. The playbook reads in the variables from vars/pre-prod.yml or vars/prod.yml depending on the deploy_type
+### Building MongoDB
 
-Running the update-asg.yml will do the following. 
+This is the playbook part for the rolls out **three** Mongo database servers in
+a cluster and sets the DNS for them.
 
-	1. It finds the newest AMI with the ovc version specified in the AMI name. 
-	2. Creates a new launch config using the user data string from scripts/{deploy_type}-user_data.sh
-	3. Then it updates the auto scaling group that is named in the vars/{deploy_type}.yml
+If you do not skip this then Mongo will redeploy **each and every time** you
+run the playbook. You will get a new MongoDB cluster each time you run this
+playbook, it does not skip if there are servers already.
 
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=mongo
 
-### create-asg-elb.yml
-  
-  To setup a brand new Autoscaled stack, you can use the create-asg-elb.yml  playbook
-  
-  This will do the following: 
-  
-  	1. Create a new Elastic Load balancer
-  	2. Create a new Launch configuration 
-  	3. Create a new Autoscaling group using the previously made ELB and LC
-  
-  This will not need to be run frequently. It is made available in case you need to stand up a new autoscaled Staging, preprod, production or other environment. 
+### Building a new AMI
 
-### Run Playbooks from the command line
-PREREQUISITES: The .vault_pass.txt file MUST be accessible from your user account
+This playbook will build a new AMI and terminate it. This is **relatively safe**
+to run without disrupting the network as long as you **only** bake the AMI and
+do not deploy it.
 
-To run the playbook, you must *first* have placed the OVC install package in the 'ovc-travisperkins-releases' under a directory with the name as the version, for example: '5.2.0'.  The AMI Baker needs to also skip two tags, 'startjetty' and 'importers' so that Jetty is not started and the importers are not run.  To run the playbook, execute the following, assuming the .vault_pass.txt is in the ~/.ssh folder.
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=bake_ami
 
-	ansible-playbook ami-baker.yml -e "ovc_version=5.2.0" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags startjetty,importers
+If you want to build an AMI but **not** terminate it so you can evaluate it
+before deploying then you can skip the termination of the AMI.
+
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --tags=bake_ami  --skip-tags=importers,terminate_ami
+
+### Deploying a new AMI
+
+Once the AMI has been created it can be deployed into the Auto Scaling Group
+using the playbook below. After running this playbook **AMI will be live** in
+the environment you have deployed it in.
+
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=asg
+
+## AMI flow - Build and deploy to PreProd in one play
+
+This is a simple play which will create a new AMI and deploy it to the ASG
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=bake_ami,asg
+
+## AMI flow - Build and deploy to PreProd in one play w/Mongo
+
+This is a simple play which will create a new AMI and deploy it to the ASG
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=mongo,bake_ami,asg
+
+## AMI flow - non-production to Production
+
+This is an example of a flow where you build an AMI, test it, and then
+progressively roll it out to environments. When we start using this process for
+UAT1/UAT2 we can start to create AMI's there and push them through UAT# ->
+PreProd -> Production to ensure better testing.
+
+**Firstly build the AMI without terminating:**
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --tags=bake_ami  --skip-tags=importers,terminate_ami
+
+Once this is done you can SSH into the the environment and confirm that
+everything has been deployed correctly and is ready to be rolled out into
+environments.
+
+**Deploy the AMI into Pre-Prod:**
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
+
+The AMI is now rolled out into PreProd and can be tested to confirm it is
+functional. At this point we can roll it out into production knowing it has
+worked for PreProd.
+
+**Deploy the AMI into Production:**
+
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
