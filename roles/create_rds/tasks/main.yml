@@ -7,7 +7,7 @@
     upgrade: yes
     subnet: "{{ rds_subnet_group }}"
     region: "{{ region }}"
-    ## The next 4 settings are dependant on whether it is prod or preprod. Preprod doesn't need multiAZ. 
+    ## The next 4 settings are dependant on whether it is prod or preprod. Preprod doesn't need multiAZ.
     multi_zone: "{{ multirdszone }}"
     maint_window: Sat:22:00-Sat:23:15
     backup_window: 00:00-01:00
@@ -21,6 +21,7 @@
     wait_timeout: 1200
     username: root
     password: 0n3v13w123
+    parameter_group: ovc-rds-parameters
     tags:
       Environment: ovc-{{ environment_name }}
       Application: ovc
