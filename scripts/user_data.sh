@@ -5,8 +5,13 @@ set -x
 
 /bin/date
 
-export ENV=prod
+REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
+INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+ENV=$(aws ec2 describe-tags --filters "Name=resource-id,Values=${INSTANCE_ID}" "Name=key,Values=environment" --region=${REGION} --output=text | cut -f5)
 
+export ENV=${ENV}
+
+aws s3 cp s3://ovc-travisperkins-whitelist/${ENV}/locationWhiteList.ovccfg /opt/ovc/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/tp-all/config/posMServer/locationWhiteList.ovccfg
 
 export FILE_NAME=/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
 cp $FILE_NAME $FILE_NAME.ORIG
@@ -29,7 +34,7 @@ cp $FILE_NAME $FILE_NAME.ORIG
 sudo mv $FILE_NAME.$ENV $FILE_NAME
 
 export FILE_NAME=/opt/ovc/posWebapp/WEB-INF/web.xml
-export LOCAL_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+export LOCAL_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 sudo /usr/bin/patch $FILE_NAME $FILE_NAME.patch.$ENV
 sed -i.bak "s#http://this_host:8080#https://$LOCAL_IP#” $FILE_NAME
 
