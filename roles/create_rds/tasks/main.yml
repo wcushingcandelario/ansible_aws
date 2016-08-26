@@ -5,6 +5,7 @@
     instance_name: "{{ environment_name }}"
     vpc_security_groups: "{{ rds_security_group }}"
     upgrade: yes
+    backup_retention: 21
     subnet: "{{ rds_subnet_group }}"
     region: "{{ region }}"
     ## The next 4 settings are dependant on whether it is prod or preprod. Preprod doesn't need multiAZ.
