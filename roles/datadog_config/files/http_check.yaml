@@ -2,7 +2,7 @@ init_config:
 
 instances:
   - name: OVC Dashboard
-    url: http://localhost:9080/ovcdashboard
+    url: http://localhost:9080/ovcdashboard/login
     timeout: 5
 
     collect_response_time: true
@@ -11,6 +11,7 @@ instances:
     tags:
       - check:http
       - process:apache
+      - env:unknown
 
   - name: Jetty
     url: http://localhost:8080/
@@ -22,9 +23,10 @@ instances:
     tags:
       - check:http
       - process:jetty
+      - env:unknown
 
   - name: NGINX
-    url: http://localhost:80/
+    url: https://localhost:443/
     timeout: 5
 
     collect_response_time: true
@@ -33,9 +35,10 @@ instances:
     tags:
       - check:http
       - process:nginx
+      - env:unknown
 
   - name: NGINX Dashboard
-    url: http://localhost:80/ovcdashboard
+    url: https://localhost:443/ovcdashboard/login
     timeout: 5
 
     collect_response_time: true
@@ -44,14 +47,4 @@ instances:
     tags:
       - check:http
       - process:nginx
-
-  - name: NGINX POS
-    url: http://localhost:80/ovcpos
-    timeout: 5
-
-    collect_response_time: true
-    skip_event: true
-
-    tags:
-      - check:http
-      - process:nginx
+      - env:unknown
