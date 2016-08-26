@@ -13,6 +13,7 @@ export ENV=${ENV}
 
 aws s3 cp s3://ovc-travisperkins-whitelist/${ENV}/locationWhiteList.ovccfg /opt/ovc/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/tp-all/config/posMServer/locationWhiteList.ovccfg
 
+
 export FILE_NAME=/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
 cp $FILE_NAME $FILE_NAME.ORIG
 sudo mv $FILE_NAME.$ENV $FILE_NAME
@@ -44,3 +45,7 @@ sed -i s#SITE_URL\',\"http:#SITE_URL\',\"https:#g /var/www/html/ovcdashboard/app
 
 sudo /sbin/service jetty restart
 sudo /sbin/service httpd restart
+
+aws s3 cp s3://ovc-userdata-scripts/${ENV}/auto-userdata.sh auto-userdata.sh
+chmod +x auto-userdata.sh
+source auto-userdata.sh
