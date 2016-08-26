@@ -103,6 +103,14 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Copy importRootLocations Files
+  synchronize:
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/importRootLocations/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
+  delegate_to: "{{ inventory_hostname }}"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
 - name: Copy Platform-Dynamic-Objects/config Files
   synchronize:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/deploy/config/uat/"
