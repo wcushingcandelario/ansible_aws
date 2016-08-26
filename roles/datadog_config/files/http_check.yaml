@@ -24,7 +24,7 @@ instances:
       - process:jetty
 
   - name: NGINX
-    url: http://localhost:80/
+    url: https://localhost:443/
     timeout: 5
 
     collect_response_time: true
@@ -35,18 +35,7 @@ instances:
       - process:nginx
 
   - name: NGINX Dashboard
-    url: http://localhost:80/ovcdashboard
-    timeout: 5
-
-    collect_response_time: true
-    skip_event: true
-
-    tags:
-      - check:http
-      - process:nginx
-
-  - name: NGINX POS
-    url: http://localhost:80/ovcpos
+    url: https://localhost:443/ovcdashboard
     timeout: 5
 
     collect_response_time: true
