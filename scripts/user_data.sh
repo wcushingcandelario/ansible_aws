@@ -38,6 +38,8 @@ export LOCAL_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 sudo /usr/bin/patch $FILE_NAME $FILE_NAME.patch.$ENV
 sed -i.bak "s#http://this_host:8080#https://$LOCAL_IP#” $FILE_NAME
 
+sed -i "s/env\:unknown/env:${ENV}/" /etc/dd-agent/conf.d/http_check.yaml
+
 sed -i s#SITE_URL\',\"http:#SITE_URL\',\"https:#g /var/www/html/ovcdashboard/app/Config/bootstrap.php
 
 sudo /sbin/service jetty restart
