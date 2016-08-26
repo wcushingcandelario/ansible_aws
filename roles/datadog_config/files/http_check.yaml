@@ -2,7 +2,7 @@ init_config:
 
 instances:
   - name: OVC Dashboard
-    url: http://localhost:9080/ovcdashboard
+    url: http://localhost:9080/ovcdashboard/login
     timeout: 5
 
     collect_response_time: true
@@ -38,7 +38,7 @@ instances:
       - env:unknown
 
   - name: NGINX Dashboard
-    url: https://localhost:443/ovcdashboard
+    url: https://localhost:443/ovcdashboard/login
     timeout: 5
 
     collect_response_time: true
