@@ -301,6 +301,23 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Create eComRefresh.sh
+  command: "cp initOVCServer.sh eComRefresh.sh"
+  args:
+    chdir: "{{ ovc_install_dir }}/bin"
+    creates: "{{ ovc_install_dir }}/bin/eComRefresh.sh"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Set eComRefresh.sh to run eComRefresh
+  replace:
+    dest: "{{ ovc_install_dir }}/bin/eComRefresh.sh"
+    regexp: "eComInit"
+    replace: "eComRefresh"
+    backup: no
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
 - name: Create initStaffDiscount.sh
   command: "cp initOVCServer.sh initStaffDiscount.sh"
   args:
