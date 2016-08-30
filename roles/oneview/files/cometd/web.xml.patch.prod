@@ -1,9 +1,9 @@
---- ./original.xml	2016-06-13 12:20:51.000000000 +0100
-+++ ./preprod.xml	2016-06-13 13:09:12.000000000 +0100
-@@ -166,23 +166,22 @@
-   	</welcome-file-list>
-
-
+--- original.xml	2016-08-30 12:31:31.000000000 +0100
++++ prod.xml	2016-08-30 12:50:27.000000000 +0100
+@@ -166,24 +166,23 @@
+   	</welcome-file-list>   -->
+ 
+ 
 -	<!-- Configure cometd cluster if necessary (replace with above OORTConfiguration
  	<servlet>
  		<servlet-name>oort</servlet-name>
@@ -25,5 +25,6 @@
  		<load-on-startup>3</load-on-startup>
 -	</servlet-->
 +	</servlet>
-
- </web-app>
+ 
+ 	<!-- Configure OVC/Quartz Scheduler Initialize/start/shutdown -->
+ 	<context-param>
