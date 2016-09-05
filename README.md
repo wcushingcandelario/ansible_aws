@@ -138,7 +138,10 @@ worked for PreProd.
 
 **Why patch files?** Simple sed would not always work in this situation so we're
 guaranteeing a context to the patch. Patches can also be run with a variety of
-'fuzz' levels to be compatible even if other parts nearby have changed.
+'fuzz' levels to be compatible even if other parts nearby have changed. These
+are found in:
+
+    roles/oneview/files/cometd/
 
 Importantly patch files **do not** modify the whole file like a template or copy
 and so don't risk removing other updates that have been made to the same file.
