@@ -168,3 +168,37 @@ AMI** so it is important to rebuild the AMI if you change a patch.
 
 -   Remember to commit the .xml files and the patch files into git so anyone
     else can reproduce your work.
+
+### Non-patch environment files
+
+These are not patch files or substitution processes, they require detailed
+attention with each release. Unfortunately we cannot presume the latest changes
+to any of these files until they are made and so no 'one size fits all' system
+can be implemented without risk that the files change with new fields and that
+these new fields also require changing before deployment.
+
+#### File names
+
+-   context.xml
+-   database.php
+-   setting_var.php
+-   tools.properties
+-   unifiedConfig.properties
+
+#### Process to update
+
+With each new release in UAT we should take the files generated there and update
+the files held within Ansible to contain the same fields. One can compare the
+two files as so (or with any other editor):
+
+    meld context.xml.uat roles/oneview/env_files/context.xml.prod
+
+The two files should not be identical but the prod/preprod files should include
+**all** of the fields that the UAT ones include.
+
+#### Important note about context.xml
+
+This file is a template but is added by file_glob. This means that **the
+context.xml template lives in files/** which seems pretty odd. Please, **do not
+move it to teplates/, it will not work**. Really, we've tested it by mistake.
+
