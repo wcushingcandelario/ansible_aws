@@ -202,3 +202,75 @@ This file is a template but is added by file_glob. This means that **the
 context.xml template lives in files/** which seems pretty odd. Please, **do not
 move it to teplates/, it will not work**. Really, we've tested it by mistake.
 
+## NGINX architecture
+
+**Note:** There are better ways to do this. Unfortunately the combination of
+which version of NGINX is used and the dashboard not supporting SSL means that
+this is the only way we have found so far.
+
+### /ovcdashboard
+
+This is the more complex part of the NGINX configuration. To display the
+dashboard we have to proxy it **twice**. There are several reasons for this.
+
+-   We must replace all links changing http:// to https:// using sub_filter to
+    'enable' https on the dashboard. This is probably because the
+    X-Forwarded-Proto and similar variables are not read correctly by the
+    dashboard. Developers are looking into this.
+
+-   When Any other proxy_set_header is set `Accept-Encoding "";` does not get
+    sent or processed correctly. When this is the case the sub_filter will not
+    work because the data is compressed.
+
+-   When `Accept-Encoding "";` is set and no other heading the application at
+    the other end of the proxy believes that the fetching host (the client) is
+    the proxy (localhost, the server) and that the remote IP it accessed
+    (X-Real-IP) is in fact localhost. All links are then written to
+    `https://localhost:9080` which is the address which we proxy to (http not
+    https but we're substituting, right). This renders the app broken and is
+    frankly annoying.
+
+-   The version of NGINX we have only uses **one** sub_filter and so we cannot
+    do search and replace twice in the same block.
+
+-   To do two substitutions (http to https, localhost to $host) we have to do
+    two proxy passes. One for each substitution.
+
+So, the architecture looks like this:
+
+    Client (browser) -> /ovcdashboard (first proxy) -> /ovcdashboardproxy (second proxy) -> localhost:9080 (Apache)
+
+This does mean that every request goes through the proxy **twice** which is a
+bit messy.
+
+![I'm sorry. I'm so, so sorry](https://i2.wp.com/s3-ak.buzzfeed.com/static/2014-05/tmp/webdr05/12/19/anigif_eaa6a580d8aece464ad6ec5fd8670b68-0.gif)
+
+### Jetty (/cometd and /)
+
+This does conform to normal sane structure but does require the HTTP version to
+be set as well as the Connection and Upgrade fields for CometD. Also, under /
+it is important to remember that the proxy_set_header fields populate data about
+where the connection originally came from (client, browser) not where it was
+proxied (server, localhost).
+
+    location /cometd {
+        proxy_set_header Accept-Encoding "";
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_http_version 1.1;
+        proxy_pass http://localhost:8080;
+    }
+
+
+    location / {
+        proxy_set_header Accept-Encoding "";
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://localhost:8080;
+    }
