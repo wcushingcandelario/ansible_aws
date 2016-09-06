@@ -122,3 +122,37 @@ worked for PreProd.
 **Deploy the AMI into Production:**
 
     ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
+
+## Maintenance
+
+### Patch files for web.xml
+
+**Why patch files?** Simple sed would not always work in this situation so we're
+guaranteeing a context to the patch. Patches can also be run with a variety of
+'fuzz' levels to be compatible even if other parts nearby have changed.
+
+Importantly patch files **do not** modify the whole file like a template or copy
+and so don't risk removing other updates that have been made to the same file.
+These patches are run in the user_data.sh script which is used within the Launch
+Configuration. **All patches** for **all environments** are included in **every
+AMI** so it is important to rebuild the AMI if you change a patch.
+
+-   Copy the latest version of the web.xml file into oroginal.xml, preprod.xml
+    and prod.xml.
+
+-   Attempt to patch the files using the existing patches, this way you can
+    increase how liberal patch is if needed. Otherwise manually patch them.
+
+
+    patch ./preprod.xml ./web.xml.patch.preprod
+    patch ./prod.xml ./web.xml.patch.prod
+
+-   Generate new strict patches from the diff's you can create now you have an
+    original and a destination.
+
+
+    diff -Naur original.xml prod.xml > ./web.xml.patch.prod
+    diff -Naur original.xml preprod.xml > ./web.xml.patch.preprod
+
+-   Remember to commit the .xml files and the patch files into git so anyone
+    else can reproduce your work.

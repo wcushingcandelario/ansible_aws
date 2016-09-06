@@ -161,9 +161,9 @@
 		<load-on-startup>4</load-on-startup>
 	</servlet>
 
-	<welcome-file-list>
+<!-- 	<welcome-file-list>
 	   <welcome-file>index.html</welcome-file>
-  	</welcome-file-list>
+  	</welcome-file-list>   -->
 
 
 	<servlet>
@@ -183,5 +183,26 @@
         </init-param>
 		<load-on-startup>3</load-on-startup>
 	</servlet>
+
+	<!-- Configure OVC/Quartz Scheduler Initialize/start/shutdown -->
+	<context-param>
+		<param-name>quartz:config-file</param-name>
+		<param-value>quartz.properties</param-value>
+	</context-param>
+	<context-param>
+		<param-name>quartz:shutdown-on-unload</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>quartz:wait-on-shutdown</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>quartz:start-on-load</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<listener>
+		<listener-class>com.oneview.scheduler.servlet.OVCQuartzInitializerListener</listener-class>
+	</listener>
 
 </web-app>
