@@ -23,12 +23,30 @@ entire environment built with the settings default to that playbook.
 
 ### What a play runs
 
--   **Role:** create_rds
--   **Role:** create_rds
--   **File:** mongo-cluster.yml
--   **File:** ami-baker.yml
--   **Role:** findovcami
--   **File:** asg_main.yml
+-   **Role: create_rds**
+    This builds the utility RDS database.
+
+-   **Role: create_rds**
+    This builds the main database for the environment.
+
+-   **File: mongo-cluster.yml**
+    This builds and deploys the mongo cluster. It will deploy a new cluster
+    each time it is run, it does not check for the existence of a cluster before
+    running.
+
+-   **File: ami-baker.yml**
+    This builds the AMI, deploys the software, deploys the configuration, then
+    saves an image of the AMI and terminates it.
+
+-   **Role: findovcami**
+    This part finds an AMI that has been built previously by this playbook and
+    sets the variables up so that it will be used for the Auto Scaling Group.
+
+-   **File: asg_main.yml**
+    This area of the playbook rolls out the Auto Scaling Group. This will take
+    either the AMI just created or the latest AMI to be previously created and
+    build out **one** Launch Configuration which then gets run by **one** Auto
+    Scaling Groups which is accessible through **two** Load Balancer.
 
 ### Skip Mongo
 
