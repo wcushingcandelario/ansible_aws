@@ -292,3 +292,22 @@ proxied (server, localhost).
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_pass http://localhost:8080;
     }
+
+## How machines become environment specific
+
+Each AMI that is created is completely environment non-specific. Without making
+any changes the AMI - if booted as a new machine - will not connect to an
+environment and would not function as a usable OVC environment.
+
+Within the AMi several configuration files are pre-populated, into the
+directories which hold the running configuration files.
+
+    /opt/jetty/webapps/context.xml
+    /opt/jetty/webapps/context.xml.prod
+    /opt/jetty/webapps/context.xml.preprod
+
+When the Launch Configuration is created a set of User Data is added in to it
+and when each machine is launched it runs that User Data. The User Data is a
+shell script which in our case mostly moves some files around and can be found
+in `scripts/user_data.sh`. Once the User Data script has been run the machine
+will function within the environment.
