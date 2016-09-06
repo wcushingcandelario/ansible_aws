@@ -7,6 +7,49 @@ application for TravisPerkins
 
 These playbooks are available to run from ansible tower.
 
+## Files
+
+-   **README.md** This file.
+
+-   **ami-baker.yml** This builds the AMI, deploys the software, deploys the
+    configuration, then saves an image of the AMI and terminates it.
+
+-   **ami-baker_test.yml** Legacy file, to be deleted.
+
+-   **asg_main.yml** This file builds the Auto Scaling Group, Launch
+    Configuration, and two Elastic Load Balancers.
+
+-   **aws-create-ovc-from-ami.yml** I'm not aware of what this is (or what it
+    is used for), if you do please add the details here.
+
+-   **create-asg-elb.yml** Legacy file, to be deleted.
+
+-   **create-auto.yml** This creates the Launch Config and Auto Scaling Group.
+
+-   **create-elb-dash.yml** This creates the ELB for the Dashboard.
+
+-   **create-elb-pos.yml** This creates the ELB for the POS.
+
+-   **datadog.yml** Legacy file, to be deleted.
+
+-   **mongo-cluster.yml** This builds and deploys the mongo cluster. It will
+    deploy a new cluster each time it is run, it does not check for the
+    existence of a cluster before running.
+
+-   **preprod.yml** The playbook for the PreProd environment
+
+-   **preprod_ami.yml** Legacy file, to be deleted.
+
+-   **prod.yml** The playbook for the Prod environment.
+
+-   **rds-create.yml** Legacy file, to be deleted.
+
+-   **test-nginx_proxy.yml** Legacy file, to be deleted.
+
+-   **test.yml** Does nothing, good for testing the dynamic inventory.
+
+-   **update-asg.yml** Legacy file, to be deleted.
+
 ## Run Playbooks from the command line
 
 **PREREQUISITES:**
