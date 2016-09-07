@@ -1,4 +1,0 @@
----
-
-- pause:
-  prompt: Instead of running this playbook please run preprod.yml with `--tags bake_ami --skip-tags terminate_ami`

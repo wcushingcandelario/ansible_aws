@@ -1,4 +1,0 @@
----
-
-- pause:
-  prompt: Instead of running this playbook please run <env>.yml with `--tags rds` or `--tags rds_util`
