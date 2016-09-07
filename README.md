@@ -7,6 +7,49 @@ application for TravisPerkins
 
 These playbooks are available to run from ansible tower.
 
+## Files
+
+-   **README.md** This file.
+
+-   **ami-baker.yml** This builds the AMI, deploys the software, deploys the
+    configuration, then saves an image of the AMI and terminates it.
+
+-   **ami-baker_test.yml** Legacy file, to be deleted.
+
+-   **asg_main.yml** This file builds the Auto Scaling Group, Launch
+    Configuration, and two Elastic Load Balancers.
+
+-   **aws-create-ovc-from-ami.yml** I'm not aware of what this is (or what it
+    is used for), if you do please add the details here.
+
+-   **create-asg-elb.yml** Legacy file, to be deleted.
+
+-   **create-auto.yml** This creates the Launch Config and Auto Scaling Group.
+
+-   **create-elb-dash.yml** This creates the ELB for the Dashboard.
+
+-   **create-elb-pos.yml** This creates the ELB for the POS.
+
+-   **datadog.yml** Legacy file, to be deleted.
+
+-   **mongo-cluster.yml** This builds and deploys the mongo cluster. It will
+    deploy a new cluster each time it is run, it does not check for the
+    existence of a cluster before running.
+
+-   **preprod.yml** The playbook for the PreProd environment
+
+-   **preprod_ami.yml** Legacy file, to be deleted.
+
+-   **prod.yml** The playbook for the Prod environment.
+
+-   **rds-create.yml** Legacy file, to be deleted.
+
+-   **test-nginx_proxy.yml** Legacy file, to be deleted.
+
+-   **test.yml** Does nothing, good for testing the dynamic inventory.
+
+-   **update-asg.yml** Legacy file, to be deleted.
+
 ## Run Playbooks from the command line
 
 **PREREQUISITES:**
@@ -20,6 +63,33 @@ If you run a playbook in without any tags or  skip-tags then you will get an
 entire environment built with the settings default to that playbook.
 
     ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt
+
+### What a play runs
+
+-   **Role: create_rds**
+    This builds the utility RDS database.
+
+-   **Role: create_rds**
+    This builds the main database for the environment.
+
+-   **File: mongo-cluster.yml**
+    This builds and deploys the mongo cluster. It will deploy a new cluster
+    each time it is run, it does not check for the existence of a cluster before
+    running.
+
+-   **File: ami-baker.yml**
+    This builds the AMI, deploys the software, deploys the configuration, then
+    saves an image of the AMI and terminates it.
+
+-   **Role: findovcami**
+    This part finds an AMI that has been built previously by this playbook and
+    sets the variables up so that it will be used for the Auto Scaling Group.
+
+-   **File: asg_main.yml**
+    This area of the playbook rolls out the Auto Scaling Group. This will take
+    either the AMI just created or the latest AMI to be previously created and
+    build out **one** Launch Configuration which then gets run by **one** Auto
+    Scaling Groups which is accessible through **two** Load Balancer.
 
 ### Skip Mongo
 
@@ -37,6 +107,23 @@ You may want to skip Mongo if it is already installed.
 
 The playbooks are designed to be able to build specific components of any
 environment without requiring a complete environment build out.
+
+### I want to... (Cheat Sheet)
+
+One line answers to things you might want to do regularly. These are duplicated
+explanations below.
+
+#### ...build an AMI
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=bake_ami
+
+#### ...build an AMI and test it
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=bake_ami -skip-tags=terminate_ami
+
+### ...deploy an AMI
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
 
 ### Building RDS
 
@@ -129,7 +216,10 @@ worked for PreProd.
 
 **Why patch files?** Simple sed would not always work in this situation so we're
 guaranteeing a context to the patch. Patches can also be run with a variety of
-'fuzz' levels to be compatible even if other parts nearby have changed.
+'fuzz' levels to be compatible even if other parts nearby have changed. These
+are found in:
+
+    roles/oneview/files/cometd/
 
 Importantly patch files **do not** modify the whole file like a template or copy
 and so don't risk removing other updates that have been made to the same file.
@@ -156,3 +246,147 @@ AMI** so it is important to rebuild the AMI if you change a patch.
 
 -   Remember to commit the .xml files and the patch files into git so anyone
     else can reproduce your work.
+
+### Non-patch environment files
+
+These are not patch files or substitution processes, they require detailed
+attention with each release. Unfortunately we cannot presume the latest changes
+to any of these files until they are made and so no 'one size fits all' system
+can be implemented without risk that the files change with new fields and that
+these new fields also require changing before deployment.
+
+#### File names
+
+-   context.xml
+-   database.php
+-   setting_var.php
+-   tools.properties
+-   unifiedConfig.properties
+
+#### Process to update
+
+With each new release in UAT we should take the files generated there and update
+the files held within Ansible to contain the same fields. One can compare the
+two files as so (or with any other editor):
+
+    meld context.xml.uat roles/oneview/env_files/context.xml.prod
+
+The two files should not be identical but the prod/preprod files should include
+**all** of the fields that the UAT ones include.
+
+#### Important note about context.xml
+
+This file is a template but is added by file_glob. This means that **the
+context.xml template lives in files/** which seems pretty odd. Please, **do not
+move it to teplates/, it will not work**. Really, we've tested it by mistake.
+
+## NGINX architecture
+
+**Note:** There are better ways to do this. Unfortunately the combination of
+which version of NGINX is used and the dashboard not supporting SSL means that
+this is the only way we have found so far.
+
+### /ovcdashboard
+
+This is the more complex part of the NGINX configuration. To display the
+dashboard we have to proxy it **twice**. There are several reasons for this.
+
+-   We must replace all links changing http:// to https:// using sub_filter to
+    'enable' https on the dashboard. This is probably because the
+    X-Forwarded-Proto and similar variables are not read correctly by the
+    dashboard. Developers are looking into this.
+
+-   When Any other proxy_set_header is set `Accept-Encoding "";` does not get
+    sent or processed correctly. When this is the case the sub_filter will not
+    work because the data is compressed.
+
+-   When `Accept-Encoding "";` is set and no other heading the application at
+    the other end of the proxy believes that the fetching host (the client) is
+    the proxy (localhost, the server) and that the remote IP it accessed
+    (X-Real-IP) is in fact localhost. All links are then written to
+    `https://localhost:9080` which is the address which we proxy to (http not
+    https but we're substituting, right). This renders the app broken and is
+    frankly annoying.
+
+-   The version of NGINX we have only uses **one** sub_filter and so we cannot
+    do search and replace twice in the same block.
+
+-   To do two substitutions (http to https, localhost to $host) we have to do
+    two proxy passes. One for each substitution.
+
+So, the architecture looks like this:
+
+    Client (browser) -> /ovcdashboard (first proxy) -> /ovcdashboardproxy (second proxy) -> localhost:9080 (Apache)
+
+This does mean that every request goes through the proxy **twice** which is a
+bit messy.
+
+![I'm sorry. I'm so, so sorry](https://i2.wp.com/s3-ak.buzzfeed.com/static/2014-05/tmp/webdr05/12/19/anigif_eaa6a580d8aece464ad6ec5fd8670b68-0.gif)
+
+### Jetty (/cometd and /)
+
+This does conform to normal sane structure but does require the HTTP version to
+be set as well as the Connection and Upgrade fields for CometD. Also, under /
+it is important to remember that the proxy_set_header fields populate data about
+where the connection originally came from (client, browser) not where it was
+proxied (server, localhost).
+
+    location /cometd {
+        proxy_set_header Accept-Encoding "";
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_http_version 1.1;
+        proxy_pass http://localhost:8080;
+    }
+
+
+    location / {
+        proxy_set_header Accept-Encoding "";
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://localhost:8080;
+    }
+
+## How machines become environment specific
+
+Each AMI that is created is completely environment non-specific. Without making
+any changes the AMI - if booted as a new machine - will not connect to an
+environment and would not function as a usable OVC environment.
+
+Within the AMi several configuration files are pre-populated, into the
+directories which hold the running configuration files.
+
+    /opt/jetty/webapps/context.xml
+    /opt/jetty/webapps/context.xml.prod
+    /opt/jetty/webapps/context.xml.preprod
+
+When the Launch Configuration is created a set of User Data is added in to it
+and when each machine is launched it runs that User Data. The User Data is a
+shell script which in our case mostly moves some files around and can be found
+in `scripts/user_data.sh`. Once the User Data script has been run the machine
+will function within the environment.
+
+## DNS architecture
+
+We specifically redirect the wickes-tills.co.uk and travisperkins.com DNS
+queries to the TP DNS servers. We do this with DNS servers built from an AMI.
+If we ever have to produce a new one we simply create new instances of the AMI
+and add those IP's to the DHCP config.
+
+DNSMasq snippet:
+
+    server=/wickes-tills.co.uk/172.31.101.101
+    server=/wickes-tills.co.uk/172.31.103.112
+    server=/wickes-tills.co.uk/172.31.101.103
+    server=/wickes-tills.co.uk/172.31.104.102
+    server=/travisperkins.com/172.31.101.101
+    server=/travisperkins.com/172.31.103.112
+    server=/travisperkins.com/172.31.101.103
+    server=/travisperkins.com/172.31.104.102
+    server=10.33.232.2
