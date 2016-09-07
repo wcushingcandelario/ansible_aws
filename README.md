@@ -371,3 +371,22 @@ and when each machine is launched it runs that User Data. The User Data is a
 shell script which in our case mostly moves some files around and can be found
 in `scripts/user_data.sh`. Once the User Data script has been run the machine
 will function within the environment.
+
+## DNS architecture
+
+We specifically redirect the wickes-tills.co.uk and travisperkins.com DNS
+queries to the TP DNS servers. We do this with DNS servers built from an AMI.
+If we ever have to produce a new one we simply create new instances of the AMI
+and add those IP's to the DHCP config.
+
+DNSMasq snippet:
+
+    server=/wickes-tills.co.uk/172.31.101.101
+    server=/wickes-tills.co.uk/172.31.103.112
+    server=/wickes-tills.co.uk/172.31.101.103
+    server=/wickes-tills.co.uk/172.31.104.102
+    server=/travisperkins.com/172.31.101.101
+    server=/travisperkins.com/172.31.103.112
+    server=/travisperkins.com/172.31.101.103
+    server=/travisperkins.com/172.31.104.102
+    server=10.33.232.2
