@@ -108,6 +108,23 @@ You may want to skip Mongo if it is already installed.
 The playbooks are designed to be able to build specific components of any
 environment without requiring a complete environment build out.
 
+### I want to... (Cheat Sheet)
+
+One line answers to things you might want to do regularly. These are duplicated
+explanations below.
+
+#### ...build an AMI
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=bake_ami
+
+#### ...build an AMI and test it
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=bake_ami -skip-tags=terminate_ami
+
+### ...deploy an AMI
+
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
+
 ### Building RDS
 
 This command will install the production database RDS. Notably:
