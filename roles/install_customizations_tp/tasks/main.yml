@@ -280,6 +280,7 @@
     - { regexp: '^products.import.pageSize=.*', line: 'products.import.pageSize=1500' }
     - { regexp: '^others.import.pageSize=.*', line: 'others.import.pageSize=1500' }
     - { regexp: '^secure.occhost.context=.*', line: 'secure.occhost.context=/omnicommercewebservices' }
+    - { regexp: '^jms.destination=.*', line: 'jms.destination=jms/destination1' }
 
   become: yes
   become_user: "{{ jetty_user_login }}"
