@@ -7,6 +7,4 @@ JETTY_ARGS='jetty.host={{ jetty_host }}'
 {% elif jetty_port is defined %}
 JETTY_ARGS='jetty.port={{ jetty_port }}'
 {% endif %}
-{% if jetty_java_options is defined %}
-JAVA_OPTIONS='{{ jetty_java_options }}'
-{% endif %}
+JAVA_OPTIONS="${JAVA_OPTIONS} -Dovc.repo_loc={{ ovc_install_dir }}/Platform-Dynamic-Objects -Dovc.config.dir={{ ovc_install_dir }}/Platform-Dynamic-Objects/config -Xmx1024m"
