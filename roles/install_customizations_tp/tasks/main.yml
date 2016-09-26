@@ -259,19 +259,17 @@
   become_user: "{{ jetty_user_login }}"
 
 
-- name: Edit tools.properties to tp-all
+- name: Edit tools.properties
   lineinfile:
     dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
-    regexp: "ovcServer.customer-all.*"
-    line: "ovcServer.customer-all=tp-all"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-- name: Edit tools.properties to import all stores
-  lineinfile:
-    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
-    regexp: "posMClientSyncUpdater.store.*"
-    line: "posMClientSyncUpdater.store=All"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+  with_items:
+    - { regexp: '^staffDiscount.protocol=.*', line: 'staffDiscount.protocol={{staffDiscount_protocol | default("https")}}' }
+    - { regexp: '^staffDiscount.region=.*', line: 'staffDiscount.region={{staffDiscount_region | default("eu-west-1")}}' }
+    - { regexp: '^staffDiscount.bucketName=.*', line: 'staffDiscount.bucketName={{staffDiscount_bucketName}}' }
+    - { regexp: '^posMClientSyncUpdater.store.*', line: 'posMClientSyncUpdater.store=All' }
+    - { regexp: '^ovcServer.customer-all.*', line: 'ovcServer.customer-all=tp-all' }
   become: yes
   become_user: "{{ jetty_user_login }}"
 
@@ -360,7 +358,8 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- stat:
+- name: Stat if there are tp-alters
+  stat:
     path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/sql/tp-alters-{{ ovc_version | regex_replace('\\.', '') }}-mysql.sql"
   register: custom_db_script
 
@@ -371,6 +370,8 @@
     - import_custom_db
   when: custom_db_script.stat.exists == True
   register: custom_db_import_result
+
+- debug: var=custom_db_import_result
 
 - name: Start Jetty
   service:
