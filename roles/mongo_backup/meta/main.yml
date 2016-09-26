@@ -1,5 +1,5 @@
 ---
 
 dependencies:
-  - { role: mongo_monitor }
   - { role: mongo_automation }
+  - { role: mongo_monitor }
