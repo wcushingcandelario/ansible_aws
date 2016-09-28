@@ -240,25 +240,6 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Edit Jetty start.ini to add AWS Access Key
-  lineinfile:
-    dest: "{{ jetty_dir }}/start.ini"
-    regexp: "-Daws.accessKeyId.*"
-    line: "-Daws.accessKeyId={{ sqs_access_key_id | default('')}}"
-    state: present
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-- name: Edit Jetty start.ini to add AWS Secret Key
-  lineinfile:
-    dest: "{{ jetty_dir }}/start.ini"
-    regexp: "-Daws.secretKeyId.*"
-    line: "-Daws.secretKeyId={{ sqs_access_secret_id | default('')}}"
-    state: present
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-
 - name: Edit tools.properties
   lineinfile:
     dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
