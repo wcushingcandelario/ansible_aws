@@ -1,0 +1,4 @@
+- name: Install backup agent on all hosts
+  hosts: all
+  roles:
+   - mongo_backup
