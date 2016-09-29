@@ -23,3 +23,6 @@ import.endpoint.temp.location=/tmp
 eComServer.username=eCommerce
 ovcServer.customer-all=tp-all
 importFiles.staffDiscountImportFiles=staffDiscountImportFiles
+staffDiscount.bucketName=ovc-cand-filerepo
+staffDiscount.region=eu-west-1
+staffDiscount.protocol=https

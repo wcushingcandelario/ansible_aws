@@ -19,6 +19,12 @@
   become: yes
   become_user: root
 
+- name: Set history to include timestamp
+  lineinfile:
+    dest: "/home/ec2-user/.bash_profile"
+    state: present
+    line: 'export HISTTIMEFORMAT="%d/%m/%y %T "'
+
 - name: Stat timezone localtime file
   stat:
     path: "/etc/localtime"

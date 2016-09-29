@@ -183,13 +183,16 @@
   become_user: root
 
 
-- name: Add jetty VM arguments
+- name: Add configurations to jettys start.ini
   lineinfile:
     dest: "{{ jetty_dir }}/start.ini"
     state: present
-    line: "-Dovc.config.dir={{ ovc_install_dir }}/Platform-Dynamic-Objects/config"
+    line: "{{ item.line }}"
+  with_items:
+    - { line: '-Dovc.config.dir={{ ovc_install_dir }}/Platform-Dynamic-Objects/config'}
+    - { line: '-Dorg.quartz.scheduler.instanceId={{inventory_hostname_short | default("localhost")}}'}
   become: yes
-  become_user: root
+  become_user: "{{ jetty_user_login }}"
 
 - name: Copy logback.xml template to Platform-Dynamic-Objects/config
   template:
