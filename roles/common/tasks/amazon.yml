@@ -1,52 +1,11 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-- name: Set the timezone to Eastern
-  lineinfile:
-    dest: "/etc/sysconfig/clock"
-    state: present
-    regexp: "ZONE=.*"
-    line: "ZONE=America/New_York"
-  become: yes
-  become_user: root
-
-- name: Set the timezone to Eastern
-  lineinfile:
-    dest: "/etc/sysconfig/clock"
-    state: present
-    regexp: "ZONE=.*"
-    line: "ZONE=America/New_York"
-  become: yes
-  become_user: root
-
 - name: Set history to include timestamp
   lineinfile:
     dest: "/home/ec2-user/.bash_profile"
     state: present
     line: 'export HISTTIMEFORMAT="%d/%m/%y %T "'
-
-- name: Stat timezone localtime file
-  stat:
-    path: "/etc/localtime"
-  become: yes
-  become_user: root
-  register: localtime
-
-- name: Delete timezone localtime if not Eastern
-  file:
-    dest: "/etc/localtime"
-    state: absent
-  become: yes
-  become_user: root
-  when: localtime.stat.islnk != true
-
-- name: Create timezone link of localtime to Eastern
-  file:
-    dest: "/etc/localtime"
-    src: "/usr/share/zoneinfo/America/New_York"
-    state: link
-  become: yes
-  become_user: root
 
 - name: Install fail2ban
   yum: name=fail2ban state=present
