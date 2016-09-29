@@ -223,6 +223,16 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Add configurations to jettys start.ini
+  lineinfile:
+    dest: "{{ jetty_dir}}/start.ini"
+    state: present
+    line: "{{ item.line }}"
+  with_items:
+    - { line: '-Dovc.tempfiles.cleanup=true'}
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
 - name: Edit Jetty start.ini to add ext module
   lineinfile:
     dest: "{{ jetty_dir }}/start.ini"
@@ -280,6 +290,7 @@
     - { regexp: '^products.import.pageSize=.*', line: 'products.import.pageSize=1500' }
     - { regexp: '^others.import.pageSize=.*', line: 'others.import.pageSize=1500' }
     - { regexp: '^secure.occhost.context=.*', line: 'secure.occhost.context=/omnicommercewebservices' }
+    - { regexp: '^jms.destination=.*', line: 'jms.destination=jms/destination1' }
 
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -350,12 +361,12 @@
   become_user: "{{ jetty_user_login }}"
 
 - stat:
-    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/sql/tp-alters-{{ ovc_version }}-mysql.sql"
+    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/sql/tp-alters-{{ ovc_version | regex_replace('\\.', '') }}-mysql.sql"
   register: custom_db_script
 
 # WORKS
 - name: Import TP SQL
-  shell: "mysql -u {{ ovcDB_username }} -p{{ ovcDB_password }} -h {{ ovcDB_host }} {{ ovcDB_db }} < {{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/sql/tp-alters-{{ ovc_version }}-mysql.sql"
+  shell: "mysql -u {{ ovcDB_username }} -p{{ ovcDB_password }} -h {{ ovcDB_host }} {{ ovcDB_db }} < {{ custom_db_script.stat.path }}"
   tags:
     - import_custom_db
   when: custom_db_script.stat.exists == True

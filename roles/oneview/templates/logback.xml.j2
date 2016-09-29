@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Example LOGBACK Configuration File http://logback.qos.ch/manual/configuration.html -->
+<configuration scan="true" scanPeriod="60 seconds">
+
+	<property scope="context" name="defaultFileName" value="jetty" />
+	<if condition='isDefined("location.of.the.log.folder")'>
+		<then>
+			<property scope="context" name="logfolder" value="${location.of.the.log.folder}/logs" />
+		</then>
+		<else>
+			<if condition='isDefined("jetty.home")'>
+				<then>
+					<property scope="context" name="logfolder" value="${jetty.home}/logs" />
+				</then>
+				<else>
+					<property scope="context" name="logfolder" value="/tmp" />
+				</else>
+			</if>
+
+		</else>
+	</if>
+	<if condition='isDefined("jetty.home")'>
+		<then>
+		</then>
+		<else>
+			<property scope="context" name="logfolder" value="/tmp" />
+			<property scope="context" name="defaultFileName" value="others" />
+		</else>
+	</if>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE-THREAD" class="ch.qos.logback.classic.sift.SiftingAppender">
+
+		<!-- This is MDC value -->
+		<!-- We will assign a value to 'logFileName' via Java code -->
+		<discriminator>
+			<key>logFileName</key>
+			<defaultValue>${defaultFileName}</defaultValue>
+		</discriminator>
+
+		<sift>
+
+			<!-- A standard RollingFileAppender, the log file is based on 'logFileName'
+				at runtime -->
+			<appender name="FILE-${logFileName}"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>${logfolder}/${logFileName}.log</file>
+
+				<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+					<Pattern>
+						%d{yyyy-MM-dd HH:mm:ss} [%thread] %level %logger{35} - %msg%n
+					</Pattern>
+				</encoder>
+
+				<rollingPolicy
+					class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+					<FileNamePattern>${logfolder}/${logFileName}.%i.log.zip
+					</FileNamePattern>
+					<MinIndex>1</MinIndex>
+					<MaxIndex>100</MaxIndex>
+				</rollingPolicy>
+
+				<triggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+					<MaxFileSize>100MB</MaxFileSize>
+				</triggeringPolicy>
+
+			</appender>
+
+		</sift>
+	</appender>
+
+	<logger name="com.oneview.Jobs" level="INFO" additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+
+	<logger name="com.oneview.tools.AppDataImporter" level="INFO"
+		additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+
+	<logger name="com.oneview.tools.posmclient.CustomerDataImporter"
+		level="INFO" additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+	<logger name="com.oneview.tools.parsers.json" level="INFO"
+		additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+	<logger name="org.apache.camel" level="INFO" additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+	<logger name="com.oneview.tools.posmclient.ImportProcessor"
+		level="INFO" additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+	<logger name="com.oneview.tools.posmclient.hybris" level="INFO"
+		additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+	<logger name="com.oneview.occ.client" level="INFO" additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE-THREAD" />
+	</root>
+
+</configuration>

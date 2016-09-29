@@ -130,6 +130,7 @@
     - { line: '--module=jaas'}
     - { line: '--module=logging'}
     - { line: '-Dovc.isBatchNode=true'}
+    - { line: '-Dovc.tempfiles.cleanup=true'}
   become: yes
   become_user: root
 
