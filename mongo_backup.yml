@@ -1,4 +1,7 @@
 - name: Install backup agent on all hosts
+  remote_user: ec2-user
   hosts: all
+  become: yes
+  become_user: root
   roles:
-   - mongo_backup
+   - mongo_automation
