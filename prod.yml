@@ -36,7 +36,7 @@
     - mongo
   vars:
    region: eu-west-1
-   key: ovc-travis
+   key: ovc-tp-prod
    ovc_security_groups: sg-be2081d9
    vpc_subnet_public: subnet-1d719879
    instance_type: m4.large
@@ -50,7 +50,7 @@
     - bake_ami
   vars:
     region: eu-west-1
-    key: ovc-travis
+    key: ovc-tp-prod
     ovc_security_groups: sg-b12180d6 # Build in non-prod, deploy to prod.
     vpc_subnet_public: subnet-0abd536e # Build in non-prod, deploy to prod.
     instance_type: m4.large
@@ -97,7 +97,7 @@
   vars:
     IAMROLE: "ProdAppServer"
     region: eu-west-1
-    key: ovc-travis
+    key: ovc-tp-prod
     ovc_security_groups: ['sg-b12180d6']
     deploy_type: "prod"
     deploy_pos: "{{ deploy_type }}-POS"
