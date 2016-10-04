@@ -116,8 +116,6 @@
     state: present
     regexp: ".*--module=home-base-warning"
     line: "# --module=home-base-warning"
-  become: yes
-  become_user: root
 
 - name: Add modules in jettys start.ini
   lineinfile:
@@ -136,6 +134,18 @@
     - { line: '-XX:+UseG1GC'}
     - { line: '-XX:+HeapDumpOnOutOfMemoryError'}
     - { line: '-XX:+UseStringDeduplication'}
+    - { line: '-Dorg.quartz.scheduler.hostName={{ inventory_hostname | default("localhost") }}'}
+  become: yes
+  become_user: root
+
+- name: Set Quartz hostname in jettys start.ini
+  lineinfile:
+    dest: "{{ jetty_dst_dir}}/jetty/start.ini"
+    state: present
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+  with_items:
+    - { line: '-Dorg.quartz.scheduler.hostName={{ inventory_hostname | default("localhost") }}', regexp: ".*-Dorg.quartz.scheduler.hostName="}
   become: yes
   become_user: root
 
