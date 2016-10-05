@@ -1,21 +1,5 @@
 ---
 
-#- name: This play will install the ami-builder and mongo cluster
-
-
-- name: Create Utility RDS
-  connection: local
-  hosts: localhost
-  roles:
-    - create_rds
-  tags:
-    - rds_util
-  vars:
-    environment_name: prod-util-rds
-    rds_security_group: sg-be2081d9
-    rds_subnet_group: prod-util-rds
-    multirdszone: no
-
 - name: Create RDS
   connection: local
   hosts: localhost
