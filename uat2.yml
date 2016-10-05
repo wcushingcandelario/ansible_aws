@@ -13,7 +13,7 @@
   vars:
     environment_name: rds-utility
     rds_security_group: sg-5bbc1f3c
-    rds_subnet_group: "uat2 rds subnet group"
+    rds_subnet_group: "uat1 rds subnet group"
     multirdszone: no
 
 - name: Create RDS
@@ -25,8 +25,8 @@
     - rds
   vars:
     environment_name: uat2-rds
-    rds_security_group: sg-a50010c1
-    rds_subnet_group: "uat2 rds subnet group"
+    rds_security_group: sg-be19edd9
+    rds_subnet_group: pre-prod-rds
     multirdszone: no
 
 - name: Build Mongo Cluster
@@ -61,15 +61,15 @@
   tasks:
     - name: Present new AMI ID
       pause:
-        prompt: uat2 will now be launched with {{ image_id }}
+        prompt: UAT2 will now be launched with {{ image_id }}
     - name: Launch instance
       ec2:
         assign_public_ip: yes
         region: eu-west-1
         key_name: ovc-tp-np
-        group_id: sg-2b00104f, sg-61001005
+        group_id: sg-4f04f028, sg-bd1aeeda
         instance_type: m4.xlarge
-        vpc_subnet_id: subnet-0ca54b68
+        vpc_subnet_id: subnet-69a24c0d
         image: "{{ image_id }}"
         wait: yes
         wait_timeout: 500
