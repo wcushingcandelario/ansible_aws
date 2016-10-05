@@ -30,7 +30,7 @@
     multirdszone: no
 
 - name: Build Mongo Cluster
-  include: mongo-cluster.yml
+  include: _mongo-cluster.yml
   remote_user: ec2-user
   tags:
     - mongo
@@ -45,7 +45,7 @@
    cluster_name: "{{ deploy_type }}_cluster"
 
 - name: Run ami-baker
-  include: ami-baker.yml
+  include: _ami-baker.yml
   tags:
     - bake_ami
   vars:
@@ -92,7 +92,7 @@
     - find_ovc_ami
 
 - name: Create ELB and ASG
-  include: asg_main.yml
+  include: _asg_main.yml
   tags:
     - asg
   vars:

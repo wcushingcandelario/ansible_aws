@@ -11,12 +11,12 @@ These playbooks are available to run from ansible tower.
 
 -   **README.md** This file.
 
--   **ami-baker.yml** This builds the AMI, deploys the software, deploys the
+-   **_ami-baker.yml** This builds the AMI, deploys the software, deploys the
     configuration, then saves an image of the AMI and terminates it.
 
 -   **ami-baker_test.yml** Legacy file, to be deleted.
 
--   **asg_main.yml** This file builds the Auto Scaling Group, Launch
+-   **_asg_main.yml** This file builds the Auto Scaling Group, Launch
     Configuration, and two Elastic Load Balancers.
 
 -   **aws-create-ovc-from-ami.yml** I'm not aware of what this is (or what it
@@ -24,15 +24,15 @@ These playbooks are available to run from ansible tower.
 
 -   **create-asg-elb.yml** Legacy file, to be deleted.
 
--   **create-auto.yml** This creates the Launch Config and Auto Scaling Group.
+-   **_create-auto.yml** This creates the Launch Config and Auto Scaling Group.
 
--   **create-elb-dash.yml** This creates the ELB for the Dashboard.
+-   **_create-elb-dash.yml** This creates the ELB for the Dashboard.
 
--   **create-elb-pos.yml** This creates the ELB for the POS.
+-   **_create-elb-pos.yml** This creates the ELB for the POS.
 
 -   **datadog.yml** Legacy file, to be deleted.
 
--   **mongo-cluster.yml** This builds and deploys the mongo cluster. It will
+-   **_mongo-cluster.yml** This builds and deploys the mongo cluster. It will
     deploy a new cluster each time it is run, it does not check for the
     existence of a cluster before running.
 
@@ -72,12 +72,12 @@ entire environment built with the settings default to that playbook.
 -   **Role: create_rds**
     This builds the main database for the environment.
 
--   **File: mongo-cluster.yml**
+-   **File: _mongo-cluster.yml**
     This builds and deploys the mongo cluster. It will deploy a new cluster
     each time it is run, it does not check for the existence of a cluster before
     running.
 
--   **File: ami-baker.yml**
+-   **File: _ami-baker.yml**
     This builds the AMI, deploys the software, deploys the configuration, then
     saves an image of the AMI and terminates it.
 
@@ -85,7 +85,7 @@ entire environment built with the settings default to that playbook.
     This part finds an AMI that has been built previously by this playbook and
     sets the variables up so that it will be used for the Auto Scaling Group.
 
--   **File: asg_main.yml**
+-   **File: _asg_main.yml**
     This area of the playbook rolls out the Auto Scaling Group. This will take
     either the AMI just created or the latest AMI to be previously created and
     build out **one** Launch Configuration which then gets run by **one** Auto
