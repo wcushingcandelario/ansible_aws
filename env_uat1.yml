@@ -14,8 +14,11 @@
     multirdszone: no
 
 - name: Build Mongo Cluster
-  pause:
-    prompt: Please confirm that mongodb-uat1.ovchosting.co.uk is available, press enter when ready.
+  hosts: localhost
+  connection: local
+  tasks:
+    - pause:
+        prompt: Please confirm that mongodb-uat1.ovchosting.co.uk is available, press enter when ready.
   tags:
     - mongo
   vars:
@@ -34,8 +37,8 @@
   roles:
     - findovcami
   tags:
-    - asg
     - find_ovc_ami
+    - launch_ami
   vars:
    region: eu-west-1
 
@@ -48,11 +51,13 @@
         image_id: "{{ ami_find.results[0].ami_id }}"
       when: image_id is undefined
   tags:
-    - asg
     - find_ovc_ami
+    - launch_ami
 
 
 - name: Launch instance for UAT1
+  hosts: localhost
+  connection: local
   tasks:
     - name: Present new AMI ID
       pause:
@@ -73,3 +78,5 @@
           Name: uat1.ovchosting.co.uk
         instance_tags:
           Name: uat1.ovchosting.co.uk
+  tags:
+    - launch_ami
