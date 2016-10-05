@@ -32,6 +32,17 @@
 - name: Build Mongo Cluster
   pause:
     prompt: Please confirm that mongodb-uat2.ovchosting.co.uk is available, press enter when ready.
+  tags:
+    - mongo
+  vars:
+   region: eu-west-1
+   key: ovc-tp-preprod
+   ovc_security_groups: sg-be19edd9
+   vpc_subnet_public: subnet-9abe50fe
+   instance_type: m4.micro
+   deploy_type: "uat2"
+   env: "{{ deploy_type }}.ovchosting.co.uk"
+   cluster_name: "{{ deploy_type }}_cluster"
 
 - name: Find AMI ID
   hosts: localhost
