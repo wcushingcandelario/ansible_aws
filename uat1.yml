@@ -30,43 +30,8 @@
     multirdszone: no
 
 - name: Build Mongo Cluster
-  include: mongo-cluster.yml
-  remote_user: ec2-user
-  tags:
-    - mongo
-  vars:
-   region: eu-west-1
-   key: ovc-tp-np
-   ovc_security_groups: sg-5bbc1f3c
-   vpc_subnet_public: subnet-0a75a06e
-   instance_type: m4.large
-   deploy_type: "uat1"
-   env: "{{ deploy_type }}.ovchosting.co.uk"
-   cluster_name: "{{ deploy_type }}_cluster"
-
-- name: Run ami-baker
-  include: ami-baker.yml
-  tags:
-    - bake_ami
-  vars:
-    ansible_ssh_private_key_file: "~/.ssh/ovc-tp-np.pem"
-    region: eu-west-1
-    key: ovc-tp-np
-    ovc_security_groups: sg-71bc1f16
-    vpc_subnet_public: subnet-cae8ffbd
-    instance_type: m4.large
-    deploy_type: "uat1"
-    deploy_pos: "{{ deploy_type }}-POS"
-    deploy_dash: "{{ deploy_type }}-Dash"
-    asg_name: "{{ deploy_type }}_autoscale"
-    jetty_user_login: jetty
-    jetty_dir: /opt/jetty
-    ovc_server_user_dir: /opt/ovc
-    webserver_user: www-data
-    s3install: true
-    asg_desired_capacity: 2
-    ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
-    ovcNOSQLDB_host: mongodb-uat1.ovchosting.co.uk
+  pause:
+    prompt: Please confirm that mongodb-uat1.ovchosting.co.uk is available, press enter when ready.
 
 - name: Find AMI ID
   hosts: localhost
@@ -91,22 +56,25 @@
     - asg
     - find_ovc_ami
 
-- name: Create ELB and ASG
-  include: asg_main.yml
-  tags:
-    - asg
-  vars:
-    IAMROLE: "NonProdAppServer"
-    region: eu-west-1
-    key: ovc-tp-np
-    ovc_security_groups: ['sg-71bc1f16']
-    deploy_type: "uat1"
-    deploy_pos: "{{ deploy_type }}-POS"
-    deploy_dash: "{{ deploy_type }}-Dash"
-    asg_name: "{{ deploy_type }}_autoscale"
-    new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
-    min_size: 2
-    max_size: 5
-    instance_type_asg: m4.xlarge
-    security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
-    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
+
+- name: Launch instance for UAT1
+  tasks:
+    - name: Present new AMI ID
+      pause:
+        prompt: UAT1 will now be launched with {{ image_id }}
+    - name: Launch instance
+      ec2:
+        assign_public_ip: yes
+        region: eu-west-1
+        key_name: ovc-tp-np
+        group_id: sg-2b00104f, sg-61001005
+        instance_type: m4.xlarge
+        vpc_subnet_id: subnet-0ca54b68
+        image: "{{ image_id }}"
+        wait: yes
+        wait_timeout: 500
+        exact_count: 1
+        count_tag:
+          Name: uat1.ovchosting.co.uk
+        instance_tags:
+          Name: uat1.ovchosting.co.uk
