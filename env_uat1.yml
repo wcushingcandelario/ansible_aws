@@ -62,6 +62,7 @@
     - name: Present new AMI ID
       pause:
         prompt: UAT1 will now be launched with {{ image_id }}
+        seconds: 30
     - name: Launch instance
       ec2:
         assign_public_ip: yes

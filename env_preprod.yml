@@ -51,6 +51,14 @@
     - asg
     - find_ovc_ami
 
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Present new AMI ID
+      pause:
+        prompt: PreProd will now be launched with {{ image_id }}
+        seconds: 30
+
 - name: Create ELB and ASG
   include: _asg_main.yml
   tags:
