@@ -4,7 +4,7 @@ stop program = "/sbin/service jetty stop"
 
 check host pos_server_health_check with address localhost
    if failed url http://localhost:8080/json/posservices/health for 2 cycles then restart
-   if 5 restarts within 5 cycles then timeout
 
 check file jetty.log with path /opt/jetty/logs/jetty.log
-   if match "java.lang.OutOfMemoryError" then restart
+   if match ".*OutOfMemoryError" then restart
+   if match "Communications link failure" then restart
