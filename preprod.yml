@@ -30,7 +30,7 @@
     multirdszone: no
 
 - name: Build Mongo Cluster
-  include: mongo-cluster.yml
+  include: mongo-cluster-cloud.yml
   remote_user: ec2-user
   tags:
     - mongo
