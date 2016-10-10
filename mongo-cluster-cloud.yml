@@ -59,7 +59,7 @@
        overwrite: yes
      with_items: ami_instance.instances
   tags:
-    - replica
+    - mongo_replica
 
 #create third server
 - name: Create third server
@@ -93,7 +93,7 @@
      wait_for: host={{ item.private_ip }} delay=300 port=22 state=started timeout=1200
      with_items: ami_instance.instances
   tags:
-    - replica
+    - mongo_replica
 
 - name: Install mongo
   hosts: just_created
