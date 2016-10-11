@@ -1,6 +1,7 @@
 ---
 
 - hosts: all
+  connection: local
   tasks:
     - name: Upload to S3
       delegate_to: localhost
