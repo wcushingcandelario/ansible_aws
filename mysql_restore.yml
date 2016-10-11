@@ -1,0 +1,19 @@
+---
+
+- hosts: all
+  delegate_to: localhost
+  tasks:
+    - name: Upload to S3
+      s3:
+        mode: put
+        bucket: ovc-tp-db-backups
+        object: {{ backup_file }}
+        dest: xdb_restore_{{ ansible_date_time.date }}.sql
+        login_host: {{ inventory_hostname }}
+        login_password: {{ login_password }}
+        login_user: {{ login_user }}
+    - name: Dump MySQL
+      mysql_db:
+        state: dump
+        name: xdb
+        target: xdb_restore_{{ ansible_date_time.date }}.sql
