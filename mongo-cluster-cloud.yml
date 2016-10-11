@@ -14,21 +14,21 @@
 
   tasks:
     - name: add host to group
-     add_host: name="{{ item.private_ip }}" groups=just_created
-     with_items: ami_instance.instances
+      add_host: name="{{ item.private_ip }}" groups=just_created
+      with_items: ami_instance.instances
 
     - name: Add new Route53 entry
-     route53:
-       command: "create"
-       zone: "ovchosting.co.uk"
-       hosted_zone_id: "Z3A98VA7X0SL0T"
-       private_zone: "true"
-       record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
-       type: "A"
-       ttl: 60
-       value: "{{ groups.just_created[0] }}"
-       overwrite: yes
-     with_items: ami_instance.instances
+      route53:
+        command: "create"
+        zone: "ovchosting.co.uk"
+        hosted_zone_id: "Z3A98VA7X0SL0T"
+        private_zone: "true"
+        record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
+        type: "A"
+        ttl: 60
+        value: "{{ groups.just_created[0] }}"
+        overwrite: yes
+      with_items: ami_instance.instances
 
 
 #create second server
@@ -43,21 +43,21 @@
 
   tasks:
     - name: add host to group
-     add_host: name="{{ item.private_ip }}" groups=just_created
-     with_items: ami_instance.instances
+      add_host: name="{{ item.private_ip }}" groups=just_created
+      with_items: ami_instance.instances
 
     - name: Add new Route53 entry
-     route53:
-       command: "create"
-       zone: "ovchosting.co.uk"
-       hosted_zone_id: "Z3A98VA7X0SL0T"
-       private_zone: "true"
-       record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
-       type: "A"
-       ttl: 60
-       value: "{{ groups.just_created[1] }}"
-       overwrite: yes
-     with_items: ami_instance.instances
+      route53:
+        command: "create"
+        zone: "ovchosting.co.uk"
+        hosted_zone_id: "Z3A98VA7X0SL0T"
+        private_zone: "true"
+        record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
+        type: "A"
+        ttl: 60
+        value: "{{ groups.just_created[1] }}"
+        overwrite: yes
+      with_items: ami_instance.instances
   tags:
     - mongo_replica
 
@@ -73,25 +73,25 @@
 
   tasks:
     - name: add host to group
-     add_host: name="{{ item.private_ip }}" groups=just_created
-     with_items: ami_instance.instances
+      add_host: name="{{ item.private_ip }}" groups=just_created
+      with_items: ami_instance.instances
 
     - name: Add new Route53 entry
-     route53:
-       command: "create"
-       zone: "ovchosting.co.uk"
-       hosted_zone_id: "Z3A98VA7X0SL0T"
-       private_zone: "true"
-       record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
-       type: "A"
-       ttl: 60
-       value: "{{ groups.just_created[2] }}"
-       overwrite: yes
-     with_items: ami_instance.instances
+      route53:
+        command: "create"
+        zone: "ovchosting.co.uk"
+        hosted_zone_id: "Z3A98VA7X0SL0T"
+        private_zone: "true"
+        record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
+        type: "A"
+        ttl: 60
+        value: "{{ groups.just_created[2] }}"
+        overwrite: yes
+      with_items: ami_instance.instances
 
     - name: wait for ssh to come up
-     wait_for: host="{{ item.private_ip }}" delay=300 port=22 state=started timeout=1200
-     with_items: ami_instance.instances
+      wait_for: host="{{ item.private_ip }}" delay=300 port=22 state=started timeout=1200
+      with_items: ami_instance.instances
   tags:
     - mongo_replica
 
