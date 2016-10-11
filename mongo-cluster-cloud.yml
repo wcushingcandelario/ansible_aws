@@ -14,7 +14,7 @@
 
   tasks:
     - name: add host to group
-     add_host: name={{ item.private_ip }} groups=just_created
+     add_host: name="{{ item.private_ip }}" groups=just_created
      with_items: ami_instance.instances
 
     - name: Add new Route53 entry
@@ -43,7 +43,7 @@
 
   tasks:
     - name: add host to group
-     add_host: name={{ item.private_ip }} groups=just_created
+     add_host: name="{{ item.private_ip }}" groups=just_created
      with_items: ami_instance.instances
 
     - name: Add new Route53 entry
@@ -73,7 +73,7 @@
 
   tasks:
     - name: add host to group
-     add_host: name={{ item.private_ip }} groups=just_created
+     add_host: name="{{ item.private_ip }}" groups=just_created
      with_items: ami_instance.instances
 
     - name: Add new Route53 entry
@@ -90,7 +90,7 @@
      with_items: ami_instance.instances
 
     - name: wait for ssh to come up
-     wait_for: host={{ item.private_ip }} delay=300 port=22 state=started timeout=1200
+     wait_for: host="{{ item.private_ip }}" delay=300 port=22 state=started timeout=1200
      with_items: ami_instance.instances
   tags:
     - mongo_replica
