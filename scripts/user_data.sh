@@ -49,6 +49,8 @@ sed -i.bak "s#http://this_host:8080#https://$LOCAL_IP#" $FILE_NAME
 
 sed -i "s/env\:unknown/env:${ENV}/" /etc/dd-agent/conf.d/http_check.yaml
 
+sed -i.bak '/-Dorg\.quartz\.scheduler\.hostName=.*/c\#This line is removed by the admin.' /opt/jetty/start.ini 
+
 sed -i s#SITE_URL\',\"http:#SITE_URL\',\"https:#g /var/www/html/ovcdashboard/app/Config/bootstrap.php
 sed -i "/-Dorg.quartz.scheduler.instanceId=/c\-Dorg.quartz.scheduler.hostName=`hostname -f`" /opt/jetty/start.ini
 
