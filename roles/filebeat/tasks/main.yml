@@ -25,6 +25,9 @@
   when: "filebeat is defined"
 
 - name: Generate filebeat configuration template
+  with_items:
+    - { src: 'filebeat.yml.preprod.j2', dest: '/etc/filebeat/filebeat.yml.preprod' }
+    - { src: 'filebeat.yml.prod.j2', dest: '/etc/filebeat/filebeat.yml.prod' }
   template:
    src={{item.src}}
    dest={{item.dest}}
@@ -45,6 +48,9 @@
   when: "filebeat is defined"
 
 - name: Install ELK server SSL client certificate
+  with_items:
+     - { src: 'logstash-forwarder.crt.preprod', dest: '/etc/pki/tls/certs/logstash-forwarder.crt.preprod' }
+     - { src: 'logstash-forwarder.crt.prod', dest: '/etc/pki/tls/certs/logstash-forwarder.crt.prod' }
   copy:
    src={{item.src}}
    dest={{item.dest}}

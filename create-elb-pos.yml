@@ -27,7 +27,7 @@
       health_check:
         ping_protocol: tcp # options are http, https, ssl, tcp
         ping_port: 443
-        ping_path: "/ovcdashboard/login" # not required for tcp or ssl
+        ping_path: "/json/posservices/health" # not required for tcp or ssl
         response_timeout: 5 # seconds
         interval: 30 # seconds
         unhealthy_threshold: 2

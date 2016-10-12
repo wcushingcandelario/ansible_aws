@@ -1,0 +1,5 @@
+---
+
+dependencies:
+  - { role: mongo_automation }
+  - { role: mongo_monitor }

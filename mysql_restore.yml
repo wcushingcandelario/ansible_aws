@@ -1,9 +1,10 @@
 ---
 
 - hosts: all
-  delegate_to: localhost
+  connection: local
   tasks:
     - name: Upload to S3
+      delegate_to: localhost
       s3:
         mode: put
         bucket: ovc-tp-db-backups
@@ -13,6 +14,7 @@
         login_password: "{{ login_password }}"
         login_user: "{{ login_user }}"
     - name: Dump MySQL
+      delegate_to: localhost
       mysql_db:
         state: dump
         name: xdb
