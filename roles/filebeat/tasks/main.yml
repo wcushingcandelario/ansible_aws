@@ -1,6 +1,6 @@
 
 #
-# install/run filebeat elk client
+# Install Logstash Forwarders for client
 #
 - name: Copy filebeat yum repo file
   copy:
@@ -25,18 +25,18 @@
   when: "filebeat is defined"
 
 - name: Generate filebeat configuration template
+  template:
+   src={{item.src}}
+   dest={{item.dest}}
+   owner=root
+   group=root
+   mode=0644
   with_items:
     - { src: 'filebeat.yml.preprod.j2', dest: '/etc/filebeat/filebeat.yml.preprod' }
     - { src: 'filebeat.yml.prod.j2', dest: '/etc/filebeat/filebeat.yml.prod' }
-  template:
-    src={{item.src}}
-    dest={{item.dest}}
-    owner=root
-    group=root
-    mode=0644
   when: "filebeat is defined"
   become: true
-  #register: filebeat_needs_restart
+
 
 - name: Check ELK server SSL client certificate
   stat: path=/etc/pki/tls/certs/logstash-forwarder.crt
@@ -45,23 +45,17 @@
   when: "filebeat is defined"
 
 - name: Install ELK server SSL client certificate
+  copy:
+   src={{item.src}}
+   dest={{item.dest}}
+   owner=root
+   group=root
+   mode=0644
   with_items:
      - { src: 'logstash-forwarder.crt.preprod', dest: '/etc/pki/tls/certs/logstash-forwarder.crt.preprod' }
      - { src: 'logstash-forwarder.crt.prod', dest: '/etc/pki/tls/certs/logstash-forwarder.crt.prod' }
-  copy:
-    src={{item.src}}
-    dest={{item.dest}}
-    owner=root
-    group=root
-    mode=0644
   when: "filebeat is defined"
   become: true
-
-#- name: Start filebeat service
-#  command: systemctl start filebeat.service
-#  ignore_errors: true
-#  become: true
-#  when: "filebeat is defined"
 
 - name: Setup filebeat service
   service: name=filebeat state=started enabled=true
