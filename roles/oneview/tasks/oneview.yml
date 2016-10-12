@@ -182,7 +182,6 @@
   become: yes
   become_user: root
 
-
 - name: Add configurations to jettys start.ini
   lineinfile:
     dest: "{{ jetty_dir }}/start.ini"
@@ -190,8 +189,16 @@
     line: "{{ item.line }}"
   with_items:
     - { line: '-Dovc.config.dir={{ ovc_install_dir }}/Platform-Dynamic-Objects/config'}
-    - { line: '-Dorg.quartz.scheduler.instanceId={{inventory_hostname_short | default("localhost")}}'}
     - { line: '-Dlogback.configurationFile={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/logback.xml'}
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Set the Quartz instanceId
+  lineinfile:
+    dest: "{{ jetty_dir }}/start.ini"
+    state: present
+    regexp: "-Dorg.quartz.scheduler.instanceId=.*"
+    line: "-Dorg.quartz.scheduler.instanceId={{ inventory_hostname_short | default('localhost') }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
