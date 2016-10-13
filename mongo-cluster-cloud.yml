@@ -101,6 +101,7 @@
   become: yes
   become_user: root
   roles:
+    - mongoinstall
     - Datadog.datadog
     - mongo_automation
   vars:
