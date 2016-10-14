@@ -39,7 +39,7 @@
       name: "{{ asg_name }}"
       launch_config_name: "{{ new_lc_name }}"
       vpc_zone_identifier: "{{ elbsubnets }}"
-      load_balancers: "{{ deploy_pos }},{{ deploy_dash }}"
+      load_balancers: "{{ deploy_type }}-mongo"
       replace_all_instances: yes
       health_check_type: ELB
       min_size: "{{ min_size }}"
@@ -67,7 +67,7 @@
     - name: Create ELB Mongo
       local_action:
         module: ec2_elb_lb
-        name: "{{ deploy_dash }}"
+        name: "{{ deploy_type }}-mongo"
         state: present
         region: "{{ region }}"
         scheme: internal
@@ -99,7 +99,7 @@
       local_action:
         module: ec2_elb_facts
         names:
-          - "{{ deploy_dash }}"
+          - "{{ deploy_type }}-mongo"
         region: "{{ region }}"
       register: elb_facts
 
