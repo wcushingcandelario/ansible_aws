@@ -9,7 +9,7 @@
   connection: local
   gather_facts: False
   roles:
-    - find_ami
+    - find_mongo_ami
     - create_server
 
   tasks:
