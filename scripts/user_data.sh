@@ -34,6 +34,14 @@ export FILE_NAME=/var/www/html/ovcdashboard/app/Config/setting_var.php
 cp $FILE_NAME $FILE_NAME.ORIG
 sudo mv $FILE_NAME.$ENV $FILE_NAME
 
+export FILE_NAME=/etc/filebeat/filebeat.yml
+cp $FILE_NAME $FILE_NAME.ORIG
+sudo mv $FILE_NAME.$ENV $FILE_NAME
+
+export FILE_NAME=/etc/pki/tls/certs/logstash-forwarder.crt
+cp $FILE_NAME $FILE_NAME.ORIG
+sudo mv $FILE_NAME.$ENV $FILE_NAME
+
 export FILE_NAME=/opt/ovc/posWebapp/WEB-INF/web.xml
 export LOCAL_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 sudo /usr/bin/patch $FILE_NAME $FILE_NAME.patch.$ENV
@@ -41,8 +49,12 @@ sed -i.bak "s#http://this_host:8080#https://$LOCAL_IP#" $FILE_NAME
 
 sed -i "s/env\:unknown/env:${ENV}/" /etc/dd-agent/conf.d/http_check.yaml
 
+sed -i.bak '/-Dorg\.quartz\.scheduler\.hostName=.*/c\#This line is removed by the admin.' /opt/jetty/start.ini
+
 sed -i s#SITE_URL\',\"http:#SITE_URL\',\"https:#g /var/www/html/ovcdashboard/app/Config/bootstrap.php
 sed -i "/-Dorg.quartz.scheduler.instanceId=/c\-Dorg.quartz.scheduler.hostName=`hostname -f`" /opt/jetty/start.ini
+
+sed -i '/^org\.quartz\.scheduler\.rmi\.export=/ s/true/false/' /opt/ovc/Platform-Dynamic-Objects/config/quartz.properties
 
 sudo /sbin/service jetty restart
 sudo /sbin/service httpd restart

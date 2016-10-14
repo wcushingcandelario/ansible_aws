@@ -19,7 +19,7 @@
       vpc_subnet_id: "{{ vpc_subnet_public }}"
       image: "{{ ami_find.results[0].ami_id }}"
       wait: yes
-      instance_profile_name: CodeDeploy-EC2
+      instance_profile_name: UtilityServer
       exact_count: 1
       count_tag:
         role: ami_builder
