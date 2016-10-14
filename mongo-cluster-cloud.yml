@@ -94,14 +94,3 @@
       with_items: ami_instance.instances
   tags:
     - mongo_replica
-
-- name: Install mongo
-  hosts: just_created
-  remote_user: ec2-user
-  become: yes
-  become_user: root
-  roles:
-    - Datadog.datadog
-    - mongo_automation
-  vars:
-    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
