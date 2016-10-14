@@ -1,0 +1,11 @@
+- name: Finding latest Amazon Linux ami
+  ec2_ami_find:
+    name: "mongo-*"
+    sort: name
+    sort_order: descending
+    region: "{{ region }}"
+    sort_end: 1
+  register: ami_find
+
+- name: AMI ID found
+  debug: "var=ami_find.results"
