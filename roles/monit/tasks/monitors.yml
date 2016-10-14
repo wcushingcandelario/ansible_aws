@@ -24,6 +24,14 @@
     group: root
   notify: restart monit
 
+- name: monitors - Write Disk monitor
+  template:
+    src: disk.j2
+    dest: "{{ monit_includes }}/disk"
+    owner: root
+    group: root
+  notify: restart monit
+
 - name: monitors - Create facts directory
   file:
     path: "/etc/ansible/facts.d"
