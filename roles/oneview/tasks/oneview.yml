@@ -190,6 +190,7 @@
   with_items:
     - { line: '-Dovc.config.dir={{ ovc_install_dir }}/Platform-Dynamic-Objects/config'}
     - { line: '-Dlogback.configurationFile={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/logback.xml'}
+    - { line: '-Dquartz.config.file=/opt/ovc/Platform-Dynamic-Objects/config/quartz.properties'}
   become: yes
   become_user: "{{ jetty_user_login }}"
 
