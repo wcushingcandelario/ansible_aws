@@ -6,6 +6,7 @@
   hosts: localhost
   vars:
     count: 01
+    user_data: "{{ lookup('file', 'scripts/mongo_user_data.sh') }}"
   connection: local
   gather_facts: False
   roles:
