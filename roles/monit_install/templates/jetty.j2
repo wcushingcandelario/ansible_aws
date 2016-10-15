@@ -1,0 +1,15 @@
+check process jetty with pidfile "/var/run/jetty.pid"
+start program = "/sbin/service jetty start"
+stop program = "/sbin/service jetty stop"
+
+check host pos_server_health_check with address localhost
+start program = "/sbin/service jetty start"
+stop program = "/sbin/service jetty stop"
+   if failed url http://localhost:8080/json/posservices/health for 2 cycles then restart
+   if 5 restarts within 15 cycles then timeout
+
+check file jetty.log with path /opt/jetty/logs/jetty.log
+start program = "/sbin/service jetty start"
+stop program = "/sbin/service jetty stop"
+   if match ".*OutOfMemoryError" then restart
+   if match "Communications link failure" then restart

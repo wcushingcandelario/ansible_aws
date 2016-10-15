@@ -1,5 +1,5 @@
 ---
-- hosts: uat1
+- hosts: uat2
   become: yes
   become_user: root
   roles:

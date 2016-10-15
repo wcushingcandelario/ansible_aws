@@ -1,0 +1,10 @@
+---
+- include: redhat/pkg.yml
+  tags: monit_pkg
+  when: ansible_distribution == 'Amazon'
+
+- include: config.yml
+  tags: monit_config
+
+- include: monitors.yml
+  tags: monit_monitors

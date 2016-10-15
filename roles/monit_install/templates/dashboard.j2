@@ -1,0 +1,8 @@
+check process apache with pidfile "/var/run/httpd/httpd.pid"
+start program = "/sbin/service httpd start"
+stop program = "/sbin/service httpd stop"
+
+check host dashboard_health_check with address localhost
+start program = "/sbin/service httpd start"
+stop program = "/sbin/service httpd stop"
+   if failed url http://localhost/ovcdashboard/login for 2 cycles then restart

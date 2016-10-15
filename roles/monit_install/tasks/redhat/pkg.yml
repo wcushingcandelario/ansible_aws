@@ -1,0 +1,49 @@
+---
+- name: Create directory
+  file:
+    path: /opt/monit
+    state: directory
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+
+- name: Unzip monit
+  unarchive:
+    copy: yes
+    src: "monit-5.19.0-linux-x64.tar.gz"
+    dest: "/opt/monit/"
+    owner: root
+    group: root
+  become: yes
+  become_user: root
+
+- name: Stat monit bin
+  stat:
+    path: /usr/bin/monit
+  register: monit_stat
+
+- name: Copy monit to /usr/bin
+  command: cp /opt/monit/monit-5.19.0/bin/monit /usr/bin/monit
+  become: yes
+  become_user: root
+  when: not monit_stat.stat.exists
+
+# - name: Create symlink
+#   file:
+#     src: "/opt/monit/monit-5.19.0/bin/monit"
+#     dest: "/usr/bin/monit"
+#     owner: root
+#     group: root
+#     state: link
+#   become: yes
+#   become_user: root
+
+- name: Create init.d
+  template:
+    src: monit.j2
+    dest: /etc/init.d/monit
+    owner: root
+    group: root
+  become: yes
+  become_user: root
