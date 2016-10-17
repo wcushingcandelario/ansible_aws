@@ -79,5 +79,7 @@
           Name: uat1.ovchosting.co.uk
         instance_tags:
           Name: uat1.ovchosting.co.uk
+          role: webapp
+          environment: uat1
   tags:
     - launch_ami
