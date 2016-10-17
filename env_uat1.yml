@@ -77,6 +77,8 @@
         exact_count: 1
         count_tag:
           Name: uat1.ovchosting.co.uk
+          role: webapp
+          environment: uat1
         instance_tags:
           Name: uat1.ovchosting.co.uk
           role: webapp
