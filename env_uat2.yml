@@ -59,6 +59,9 @@
   hosts: localhost
   connection: local
   tasks:
+    - name: Display new AMI ID
+      debug:
+        msg="UAT2 will now be launched with {{ image_id }}"
     - name: Present new AMI ID
       pause:
         prompt: UAT2 will now be launched with {{ image_id }}

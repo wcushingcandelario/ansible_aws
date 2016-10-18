@@ -69,11 +69,11 @@
     - name: Launch instance
       ec2:
         assign_public_ip: yes
-        region: eu-west-1
-        key_name: ovc-tp-np
-        group_id: sg-2b00104f, sg-61001005
-        instance_type: m4.xlarge
-        vpc_subnet_id: subnet-0ca54b68
+        region: "eu-west-1"
+        key_name: "ovc-tp-np"
+        group_id: "sg-2b00104f,sg-61001005"
+        instance_type: "m4.xlarge"
+        vpc_subnet_id: "subnet-0ca54b68"
         image: "{{ image_id }}"
         wait: yes
         wait_timeout: 500
