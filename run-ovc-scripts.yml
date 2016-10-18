@@ -1,0 +1,20 @@
+---
+
+- hosts: tag_environment_prod:&tag_role_webapp
+  remote_user: ec2-user
+  become: yes
+  become_user: jetty
+  tasks:
+    - name: Run eComRefresh
+      run_once: yes
+      shell: /opt/ovc/bin/eComRefresh.sh
+      tags:
+        - tagged
+        - ecomrefresh
+
+    - name: Run initStaffDiscount
+      run_once: yes
+      shell: /opt/ovc/bin/initStaffDiscount.sh
+      tags:
+        - tagged
+        - staffdiscount
