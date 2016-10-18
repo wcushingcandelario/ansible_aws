@@ -5,27 +5,27 @@
   tasks:
     - name: Update configs from AMI
       with_items:
-        - { src: 'roles/oneview/files/env_files/unifiedConfig.properties.preprod' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { src: 'roles/oneview/files/env_files/tools.properties.preprod' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
-        - { src: 'roles/oneview/files/env_files/context.xml.preprod' dest: '/opt/jetty/webapps/context.xml' }
-        - { src: 'roles/oneview/files/env_files/database.php.preprod' dest: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { src: 'roles/oneview/files/env_files/setting_var.php.preprod' dest: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-        - { src: 'roles/oneview/files/env_files/unifiedConfig.properties.prod' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { src: 'roles/oneview/files/env_files/tools.properties.prod' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
-        - { src: 'roles/oneview/files/env_files/context.xml.prod' dest: '/opt/jetty/webapps/context.xml' }
-        - { src: 'roles/oneview/files/env_files/database.php.prod' dest: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { src: 'roles/oneview/files/env_files/setting_var.php.prod' dest: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-        - { src: 'roles/oneview/files/env_files/unifiedConfig.properties.uat1' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { src: 'roles/oneview/files/env_files/tools.properties.uat1' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
-        - { src: 'roles/oneview/files/env_files/context.xml.uat1' dest: '/opt/jetty/webapps/context.xml' }
-        - { src: 'roles/oneview/files/env_files/database.php.uat1' dest: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { src: 'roles/oneview/files/env_files/setting_var.php.uat1' dest: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-        - { src: 'roles/oneview/files/env_files/unifiedConfig.properties.uat2' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { src: 'roles/oneview/files/env_files/tools.properties.uat2' dest: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
-        - { src: 'roles/oneview/files/env_files/context.xml.uat2' dest: '/opt/jetty/webapps/context.xml' }
-        - { src: 'roles/oneview/files/env_files/database.php.uat2' dest: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { src: 'roles/oneview/files/env_files/setting_var.php.uat2' dest: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-        - { src: 'roles/oneview/files/cometd/original.xml' dest: '/opt/ovc/posWebapp/WEB-INF/web.xml' }
+        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.preprod' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
+        - { dest: 'roles/oneview/files/env_files/tools.properties.preprod' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
+        - { dest: 'roles/oneview/files/env_files/context.xml.preprod' src: '/opt/jetty/webapps/context.xml' }
+        - { dest: 'roles/oneview/files/env_files/database.php.preprod' src: '/var/www/html/ovcdashboard/app/Config/database.php' }
+        - { dest: 'roles/oneview/files/env_files/setting_var.php.preprod' src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
+        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.prod' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
+        - { dest: 'roles/oneview/files/env_files/tools.properties.prod' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
+        - { dest: 'roles/oneview/files/env_files/context.xml.prod' src: '/opt/jetty/webapps/context.xml' }
+        - { dest: 'roles/oneview/files/env_files/database.php.prod' src: '/var/www/html/ovcdashboard/app/Config/database.php' }
+        - { dest: 'roles/oneview/files/env_files/setting_var.php.prod' src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
+        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat1' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
+        - { dest: 'roles/oneview/files/env_files/tools.properties.uat1' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
+        - { dest: 'roles/oneview/files/env_files/context.xml.uat1' src: '/opt/jetty/webapps/context.xml' }
+        - { dest: 'roles/oneview/files/env_files/database.php.uat1' src: '/var/www/html/ovcdashboard/app/Config/database.php' }
+        - { dest: 'roles/oneview/files/env_files/setting_var.php.uat1' src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
+        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat2' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
+        - { dest: 'roles/oneview/files/env_files/tools.properties.uat2' src: '{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties' }
+        - { dest: 'roles/oneview/files/env_files/context.xml.uat2' src: '/opt/jetty/webapps/context.xml' }
+        - { dest: 'roles/oneview/files/env_files/database.php.uat2' src: '/var/www/html/ovcdashboard/app/Config/database.php' }
+        - { dest: 'roles/oneview/files/env_files/setting_var.php.uat2' src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
+        - { dest: 'roles/oneview/files/cometd/original.xml' src: '/opt/ovc/posWebapp/WEB-INF/web.xml' }
       fetch:
         src: {{ item.src }}
         dest: {{ item.dest }}
