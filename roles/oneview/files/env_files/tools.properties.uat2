@@ -1,0 +1,29 @@
+#Updated by OVCInstaller
+#Mon Sep 19 19:20:01 EDT 2016
+posMClientSyncUpdater.store=All
+importFiles.postProductsImportsDir=eCommerceImportFiles2
+eComServer.baseSiteId=wickesStores
+importer_mode=production
+custDataImporter.ignoreJsonValidationErrors=true
+posMClientSyncUpdater.browser=true
+calendarDataImport.encrypted.password=C9VdD8e5BH/IMIuSNhwkvg\=\=
+importFiles.staffDiscountImportFiles=staffDiscountImportFiles
+ovcServer.prop_dir=/opt/ovc/Platform-Dynamic-Objects/config
+importFiles.externalUserDir=importDefaultExternalUser
+importFiles.rootLocationsDir=importRootLocations
+custDataImporter.async=false
+ovcServer.webcontext=
+ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
+appDataImporter.async=true
+calendarDataImport.username=eCommerce
+appDataImporter.useLocalHashcodes=true
+importFiles.standaloneImportsDir=eCommerceImportFiles
+eComServer.encrypted.password=C9VdD8e5BH/IMIuSNhwkvg\=\=
+eComServer.retailerId=defaultRetailer
+import.endpoint.temp.location=/tmp
+eComServer.username=eCommerce
+ovcServer.customer-all=tp-all
+
+staffDiscount.bucketName=ovc-uat2-filerepo
+staffDiscount.region=eu-west-1
+staffDiscount.protocol=https
