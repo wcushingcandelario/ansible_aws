@@ -1,28 +1,28 @@
-#Updated by OVCInstaller
 #Mon May 09 12:04:56 EDT 2016
-posMClientSyncUpdater.store=All
-importFiles.postProductsImportsDir=eCommerceImportFiles2
-eComServer.baseSiteId=wickesStores
-importer_mode=production
-custDataImporter.ignoreJsonValidationErrors=true
-posMClientSyncUpdater.browser=true
-calendarDataImport.encrypted.password=1D6DfFDrZTJ2/Tt17Fn2l4tj+MlBjtnm+CR4NGge5+tey6ynSbEyAoFBDvVmipoN
-ovcServer.prop_dir=/opt/ovc/Platform-Dynamic-Objects/config
-importFiles.externalUserDir=importDefaultExternalUser
-importFiles.rootLocationsDir=importRootLocations
-custDataImporter.async=false
-ovcServer.webcontext=
-ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
+#Updated by OVCInstaller
 appDataImporter.async=true
-calendarDataImport.username=eCommerce
 appDataImporter.useLocalHashcodes=true
-importFiles.standaloneImportsDir=eCommerceImportFiles
+calendarDataImport.encrypted.password=1D6DfFDrZTJ2/Tt17Fn2l4tj+MlBjtnm+CR4NGge5+tey6ynSbEyAoFBDvVmipoN
+calendarDataImport.username=eCommerce
+custDataImporter.async=false
+custDataImporter.ignoreJsonValidationErrors=true
+eComServer.baseSiteId=wickesStores
 eComServer.encrypted.password=lHl7Wgn7Z0YCFD6PEhnqUg\=\=
 eComServer.retailerId=defaultRetailer
-import.endpoint.temp.location=/tmp
 eComServer.username=eCommerce
-ovcServer.customer-all=tp-all
+import.endpoint.temp.location=/tmp
+importFiles.externalUserDir=importDefaultExternalUser
+importFiles.postProductsImportsDir=eCommerceImportFiles2
+importFiles.rootLocationsDir=importRootLocations
 importFiles.staffDiscountImportFiles=staffDiscountImportFiles
+importFiles.standaloneImportsDir=eCommerceImportFiles
+importer_mode=production
+ovcServer.customer-all=tp-all
+ovcServer.prop_dir=/opt/ovc/Platform-Dynamic-Objects/config
+ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
+ovcServer.webcontext=
+posMClientSyncUpdater.browser=true
+posMClientSyncUpdater.store=All
+staffDiscount.bucketName=ovc-uat1-filerepo
 staffDiscount.protocol=https
 staffDiscount.region=eu-west-1
-staffDiscount.bucketName=ovc-uat1-filerepo

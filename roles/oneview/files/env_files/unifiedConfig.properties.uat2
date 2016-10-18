@@ -1,8 +1,9 @@
-#Updated through OVCInstaller
 #Mon Sep 19 19:20:04 EDT 2016
+#Updated through OVCInstaller
 MESSAGE_COUNTER=10
 TIMEOUT=10000
 cartDetails.url=/v2/%s/users/%s/carts
+catalogs.url=/v2/%s/ovc/merchandisingGroups/All
 client_id=trusted_client
 client_secret=secret
 customerDetails.url=/v2/%s/users/%s
@@ -22,6 +23,7 @@ export.product.catalog.name=apparelProductCatalog
 export.product.catalog.version=Online
 export.product.type=ApparelProduct
 export.products.url=v2/%s/ovc/products/paginated
+export.stock.url=v2/%s/ovc/storestock/%s
 grant_type=client_credentials
 grant_type_pwd=password
 import.stock.balanceType=ats
@@ -73,5 +75,3 @@ secure.occhost.context=/omnicommercewebservices
 store.finder.stock.url=/v2/%s/products/%s/stock
 stores.url=/v2/%s/ovc/locations/All
 username=customermanager
-catalogs.url=/v2/%s/ovc/merchandisingGroups/All
-export.stock.url=v2/%s/ovc/storestock/%s
