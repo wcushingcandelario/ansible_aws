@@ -21,7 +21,7 @@
       poll: 60
       tags:
         - tagged
-        - ecomrefresh
+        - eComRefresh
 
     - name: Run initStaffDiscount
       run_once: yes
@@ -30,4 +30,4 @@
       poll: 30
       tags:
         - tagged
-        - staffdiscount
+        - staffData
