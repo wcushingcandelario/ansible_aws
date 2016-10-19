@@ -76,6 +76,7 @@
         vpc_subnet_id: "subnet-69a24c0d"
         image: "{{ image_id }}"
         user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
+        termination_protection: yes
         wait: yes
         wait_timeout: 500
         exact_count: 1
