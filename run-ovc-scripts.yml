@@ -5,6 +5,13 @@
   become: yes
   become_user: jetty
   tasks:
+    - name: Run devAll
+      run_once: yes
+      shell: /opt/ovc/bin/initDevAll.sh
+      tags:
+        - tagged
+        - devAll
+
     - name: Run eComRefresh
       run_once: yes
       shell: /opt/ovc/bin/eComRefresh.sh
