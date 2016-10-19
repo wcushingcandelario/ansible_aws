@@ -75,6 +75,7 @@
         instance_type: "m4.xlarge"
         vpc_subnet_id: "subnet-69a24c0d"
         image: "{{ image_id }}"
+        instance_profile_name: NonProdAppServer
         user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
         termination_protection: yes
         wait: yes
