@@ -7,21 +7,27 @@
   tasks:
     - name: Run devAll
       run_once: yes
-      shell: /opt/ovc/bin/initDevAll.sh
+      command: /opt/ovc/bin/initDevAll.sh
+      async: 1200
+      poll: 30
       tags:
         - tagged
         - devAll
 
     - name: Run eComRefresh
       run_once: yes
-      shell: /opt/ovc/bin/eComRefresh.sh
+      command: /opt/ovc/bin/eComRefresh.sh
+      async: 7200
+      poll: 60
       tags:
         - tagged
         - ecomrefresh
 
     - name: Run initStaffDiscount
       run_once: yes
-      shell: /opt/ovc/bin/initStaffDiscount.sh
+      command: /opt/ovc/bin/initStaffDiscount.sh
+      async: 1200
+      poll: 30
       tags:
         - tagged
         - staffdiscount
