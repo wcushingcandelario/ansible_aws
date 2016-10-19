@@ -8,7 +8,7 @@
 	<Set name="extractWAR">false</Set>
 
 	<Set name="overrideDescriptor">/opt/jetty/webapps/pos.d/pos-override.xml</Set>
-<Set name="extraClasspath">/opt/ovc/lib/ext/TPExtensions-5.8.0.jar;/opt/ovc/lib/ext/TPPopulators-5.8.0.jar</Set>
+<Set name="extraClasspath">/opt/ovc/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar;/opt/ovc/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar</Set>
 
 	<Set name="securityHandler">
 		<New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
