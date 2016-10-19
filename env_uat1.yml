@@ -75,6 +75,7 @@
         instance_type: "m4.xlarge"
         vpc_subnet_id: "subnet-0ca54b68"
         image: "{{ image_id }}"
+        user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
         wait: yes
         wait_timeout: 500
         exact_count: 1
