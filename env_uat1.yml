@@ -1,107 +1,24 @@
 ---
 
-- name: Create RDS
-  connection: local
-  hosts: localhost
-  roles:
-    - create_rds
-  tags:
-    - rds
+- name: Build UAT1
+  include: _build-env-single.yml
   vars:
+    deploy_type: uat1
+
     environment_name: uat1-rds
     rds_security_group: sg-a50010c1
     rds_subnet_group: "uat1 rds subnet group"
     multirdszone: no
 
-- name: Build Mongo Cluster
-  hosts: localhost
-  connection: local
-  tasks:
-    - pause:
-        prompt: Please confirm that mongodb-uat1.ovchosting.co.uk is available, press enter when ready.
-  tags:
-    - mongo
-  vars:
-   region: eu-west-1
-   key: ovc-tp-preprod
-   ovc_security_groups: sg-a50010c1
-   vpc_subnet_public: subnet-b3bf51d7
-   instance_type: m4.micro
-   deploy_type: "uat1"
-   env: "{{ deploy_type }}.ovchosting.co.uk"
-   cluster_name: "{{ deploy_type }}_cluster"
+    region: eu-west-1
+    key: ovc-tp-np
+    ovc_security_groups: sg-a50010c1
+    vpc_subnet_public: subnet-b3bf51d7
+    instance_type: m4.micro
+    deploy_type: "uat1"
+    env: "{{ deploy_type }}.ovchosting.co.uk"
+    cluster_name: "{{ deploy_type }}_cluster"
 
-- name: Find AMI ID
-  hosts: localhost
-  connection: local
-  roles:
-    - findovcami
-  tags:
-    - find_ovc_ami
-    - launch_ami
-  vars:
-   region: eu-west-1
-
-- name: Add AMI ID to facts
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Use set_fact to AMI
-      set_fact:
-        image_id: "{{ ami_find.results[0].ami_id }}"
-      when: image_id is undefined
-  tags:
-    - find_ovc_ami
-    - launch_ami
-
-
-- name: Launch instance for UAT1
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Display new AMI ID
-      debug:
-        msg="UAT1 will now be launched with {{ image_id }}"
-    - name: Present new AMI ID
-      pause:
-        prompt: UAT1 will now be launched with {{ image_id }}
-        seconds: 30
-    - name: Launch instance
-      ec2:
-        assign_public_ip: yes
-        region: "eu-west-1"
-        key_name: "ovc-tp-np"
-        group_id: "sg-2b00104f,sg-61001005"
-        instance_type: "m4.xlarge"
-        vpc_subnet_id: "subnet-0ca54b68"
-        image: "{{ image_id }}"
-        instance_profile_name: NonProdAppServer
-        user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
-        termination_protection: yes
-        wait: yes
-        wait_timeout: 500
-        exact_count: 1
-        count_tag:
-          Name: uat1.ovchosting.co.uk
-          role: webapp
-          environment: uat1
-        instance_tags:
-          Name: uat1.ovchosting.co.uk
-          role: webapp
-          environment: uat1
-      register: ami_instance
-    - name: Add new Route53 entry
-      route53:
-        command: "create"
-        zone: "ovchosting.co.uk"
-        hosted_zone_id: "Z3A98VA7X0SL0T"
-        private_zone: "true"
-        record: "uat1.ovchosting.co.uk"
-        type: "A"
-        ttl: 300
-        value: "{{ ami_instance.instances[0].private_ip }}"
-        overwrite: yes
-      tags:
-        - dns
-  tags:
-    - launch_ami
+    group_id: "sg-2b00104f,sg-61001005"
+    instance_type_single: "m4.xlarge"
+    vpc_subnet_id: "subnet-0ca54b68"
