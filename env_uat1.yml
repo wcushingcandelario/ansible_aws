@@ -3,6 +3,8 @@
 - name: Build UAT1
   include: _build-env-single.yml
   vars:
+    deploy_type: uat1
+
     environment_name: uat1-rds
     rds_security_group: sg-a50010c1
     rds_subnet_group: "uat1 rds subnet group"
@@ -20,4 +22,3 @@
     group_id: "sg-2b00104f,sg-61001005"
     instance_type_single: "m4.xlarge"
     vpc_subnet_id: "subnet-0ca54b68"
-    deploy_type: uat1
