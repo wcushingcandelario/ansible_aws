@@ -1,0 +1,49 @@
+---
+
+- name: Create RDS
+  connection: local
+  hosts: localhost
+  roles:
+    - create_rds
+  tags:
+    - rds
+
+- name: Build Mongo Cluster
+  include: _mongo-cluster-cloud.yml
+  remote_user: ec2-user
+  tags:
+    - mongo
+
+- name: Find AMI ID
+  hosts: localhost
+  connection: local
+  roles:
+    - findovcami
+  tags:
+    - asg
+    - find_ovc_ami
+
+- name: Add AMI ID to facts
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: "{{ ami_find.results[0].ami_id }}"
+      when: image_id is undefined
+  tags:
+    - asg
+    - find_ovc_ami
+
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Present new AMI ID
+      pause:
+        prompt: PreProd will now be launched with {{ image_id }}
+        seconds: 30
+
+- name: Create ELB and ASG
+  include: _asg_main.yml
+  tags:
+    - asg
