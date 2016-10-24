@@ -1,0 +1,13 @@
+[tag_role_webapp]
+[tag_role_mongodb]
+[tag_role_promo]
+
+
+[appserver:children]
+tag_role_webapp
+
+[mongodb:children]
+tag_role_mongodb
+
+[promoengine:children]
+tag_role_promo
