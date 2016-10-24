@@ -56,7 +56,11 @@ sed -i "/-Dorg.quartz.scheduler.instanceId=/c\-Dorg.quartz.scheduler.hostName=`h
 
 sed -i '/^org\.quartz\.scheduler\.rmi\.export=/ s/true/false/' /opt/ovc/Platform-Dynamic-Objects/config/quartz.properties
 
-sudo /sbin/service jetty restart
+sudo /sbin/service jetty stop
+killall jetty
+ps aux | grep jetty
+sudo /sbin/service jetty start
+
 sudo /sbin/service httpd restart
 
 aws s3 cp s3://ovc-userdata-scripts/${ENV}/auto-userdata.sh auto-userdata.sh

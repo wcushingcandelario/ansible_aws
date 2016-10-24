@@ -1,21 +1,5 @@
 ---
 
-#- name: This play will install the ami-builder and mongo cluster
-
-
-- name: Create Utility RDS
-  connection: local
-  hosts: localhost
-  roles:
-    - create_rds
-  tags:
-    - rds_util
-  vars:
-    environment_name: util-rds
-    rds_security_group: sg-5bbc1f3c
-    rds_subnet_group: "uat1 rds subnet group"
-    multirdszone: no
-
 - name: Create RDS
   connection: local
   hosts: localhost
@@ -30,7 +14,7 @@
     multirdszone: no
 
 - name: Build Mongo Cluster
-  include: mongo-cluster-cloud.yml
+  include: _mongo-cluster-cloud.yml
   remote_user: ec2-user
   tags:
     - mongo
@@ -43,30 +27,6 @@
    deploy_type: "preprod"
    env: "{{ deploy_type }}.ovchosting.co.uk"
    cluster_name: "{{ deploy_type }}_cluster"
-
-- name: Run ami-baker
-  include: ami-baker.yml
-  tags:
-    - bake_ami
-  vars:
-    ansible_ssh_private_key_file: "~/.ssh/ovc-tp-np.pem"
-    region: eu-west-1
-    key: ovc-tp-np
-    ovc_security_groups: sg-71bc1f16
-    vpc_subnet_public: subnet-cae8ffbd
-    instance_type: m4.large
-    deploy_type: "preprod"
-    deploy_pos: "{{ deploy_type }}-POS"
-    deploy_dash: "{{ deploy_type }}-Dash"
-    asg_name: "{{ deploy_type }}_autoscale"
-    jetty_user_login: jetty
-    jetty_dir: /opt/jetty
-    ovc_server_user_dir: /opt/ovc
-    webserver_user: www-data
-    s3install: true
-    asg_desired_capacity: 2
-    ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
-    ovcNOSQLDB_host: mongodb-preprod01.ovchosting.co.uk
 
 - name: Find AMI ID
   hosts: localhost
@@ -91,8 +51,16 @@
     - asg
     - find_ovc_ami
 
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Present new AMI ID
+      pause:
+        prompt: PreProd will now be launched with {{ image_id }}
+        seconds: 30
+
 - name: Create ELB and ASG
-  include: asg_main.yml
+  include: _asg_main.yml
   tags:
     - asg
   vars:

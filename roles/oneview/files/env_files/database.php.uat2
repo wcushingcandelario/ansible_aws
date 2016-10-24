@@ -1,0 +1,17 @@
+<?php
+class DATABASE_CONFIG {
+
+        public $default = array(
+                
+		'datasource' => 'Database/Mysql',
+                'persistent' => false,
+		'host' => 'uat2-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com',
+		'login' => 'root',
+		'password' => '0n3v13w123',
+		'database' => 'xdb',
+		'prefix' => '',
+	);
+
+
+}
+
