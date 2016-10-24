@@ -1,0 +1,33 @@
+---
+
+- hosts: tag_environment_prod:&tag_role_webapp
+  remote_user: ec2-user
+  become: yes
+  become_user: jetty
+  tasks:
+    - name: Run devAll
+      run_once: yes
+      command: 'java -cp "/opt/ovc/lib/ovc-tools.jar":"/opt/ovc/lib/ext/*" com.oneview.tools.posmclient.UnifiedImporterAndSyncUpdater "/opt/ovc/Platform-Dynamic-Objects/config/tools.properties" "/opt/ovc/Base-Location-Import-Files/ovc-all-OvcStore" "/opt/ovc/Application-Dynamic-Objects" devAll'
+      async: 1200
+      poll: 30
+      tags:
+        - tagged
+        - devAll
+
+    - name: Run eComRefresh
+      run_once: yes
+      command: /opt/ovc/bin/eComRefresh.sh
+      async: 7200
+      poll: 60
+      tags:
+        - tagged
+        - eComRefresh
+
+    - name: Run initStaffDiscount
+      run_once: yes
+      command: /opt/ovc/bin/initStaffDiscount.sh
+      async: 1200
+      poll: 30
+      tags:
+        - tagged
+        - staffData
