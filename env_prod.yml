@@ -1,69 +1,24 @@
 ---
 
-- name: Create RDS
-  connection: local
-  hosts: localhost
-  roles:
-    - create_rds
-  tags:
-    - rds
+- name: Build Prod
+  include: _build-env-clustered.yml
   vars:
     environment_name: prod-rds
     rds_security_group: sg-be2081d9
     rds_subnet_group: prod-rds
     multirdszone: yes
 
-- name: Build Mongo Cluster
-  include: _mongo-cluster-cloud.yml
-  remote_user: ec2-user
-  tags:
-    - mongo
-  vars:
-   region: eu-west-1
-   key: ovc-tp-prod
-   ovc_security_groups: sg-be2081d9
-   vpc_subnet_public: subnet-1d719879
-   instance_type: m4.large
-   deploy_type: "prod"
-   env: "{{ deploy_type }}.ovchosting.co.uk"
-   cluster_name: "{{ deploy_type }}_cluster"
+    region: eu-west-1
+    key: ovc-tp-prod
+    ovc_security_groups: sg-be2081d9
+    vpc_subnet_public: subnet-1d719879
+    instance_type: m4.large
+    deploy_type: "prod"
+    env: "{{ deploy_type }}.ovchosting.co.uk"
+    cluster_name: "{{ deploy_type }}_cluster"
 
-- name: Find AMI ID
-  hosts: localhost
-  connection: local
-  roles:
-    - findovcami
-  tags:
-    - asg
-    - find_ovc_ami
-  vars:
-   region: eu-west-1
+    region: eu-west-1
 
-- name: Add AMI ID to facts
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Use set_fact to AMI
-      set_fact:
-        image_id: "{{ ami_find.results[0].ami_id }}"
-      when: image_id is undefined
-  tags:
-    - asg
-    - find_ovc_ami
-
-- hosts: localhost
-  connection: local
-  tasks:
-    - name: Present new AMI ID
-      pause:
-        prompt: Prod will now be launched with {{ image_id }}
-        seconds: 30
-
-- name: Create ELB and ASG
-  include: _asg_main.yml
-  tags:
-    - asg
-  vars:
     IAMROLE: "ProdAppServer"
     region: eu-west-1
     key: ovc-tp-prod
