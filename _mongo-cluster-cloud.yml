@@ -20,10 +20,10 @@
     - name: Add new Route53 entry
       route53:
         command: "create"
-        zone: "ovchosting.co.uk"
+        zone: "{{ dns_domain }}"
         hosted_zone_id: "Z3A98VA7X0SL0T"
         private_zone: "true"
-        record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
+        record: "mongodb-{{ deploy_type }}0{{ count }}.{{ dns_domain }}"
         type: "A"
         ttl: 60
         value: "{{ groups.just_created[0] }}"
@@ -49,10 +49,10 @@
     - name: Add new Route53 entry
       route53:
         command: "create"
-        zone: "ovchosting.co.uk"
+        zone: "{{ dns_domain }}"
         hosted_zone_id: "Z3A98VA7X0SL0T"
         private_zone: "true"
-        record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
+        record: "mongodb-{{ deploy_type }}0{{ count }}.{{ dns_domain }}"
         type: "A"
         ttl: 60
         value: "{{ groups.just_created[1] }}"
@@ -79,10 +79,10 @@
     - name: Add new Route53 entry
       route53:
         command: "create"
-        zone: "ovchosting.co.uk"
+        zone: "{{ dns_domain }}"
         hosted_zone_id: "Z3A98VA7X0SL0T"
         private_zone: "true"
-        record: "mongodb-{{ deploy_type }}0{{ count }}.ovchosting.co.uk"
+        record: "mongodb-{{ deploy_type }}0{{ count }}.{{ dns_domain }}"
         type: "A"
         ttl: 60
         value: "{{ groups.just_created[2] }}"

@@ -13,7 +13,7 @@
   connection: local
   tasks:
     - pause:
-        prompt: Please confirm that mongodb-{{ deploy_type }}.ovchosting.co.uk is available, press enter when ready.
+        prompt: Please confirm that mongodb-{{ deploy_type }}.{{ dns_domain }} is available, press enter when ready.
   tags:
     - mongo
 
@@ -66,21 +66,21 @@
         wait_timeout: 500
         exact_count: 1
         count_tag:
-          Name: "{{ deploy_type }}.ovchosting.co.uk"
+          Name: "{{ deploy_type }}.{{ dns_domain }}"
           role: webapp
           environment: "{{ deploy_type }}"
         instance_tags:
-          Name: "{{ deploy_type }}.ovchosting.co.uk"
+          Name: "{{ deploy_type }}.{{ dns_domain }}"
           role: webapp
           environment: "{{ deploy_type }}"
       register: ami_instance
     - name: Add new Route53 entry
       route53:
         command: "create"
-        zone: "ovchosting.co.uk"
+        zone: "{{ dns_domain }}"
         hosted_zone_id: "Z3A98VA7X0SL0T"
         private_zone: "true"
-        record: "{{ deploy_type }}.ovchosting.co.uk"
+        record: "{{ deploy_type }}.{{ dns_domain }}"
         type: "A"
         ttl: 300
         value: "{{ ami_instance.instances[0].private_ip }}"

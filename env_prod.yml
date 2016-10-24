@@ -15,7 +15,7 @@
     mongo_security_groups: sg-be2081d9
     vpc_subnet_public: subnet-1d719879
     mongo_instance_type: m4.large
-    env: "{{ deploy_type }}.ovchosting.co.uk"
+    env: "{{ deploy_type }}.{{ dns_domain }}"
     cluster_name: "{{ deploy_type }}_cluster"
 
     IAMROLE: "ProdAppServer"
