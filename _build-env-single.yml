@@ -54,9 +54,9 @@
       ec2:
         assign_public_ip: yes
         region: "{{ region }}"
-        key_name: "{{ key_name }}"
+        key_name: "{{ key }}"
         group_id: "{{ group_id }}"
-        instance_type: "{{ instance_type }}"
+        instance_type: "{{ instance_type_single }}"
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         image: "{{ image_id }}"
         instance_profile_name: NonProdAppServer

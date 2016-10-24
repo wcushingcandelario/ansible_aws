@@ -9,7 +9,7 @@
     multirdszone: no
 
     region: eu-west-1
-    key: ovc-tp-preprod
+    key: ovc-tp-np
     ovc_security_groups: sg-be19edd9
     vpc_subnet_public: subnet-9abe50fe
     instance_type: m4.micro
@@ -17,11 +17,7 @@
     env: "{{ deploy_type }}.ovchosting.co.uk"
     cluster_name: "{{ deploy_type }}_cluster"
 
-    region: eu-west-1
-
-    region: "eu-west-1"
-    key_name: "ovc-tp-np"
     group_id: "sg-4f04f028,sg-bd1aeeda"
-    instance_type: "m4.xlarge"
+    instance_type_single: "m4.xlarge"
     vpc_subnet_id: "subnet-69a24c0d"
     deploy_type: uat2
