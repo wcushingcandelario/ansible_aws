@@ -129,11 +129,6 @@
     - { line: '--module=logging'}
     - { line: '-Dovc.isBatchNode=true'}
     - { line: '-Dovc.tempfiles.cleanup=true'}
-    - { line: '-Xms4G'}
-    - { line: '-Xmx8G'}
-    - { line: '-XX:+UseG1GC'}
-    - { line: '-XX:+HeapDumpOnOutOfMemoryError'}
-    - { line: '-XX:+UseStringDeduplication'}
     - { line: '-Dorg.quartz.scheduler.hostName={{ inventory_hostname | default("localhost") }}'}
   become: yes
   become_user: root

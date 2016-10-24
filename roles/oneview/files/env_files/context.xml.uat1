@@ -38,7 +38,7 @@
 		<Arg>
 
 			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-				<Set name="URL">jdbc:mysql://prod-mysql.ovchosting.co.uk:3306/xdb</Set>
+				<Set name="URL">jdbc:mysql://uat1-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com:3306/xdb</Set>
 				<Set name="user">root</Set>
 				<Set name="password">
 					<Ref refid="password"/>
@@ -70,7 +70,7 @@
 		<Arg>
 			<New class="org.skyscreamer.nevado.jms.destination.NevadoQueue">
 				<Arg>destination1</Arg>
-				<Set name="queueUrl">https://sqs.eu-west-1.amazonaws.com/063725663692/Prod-Queue</Set>
+				<Set name="queueUrl">https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1</Set>
 			</New>
 		</Arg>
 	</New>

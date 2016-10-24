@@ -1,0 +1,31 @@
+---
+
+- name: Build PreProdTest
+  include: _build-env-clustered.yml
+  vars:
+    deploy_type: preprodtest
+
+    environment_name: preprodtest-rds
+    rds_security_group: sg-5bbc1f3c
+    rds_subnet_group: pre-prod-rds
+    multirdszone: no
+
+    region: eu-west-1
+    key: ovc-tp-np
+    mongo_security_groups: sg-5bbc1f3c
+    vpc_subnet_public: subnet-0a75a06e
+    mongo_instance_type: m4.large
+    env: "{{ deploy_type }}.ovchosting.co.uk"
+    cluster_name: "{{ deploy_type }}_cluster"
+
+    IAMROLE: "NonProdAppServer"
+    ovc_security_groups: ['sg-71bc1f16']
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+    asg_name: "{{ deploy_type }}_autoscale"
+    new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
+    min_size: 2
+    max_size: 5
+    instance_type_asg: m4.xlarge
+    security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
+    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
