@@ -66,13 +66,13 @@
         wait_timeout: 500
         exact_count: 1
         count_tag:
-          Name: {{ deploy_type }}.ovchosting.co.uk
+          Name: "{{ deploy_type }}.ovchosting.co.uk"
           role: webapp
-          environment: {{ deploy_type }}
+          environment: "{{ deploy_type }}"
         instance_tags:
-          Name: {{ deploy_type }}.ovchosting.co.uk
+          Name: "{{ deploy_type }}.ovchosting.co.uk"
           role: webapp
-          environment: {{ deploy_type }}
+          environment: "{{ deploy_type }}"
       register: ami_instance
     - name: Add new Route53 entry
       route53:
