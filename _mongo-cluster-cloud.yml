@@ -21,7 +21,7 @@
       route53:
         command: "create"
         zone: "{{ dns_domain }}"
-        hosted_zone_id: "Z3A98VA7X0SL0T"
+        hosted_zone_id: "{{ dns_zone_id }}"
         private_zone: "true"
         record: "mongodb-{{ deploy_type }}0{{ count }}.{{ dns_domain }}"
         type: "A"
@@ -50,7 +50,7 @@
       route53:
         command: "create"
         zone: "{{ dns_domain }}"
-        hosted_zone_id: "Z3A98VA7X0SL0T"
+        hosted_zone_id: "{{ dns_zone_id }}"
         private_zone: "true"
         record: "mongodb-{{ deploy_type }}0{{ count }}.{{ dns_domain }}"
         type: "A"
@@ -80,7 +80,7 @@
       route53:
         command: "create"
         zone: "{{ dns_domain }}"
-        hosted_zone_id: "Z3A98VA7X0SL0T"
+        hosted_zone_id: "{{ dns_zone_id }}"
         private_zone: "true"
         record: "mongodb-{{ deploy_type }}0{{ count }}.{{ dns_domain }}"
         type: "A"
