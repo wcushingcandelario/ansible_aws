@@ -13,6 +13,9 @@
   remote_user: ec2-user
   tags:
     - mongo
+  vars:
+    ovc_security_groups: "{{ ovc_security_groups }}"
+    instance_type: "{{ mongo_instance_type }}"
 
 - name: Find AMI ID
   hosts: localhost
