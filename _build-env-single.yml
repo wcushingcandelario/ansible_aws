@@ -86,7 +86,7 @@
         record: "{{ deploy_type }}.ovchosting.co.uk"
         type: "A"
         ttl: 300
-        value: "{{ ami_instance.instances[0].private_ip }}"
+        value: "{{ ami_instance.tagged_instances[0].private_ip }}"
         overwrite: "yes"
       tags:
         - dns
