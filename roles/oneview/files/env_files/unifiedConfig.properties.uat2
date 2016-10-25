@@ -66,8 +66,8 @@ ovcNOSQLDB.port=27017
 ovcNOSQLDB.socketTimeout=5000
 ovcNOSQLDB.username=root
 ovcServer.host=uat2.ovchosting.co.uk
-ovcServer.port=8080
-ovcServer.scheme=http
+ovcServer.port=443
+ovcServer.scheme=https
 password=S9beBCmJbdLsitMzzpZ7qQ\=\=
 products.import.pageSize=1500
 scope=extended
