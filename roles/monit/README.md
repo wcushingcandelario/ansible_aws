@@ -19,6 +19,8 @@ An Ansible ready host.
 Role Variables
 --------------
 
+* `slack_channel`: Slack channel to notify. Defaults to `development`.
+* `slack_webhook_url`: Slack webhook url tied to the channel above in `slack_channel`. If not set, no slack notifications will be used.
 * `monit_cycle`: Time between checks in seconds. Defaults to `120`.
 * `monit_log_destination`: Where the log will be written. Can be a path to a file or "syslog", which will write to syslog daemon. Defaults to `/var/log/monit.log`.
 * `monit_state_file`: State file path. Defaults to `/var/lib/monit/state`.
