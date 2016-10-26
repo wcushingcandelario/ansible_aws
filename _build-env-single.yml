@@ -77,7 +77,7 @@
     - name: Display AMI Instance Details
       debug:
         msg="{{ami_instance}}"
-    - name: Add new Route53 entry
+    - name: Add or Update Route53 entry
       route53:
         command: "create"
         zone: "ovchosting.co.uk"
