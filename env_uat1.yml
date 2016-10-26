@@ -15,7 +15,6 @@
     ovc_security_groups: sg-a50010c1
     vpc_subnet_public: subnet-b3bf51d7
     instance_type: m4.micro
-    deploy_type: "uat1"
     env: "{{ deploy_type }}.ovchosting.co.uk"
     cluster_name: "{{ deploy_type }}_cluster"
 

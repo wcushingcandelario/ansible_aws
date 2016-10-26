@@ -60,14 +60,14 @@ ovcNOSQLDB.connectTimeout=5000
 ovcNOSQLDB.connectionsPerHost=20
 ovcNOSQLDB.db=xdb
 ovcNOSQLDB.encrypted.password=pS6Uu4KU3B9G9FRg5IlnBg\=\=
-ovcNOSQLDB.host=mongodb-uat1.ovchosting.co.uk
+ovcNOSQLDB.host=mongodb-uat2.ovchosting.co.uk
 ovcNOSQLDB.maxWaitTime=5000
 ovcNOSQLDB.port=27017
 ovcNOSQLDB.socketTimeout=5000
 ovcNOSQLDB.username=root
 ovcServer.host=uat2.ovchosting.co.uk
-ovcServer.port=8080
-ovcServer.scheme=http
+ovcServer.port=443
+ovcServer.scheme=https
 password=S9beBCmJbdLsitMzzpZ7qQ\=\=
 products.import.pageSize=1500
 scope=extended
