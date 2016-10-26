@@ -9,12 +9,12 @@
   - name: create launch config
     local_action:
       module: ec2_lc
-      name: "{{ new_lc_name }}"
+      name: "{{ new_lc_name }}-mongo"
       image_id: "{{ image_id }}"
       key_name: "{{ key }}"
       region: "{{ region }}"
-      security_groups: "{{ ovc_security_groups }}"
-      instance_type: "{{ instance_type_asg }}"
+      security_groups: "{{ mongo_security_groups }}"
+      instance_type: "{{ mongo_instance_type }}"
       instance_monitoring: yes
       assign_public_ip: yes
       instance_profile_name: "{{ IAMROLE }}"
@@ -37,7 +37,7 @@
     local_action:
       module: ec2_asg
       name: "{{ asg_name }}"
-      launch_config_name: "{{ new_lc_name }}"
+      launch_config_name: "{{ new_lc_name }}-mongo"
       vpc_zone_identifier: "{{ elbsubnets }}"
       load_balancers: "{{ deploy_type }}-mongo"
       replace_all_instances: yes
