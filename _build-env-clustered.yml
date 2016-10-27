@@ -12,7 +12,18 @@
   include: _mongo-cluster-cloud.yml
   remote_user: ec2-user
   tags:
-    - mongo
+    - mongo-cluster-cloud
+    - tagged
+  vars:
+    ovc_security_groups: "{{ ovc_security_groups }}"
+    instance_type: "{{ mongo_instance_type }}"
+
+- name: Build Mongo Cluster
+  include: _mongo-create-auto.yml
+  remote_user: ec2-user
+  tags:
+    - mongo-asg
+    - tagged
   vars:
     ovc_security_groups: "{{ ovc_security_groups }}"
     instance_type: "{{ mongo_instance_type }}"
