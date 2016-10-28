@@ -48,5 +48,10 @@
 
 - name: Create ELB and ASG
   include: _asg_main.yml
+  vars:
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+    asg_name: "{{ deploy_type }}_autoscale"
+    new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
   tags:
     - asg
