@@ -17,7 +17,6 @@
     # Mongo
     mongo_instance_type: m4.micro
     mongo_security_groups: FIXME
-    cluster_name: "{{ deploy_type }}_cluster"
 
     # AMI/ELB/ASG
     ovc_security_groups: sg-be19edd9
