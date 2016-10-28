@@ -15,8 +15,8 @@
     multirdszone: no
 
     # Mongo
-    mongo_security_groups: sg-5bbc1f3c
     mongo_instance_type: m4.large
+    mongo_security_groups: sg-5bbc1f3c
 
     # AMI/ELB/ASG
     ovc_security_groups: ['sg-71bc1f16']
