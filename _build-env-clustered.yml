@@ -9,15 +9,11 @@
     - rds
 
 - name: Build Mongo Cluster
-  include: _mongo-cluster-cloud.yml
+  include: _mongo-create-auto.yml
   remote_user: ec2-user
   tags:
     - mongo
-  vars:
-    ovc_security_groups: "{{ ovc_security_groups }}"
-    instance_type: "{{ mongo_instance_type }}"
-    env: "{{ deploy_type }}.ovchosting.co.uk"
-    cluster_name: "{{ deploy_type }}_cluster"
+    - tagged
 
 - name: Find AMI ID
   hosts: localhost

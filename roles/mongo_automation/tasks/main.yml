@@ -28,5 +28,5 @@
 - name: Enable and service
   service:
     name: mongodb-mms-automation-agent
-    state: started
+    state: stopped
     enabled: yes
