@@ -1,0 +1,87 @@
+- name: Build temporary instance
+  hosts: localhost
+  remote_user: ec2-user
+  connection: local
+  gather_facts: False
+
+  roles:
+  - find_ami
+
+  tasks:
+  - name: launch temporary instance
+    local_action:
+      module: ec2
+      assign_public_ip: yes
+      region: "{{ region }}"
+      key_name: "{{ key }}"
+      group_id: "{{ ovc_security_groups }}"
+      instance_type: "{{ instance_type }}"
+      vpc_subnet_id: "{{ vpc_subnet_public }}"
+      image: "{{ ami_find.results[0].ami_id }}"
+      wait: yes
+      instance_profile_name: UtilityServer
+      exact_count: 1
+      count_tag:
+        role: ami_builder
+      instance_tags:
+        role: ami_builder
+        Name: ami_builder
+    register: ami_instance
+
+  - name: wait for ssh to come up
+    wait_for: host={{ item.private_ip }} delay=90 port=22 state=started timeout=640
+    with_items: ami_instance.instances
+
+  - name: Add host to group just_created
+    add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_created
+
+  - name: Add host to group just_baked
+    add_host: name={{ ami_instance.tagged_instances.0.private_ip }} groups=just_baked
+
+- hosts: just_baked
+  remote_user: ec2-user
+  become: yes
+  become_user: root
+
+  roles:
+    - common
+    - mongo_automation
+    - Datadog.datadog
+  vars:
+    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
+
+- hosts: just_baked
+  remote_user: ec2-user
+  become: yes
+  become_user: root
+
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: bundle ami
+    local_action:
+      module: ec2_ami
+      instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+      region: "{{ region }}"
+      state: present
+      description: This was provisioned {{ ansible_date_time.iso8601 }}
+      name: mongo-{{ ansible_date_time.epoch }}
+      wait: yes
+    register: amioutput
+
+  - name: terminate temporary instance
+    local_action:
+      module: ec2
+      state: absent
+      region: "{{ region }}"
+      instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+    tags:
+      - terminate_ami
+
+  - name: debug
+    debug: var=amioutput
+
+  - name: Set image_id
+    set_fact:
+      mongo_image_id: "{{ amioutput.image_id }}"

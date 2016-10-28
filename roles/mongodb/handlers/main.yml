@@ -1,8 +1,0 @@
----
-
-- name: Restart Mongod
-  service:
-    name=mongod
-    state=restarted
-  become: yes
-  become_user: root
