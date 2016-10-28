@@ -3,21 +3,28 @@
 - name: Build UAT2
   include: _build-env-single.yml
   vars:
+    # Common
     deploy_type: uat2
+    region: eu-west-1
+    key: ovc-tp-np
 
+    # DB
     environment_name: uat2-rds
     rds_security_group: sg-be19edd9
     rds_subnet_group: pre-prod-rds
     multirdszone: no
 
-    region: eu-west-1
-    key: ovc-tp-np
+    # Mongo
+    mongo_instance_type: m4.micro
+    mongo_security_groups: FIXME
+
+    # AMI/ELB/ASG
     ovc_security_groups: sg-be19edd9
     vpc_subnet_public: subnet-9abe50fe
-    instance_type: m4.micro
-    env: "{{ deploy_type }}.ovchosting.co.uk"
-    cluster_name: "{{ deploy_type }}_cluster"
+    IAMROLE: "NonProdAppServer"
+    instance_type_single: "m4.xlarge"
 
     group_id: "sg-4f04f028,sg-bd1aeeda"
-    instance_type_single: "m4.xlarge"
     vpc_subnet_id: "subnet-69a24c0d"
+    min_size: 1
+    max_size: 1
