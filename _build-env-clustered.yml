@@ -16,7 +16,7 @@
   vars:
     ovc_security_groups: "{{ ovc_security_groups }}"
     instance_type: "{{ mongo_instance_type }}"
-    env: "{{ deploy_type }}.ovchosting.co.uk"
+    env: "{{ deploy_type }}.{{ dns_domain }}"
     cluster_name: "{{ deploy_type }}_cluster"
 
 - name: Find AMI ID

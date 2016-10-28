@@ -15,7 +15,7 @@
     - pause:
         prompt: Please confirm that mongodb-{{ deploy_type }}.{{ dns_domain }} is available, press enter when ready.
   vars:
-    env: "{{ deploy_type }}.ovchosting.co.uk"
+    env: "{{ deploy_type }}.{{ dns_domain }}"
     cluster_name: "{{ deploy_type }}_cluster"
   tags:
     - mongo
