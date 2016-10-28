@@ -1,7 +1,23 @@
 ---
+- name: See if monit is already installed
+  stat:
+    path: /usr/bin/monit
+  register: monit_stat
+
+- name: See if monit service is already configured
+  stat:
+    path: /etc/init.d/monit
+  register: monit_stat_service
+
+- name: Stop monit
+  service:
+    name: monit
+    state: stopped
+  when: monit_stat_service.stat.exists
+
 - name: Create directory
   file:
-    path: /opt/monit
+    path: "{{ monit_home }}"
     state: directory
     owner: root
     group: root
@@ -11,27 +27,21 @@
 - name: Unzip monit
   unarchive:
     copy: yes
-    src: "monit-5.19.0-linux-x64.tar.gz"
-    dest: "/opt/monit/"
+    src: "monit-{{ monit_version }}-linux-x64.tar.gz"
+    dest: "{{ monit_home }}/"
     owner: root
     group: root
   become: yes
   become_user: root
 
-- name: Stat monit bin
-  stat:
-    path: /usr/bin/monit
-  register: monit_stat
-
 - name: Copy monit to /usr/bin
-  command: cp /opt/monit/monit-5.19.0/bin/monit /usr/bin/monit
+  command: "cp {{ monit_home }}/monit-{{ monit_version }}/bin/monit /usr/bin/monit"
   become: yes
   become_user: root
-  when: not monit_stat.stat.exists
 
 # - name: Create symlink
 #   file:
-#     src: "/opt/monit/monit-5.19.0/bin/monit"
+#     src: "{{ monit_home }}/monit-5.19.0/bin/monit"
 #     dest: "/usr/bin/monit"
 #     owner: root
 #     group: root
@@ -43,6 +53,7 @@
   template:
     src: monit.j2
     dest: /etc/init.d/monit
+    mode: 0755
     owner: root
     group: root
   become: yes

@@ -1,0 +1,18 @@
+#!/bin/sh
+REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
+INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+ENV=$(aws ec2 describe-tags --filters "Name=resource-id,Values=${INSTANCE_ID}" "Name=key,Values=environment" --region=${REGION} --output=text | cut -f5)
+export ENV=${ENV}
+
+/usr/bin/curl \
+    -X POST \
+    -s \
+    --data-urlencode "payload={ \
+        \"channel\": \"#{{ slack_channel | default('devops-lobby') }}\", \
+        \"username\": \"Monit\", \
+        \"pretext\": \"${ENV} - `hostname` | $MONIT_DATE\", \
+        \"color\": \"danger\", \
+        \"icon_emoji\": \":robot_face:\", \
+        \"text\": \"$MONIT_SERVICE - $MONIT_DESCRIPTION\" \
+    }" \
+    {{ slack_webhook_url | default('')}}

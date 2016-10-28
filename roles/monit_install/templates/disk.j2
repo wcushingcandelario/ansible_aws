@@ -1,2 +1,5 @@
 check device diskspace with path /dev/xvda1
     if SPACE usage > 80% then exec /sbin/reboot
+{% if slack_webhook_url is defined %}
+    if SPACE usage > 70% then exec "{{ monit_home }}/slackNotify.sh" else if succeeded then exec "{{ monit_home }}/slackNotify.sh"
+{% endif %}

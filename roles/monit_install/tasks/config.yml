@@ -35,3 +35,12 @@
     mode: 0644
   notify: restart monit
   when: monit_mail_enabled
+
+- name: config - Setup Slack alerts
+  template:
+    src: slackNotify.sh.j2
+    dest: "{{ monit_home }}/slackNotify.sh"
+    owner: root
+    group: root
+    mode: 0755
+  when: slack_webhook_url is defined

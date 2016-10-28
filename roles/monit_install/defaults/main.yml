@@ -5,7 +5,7 @@ monit_state_file: "{{ monit_lib_folder }}/state"
 monit_id_file: "{{ monit_lib_folder }}/id"
 
 monit_services: []
-monit_service_delete_unlisted: true
+monit_service_delete_unlisted: false
 
 monit_mail_enabled: false
 monit_mailserver_host: localhost
@@ -24,3 +24,7 @@ monit_apache_rules:
 monit_memcached_rules:
  - "if failed host 127.0.0.1 port 11211 protocol MEMCACHE then restart"
  - "if cpu > 80% for 3 cycles then alert"
+
+monit_version: 5.20.0
+monit_home: /opt/monit
+slack_webhook_url: "https://hooks.slack.com/services/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"

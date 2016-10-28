@@ -1,10 +1,16 @@
 check process jetty with pidfile "/var/run/jetty.pid"
 start program = "/sbin/service jetty start"
 stop program = "/sbin/service jetty stop"
+{% if slack_webhook_url is defined %}
+    if changed pid then exec "{{ monit_home }}/slackNotify.sh"
+{% endif %}
 
 check host pos_server_health_check with address localhost
 start program = "/sbin/service jetty start"
 stop program = "/sbin/service jetty stop"
+{% if slack_webhook_url is defined %}
+   if failed url http://localhost:8080/json/posservices/health for 2 cycles then exec "{{ monit_home }}/slackNotify.sh" else if succeeded then exec "{{ monit_home }}/slackNotify.sh"
+{% endif %}
    if failed url http://localhost:8080/json/posservices/health for 2 cycles then restart
    if 5 restarts within 15 cycles then timeout
 
