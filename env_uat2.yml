@@ -26,3 +26,5 @@
 
     group_id: "sg-4f04f028,sg-bd1aeeda"
     vpc_subnet_id: "subnet-69a24c0d"
+    min_size: 1
+    max_size: 1

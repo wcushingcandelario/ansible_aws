@@ -26,3 +26,5 @@
 
     group_id: "sg-2b00104f,sg-61001005"
     vpc_subnet_id: "subnet-0ca54b68"
+    min_size: 1
+    max_size: 1
