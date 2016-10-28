@@ -14,7 +14,7 @@
     key: ovc-tp-np
     ovc_security_groups: sg-be19edd9
     vpc_subnet_public: subnet-9abe50fe
-    instance_type: m4.micro
+    mongo_instance_type: m4.micro
     env: "{{ deploy_type }}.ovchosting.co.uk"
     cluster_name: "{{ deploy_type }}_cluster"
 
