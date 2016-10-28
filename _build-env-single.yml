@@ -14,6 +14,8 @@
   tasks:
     - pause:
         prompt: Please confirm that mongodb-{{ deploy_type }}.ovchosting.co.uk is available, press enter when ready.
+  vars:
+    env: "{{ deploy_type }}.ovchosting.co.uk"
   tags:
     - mongo
 

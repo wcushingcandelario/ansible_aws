@@ -16,6 +16,7 @@
   vars:
     ovc_security_groups: "{{ ovc_security_groups }}"
     instance_type: "{{ mongo_instance_type }}"
+    env: "{{ deploy_type }}.ovchosting.co.uk"
 
 - name: Find AMI ID
   hosts: localhost
