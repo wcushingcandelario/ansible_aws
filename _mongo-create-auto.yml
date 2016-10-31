@@ -57,13 +57,6 @@
   - name: debug auto scaling update
     debug: "var=asglaunch"
 
-  - name: Create a new ELB for Mongo
-    hosts: localhost
-    connection: local
-    gather_facts: False
-
-
-    tasks:
     - name: Create ELB Mongo
       local_action:
         module: ec2_elb_lb
