@@ -76,5 +76,3 @@ sqs_queue_url: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
 
 sqs_access_key_id: test
 sqs_access_secret_id: testsecret
-
-s3_bucket: ovc-travisperkins-releases
