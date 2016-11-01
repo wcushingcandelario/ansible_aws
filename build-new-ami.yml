@@ -29,5 +29,5 @@
     ovc_server_user_dir: /opt/ovc
     webserver_user: www-data
     s3install: true
-    ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
+    ovcDB_host: utility-mysql.{{ dns_domain }}
     ovcNOSQLDB_host: mongodb-utility01.{{ dns_domain }}
