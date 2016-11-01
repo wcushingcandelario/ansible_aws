@@ -42,5 +42,5 @@
     dest: "{{ monit_home }}/slackNotify.sh"
     owner: root
     group: root
-    mode: 0755
+    mode: 0711
   when: slack_webhook_url is defined

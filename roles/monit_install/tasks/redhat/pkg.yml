@@ -4,6 +4,11 @@
     path: /usr/bin/monit
   register: monit_stat
 
+- name: See if monit is the correct version
+  stat:
+    path: "{{ monit_home }}/monit-{{ monit_version }}"
+  register: monit_stat_version
+
 - name: See if monit service is already configured
   stat:
     path: /etc/init.d/monit
@@ -33,21 +38,23 @@
     group: root
   become: yes
   become_user: root
+  when: not monit_stat_version.stat.exists
 
-- name: Copy monit to /usr/bin
-  command: "cp {{ monit_home }}/monit-{{ monit_version }}/bin/monit /usr/bin/monit"
-  become: yes
-  become_user: root
-
-# - name: Create symlink
-#   file:
-#     src: "{{ monit_home }}/monit-5.19.0/bin/monit"
-#     dest: "/usr/bin/monit"
-#     owner: root
-#     group: root
-#     state: link
+# - name: Copy monit to /usr/bin
+#   command: "cp {{ monit_home }}/monit-{{ monit_version }}/bin/monit /usr/bin/monit"
 #   become: yes
 #   become_user: root
+  # when: not monit_stat_version.stat.exists
+
+- name: Create symlink
+  file:
+    src: "{{ monit_home }}/monit-{{ monit_version }}/bin/monit"
+    dest: "/usr/bin/monit"
+    owner: root
+    group: root
+    state: link
+  become: yes
+  become_user: root
 
 - name: Create init.d
   template:
@@ -58,3 +65,4 @@
     group: root
   become: yes
   become_user: root
+  when: not monit_stat_version.stat.exists

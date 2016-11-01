@@ -8,7 +8,6 @@
 # description: Utility for monitoring services on a Unix system
 #
 # processname: monit
-# config: /etc/monit.conf
 # pidfile: /var/run/monit.pid
 # Short-Description: Monit is a system monitor
 
@@ -16,12 +15,10 @@
 . /etc/init.d/functions
 
 ### Default variables
-CONFIG="/etc/monit.conf"
 prog="monit"
 
 # Check if requirements are met
 [ -x /usr/bin/monit ] || exit 1
-[ -r "$CONFIG" ] || exit 1
 
 RETVAL=0
 
@@ -50,7 +47,7 @@ restart() {
 
 reload() {
 	echo -n $"Reloading $prog: "
-	monit -c "$CONFIG" reload
+	monit reload
 	RETVAL=$?
 	echo
 	return $RETVAL
