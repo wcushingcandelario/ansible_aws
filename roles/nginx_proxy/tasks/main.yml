@@ -17,6 +17,7 @@
   shell: cat /etc/ssl/certs/6eb20afcb39167a3.crt /etc/ssl/certs/gd_bundle-g2-g1.crt > /etc/ssl/certs/6eb20afcb39167a3-chained.crt
   become: yes
   become_user: root
+  when: not skip_ssl
 
 - name: Copy in the new NGINX configuration
   copy:

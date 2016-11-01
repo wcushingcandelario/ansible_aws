@@ -29,6 +29,7 @@
   become_user: root
 
 - include: ssl.yml
+  when: not skip_ssl
 
 - stat:
     path: "{{ jetty_src_dir }}/jetty"
