@@ -9,8 +9,8 @@
     - rds_util
   vars:
     environment_name: util-rds
-    rds_security_group: {{ ami_baker_rds_security_group }}
-    rds_subnet_group: {{ ami_baker_rds_subnet_group }}
+    rds_security_group: "{{ ami_baker_rds_security_group }}"
+    rds_subnet_group: "{{ ami_baker_rds_subnet_group }}"
     multirdszone: no
 
 - name: Run ami-baker
@@ -18,16 +18,16 @@
   tags:
     - bake_ami
   vars:
-    ansible_ssh_private_key_file: {{ ansible_ssh_private_key_file }}
-    region: {{ region }}
-    key: {{ key }}
-    ovc_security_groups: {{ ami_baker_ovc_security_groups }}
-    vpc_subnet_public: {{ ami_baker_vpc_subnet_public }}
+    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
+    region: "{{ region }}"
+    key: "{{ key }}"
+    ovc_security_groups: "{{ ami_baker_ovc_security_groups }}"
+    vpc_subnet_public: "{{ ami_baker_vpc_subnet_public }}"
     instance_type: m4.large
     jetty_user_login: jetty
     jetty_dir: /opt/jetty
     ovc_server_user_dir: /opt/ovc
     webserver_user: www-data
     s3install: true
-    ovcDB_host: utility-mysql.{{ dns_domain }}
-    ovcNOSQLDB_host: mongodb-utility01.{{ dns_domain }}
+    ovcDB_host: "utility-mysql.{{ dns_domain }}"
+    ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
