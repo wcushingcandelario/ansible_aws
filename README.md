@@ -47,6 +47,10 @@ These playbooks are available to run from RunDeck.
 -   The .vault_pass.txt file MUST be accessible from your user account.
 -   You almost definitely want to skip importers.
 
+## Including variable data for TP hosted environments.
+
+You must include the TP variables -e @vars/tp.yml
+
 ## Building Whole Environments
 
 If you run a playbook in without any tags or  skip-tags then you will get an
@@ -90,17 +94,17 @@ take the latest OVC customised AMI.**
 
 You may want to skip Mongo if it is already installed. *(PreProd/Prod only)*
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,mongo
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,mongo
 
 ### Skip RDS
 
 You may want to skip RDS if it is already installed.
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
 
 ### Build with a specific image (AMI)
 
-    ansible-playbook preprod.yml -e "image_id=x ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
+    ansible-playbook preprod.yml -e "image_id=x ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' -e @vars/tp.yml deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
 
 ## Updating Specific Components
 
@@ -114,15 +118,15 @@ explanations below.
 
 #### ...build an AMI
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 #### ...build an AMI and test it
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,terminate_ami
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,terminate_ami
 
 ### ...deploy an AMI
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
 
 ### Building RDS
 
@@ -136,7 +140,7 @@ This command will install the production database RDS. Notably:
 -   This must be run during the rollout of a new environment
 
 
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=rds
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=rds
 
 ### Building MongoDB
 
@@ -147,7 +151,7 @@ If you do not skip this then Mongo will redeploy **each and every time** you
 run the playbook. You will get a new MongoDB cluster each time you run this
 playbook, it does not skip if there are servers already.
 
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=mongo
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=mongo
 
 ### Building a new AMI
 
@@ -155,12 +159,12 @@ This playbook will build a new AMI and terminate it. This is **relatively safe**
 to run without disrupting the network as long as you **only** bake the AMI and
 do not deploy it.
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 If you want to build an AMI but **not** terminate it so you can evaluate it
 before deploying then you can skip the termination of the AMI.
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
 
 ### Deploying a new AMI
 
@@ -169,21 +173,21 @@ using the playbook below. After running this playbook **AMI will be live** in
 the environment you have deployed it in. This is limited to the `asg` tag which
 just builds the Auto Scaling Group.
 
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=asg
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=asg
 
 ## AMI flow - Build and deploy to PreProd in two plays
 
 This is a simple play which will create a new AMI and deploy it to the ASG
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
 
 ## AMI flow - Build and deploy to PreProd in one play w/Mongo
 
 This is a simple play which will create a new AMI and deploy it to the ASG.
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,mongo
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,mongo
 
 ## AMI flow - non-production to Production
 
@@ -194,7 +198,7 @@ PreProd -> Production to ensure better testing.
 
 **Firstly build the AMI without terminating:**
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
 
 Once this is done you can SSH into the the environment and confirm that
 everything has been deployed correctly and is ready to be rolled out into
@@ -202,7 +206,7 @@ environments.
 
 **Deploy the AMI into UAT1 (or UAT2):**
 
-    ansible-playbook uat1.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
+    ansible-playbook uat1.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
 
 The AMI is now rolled out into UAT1/UAT2 and can be tested to confirm it is
 functional. This means specifically that the version of the AMI will work for
@@ -210,7 +214,7 @@ a non-clustered environment.
 
 **Deploy the AMI into PreProd:**
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
 
 The AMI is now rolled out into PreProd and can be tested to confirm it is
 functional. At this point we can roll it out into production knowing it has
@@ -218,7 +222,7 @@ worked for PreProd.
 
 **Deploy the AMI into Production:**
 
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
+    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
 
 Deployment complete!
 
