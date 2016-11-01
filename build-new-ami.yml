@@ -9,8 +9,8 @@
     - rds_util
   vars:
     environment_name: util-rds
-    rds_security_group: sg-5bbc1f3c
-    rds_subnet_group: "uat1 rds subnet group"
+    rds_security_group: {{ ami_baker_rds_security_group }}
+    rds_subnet_group: {{ ami_baker_rds_subnet_group }}
     multirdszone: no
 
 - name: Run ami-baker
