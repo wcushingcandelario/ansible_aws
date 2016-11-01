@@ -3,7 +3,7 @@
 - name: first make sure dest exists.
   file: dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config state=directory
 
-- name: Copy out the unifiedConfig files
+- name: Copy out the unifiedConfig/tools.properties files
   copy: src={{ item }} dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/ owner=jetty group=www-data
   with_fileglob:
     - env_files/unifiedConfig.properties.*
@@ -11,14 +11,14 @@
   become: yes
   become_user: root
 
-- name: Copy out the unifiedConfig files
+- name: Copy out the context.xml files
   template: src={{ item }} dest=/opt/jetty/webapps/ owner=jetty group=jetty
   with_fileglob:
     - env_files/context.xml.*
   become: yes
   become_user: root
 
-- name: Copy out the unifiedConfig files
+- name: Copy out the database/settings_var.php files
   copy: src={{ item }} dest=/var/www/html/ovcdashboard/app/Config/ owner=www-data group=www-data
   with_fileglob:
     - env_files/database.php.*
