@@ -106,10 +106,10 @@
     - name: Add new Route53 entry
       route53:
         command: "create"
-        zone: "ovchosting.co.uk"
-        hosted_zone_id: "Z3A98VA7X0SL0T"
+        zone: "{{ dns_domain }}"
+        hosted_zone_id: "{{ dns_zone_id }}"
         private_zone: "true"
-        record: "{{ deploy_type }}-mongo.ovchosting.co.uk"
+        record: "{{ deploy_type }}-mongo.{{ dns_domain }}"
         type: "CNAME"
         ttl: 300
         value: "{{ elb_facts.elbs.0.dns_name }}"
