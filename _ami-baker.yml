@@ -62,7 +62,7 @@
     - jetty
     - filebeat
     - oneview
-    - install_customizations_tp
+    - { role: install_customizations_tp, when: not skip_custom }
     - nginx_proxy
     - Datadog.datadog
     - datadog_config
