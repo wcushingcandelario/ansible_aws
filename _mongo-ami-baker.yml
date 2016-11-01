@@ -47,8 +47,6 @@
     - common
     - mongo_automation
     - Datadog.datadog
-  vars:
-    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 
 - hosts: just_baked
   remote_user: ec2-user
