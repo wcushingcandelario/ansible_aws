@@ -2,3 +2,5 @@ dns_zone_id: Z3A98VA7X0SL0T
 dns_domain: ovchosting.co.uk
 ami_baker_rds_security_group: sg-5bbc1f3c
 ami_baker_rds_subnet_group: "uat1 rds subnet group"
+ami_baker_ovc_security_groups: sg-71bc1f16
+ami_baker_vpc_subnet_public: subnet-cae8ffbd
