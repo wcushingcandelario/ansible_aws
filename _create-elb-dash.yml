@@ -26,7 +26,7 @@
         load_balancer_port: 443
         instance_protocol: https
         instance_port: 443
-        ssl_certificate_id: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
+        ssl_certificate_id: {{ ssl_certificate_id }}
       stickiness:
         type: loadbalancer
         enabled: yes
