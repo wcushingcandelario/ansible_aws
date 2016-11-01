@@ -11,3 +11,4 @@ ami_baker_instance_profile_name: UtilityServer
 ssl_certificate_id: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
 datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 s3_bucket: ovc-travisperkins-releases
+use_public_ip: No
