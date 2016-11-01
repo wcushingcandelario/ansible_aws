@@ -3,7 +3,7 @@ dns_domain: ovcdemo.com
 ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
 region: us-east-1
 key: ovc-private
-ami_baker_rds_security_group: sg-6387e207
+ami_baker_rds_security_group: sg-6387e207,sg-0591ee7f
 ami_baker_rds_subnet_group: "rds subnet"
 ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
 ami_baker_vpc_subnet_public: subnet-9f8a92b7
