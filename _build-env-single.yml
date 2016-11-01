@@ -49,7 +49,7 @@
         instance_type: "{{ mongo_instance_type }}"
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         image: "{{ mongo_image_id }}"
-        instance_profile_name: NonProdAppServer
+        instance_profile_name: {{ IAMROLE }}
         user_data: "{{ lookup('file', 'scripts/mongo_user_data.sh') }}"
         termination_protection: yes
         wait: yes
@@ -127,7 +127,7 @@
         instance_type: "{{ instance_type_single }}"
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         image: "{{ image_id }}"
-        instance_profile_name: NonProdAppServer
+        instance_profile_name: {{ IAMROLE }}
         user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
         termination_protection: yes
         wait: yes
