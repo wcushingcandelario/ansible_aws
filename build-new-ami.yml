@@ -24,15 +24,10 @@
     ovc_security_groups: sg-71bc1f16
     vpc_subnet_public: subnet-cae8ffbd
     instance_type: m4.large
-    deploy_type: "preprod"
-    deploy_pos: "{{ deploy_type }}-POS"
-    deploy_dash: "{{ deploy_type }}-Dash"
-    asg_name: "{{ deploy_type }}_autoscale"
     jetty_user_login: jetty
     jetty_dir: /opt/jetty
     ovc_server_user_dir: /opt/ovc
     webserver_user: www-data
     s3install: true
-    asg_desired_capacity: 2
     ovcDB_host: rds-utility.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com
     ovcNOSQLDB_host: mongodb-utility01.{{ dns_domain }}
