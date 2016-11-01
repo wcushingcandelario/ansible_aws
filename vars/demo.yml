@@ -6,5 +6,6 @@ key:
 ami_baker_rds_security_group:
 ami_baker_rds_subnet_group:
 ami_baker_ovc_security_groups:
-ami_baker_vpc_subnet_public: 
+ami_baker_vpc_subnet_public:
+ami_baker_instance_profile_name:
 ssl_certificate_id:
