@@ -23,6 +23,9 @@
 #   local tasks which are executed with the cwd of the executed script.
 # http://docs.ansible.com/ansible/playbooks_lookups.html
       user_data: "{{ lookup('file', 'scripts/mongo_user_data.sh') }}"
+      volumes:
+        - device_name: /dev/xvda
+          volume_size: 100
     register: debuglaunch
 
   - name: ovc_security_groups
