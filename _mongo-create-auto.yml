@@ -57,51 +57,44 @@
   - name: debug auto scaling update
     debug: "var=asglaunch"
 
-  - name: Create a new ELB for Mongo
-    hosts: localhost
-    connection: local
-    gather_facts: False
-
-
-    tasks:
-    - name: Create ELB Mongo
-      local_action:
-        module: ec2_elb_lb
-        name: "{{ deploy_type }}-mongo"
-        state: present
-        region: "{{ region }}"
-        scheme: internal
-        connection_draining_timeout: 120
-        idle_timeout: 300
-        subnets: "{{ elbsubnets }}"
-        security_group_ids: "{{ security_group_ids }}"
-        stickiness:
-          type: loadbalancer
-          enabled: yes
-          expiration: 300
-        health_check:
-          ping_protocol: tcp # options are http, https, ssl, tcp
-          ping_port: 22
-          response_timeout: 5 # seconds
-          interval: 30 # seconds
-          unhealthy_threshold: 2
-          healthy_threshold: 10
+  - name: Create ELB Mongo
+    local_action:
+      module: ec2_elb_lb
+      name: "{{ deploy_type }}-mongo"
+      state: present
+      region: "{{ region }}"
+      scheme: internal
+      connection_draining_timeout: 120
+      idle_timeout: 300
+      subnets: "{{ elbsubnets }}"
+      security_group_ids: "{{ security_group_ids }}"
+      stickiness:
+        type: loadbalancer
+        enabled: yes
+        expiration: 300
+      health_check:
+        ping_protocol: tcp # options are http, https, ssl, tcp
+        ping_port: 22
+        response_timeout: 5 # seconds
+        interval: 30 # seconds
+        unhealthy_threshold: 2
+        healthy_threshold: 10
   #      access_logs:
   #        interval: 5 # minutes (defaults to 60)
   #        s3_location: "sglogs" # This value is required if access_logs is set
   #        s3_prefix: "{{ deploy_type }}ELBlogs"
-      register: elb_new
+    register: elb_new
 
-    - name: debug elb create
-      debug: "var=elb_new"
+  - name: debug elb create
+    debug: "var=elb_new"
 
-    - name: Get ELB details after creation
-      local_action:
-        module: ec2_elb_facts
-        names:
-          - "{{ deploy_type }}-mongo"
-        region: "{{ region }}"
-      register: elb_facts
+  - name: Get ELB details after creation
+    local_action:
+      module: ec2_elb_facts
+      names:
+        - "{{ deploy_type }}-mongo"
+      region: "{{ region }}"
+    register: elb_facts
 
     - name: Add new Route53 entry
       route53:
