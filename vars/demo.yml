@@ -1,12 +1,12 @@
 dns_zone_id: Z1IY8P6OMVL5SH
 dns_domain: ovcdemo.com
-ansible_ssh_private_key_file:
-region: eu-west-1
-key:
-ami_baker_rds_security_group:
-ami_baker_rds_subnet_group:
-ami_baker_ovc_security_groups:
-ami_baker_vpc_subnet_public:
-ami_baker_instance_profile_name:
-ssl_certificate_id:
+ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
+region: us-east-1
+key: ovc-private
+ami_baker_rds_security_group: sg-6387e207
+ami_baker_rds_subnet_group: "rds subnet"
+ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
+ami_baker_vpc_subnet_public: subnet-9f8a92b7
+ami_baker_instance_profile_name: S3_Release_Read
+ssl_certificate_id: "arn:aws:acm:us-east-1:748109554602:certificate/29bd18b2-2c4a-4581-a1bd-1e265a35d313"
 datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
