@@ -43,7 +43,7 @@
       var: ssh_ip
 
   - name: wait for ssh to come up
-    wait_for: host={{ ssh_ip }} delay=90 port=22 state=started timeout=640
+    wait_for: host={{ ssh_ip }} delay=30 port=22 state=started timeout=640
     with_items: ami_instance.instances
 
   - name: Add host to group just_created
