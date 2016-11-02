@@ -13,6 +13,22 @@
   become: yes
   become_user: root
 
+- name: Copy in a *bad* certificate for testing
+  copy:
+    src: nginx-chained.crt
+    dest: /etc/ssl/certs/nginx-chained.crt
+    mode: 0644
+  become: yes
+  become_user: root
+
+- name: Copy in a *bad* certificate key for testing
+  copy:
+    src: nginx-noencrypt.key
+    dest: /etc/ssl/certs/nginx-noencrypt.key
+    mode: 0644
+  become: yes
+  become_user: root
+
 - name: Create a chained certificate
   shell: cat /etc/ssl/certs/6eb20afcb39167a3.crt /etc/ssl/certs/gd_bundle-g2-g1.crt > /etc/ssl/certs/nginx-chained.crt
   become: yes
