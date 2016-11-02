@@ -14,3 +14,4 @@ skip_ssl: Yes
 s3_bucket: ovc-release
 use_public_ip: Yes
 skip_custom: Yes
+dns_private_zone: No

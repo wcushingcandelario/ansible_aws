@@ -61,7 +61,7 @@
       command: "create"
       zone: "{{ dns_domain }}"
       hosted_zone_id: "{{ dns_zone_id }}"
-      private_zone: "true"
+      private_zone: "{{ dns_private_zone }}"
       record: "{{ deploy_type }}-dash.{{ dns_domain }}"
       type: "CNAME"
       ttl: 300

@@ -14,3 +14,4 @@ skip_ssl: No
 s3_bucket: ovc-travisperkins-releases
 use_public_ip: No
 skip_custom: No
+dns_private_zone: Yes
