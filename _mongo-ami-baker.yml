@@ -19,13 +19,13 @@
       vpc_subnet_id: "{{ vpc_subnet_public }}"
       image: "{{ ami_find.results[0].ami_id }}"
       wait: yes
-      instance_profile_name: {{ ami_baker_instance_profile_name }}
+      instance_profile_name: "{{ ami_baker_instance_profile_name }}"
       exact_count: 1
       count_tag:
-        role: ami_builder
+        role: mongo_ami_builder
       instance_tags:
-        role: ami_builder
-        Name: ami_builder
+        role: mongo_ami_builder
+        Name: mongo_ami_builder
     register: ami_instance
 
   - name: wait for ssh to come up
