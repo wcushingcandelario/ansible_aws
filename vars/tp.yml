@@ -13,5 +13,6 @@ datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 skip_ssl: No
 s3_bucket: ovc-travisperkins-releases
 use_public_ip: No
+elb_scheme: internal
 skip_custom: No
 dns_private_zone: Yes

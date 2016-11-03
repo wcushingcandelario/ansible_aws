@@ -12,7 +12,7 @@
       name: "{{ deploy_pos }}"
       state: present
       region: "{{ region }}"
-      scheme: internal
+      scheme: "{{ elb_scheme }}"
       connection_draining_timeout: 120
       idle_timeout: 300
       subnets: "{{ elbsubnets }}"
