@@ -1,0 +1,70 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Create Elastic Beanstalk application
+      elasticbeanstalk_app:
+         region: us-east-1
+         app_name: BeanieTestApp
+         description: Testing Beanie Automation Deployment
+         state: present
+      register: application
+
+    - debug: var=result
+
+    - name: Create application version
+      elasticbeanstalk_version:
+         region: us-east-1
+         app_name: BeanieTestApp
+         version_label: Version_1
+         s3_bucket: ovc-devops
+         s3_key: Dockerrun.aws.json.zip
+         state: present
+      register: version
+
+    - debug: var=version
+
+    - name: Create environment
+      elasticbeanstalk_env:
+         region: us-east-1
+         app_name: BeanieTestApp
+         env_name: beanietestenv
+         tier_name: WebServer
+         version_label: Version_1
+         solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
+         option_settings:
+           - Namespace: aws:elb:loadbalancer
+             OptionName: CrossZone
+             Value: true
+           - Namespace: aws:elasticbeanstalk:environment
+             OptionName: ServiceRole
+             Value: aws-elasticbeanstalk-service-role
+           - Namespace: aws:elasticbeanstalk:environment
+             OptionName: EnvironmentType
+             Value: LoadBalanced
+           - Namespace: aws:elasticbeanstalk:application
+             OptionName: Application Healthcheck URL
+             Value: /
+           - Namespace: aws:ec2:vpc
+             OptionName: Subnets
+             Value: subnet-9f8a92b7,subnet-a194589c
+           - Namespace: aws:ec2:vpc
+             OptionName: VPCId
+             Value: vpc-e8932b8d
+           - Namespace: aws:ec2:vpc
+             OptionName: ELBSubnets
+             Value: subnet-9f8a92b7,subnet-a194589c
+           - Namespace: aws:ec2:vpc
+             OptionName: ELBScheme
+             Value: internal
+           - Namespace: aws:ec2:vpc
+             OptionName: AssociatePublicIpAddress
+             Value: true
+           - Namespace: aws:autoscaling:launchconfiguration
+             OptionName: IamInstanceProfile
+             Value: aws-elasticbeanstalk-ec2-role
+           - Namespace: aws:autoscaling:launchconfiguration
+             OptionName: InstanceType
+             Value: t2.medium
+           - Namespace: aws:autoscaling:launchconfiguration
+             OptionName: EC2KeyName
+             Value: ovc-demo
