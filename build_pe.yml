@@ -1,20 +1,20 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Create Elastic Beanstalk application
+    - name: Creating Beanstalk application
       elasticbeanstalk_app:
          region: us-east-1
-         app_name: BeanieTestApp1
+         app_name: BeanieTestApp
          description: Testing Beanie Automation Deployment
          state: present
       register: application
 
-    - debug: var=result
+    - debug: var=application
 
-    - name: Create application version
+    - name: Versioning the application
       elasticbeanstalk_version:
          region: us-east-1
-         app_name: BeanieTestApp1
+         app_name: BeanieTestApp
          version_label: Version_1
          s3_bucket: ovc-devops
          s3_key: Dockerrun.aws.json.zip
@@ -23,11 +23,11 @@
 
     - debug: var=version
 
-    - name: Create environment
+    - name: Create new Beanstalk environment
       elasticbeanstalk_env:
          region: us-east-1
-         app_name: BeanieTestApp1
-         env_name: beanietestenv1
+         app_name: BeanieTestApp
+         env_name: beanietestenv
          tier_name: WebServer
          version_label: Version_1
          solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
@@ -38,9 +38,18 @@
            - Namespace: aws:elasticbeanstalk:application
              OptionName: Application Healthcheck URL
              Value: TCP:22
-           - Namespace: aws:elb:listener
-             OptionName: ListenerProtocol
-             Value: TCP
+           - Namespace: aws:elb:listener:3000
+             OptionName: InstanceProtocol
+             Value: HTTP
+           - Namespace: aws:elb:listener:3000
+             OptionName: InstancePort
+             Value: 3000
+           - Namespace: aws:elb:listener:8888
+             OptionName: InstanceProtocol
+             Value: HTTP
+           - Namespace: aws:elb:listener:8888
+             OptionName: InstancePort
+             Value: 8888
            - Namespace: aws:autoscaling:asg
              OptionName: MinSize
              Value: 2
@@ -59,15 +68,6 @@
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: EnvironmentType
              Value: LoadBalanced
-           - Namespace: aws:elasticbeanstalk:environment:process:promo
-             OptionName: Port
-             Value: 22
-           - Namespace: aws:elasticbeanstalk:environment:process:promo
-             OptionName: Protocol
-             Value: TCP
-           - Namespace: aws:elasticbeanstalk:environment:process:promo
-             OptionName: StickinessEnabled
-             Value: true
            - Namespace: aws:ec2:vpc
              OptionName: Subnets
              Value: subnet-9f8a92b7,subnet-a194589c
@@ -95,3 +95,21 @@
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: EC2KeyName
              Value: ovc-demo
+
+    - name: Record ELB EndpointURL
+      command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`beanietestenv1` && Status==`Ready`].EndpointURL'"
+      register: elb_dns
+
+    - name: debug elb dns
+      debug: "var=elb_dns"
+
+    - name: Add Alias to Route53
+      route53:
+        command: "create"
+        zone: "ovcdemo.com"
+        record: "beantest.ovcdemo.com"
+        type: "A"
+        value: "{{ elb_dns.stdout }}"
+        alias: "True"
+        alias_hosted_zone_id: "Z35SXDOTRQ7X7K"
+        overwrite: yes
