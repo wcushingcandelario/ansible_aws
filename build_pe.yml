@@ -4,7 +4,7 @@
     - name: Create Elastic Beanstalk application
       elasticbeanstalk_app:
          region: us-east-1
-         app_name: BeanieTestApp
+         app_name: BeanieTestApp1
          description: Testing Beanie Automation Deployment
          state: present
       register: application
@@ -14,7 +14,7 @@
     - name: Create application version
       elasticbeanstalk_version:
          region: us-east-1
-         app_name: BeanieTestApp
+         app_name: BeanieTestApp1
          version_label: Version_1
          s3_bucket: ovc-devops
          s3_key: Dockerrun.aws.json.zip
@@ -26,8 +26,8 @@
     - name: Create environment
       elasticbeanstalk_env:
          region: us-east-1
-         app_name: BeanieTestApp
-         env_name: beanietestenv
+         app_name: BeanieTestApp1
+         env_name: beanietestenv1
          tier_name: WebServer
          version_label: Version_1
          solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
@@ -35,15 +35,39 @@
            - Namespace: aws:elb:loadbalancer
              OptionName: CrossZone
              Value: true
+           - Namespace: aws:elasticbeanstalk:application
+             OptionName: Application Healthcheck URL
+             Value: TCP:22
+           - Namespace: aws:elb:listener
+             OptionName: ListenerProtocol
+             Value: TCP
+           - Namespace: aws:autoscaling:asg
+             OptionName: MinSize
+             Value: 2
+           - Namespace: aws:autoscaling:asg
+             OptionName: MaxSize
+             Value: 4
+           - Namespace: aws:elb:loadbalancer
+             OptionName: SecurityGroups
+             Value: sg-fe9c7083
+           - Namespace: aws:elb:loadbalancer
+             OptionName: ManagedSecurityGroup
+             Value: sg-fe9c7083
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: ServiceRole
              Value: aws-elasticbeanstalk-service-role
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: EnvironmentType
              Value: LoadBalanced
-           - Namespace: aws:elasticbeanstalk:application
-             OptionName: Application Healthcheck URL
-             Value: /
+           - Namespace: aws:elasticbeanstalk:environment:process:promo
+             OptionName: Port
+             Value: 22
+           - Namespace: aws:elasticbeanstalk:environment:process:promo
+             OptionName: Protocol
+             Value: TCP
+           - Namespace: aws:elasticbeanstalk:environment:process:promo
+             OptionName: StickinessEnabled
+             Value: true
            - Namespace: aws:ec2:vpc
              OptionName: Subnets
              Value: subnet-9f8a92b7,subnet-a194589c
@@ -55,7 +79,7 @@
              Value: subnet-9f8a92b7,subnet-a194589c
            - Namespace: aws:ec2:vpc
              OptionName: ELBScheme
-             Value: internal
+             Value: external
            - Namespace: aws:ec2:vpc
              OptionName: AssociatePublicIpAddress
              Value: true
@@ -65,6 +89,9 @@
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: InstanceType
              Value: t2.medium
+           - Namespace: aws:autoscaling:launchconfiguration
+             OptionName: SecurityGroups
+             Value: sg-66ecf301
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: EC2KeyName
              Value: ovc-demo
