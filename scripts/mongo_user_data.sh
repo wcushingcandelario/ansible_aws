@@ -17,3 +17,6 @@ if [ ${ENV} == 'prod' ]; then
   sed -i "s/5783bd0ce4b09cfd9d5c9ee0/57ff68293b34b924734d20c7/" /etc/mongodb-mms/automation-agent.config
 
 fi
+
+#Hack for accounts where DNS is bawked
+for I in `seq 1 254`; do echo 10.0.0.$I ip-10-0-0-$I ip-10-0-0-$I.ec2.local >> /etc/hosts; done
