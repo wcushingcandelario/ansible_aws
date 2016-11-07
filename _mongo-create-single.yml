@@ -80,7 +80,7 @@
         record: "mongodb-{{ deploy_type }}.{{ dns_domain }}"
         type: "A"
         ttl: 300
-        value: "{{ mongo_ssh_ip }}"
+        value: "{{ mongo_ami_instance.tagged_instances.0.private_ip }}"
         overwrite: "yes"
       tags:
         - dns
@@ -93,4 +93,5 @@
   vars:
     cluster_name: "{{ deploy_type }}_cluster"
   tags:
+    - tagged
     - mongo_install
