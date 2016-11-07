@@ -16,7 +16,7 @@
          region: "{{ region }}"
          app_name: "{{ deploy_type }}-Promo"
          version_label: "{{ pe_version }}"
-         s3_bucket: ovc-github-access-2
+         s3_bucket: "{{ s3_bucket }}"
          s3_key: Dockerrun.aws.json.zip
          state: present
       register: version
@@ -28,7 +28,7 @@
          region: "{{ region }}"
          app_name: "{{ deploy_type }}-Promo"
          env_name: "{{ deploy_type }}Promo-env"
-         tier_name: WebServer
+         tier_name: "{{ tier }}"
          version_label: "{{ pe_version }}"
          solution_stack_name: "{{ solution_stack_name }}"
          option_settings:
@@ -42,29 +42,41 @@
              OptionName: ListenerEnabled
              Value: false
            - Namespace: aws:elb:listener:3000
+             OptionName: ListenerProtocol
+             Value: HTTPS
+           - Namespace: aws:elb:listener:3000
              OptionName: InstanceProtocol
              Value: HTTP
            - Namespace: aws:elb:listener:3000
              OptionName: InstancePort
              Value: 3000
+           - Namespace: aws:elb:listener:3000
+             OptionName: SSLCertificateId
+             Value: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
            - Namespace: aws:elb:listener:8888
              OptionName: InstanceProtocol
              Value: HTTP
            - Namespace: aws:elb:listener:8888
+             OptionName: ListenerProtocol
+             Value: HTTPS
+           - Namespace: aws:elb:listener:8888
              OptionName: InstancePort
              Value: 8888
+           - Namespace: aws:elb:listener:8888
+             OptionName: SSLCertificateId
+             Value: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
            - Namespace: aws:autoscaling:asg
              OptionName: MinSize
-             Value: 2
+             Value: "{{ min_size }}"
            - Namespace: aws:autoscaling:asg
              OptionName: MaxSize
-             Value: 4
+             Value: "{{ max_size }}"
            - Namespace: aws:elb:loadbalancer
              OptionName: SecurityGroups
-             Value: sg-fe9c7083
+             Value: "{{ security_group_ids }}"
            - Namespace: aws:elb:loadbalancer
              OptionName: ManagedSecurityGroup
-             Value: sg-fe9c7083
+             Value: "{{ elb_security_group_id }}"
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: ServiceRole
              Value: aws-elasticbeanstalk-service-role
@@ -73,16 +85,16 @@
              Value: LoadBalanced
            - Namespace: aws:ec2:vpc
              OptionName: Subnets
-             Value: subnet-9f8a92b7,subnet-a194589c
+             Value: "{{ elbsubnets }}"
            - Namespace: aws:ec2:vpc
              OptionName: VPCId
-             Value: vpc-e8932b8d
+             Value: "{{ vpc_id }}"
            - Namespace: aws:ec2:vpc
              OptionName: ELBSubnets
-             Value: subnet-9f8a92b7,subnet-a194589c
+             Value: "{{ elbsubnets }}"
            - Namespace: aws:ec2:vpc
              OptionName: ELBScheme
-             Value: external
+             Value: internal
            - Namespace: aws:ec2:vpc
              OptionName: AssociatePublicIpAddress
              Value: true
@@ -91,16 +103,16 @@
              Value: aws-elasticbeanstalk-ec2-role
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: InstanceType
-             Value: t2.medium
+             Value: "{{ instance_type_pe }}"
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: SecurityGroups
-             Value: sg-66ecf301
+             Value: "{{ security_group_ids }}"
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: EC2KeyName
-             Value: ovc-demo
+             Value: "{{ key }}"
 
     - name: Record ELB EndpointURL
-      command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`beanietestenv` && Status==`Ready`].EndpointURL'"
+      command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo-env` && Status==`Ready`].EndpointURL'"
       register: elb_dns
 
     - name: debug elb dns
@@ -114,5 +126,5 @@
         type: "A"
         value: "{{ elb_dns.stdout }}"
         alias: "True"
-        alias_hosted_zone_id: "Z35SXDOTRQ7X7K"
+        alias_hosted_zone_id: "{{ alias_hosted_zone }}"
         overwrite: yes
