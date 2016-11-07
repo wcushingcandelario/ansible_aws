@@ -3,9 +3,9 @@
   tasks:
     - name: Creating Beanstalk application
       elasticbeanstalk_app:
-         region: us-east-1
-         app_name: BeanieTestApp
-         description: Testing Beanie Automation Deployment
+         region: "{{ region }}"
+         app_name: "{{ deploy_type }}-Promo"
+         description: "{{ deploy_type }} Promo Engine"
          state: present
       register: application
 
@@ -13,10 +13,10 @@
 
     - name: Versioning the application
       elasticbeanstalk_version:
-         region: us-east-1
-         app_name: BeanieTestApp
-         version_label: Version_1
-         s3_bucket: ovc-devops
+         region: "{{ region }}"
+         app_name: "{{ deploy_type }}-Promo"
+         version_label: "{{ pe_version }}"
+         s3_bucket: ovc-github-access-2
          s3_key: Dockerrun.aws.json.zip
          state: present
       register: version
@@ -25,12 +25,12 @@
 
     - name: Create new Beanstalk environment
       elasticbeanstalk_env:
-         region: us-east-1
-         app_name: BeanieTestApp
-         env_name: beanietestenv
+         region: "{{ region }}"
+         app_name: "{{ deploy_type }}-Promo"
+         env_name: "{{ deploy_type }}Promo-env"
          tier_name: WebServer
-         version_label: Version_1
-         solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
+         version_label: "{{ pe_version }}"
+         solution_stack_name: "{{ solution_stack_name }}"
          option_settings:
            - Namespace: aws:elb:loadbalancer
              OptionName: CrossZone
