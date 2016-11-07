@@ -38,3 +38,4 @@
     instance_type_pe: t2.medium
     key: ovc-tp-np
     alias_hosted_zone: Z35SXDOTRQ7X7K
+    solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"

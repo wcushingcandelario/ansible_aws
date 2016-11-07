@@ -122,8 +122,9 @@
       route53:
         command: "create"
         zone: "ovcdemo.com"
-        record: "beantest.ovcdemo.com"
+        record: "{{ deploy_type }}-promo.ovchosting.co.uk"
         type: "A"
+        private_zone: "true"
         value: "{{ elb_dns.stdout }}"
         alias: "True"
         alias_hosted_zone_id: "{{ alias_hosted_zone }}"

@@ -3,9 +3,9 @@
   tasks:
     - name: Creating Beanstalk application
       elasticbeanstalk_app:
-         region: us-east-1
-         app_name: BeanieTestApp
-         description: Testing Beanie Automation Deployment
+         region: "{{ region }}"
+         app_name: "{{ deploy_type }}-Promo"
+         description: "{{ deploy_type }} Promo Engine"
          state: present
       register: application
 
@@ -13,10 +13,10 @@
 
     - name: Versioning the application
       elasticbeanstalk_version:
-         region: us-east-1
-         app_name: BeanieTestApp
-         version_label: Version_1
-         s3_bucket: ovc-devops
+         region: "{{ region }}"
+         app_name: "{{ deploy_type }}-Promo"
+         version_label: "{{ pe_version }}"
+         s3_bucket: "{{ s3_bucket }}"
          s3_key: Dockerrun.aws.json.zip
          state: present
       register: version
@@ -30,7 +30,7 @@
          env_name: beanietestenv
          tier_name: WebServer
          version_label: Version_1
-         solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
+         solution_stack_name: "{{ solution_stack_name }}"
          option_settings:
            - Namespace: aws:elb:loadbalancer
              OptionName: CrossZone
@@ -55,16 +55,16 @@
              Value: 8888
            - Namespace: aws:autoscaling:asg
              OptionName: MinSize
-             Value: 2
+             Value: "{{ min_size }}"
            - Namespace: aws:autoscaling:asg
              OptionName: MaxSize
-             Value: 4
+             Value: "{{ max_size }}"
            - Namespace: aws:elb:loadbalancer
              OptionName: SecurityGroups
-             Value: sg-fe9c7083
+             Value: "{{ security_group_ids }}"
            - Namespace: aws:elb:loadbalancer
              OptionName: ManagedSecurityGroup
-             Value: sg-fe9c7083
+             Value: "{{ elb_security_group_id }}"
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: ServiceRole
              Value: aws-elasticbeanstalk-service-role
@@ -73,13 +73,13 @@
              Value: LoadBalanced
            - Namespace: aws:ec2:vpc
              OptionName: Subnets
-             Value: subnet-9f8a92b7,subnet-a194589c
+             Value: "{{ elbsubnets }}"
            - Namespace: aws:ec2:vpc
              OptionName: VPCId
-             Value: vpc-e8932b8d
+             Value: "{{ vpc_id }}"
            - Namespace: aws:ec2:vpc
              OptionName: ELBSubnets
-             Value: subnet-9f8a92b7,subnet-a194589c
+             Value: "{{ elbsubnets }}"
            - Namespace: aws:ec2:vpc
              OptionName: ELBScheme
              Value: external
@@ -91,16 +91,16 @@
              Value: aws-elasticbeanstalk-ec2-role
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: InstanceType
-             Value: t2.medium
+             Value: "{{ instance_type_pe }}"
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: SecurityGroups
-             Value: sg-66ecf301
+             Value:  "{{ security_group_ids }}"
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: EC2KeyName
-             Value: ovc-demo
+             Value: "{{ key }}"
 
     - name: Record ELB EndpointURL
-      command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`beanietestenv` && Status==`Ready`].EndpointURL'"
+      command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo-env` && Status==`Ready`].EndpointURL'"
       register: elb_dns
 
     - name: debug elb dns
@@ -114,5 +114,5 @@
         type: "A"
         value: "{{ elb_dns.stdout }}"
         alias: "True"
-        alias_hosted_zone_id: "Z35SXDOTRQ7X7K"
+        alias_hosted_zone_id: "{{ alias_hosted_zone }}"
         overwrite: yes
