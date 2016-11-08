@@ -25,11 +25,11 @@
 
     - name: Create new Beanstalk environment
       elasticbeanstalk_env:
-         region: us-east-1
-         app_name: BeanieTestApp
-         env_name: beanietestenv
-         tier_name: WebServer
-         version_label: Version_1
+         region: "{{ region }}"
+         app_name: "{{ deploy_type }}-Promo"
+         env_name: "{{ deploy_type }}Promo-env"
+         tier_name: "{{ tier }}"
+         version_label: "{{ pe_version }}"
          solution_stack_name: "{{ solution_stack_name }}"
          option_settings:
            - Namespace: aws:elb:loadbalancer
@@ -67,7 +67,7 @@
              Value: "{{ elb_security_group_id }}"
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: ServiceRole
-             Value: aws-elasticbeanstalk-service-role
+             Value: "{{ beanstalk_service_role }}"
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: EnvironmentType
              Value: LoadBalanced
@@ -82,13 +82,13 @@
              Value: "{{ elbsubnets }}"
            - Namespace: aws:ec2:vpc
              OptionName: ELBScheme
-             Value: external
+             Value: "{{ elb_scheme }}"
            - Namespace: aws:ec2:vpc
              OptionName: AssociatePublicIpAddress
              Value: true
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: IamInstanceProfile
-             Value: aws-elasticbeanstalk-ec2-role
+             Value: "{{ beanstalk_iam_role }}"
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: InstanceType
              Value: "{{ instance_type_pe }}"
@@ -110,7 +110,7 @@
       route53:
         command: "create"
         zone: "ovcdemo.com"
-        record: "beantest.ovcdemo.com"
+        record: "{{deploy_type }}.{{ dns_domain }}"
         type: "A"
         value: "{{ elb_dns.stdout }}"
         alias: "True"
