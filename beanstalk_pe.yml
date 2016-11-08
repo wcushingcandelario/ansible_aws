@@ -52,7 +52,7 @@
              Value: 3000
            - Namespace: aws:elb:listener:3000
              OptionName: SSLCertificateId
-             Value: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
+             Value: "{{ ssl_certificate_id }}"
            - Namespace: aws:elb:listener:8888
              OptionName: InstanceProtocol
              Value: HTTP
@@ -64,7 +64,7 @@
              Value: 8888
            - Namespace: aws:elb:listener:8888
              OptionName: SSLCertificateId
-             Value: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
+             Value: "{{ ssl_certificate_id }}"
            - Namespace: aws:autoscaling:asg
              OptionName: MinSize
              Value: "{{ min_size }}"

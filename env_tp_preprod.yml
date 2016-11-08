@@ -37,5 +37,5 @@
     vpc_id: vpc-ccb0b5a9
     instance_type_pe: t2.medium
     key: ovc-tp-np
-    alias_hosted_zone: Z35SXDOTRQ7X7K
+    alias_hosted_zone: Z32O12XQLNTSW2
     solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
