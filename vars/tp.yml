@@ -1,2 +1,18 @@
 dns_zone_id: Z3A98VA7X0SL0T
 dns_domain: ovchosting.co.uk
+ansible_ssh_private_key_file: "~/.ssh/ovc-tp-np.pem"
+region: eu-west-1
+key: ovc-tp-np
+ami_baker_rds_security_group: sg-5bbc1f3c
+ami_baker_rds_subnet_group: "uat1 rds subnet group"
+ami_baker_ovc_security_groups: sg-71bc1f16
+ami_baker_vpc_subnet_public: subnet-cae8ffbd
+ami_baker_instance_profile_name: UtilityServer
+ssl_certificate_id: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
+datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
+skip_ssl: No
+s3_bucket: ovc-travisperkins-releases
+use_public_ip: No
+elb_scheme: internal
+skip_custom: No
+dns_private_zone: Yes

@@ -1,0 +1,97 @@
+---
+- name: Find Mongo AMI ID
+  hosts: localhost
+  connection: local
+  roles:
+    - find_mongo_ami
+  tags:
+    - find_mongo_ami
+
+- name: Add Mongo AMI ID to facts
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Use set_fact to AMI
+      set_fact:
+        mongo_image_id: "{{ ami_find.results[0].ami_id }}"
+      when: monog_image_id is undefined
+  tags:
+    - find_mongo_ami
+
+- name: Build Mongo Single Instance
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Display new Mongo AMI ID
+      debug:
+        msg="{{deploy_type}} Mongo will now be launched with {{ mongo_image_id }}"
+    - name: Present new AMI Mongo ID
+      pause:
+        prompt: "{{deploy_type}} Mongo will now be launched with {{ mongo_image_id }}"
+        seconds: 30
+    - name: Launch Mongo instance
+      ec2:
+        assign_public_ip: yes
+        region: "{{ region }}"
+        key_name: "{{ key }}"
+        group_id: "{{ mongo_security_groups }}"
+        instance_type: "{{ mongo_instance_type }}"
+        vpc_subnet_id: "{{ vpc_subnet_id }}"
+        image: "{{ mongo_image_id }}"
+        instance_profile_name: "{{ IAMROLE }}"
+        user_data: "{{ lookup('file', 'scripts/mongo_user_data.sh') }}"
+        termination_protection: yes
+        wait: yes
+        wait_timeout: 500
+        exact_count: 1
+        count_tag:
+          Name: "mongodb-{{ deploy_type }}.{{ dns_domain }}"
+          role: mongodb
+          environment: "{{ deploy_type }}"
+        instance_tags:
+          Name: "mongodb-{{ deploy_type }}.{{ dns_domain }}"
+          role: mongodb
+          environment: "{{ deploy_type }}"
+      register: mongo_ami_instance
+
+    - name: Set IP fact (public).
+      set_fact:
+        mongo_ssh_ip: "{{ mongo_ami_instance.tagged_instances.0.public_ip }}"
+      when: use_public_ip
+
+    - name: Set IP fact (private).
+      set_fact:
+        mongo_ssh_ip: "{{ mongo_ami_instance.tagged_instances.0.private_ip }}"
+      when: not use_public_ip
+
+    - name: Add host to group just_baked
+      add_host: name={{ mongo_ssh_ip }} groups=mongo_just_baked
+
+    - name: Display Mongo AMI Instance Details
+      debug:
+        msg="{{ mongo_ami_instance }}"
+
+    - name: Add or Update Mongo Route53 entry
+      route53:
+        command: "create"
+        zone: "{{ dns_domain }}"
+        hosted_zone_id: "{{ dns_zone_id }}"
+        private_zone: "Yes"
+        record: "mongodb-{{ deploy_type }}.{{ dns_domain }}"
+        type: "A"
+        ttl: 300
+        value: "{{ mongo_ami_instance.tagged_instances.0.private_ip }}"
+        overwrite: "yes"
+      tags:
+        - dns
+
+- name: Install Mongo manually if requested
+  hosts: mongo_just_baked
+  remote_user: ec2-user
+  roles:
+    - mongoinstall
+  vars:
+    cluster_name: "{{ deploy_type }}_cluster"
+  tags:
+    - tagged
+    - mongo_install

@@ -47,6 +47,9 @@ export LOCAL_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 sudo /usr/bin/patch $FILE_NAME $FILE_NAME.patch.$ENV
 sed -i.bak "s#http://this_host:8080#https://$LOCAL_IP#" $FILE_NAME
 
+#Hack for accounts where DNS is bawked
+for I in `seq 1 254`; do echo 10.0.0.$I ip-10-0-0-$I ip-10-0-0-$I.ec2.local >> /etc/hosts; done
+
 sed -i "s/env\:unknown/env:${ENV}/" /etc/dd-agent/conf.d/http_check.yaml
 
 sed -i.bak '/-Dorg\.quartz\.scheduler\.hostName=.*/c\#This line is removed by the admin.' /opt/jetty/start.ini

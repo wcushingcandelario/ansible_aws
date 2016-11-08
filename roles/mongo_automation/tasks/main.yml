@@ -24,6 +24,7 @@
     path: /data
     owner: mongod
     group: mongod
+    state: directory
 
 - name: Enable and service
   service:

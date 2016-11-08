@@ -12,8 +12,15 @@
   include: _mongo-create-auto.yml
   remote_user: ec2-user
   tags:
-    - mongo
     - tagged
+    - mongo
+
+- name: Build Mongo Cluster
+  include: _mongo-create-single.yml
+  remote_user: ec2-user
+  tags:
+    - tagged
+    - mongo_single
 
 - name: Find AMI ID
   hosts: localhost
