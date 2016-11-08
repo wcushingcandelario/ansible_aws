@@ -16,3 +16,9 @@ use_public_ip: No
 elb_scheme: internal
 skip_custom: No
 dns_private_zone: Yes
+solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
+alias_hosted_zone: Z32O12XQLNTSW2
+vpc_id: vpc-ccb0b5a9
+instance_type_pe: t2.medium
+beanstalk_iam_role: aws-elasticbeanstalk-ec2-role
+beanstalk_service_role: aws-elasticbeanstalk-service-role
