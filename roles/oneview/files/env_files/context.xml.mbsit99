@@ -37,7 +37,7 @@
 		<Arg>
 
 			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-				<Set name="URL">jdbc:mysql://mysql-mb_sit99.ovcdemo.com:3306/xdb</Set>
+				<Set name="URL">jdbc:mysql://mysql-mbsit99.ovcdemo.com:3306/xdb</Set>
 				<Set name="user">root</Set>
 				<Set name="password">
 					<Ref refid="password"/>
