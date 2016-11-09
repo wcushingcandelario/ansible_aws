@@ -4,7 +4,7 @@
   include: _build-env-clustered.yml
   vars:
     # Common
-    deploy_type: mb_sit99
+    deploy_type: mbsit99
     region: us-east-1
     key: ovcdemo
 
