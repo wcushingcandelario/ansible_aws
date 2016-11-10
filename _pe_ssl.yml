@@ -1,6 +1,6 @@
 ---
-- hosts: localhost
-  tasks:
+ - hosts: localhost
+   tasks:
     - name: Creating Beanstalk application
       elasticbeanstalk_app:
          region: "{{ region }}"
@@ -58,18 +58,24 @@
            - Namespace: aws:elb:listener:3000
              OptionName: SSLCertificateId
              Value: "{{ ssl_certificate_id }}"
-           - Namespace: aws:elb:listener:8888
+           - Namespace: aws:elb:listener:443
              OptionName: InstanceProtocol
              Value: HTTP
-           - Namespace: aws:elb:listener:8888
+           - Namespace: aws:elb:listener:443
              OptionName: ListenerProtocol
              Value: HTTPS
-           - Namespace: aws:elb:listener:8888
+           - Namespace: aws:elb:listener:443
              OptionName: InstancePort
              Value: 8888
-           - Namespace: aws:elb:listener:8888
+           - Namespace: aws:elb:listener:443
              OptionName: SSLCertificateId
              Value: "{{ ssl_certificate_id }}"
+           - Namespace: aws:elb:policies
+             OptionName: LoadBalancerPorts
+             Value: all
+           - Namespace: aws:elb:policies
+             OptionName: Stickiness Cookie Expiration
+             Value: 300
            - Namespace: aws:autoscaling:asg
              OptionName: MinSize
              Value: "{{ min_size }}"
