@@ -48,28 +48,22 @@
             Value: false
           - Namespace: aws:elb:listener:3000
             OptionName: ListenerProtocol
-            Value: HTTPS
+            Value: HTTP
           - Namespace: aws:elb:listener:3000
             OptionName: InstanceProtocol
             Value: HTTP
           - Namespace: aws:elb:listener:3000
             OptionName: InstancePort
             Value: 3000
-          - Namespace: aws:elb:listener:3000
-            OptionName: SSLCertificateId
-            Value: "{{ ssl_certificate_id }}"
           - Namespace: aws:elb:listener:8888
             OptionName: InstanceProtocol
             Value: HTTP
           - Namespace: aws:elb:listener:8888
             OptionName: ListenerProtocol
-            Value: HTTPS
+            Value: HTTP
           - Namespace: aws:elb:listener:8888
             OptionName: InstancePort
             Value: 8888
-          - Namespace: aws:elb:listener:8888
-            OptionName: SSLCertificateId
-            Value: "{{ ssl_certificate_id }}"
           - Namespace: aws:autoscaling:asg
             OptionName: MinSize
             Value: "{{ min_size }}"
@@ -118,6 +112,31 @@
       tags:
          - pe_env
 
+    - name: Create new Beanstalk environment
+      elasticbeanstalk_env:
+        region: "{{ region }}"
+        app_name: "{{ deploy_type }}-Promo"
+        env_name: "{{ deploy_type }}Promo-env"
+        tier_name: "{{ tier }}"
+        version_label: "{{ pe_version }}"
+        solution_stack_name: "{{ solution_stack_name }}"
+        option_settings:
+          - Namespace: aws:elb:listener:3000
+            OptionName: ListenerProtocol
+            Value: HTTPS
+          - Namespace: aws:elb:listener:3000
+            OptionName: SSLCertificateId
+            Value: "{{ ssl_certificate_id }}"
+          - Namespace: aws:elb:listener:8888
+            OptionName: ListenerProtocol
+            Value: HTTPS
+          - Namespace: aws:elb:listener:8888
+            OptionName: SSLCertificateId
+            Value: "{{ ssl_certificate_id }}"
+        when: ssl_certificate_id
+      tags:
+        - pe_env
+
     - name: Record ELB EndpointURL
       command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo-env` && Status==`Ready`].EndpointURL'"
       register: elb_dns
@@ -130,10 +149,10 @@
     - name: Add Alias to Route53
       route53:
         command: "create"
-        zone: "ovcdemo.com"
+        zone: "{{ dns_domain }}"
         record: "{{ deploy_type }}-promo.{{ dns_domain }}"
         type: "A"
-        private_zone: "true"
+        private_zone: "{{ dns_private_zone }}"
         value: "{{ elb_dns.stdout }}"
         alias: "True"
         alias_hosted_zone_id: "{{ alias_hosted_zone }}"
