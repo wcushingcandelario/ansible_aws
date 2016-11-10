@@ -121,6 +121,15 @@
         version_label: "{{ pe_version }}"
         solution_stack_name: "{{ solution_stack_name }}"
         option_settings:
+          - Namespace: aws:elb:listener:3000
+            OptionName: ListenerEnabled
+            Value: false
+          - Namespace: aws:elb:listener:443
+            OptionName: InstanceProtocol
+            Value: HTTP
+          - Namespace: aws:elb:listener:443
+            OptionName: InstancePort
+            Value: 3000
           - Namespace: aws:elb:listener:443
             OptionName: ListenerProtocol
             Value: HTTPS
