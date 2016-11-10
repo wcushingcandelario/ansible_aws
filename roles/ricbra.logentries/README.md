@@ -27,10 +27,15 @@ environment_name: TEST_environment_name
 
 ```
 Where the variables are:
+
 `logentries_account_key` = The Logentries user key
+
 `jetty_dir` = The location of the Jetty root directory
+
 `html_root` = The location of the OVC Dashboard root directory
-`environment_name` = The environment name (log set in logentries) to push this systems logs to
+
+`environment_name` = The environment name (log set in logentries) to push this systems
+logs to
 
 The logs followed are configured in `templates/config.j2` since we create AMIs and deploy them out to various environments.  When NOT specifying the environment name, which typically should not be done unless pushing this role to a specific single environment, the default environment name will be applied as `TEST_environment_name`.  This should be replaced in the bootstrapping of new instances via the user data script.
 
