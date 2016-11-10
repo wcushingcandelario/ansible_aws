@@ -8,9 +8,6 @@
          description: "{{ deploy_type }} Promo Engine"
          state: present
       register: application
-      tags:
-         - pe_application
-
 
     - debug: var=application
 
@@ -23,8 +20,6 @@
          s3_key: Dockerrun.aws.json.zip
          state: present
       register: version
-      tags:
-         - pe_version
 
     - debug: var=version
 
@@ -32,7 +27,7 @@
       elasticbeanstalk_env:
          region: "{{ region }}"
          app_name: "{{ deploy_type }}-Promo"
-         env_name: "{{ deploy_type }}Promo-env"
+         env_name: "{{ deploy_type }}Promo"
          tier_name: "{{ tier }}"
          version_label: "{{ pe_version }}"
          solution_stack_name: "{{ solution_stack_name }}"
@@ -72,7 +67,7 @@
              Value: "{{ ssl_certificate_id }}"
            - Namespace: aws:elb:policies
              OptionName: LoadBalancerPorts
-             Value: all
+             Value: 3000, 443
            - Namespace: aws:elb:policies
              OptionName: Stickiness Cookie Expiration
              Value: 300
@@ -125,10 +120,8 @@
          - pe_env
 
     - name: Record ELB EndpointURL
-      command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo-env` && Status==`Ready`].EndpointURL'"
+      command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo` && Status==`Ready`].EndpointURL'"
       register: elb_dns
-      tags:
-         -elb_dns
 
     - name: debug elb dns
       debug: "var=elb_dns"
@@ -136,7 +129,7 @@
     - name: Add Alias to Route53
       route53:
         command: "create"
-        zone: "ovcdemo.com"
+        zone: "{{ dns_domain }}"
         record: "{{ deploy_type }}-promo.{{ dns_domain }}"
         type: "A"
         private_zone: "true"
