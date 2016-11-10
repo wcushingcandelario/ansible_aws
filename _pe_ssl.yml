@@ -3,28 +3,28 @@
    tasks:
     - name: Creating Beanstalk application
       elasticbeanstalk_app:
-         region: "{{ region }}"
-         app_name: "{{ deploy_type }}-Promo"
-         description: "{{ deploy_type }} Promo Engine"
-         state: present
+        region: "{{ region }}"
+        app_name: "{{ deploy_type }}-Promo"
+        description: "{{ deploy_type }} Promo Engine"
+        state: present
       register: application
       tags:
-         - pe_application
+        - pe_application
 
 
     - debug: var=application
 
     - name: Versioning the application
       elasticbeanstalk_version:
-         region: "{{ region }}"
-         app_name: "{{ deploy_type }}-Promo"
-         version_label: "{{ pe_version }}"
-         s3_bucket: "{{ s3_bucket }}"
-         s3_key: Dockerrun.aws.json.zip
-         state: present
+        region: "{{ region }}"
+        app_name: "{{ deploy_type }}-Promo"
+        version_label: "{{ pe_version }}"
+        s3_bucket: "{{ s3_bucket }}"
+        s3_key: Dockerrun.aws.json.zip
+        state: present
       register: version
       tags:
-         - pe_version
+        - pe_version
 
     - debug: var=version
 
@@ -141,7 +141,7 @@
       command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo-env` && Status==`Ready`].EndpointURL'"
       register: elb_dns
       tags:
-         -elb_dns
+        -elb_dns
 
     - name: debug elb dns
       debug: "var=elb_dns"
