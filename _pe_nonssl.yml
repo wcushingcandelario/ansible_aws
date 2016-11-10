@@ -116,10 +116,12 @@
       route53:
         command: "create"
         zone: "{{ dns_domain }}"
-        record: "{{deploy_type }}.{{ dns_domain }}"
+        record: "{{ deploy_type }}-promo.{{ dns_domain }}"
         type: "A"
+        private_zone: "{{ dns_private_zone }}"
         value: "{{ elb_dns.stdout }}"
         alias: "True"
         alias_hosted_zone_id: "{{ alias_hosted_zone }}"
         overwrite: yes
-      tags: elb_dns
+      tags:
+        - pe_alias
