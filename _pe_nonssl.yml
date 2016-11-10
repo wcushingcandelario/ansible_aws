@@ -8,8 +8,6 @@
         description: "{{ deploy_type }} Promo Engine"
         state: present
       register: application
-      tags:
-         - pe_applicaiton
 
     - debug: var=application
 
@@ -22,8 +20,6 @@
         s3_key: Dockerrun.aws.json.zip
         state: present
       register: version
-      tags:
-         - pe_version
 
     - debug: var=version
 
