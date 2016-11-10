@@ -1,0 +1,35 @@
+[Main]
+user-key={{ logentries_account_key }}
+
+
+[Jetty Logs]
+path = {{ jetty_dir }}/logs/jetty.log
+destination = {{ environment_name | default('TEST_environment_name') }}/Jetty
+
+[Importer Logs]
+path = {{ jetty_dir }}/logs/ip*.log
+destination = {{ environment_name | default('TEST_environment_name') }}/Importers
+
+[Jetty Start logs]
+path = {{ jetty_dir }}/logs/start.log
+destination = {{ environment_name | default('TEST_environment_name') }}/Jetty
+
+[Dashboard Error logs]
+path = {{ html_root }}/ovcdashboard/app/tmp/logs/error.log
+destination = {{ environment_name | default('TEST_environment_name') }}/Dashboard
+
+[SSH Logs]
+path = /var/log/secure
+destination = {{ environment_name | default('TEST_environment_name') }}/SSH
+
+[NGINX Access Log]
+path = /var/log/nginx/access.log
+destination = {{ environment_name | default('TEST_environment_name') }}/NGINX
+
+[Cron logs]
+path = /var/log/cron
+destination = {{ environment_name | default('TEST_environment_name') }}/Cron
+
+[CloudInit logs]
+path = /var/log/cloud-init.log
+destination = {{ environment_name | default('TEST_environment_name') }}/CloudInit
