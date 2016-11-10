@@ -120,7 +120,7 @@
         version_label: "{{ pe_version }}"
         solution_stack_name: "{{ solution_stack_name }}"
         option_settings:
-          - Namespace: aws:elb:listener:3000
+          - Namespace: aws:elb:listener:8888
             OptionName: ListenerEnabled
             Value: false
           - Namespace: aws:elb:listener:443
@@ -128,17 +128,17 @@
             Value: HTTP
           - Namespace: aws:elb:listener:443
             OptionName: InstancePort
-            Value: 3000
+            Value: 8888
           - Namespace: aws:elb:listener:443
             OptionName: ListenerProtocol
             Value: HTTPS
           - Namespace: aws:elb:listener:443
             OptionName: SSLCertificateId
             Value: "{{ ssl_certificate_id }}"
-          - Namespace: aws:elb:listener:8888
+          - Namespace: aws:elb:listener:3000
             OptionName: ListenerProtocol
             Value: HTTPS
-          - Namespace: aws:elb:listener:8888
+          - Namespace: aws:elb:listener:3000
             OptionName: SSLCertificateId
             Value: "{{ ssl_certificate_id }}"
         when: ssl_certificate_id
