@@ -6,6 +6,7 @@
 	<Set name="war">/opt/ovc/posWebapp</Set>
 	<Set name="contextPath">/</Set>
 	<Set name="extractWAR">false</Set>
+	<Set name="maxFormContentSize">20000000</Set>
 
 	<Set name="overrideDescriptor">/opt/jetty/webapps/pos.d/pos-override.xml</Set>
 <Set name="extraClasspath">/opt/ovc/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar;/opt/ovc/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar</Set>
