@@ -1,6 +1,6 @@
 ---
-- hosts: localhost
-  tasks:
+ - hosts: localhost
+   tasks:
     - name: Creating Beanstalk application
       elasticbeanstalk_app:
         region: "{{ region }}"
@@ -42,6 +42,9 @@
             OptionName: ListenerEnabled
             Value: false
           - Namespace: aws:elb:listener:3000
+            OptionName: ListenerProtocol
+            Value: HTTP
+          - Namespace: aws:elb:listener:3000
             OptionName: InstanceProtocol
             Value: HTTP
           - Namespace: aws:elb:listener:3000
@@ -49,6 +52,9 @@
             Value: 3000
           - Namespace: aws:elb:listener:8888
             OptionName: InstanceProtocol
+            Value: HTTP
+          - Namespace: aws:elb:listener:8888
+            OptionName: ListenerProtocol
             Value: HTTP
           - Namespace: aws:elb:listener:8888
             OptionName: InstancePort
@@ -94,16 +100,52 @@
             Value: "{{ instance_type_pe }}"
           - Namespace: aws:autoscaling:launchconfiguration
             OptionName: SecurityGroups
-            Value:  "{{ security_group_ids }}"
+            Value: "{{ security_group_ids }}"
           - Namespace: aws:autoscaling:launchconfiguration
             OptionName: EC2KeyName
             Value: "{{ key }}"
       tags:
          - pe_env
 
+    - name: Create new Beanstalk environment
+      elasticbeanstalk_env:
+        region: "{{ region }}"
+        app_name: "{{ deploy_type }}-Promo"
+        env_name: "{{ deploy_type }}Promo-env"
+        tier_name: "{{ tier }}"
+        version_label: "{{ pe_version }}"
+        solution_stack_name: "{{ solution_stack_name }}"
+        option_settings:
+          - Namespace: aws:elb:listener:8888
+            OptionName: ListenerEnabled
+            Value: false
+          - Namespace: aws:elb:listener:443
+            OptionName: InstanceProtocol
+            Value: HTTP
+          - Namespace: aws:elb:listener:443
+            OptionName: InstancePort
+            Value: 8888
+          - Namespace: aws:elb:listener:443
+            OptionName: ListenerProtocol
+            Value: HTTPS
+          - Namespace: aws:elb:listener:443
+            OptionName: SSLCertificateId
+            Value: "{{ ssl_certificate_id }}"
+          - Namespace: aws:elb:listener:3000
+            OptionName: ListenerProtocol
+            Value: HTTPS
+          - Namespace: aws:elb:listener:3000
+            OptionName: SSLCertificateId
+            Value: "{{ ssl_certificate_id }}"
+        when: ssl_certificate_id
+      tags:
+        - pe_env
+
     - name: Record ELB EndpointURL
       command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo` && Status==`Ready`].EndpointURL'"
       register: elb_dns
+      tags:
+        -elb_dns
 
     - name: debug elb dns
       debug: "var=elb_dns"

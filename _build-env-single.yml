@@ -15,6 +15,27 @@
     - mongo
     - tagged
 
+- name: Build PE (Combined)
+  include: _pe_combined.yml
+  remote_user: ec2-user
+  tags:
+    - tagged
+    - promo
+
+- name: Build PE (NoSSL)
+  include: _pe_nossl.yml
+  remote_user: ec2-user
+  tags:
+    - tagged
+    - promo_nossl
+
+- name: Build PE (SSL)
+  include: _pe_ssl.yml
+  remote_user: ec2-user
+  tags:
+    - tagged
+    - promo_ssl
+
 - name: Find AMI ID
   hosts: localhost
   connection: local
