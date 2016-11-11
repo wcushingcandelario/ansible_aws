@@ -60,9 +60,10 @@
   roles:
     - common
     - jetty
-    - filebeat
+    # - filebeat
     - oneview
     - { role: install_customizations_tp, when: not skip_custom }
+    - ricbra.logentries
     - nginx_proxy
     - Datadog.datadog
     - datadog_config
