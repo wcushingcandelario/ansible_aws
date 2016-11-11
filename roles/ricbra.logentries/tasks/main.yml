@@ -15,6 +15,8 @@
   assert:
     that: logentries_os_supported == True
 
+- include_vars: logentries_key.yml
+
 - name: Add APT keys
   apt_key: id={{ item.id }} keyserver={{ item.keyserver }} state=present
   with_items: '{{ logentries_apt_keys }}'

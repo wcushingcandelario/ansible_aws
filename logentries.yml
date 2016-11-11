@@ -3,4 +3,4 @@
   become: yes
   become_user: root
   roles:
-    - { role: ricbra.logentries, logentries_account_key: "3dee8ab1-b063-45be-b4e3-5cd5f40834c4"}
+    - { role: ricbra.logentries}
