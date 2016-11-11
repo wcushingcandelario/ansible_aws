@@ -10,4 +10,4 @@ logentries_service: logentries
 logentries_repo_template: ""
 
 jetty_dir: /opt/jetty
-html_root: /var/www
+html_root: /var/www/html

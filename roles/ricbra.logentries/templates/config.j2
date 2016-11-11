@@ -29,7 +29,3 @@ destination = {{ environment_name | default('TEST_environment_name') }}/NGINX
 [Cron logs]
 path = /var/log/cron
 destination = {{ environment_name | default('TEST_environment_name') }}/Cron
-
-[CloudInit logs]
-path = /var/log/cloud-init.log
-destination = {{ environment_name | default('TEST_environment_name') }}/CloudInit
