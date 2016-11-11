@@ -1,0 +1,6 @@
+---
+- hosts: uat2
+  become: yes
+  become_user: root
+  roles:
+    - { role: ricbra.logentries}
