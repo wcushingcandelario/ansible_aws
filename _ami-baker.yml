@@ -60,7 +60,6 @@
   roles:
     - common
     - jetty
-    - filebeat
     - oneview
     - { role: install_customizations_tp, when: not skip_custom }
     - ricbra.logentries
