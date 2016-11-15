@@ -9,7 +9,7 @@
     key: ovc-tp-np
 
     # DB
-    environment_name: uat1-rds
+    environment_name: {{ deploy_type }}-rds
     rds_security_group: sg-a50010c1
     rds_subnet_group: "uat1 rds subnet group"
     multirdszone: no
@@ -34,10 +34,10 @@
     s3_bucket_docker: "ovc-github-access-2"
     dockercfg: dockercfg
     pe_version: 1.5.0
-    mongo_url: "mongodb://mongodb-uat1.ovchosting.co.uk/ovcpromo"
-    ovc_url: "https://uat1.ovchosting.co.uk"
-    dash_path: "https://uat1.ovchosting.co.uk/ovcdashboard/"
-    promo_path: "https://uat1-promo.ovchosting.co.uk:3000/promotions/"
+    mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
+    ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
+    dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
+    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
     tier: WebServer
     security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
     elb_security_group_id: sg-4318e724

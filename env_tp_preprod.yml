@@ -9,7 +9,7 @@
     key: ovc-tp-np
 
     # DB
-    environment_name: preprod-rds
+    environment_name: {{ deploy_type }}-rds
     rds_security_group: sg-5bbc1f3c
     rds_subnet_group: pre-prod-rds
     multirdszone: no
@@ -31,10 +31,10 @@
     s3_bucket_docker: "ovc-github-access-2"
     dockercfg: dockercfg
     pe_version: 1.5.0
-    mongo_url: "mongodb://mongodb-preprod01.ovchosting.co.uk:27017,mongodb-preprod02.ovchosting.co.uk:27017,mongodb-preprod03.ovchosting.co.uk:27017/ovcpromo"
-    ovc_url: "https://preprod.ovchosting.co.uk"
-    dash_path: "https://preprod-dash.ovchosting.co.uk/ovcdashboard/"
-    promo_path: "https://preprod-promo.ovchosting.co.uk:3000/promotions/"
+    mongo_url: "mongodb://mongodb-{{ deploy_type }}01.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}02.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}03.{{ dns_domain }}:27017/ovcpromo"
+    ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
+    dash_path: "https://{{ deploy_type }}-dash.{{ dns_domain }}/ovcdashboard/"
+    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
     tier: WebServer
     security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
     elb_security_group_id: sg-887dc9ef
