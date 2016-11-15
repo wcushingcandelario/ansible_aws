@@ -11,6 +11,27 @@
 
     - debug: var=application
 
+    - name: Creating temp file for docker template
+      shell: mktemp /tmp/"{{ deploy_type }}.Dockerrun.aws.json"
+      register: temp
+
+    - name: Making new docker file
+      template:
+         src: Dockerrun.aws.json.j2
+         dest: "{{ temp.stdout }}"
+
+    - name: Uploading new docker file to S3
+      s3:
+       bucket: "{{ s3_bucket_docker }}"
+       mode: put
+       object: "{{ deploy_type }}.Dockerrun.aws.json"
+       src: "{{ temp.stdout }}"
+
+    - name: Removing docker temp file
+      file:
+        path: "{{ temp.stdout }}"
+        state: absent
+
     - name: Versioning the application
       elasticbeanstalk_version:
         region: "{{ region }}"
