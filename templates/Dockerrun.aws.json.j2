@@ -1,0 +1,71 @@
+{
+	"AWSEBDockerrunVersion": "2",
+	"Authentication": {
+		"Bucket": "{{ s3_bucket_docker }}",
+		"Key": "{{ dockercfg }}"
+	},
+    "containerDefinitions":[
+   		{
+					"name": "promo-server",
+					"image": "oneviewcommerce/promo-server:{{ pe_version }}",
+					"environment": [
+					{
+						"name": "Container",
+						"value": "promo-server"
+					},
+					{
+						"name": "MONGO_URL",
+						"value": "{{ mongo_url }}"
+					},
+					{
+						"name": "MAX_PROMO_ID",
+						"value": "999999999999"
+					},
+					{
+						"name": "OVC_URL",
+						"value": "{{ ovc_url }}"
+					}
+					],
+					"essential": true,
+					"memory": 1024,
+					"portMappings": [
+					{
+						"containerPort": 3000,
+						"hostPort": 3000
+					}
+					],
+					"mountPoints": [
+
+					]
+				},
+				{
+					"name": "promo-client",
+					"image": "oneviewcommerce/promo-server:{{ pe_version }}",
+					"command": ["runUI"],
+					"environment": [{
+						"name": "Container",
+						"value": "promo-client"
+					}, {
+						"name": "CLIENT_PORT",
+						"value": 8888
+					}, {
+						"name": "DASH_PATH",
+						"value": "{{ dash_path }}"
+					}, {
+						"name": "PROMO_PATH",
+						"value": "{{ promo_path }}"
+					}],
+					"essential": true,
+					"memory": 1024,
+					"portMappings": [{
+						"containerPort": 8888,
+						"hostPort": 8888
+					}],
+					"mountPoints": [
+
+					]
+				}
+
+	  ]
+
+}

@@ -30,7 +30,15 @@
     max_size: 1
 
     # Promo Engine
-    s3_bucket: ovc-github-access-2
+    dockerrun_version: "2"
+    s3_bucket_docker: "ovc-github-access-2"
+    dockercfg: dockercfg
+    pe_version: 1.5.0
+    mongo_url: "mongodb://mongodb-uat1.ovchosting.co.uk/ovcpromo"
+    ovc_url: "https://uat1.ovchosting.co.uk"
+    dash_path: "https://uat1.ovchosting.co.uk/ovcdashboard/"
+    promo_path: "https://uat1-promo.ovchosting.co.uk:3000/promotions/"
     tier: WebServer
-    pe_version: v1.5.0
+    security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
     elb_security_group_id: sg-4318e724
+    elbsubnets: "subnet-65fe0b13,subnet-0ca54b68"

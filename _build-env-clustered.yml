@@ -30,7 +30,7 @@
     - promo
 
 - name: Build PE (NoSSL)
-  include: _pe_nossl.yml
+  include: _pe_nonssl.yml
   remote_user: ec2-user
   tags:
     - tagged
@@ -41,7 +41,7 @@
   remote_user: ec2-user
   tags:
     - tagged
-    - promo_ssl
+    - pe_ssl
 
 - name: Find AMI ID
   hosts: localhost
