@@ -13,6 +13,16 @@ export ENV=${ENV}
 
 aws s3 cp s3://ovc-travisperkins-whitelist/${ENV}/locationWhiteList.ovccfg /opt/ovc/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/tp-all/config/posMServer/locationWhiteList.ovccfg
 
+logentries_config() {
+    if hash le 2>/dev/null; then
+        echo "Logentries installed.  Configuring the instance."
+        sed -i "s/TEST_environment_name/[TravisPerkins]-${ENV}/g" /etc/le/config
+        le reinit
+        service logentries restart
+    else
+        echo "Logentries is not installed"
+    fi
+}
 
 export FILE_NAME=/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties
 cp $FILE_NAME $FILE_NAME.ORIG
@@ -58,6 +68,8 @@ sed -i s#SITE_URL\',\"http:#SITE_URL\',\"https:#g /var/www/html/ovcdashboard/app
 sed -i "/-Dorg.quartz.scheduler.instanceId=/c\-Dorg.quartz.scheduler.hostName=`hostname -f`" /opt/jetty/start.ini
 
 sed -i '/^org\.quartz\.scheduler\.rmi\.export=/ s/true/false/' /opt/ovc/Platform-Dynamic-Objects/config/quartz.properties
+
+logentries_config
 
 sudo /sbin/service jetty stop
 killall jetty
