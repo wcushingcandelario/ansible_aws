@@ -158,7 +158,7 @@
           - Namespace: aws:elb:listener:3000
             OptionName: SSLCertificateId
             Value: "{{ ssl_certificate_id }}"
-        when: ssl_certificate_id
+      when: ssl_certificate_id
       tags:
         - pe_env
 
