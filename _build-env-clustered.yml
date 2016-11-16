@@ -34,7 +34,7 @@
   remote_user: ec2-user
   tags:
     - tagged
-    - promo_nossl
+    - pe_nonssl
 
 - name: Build PE (SSL)
   include: _pe_ssl.yml

@@ -20,14 +20,14 @@
   remote_user: ec2-user
   tags:
     - tagged
-    - promo
+    - pe_combined
 
 - name: Build PE (NoSSL)
   include: _pe_nonssl.yml
   remote_user: ec2-user
   tags:
     - tagged
-    - promo_nonssl
+    - pe_nonssl
 
 - name: Build PE (SSL)
   include: _pe_ssl.yml
