@@ -37,8 +37,8 @@
         region: "{{ region }}"
         app_name: "{{ deploy_type }}-Promo"
         version_label: "{{ pe_version }}"
-        s3_bucket: "{{ s3_bucket }}"
-        s3_key: Dockerrun.aws.json.zip
+        s3_bucket: "{{ s3_bucket_docker }}"
+        s3_key: Dockerrun.aws.json
         state: present
       register: version
 
@@ -125,14 +125,12 @@
           - Namespace: aws:autoscaling:launchconfiguration
             OptionName: EC2KeyName
             Value: "{{ key }}"
-      tags:
-         - pe_env
 
     - name: Create new Beanstalk environment
       elasticbeanstalk_env:
         region: "{{ region }}"
         app_name: "{{ deploy_type }}-Promo"
-        env_name: "{{ deploy_type }}Promo-env"
+        env_name: "{{ deploy_type }}Promo"
         tier_name: "{{ tier }}"
         version_label: "{{ pe_version }}"
         solution_stack_name: "{{ solution_stack_name }}"
@@ -159,14 +157,12 @@
             OptionName: SSLCertificateId
             Value: "{{ ssl_certificate_id }}"
       when: ssl_certificate_id
-      tags:
-        - pe_env
+
 
     - name: Record ELB EndpointURL
       command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo` && Status==`Ready`].EndpointURL'"
       register: elb_dns
-      tags:
-        -elb_dns
+
 
     - name: debug elb dns
       debug: "var=elb_dns"
@@ -183,4 +179,4 @@
         alias_hosted_zone_id: "{{ alias_hosted_zone }}"
         overwrite: yes
       tags:
-        - pe_alias
+        - pe_combined
