@@ -31,7 +31,11 @@
     - name: Use set_fact to AMI
       set_fact:
         image_id: "{{ ami_find.results[0].ami_id }}"
-      when: image_id is undefined
+      when: image_id is undefined and ami_find.results is defined
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: BAD_AMI_ID__LOOKUP_FAILED
+      when: image_id is undefined and ami_find.results is undefined
   tags:
     - find_ovc_ami
     - launch_ami
@@ -89,6 +93,7 @@
         ttl: 300
         value: "{{ ami_instance.tagged_instances[0].private_ip }}"
         overwrite: "yes"
+      when: ami_instance.tagged_instances is defined
       tags:
         - dns
   tags:
