@@ -22,6 +22,22 @@
     - tagged
     - mongo_single
 
+- name: Set OVC URLs
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Set SSL based facts
+      set_fact:
+        ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
+        dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
+      when: ssl_certificate_id
+
+    - name: Set SSL based facts
+      set_fact:
+        ovc_url: "http://{{ deploy_type }}.{{ dns_domain }}"
+        dash_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
+      when: not ssl_certificate_id
+
 - name: Build PE (Combined)
   include: _pe_combined.yml
   remote_user: ec2-user

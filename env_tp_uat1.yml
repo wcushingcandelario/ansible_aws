@@ -35,12 +35,7 @@
     dockercfg: dockercfg
     pe_version: 1.5.0
     mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
-    ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
-    ovc_nonssl_url: "http://{{ deploy_type }}.{{ dns_domain }}:8080"
-    dash_nonssl_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
-    dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
     promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
-    promo_nonssl_path: "http://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
     tier: WebServer
     security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
     elb_security_group_id: sg-4318e724
