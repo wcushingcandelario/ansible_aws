@@ -12,19 +12,19 @@
     - debug: var=application
 
     - name: Creating temp file for docker template
-      shell: mktemp /tmp/"{{ deploy_type }}.Dockerrun.aws.json"
+      shell: mktemp /tmp/"{{ deploy_type }}.Dockerrun-nonssl.aws.json"
       register: temp
 
     - name: Making new docker file
       template:
-         src: Dockerrun.aws.json.j2
+         src: Dockerrun-nonssl.aws.json.j2
          dest: "{{ temp.stdout }}"
 
     - name: Uploading new docker file to S3
       s3:
        bucket: "{{ s3_bucket_docker }}"
        mode: put
-       object: "{{ deploy_type }}.Dockerrun.aws.json"
+       object: "{{ deploy_type }}.Dockerrun-nonssl.aws.json"
        src: "{{ temp.stdout }}"
 
     - name: Removing docker temp file
@@ -38,7 +38,7 @@
         app_name: "{{ deploy_type }} Services"
         version_label: "{{ pe_version }}"
         s3_bucket: "{{ s3_bucket_docker }}"
-        s3_key: "{{ deploy_type }}.Dockerrun.aws.json"
+        s3_key: "{{ deploy_type }}.Dockerrun-nonssl.aws.json"
         state: present
       register: version
 
