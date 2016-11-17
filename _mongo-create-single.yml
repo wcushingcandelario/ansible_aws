@@ -14,7 +14,11 @@
     - name: Use set_fact to AMI
       set_fact:
         mongo_image_id: "{{ ami_find.results[0].ami_id }}"
-      when: monog_image_id is undefined
+      when: monog_image_id is undefined and ami_find.results is defined
+    - name: Use set_fact to AMI
+      set_fact:
+        mongo_image_id: BAD_AMI_ID__LOOKUP_FAILED
+      when: monog_image_id is undefined and ami_find.results is undefined
   tags:
     - find_mongo_ami
 
@@ -57,12 +61,17 @@
     - name: Set IP fact (public).
       set_fact:
         mongo_ssh_ip: "{{ mongo_ami_instance.tagged_instances.0.public_ip }}"
-      when: use_public_ip
+      when: use_public_ip and mongo_ami_instance.tagged_instances is defined
 
     - name: Set IP fact (private).
       set_fact:
         mongo_ssh_ip: "{{ mongo_ami_instance.tagged_instances.0.private_ip }}"
-      when: not use_public_ip
+      when: not use_public_ip and mongo_ami_instance.tagged_instances is defined
+
+    - name: Set IP fact when no tagged_instances (for --check)
+      set_fact:
+        mongo_ssh_ip: BAD_AMI_IP__LOOKUP_FAILED
+      when: mongo_ami_instance.tagged_instances is undefined
 
     - name: Add host to group just_baked
       add_host: name={{ mongo_ssh_ip }} groups=mongo_just_baked
@@ -82,6 +91,7 @@
         ttl: 300
         value: "{{ mongo_ami_instance.tagged_instances.0.private_ip }}"
         overwrite: "yes"
+      when: mongo_ami_instance.tagged_instances is defined
       tags:
         - dns
 
