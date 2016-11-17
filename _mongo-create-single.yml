@@ -90,6 +90,29 @@
   remote_user: ec2-user
   roles:
     - mongoinstall
+  tasks:
+    - name: Start mongo on Primary server
+      service:
+        name: mongod
+        state: started
+        state: enabled
+
+    - name: Initiate mongo on Primary Server
+      shell: "mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.initiate())' "
+
+    - name: Verify configuration on Primary Server
+      shell: "mongo --host {{ groups.just_created[0] }} --eval 'printjson(rs.conf())' "
+
+    - name: Copy to Primary
+      copy:
+        src: roles/mongoinstall/files/setAuth.js
+        dest: /opt/setAuth.js
+        mode: 0644
+      become: yes
+      become_user: root
+
+    - name: Execute setAuth.js
+      shell: mongo --host {{ groups.just_created[0] }} < /opt/setAuth.js
   vars:
     cluster_name: "{{ deploy_type }}_cluster"
   tags:
