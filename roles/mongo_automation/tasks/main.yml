@@ -25,7 +25,7 @@
     owner: mongod
     group: mongod
     state: directory
-    recuse: yes
+    recurse: yes
 
 - name: Enable and service
   service:
