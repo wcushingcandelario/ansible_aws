@@ -76,3 +76,4 @@ secure.occhost.context=/rest
 store.finder.stock.url=/v2/%s/products/%s/stock
 stores.url=/v2/%s/stores
 username=customermanager
+import.stock.type=product

@@ -51,3 +51,4 @@ ovcServer.scheme=https
 products.import.pageSize=1500
 secure.occhost.context=/omnicommercewebservices
 stores.url=/v2/%s/ovc/locations/All
+import.stock.type=product

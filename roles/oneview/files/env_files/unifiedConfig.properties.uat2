@@ -75,3 +75,4 @@ secure.occhost.context=/omnicommercewebservices
 store.finder.stock.url=/v2/%s/products/%s/stock
 stores.url=/v2/%s/ovc/locations/All
 username=customermanager
+import.stock.type=product
