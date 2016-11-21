@@ -6,13 +6,17 @@ user-key={{ logentries_account_key }}
 path = {{ jetty_dir }}/logs/jetty.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Jetty
 
-[Importer Logs]
-path = {{ jetty_dir }}/logs/ip*.log
-destination = {{ environment_name | default('TEST_environment_name') }}/Importers
+[Jetty stderror Logs]
+path = {{ jetty_dir }}/logs/*stderrout*.log
+destination = {{ environment_name | default('TEST_environment_name') }}/Jetty_Std_Error
 
 [Jetty Start logs]
 path = {{ jetty_dir }}/logs/start.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Jetty
+
+[Importer Logs]
+path = {{ jetty_dir }}/logs/ip*.log
+destination = {{ environment_name | default('TEST_environment_name') }}/Importers
 
 [Dashboard Error logs]
 path = {{ html_root }}/ovcdashboard/app/tmp/logs/error.log
