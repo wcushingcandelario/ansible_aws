@@ -182,6 +182,14 @@
   become: yes
   become_user: root
 
+- name: Set Quartz threads to 1
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/quartz.properties"
+    state: present
+    regexp: "org.quartz.threadPool.threadCount.*"
+    line: "org.quartz.threadPool.threadCount = 1"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
 - name: Add configurations to jettys start.ini
   lineinfile:
     dest: "{{ jetty_dir }}/start.ini"
