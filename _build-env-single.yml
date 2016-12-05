@@ -23,34 +23,22 @@
       set_fact:
         ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
         dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
-      when: ssl_certificate_id
+      when: ssl_certificate_id is defined
 
     - name: Set SSL based facts
       set_fact:
         ovc_url: "http://{{ deploy_type }}.{{ dns_domain }}"
         dash_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
-      when: not ssl_certificate_id
+      when: ssl_certificate_id is undefined
+  tags:
+    - promo_engine
 
-- name: Build PE (Combined)
-  include: _pe_combined.yml
+- name: Build Promo Engine
+  include: _promo_engine.yml
   remote_user: ec2-user
   tags:
     - tagged
-    - pe_combined
-
-- name: Build PE (NoSSL)
-  include: _pe_nonssl.yml
-  remote_user: ec2-user
-  tags:
-    - tagged
-    - pe_nonssl
-
-- name: Build PE (SSL)
-  include: _pe_ssl.yml
-  remote_user: ec2-user
-  tags:
-    - tagged
-    - pe_ssl
+    - promo_engine
 
 - name: Find AMI ID
   hosts: localhost

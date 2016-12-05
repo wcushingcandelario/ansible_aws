@@ -64,34 +64,22 @@
             Value: false
           - Namespace: aws:elb:listener:3000
             OptionName: ListenerProtocol
-            Value: HTTPS
+            Value: HTTP
           - Namespace: aws:elb:listener:3000
             OptionName: InstanceProtocol
             Value: HTTP
           - Namespace: aws:elb:listener:3000
             OptionName: InstancePort
             Value: 3000
-          - Namespace: aws:elb:listener:3000
-            OptionName: SSLCertificateId
-            Value: "{{ ssl_certificate_id }}"
-          - Namespace: aws:elb:listener:443
+          - Namespace: aws:elb:listener:8888
             OptionName: InstanceProtocol
             Value: HTTP
-          - Namespace: aws:elb:listener:443
+          - Namespace: aws:elb:listener:8888
             OptionName: ListenerProtocol
-            Value: HTTPS
-          - Namespace: aws:elb:listener:443
+            Value: HTTP
+          - Namespace: aws:elb:listener:8888
             OptionName: InstancePort
             Value: 8888
-          - Namespace: aws:elb:listener:443
-            OptionName: SSLCertificateId
-            Value: "{{ ssl_certificate_id }}"
-          - Namespace: aws:elb:policies
-            OptionName: LoadBalancerPorts
-            Value: 3000, 443
-          - Namespace: aws:elb:policies
-            OptionName: Stickiness Cookie Expiration
-            Value: 300
           - Namespace: aws:autoscaling:asg
             OptionName: MinSize
             Value: "{{ min_size }}"
@@ -138,9 +126,44 @@
             OptionName: EC2KeyName
             Value: "{{ key }}"
 
+
+    - name: Create new Beanstalk SSL environment
+      elasticbeanstalk_env:
+        region: "{{ region }}"
+        app_name: "{{ deploy_type }} Services"
+        env_name: "{{ deploy_type }}Promo"
+        tier_name: "{{ tier }}"
+        version_label: "{{ pe_version }}"
+        solution_stack_name: "{{ solution_stack_name }}"
+        option_settings:
+          - Namespace: aws:elb:listener:8888
+            OptionName: ListenerEnabled
+            Value: false
+          - Namespace: aws:elb:listener:443
+            OptionName: InstanceProtocol
+            Value: HTTP
+          - Namespace: aws:elb:listener:443
+            OptionName: InstancePort
+            Value: 8888
+          - Namespace: aws:elb:listener:443
+            OptionName: ListenerProtocol
+            Value: HTTPS
+          - Namespace: aws:elb:listener:443
+            OptionName: SSLCertificateId
+            Value: "{{ ssl_certificate_id }}"
+          - Namespace: aws:elb:listener:3000
+            OptionName: ListenerProtocol
+            Value: HTTPS
+          - Namespace: aws:elb:listener:3000
+            OptionName: SSLCertificateId
+            Value: "{{ ssl_certificate_id }}"
+      when: ssl_certificate_id is defined and (ssl_certificate_id != 'false')
+
+
     - name: Record ELB EndpointURL
       command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo` && Status==`Ready`].EndpointURL'"
       register: elb_dns
+
 
     - name: debug elb dns
       debug: "var=elb_dns"
@@ -157,4 +180,4 @@
         alias_hosted_zone_id: "{{ alias_hosted_zone }}"
         overwrite: yes
       tags:
-        - pe_ssl
+        - promo_engine
