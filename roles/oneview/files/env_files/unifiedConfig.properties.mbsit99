@@ -52,7 +52,7 @@ others.import.pageSize=2000
 ovcDB.db=xdb
 ovcDB.driver=com.mysql.jdbc.Driver
 ovcDB.encrypted.password=L3Q5kQqII0OlaJ9FGCaukQ==
-ovcDB.host=mysql-sit99.ovcdemo.com
+ovcDB.host=mysql-mbsit99.ovcdemo.com
 ovcDB.params=autoReconnect\=true
 ovcDB.port=3306
 ovcDB.scheme=jdbc\:mysql
@@ -61,12 +61,12 @@ ovcNOSQLDB.connectTimeout=5000
 ovcNOSQLDB.connectionsPerHost=20
 ovcNOSQLDB.db=xdb
 ovcNOSQLDB.encrypted.password=pS6Uu4KU3B9G9FRg5IlnBg\=\=
-ovcNOSQLDB.host=mongodb-sit99.ovcdemo.com
+ovcNOSQLDB.host=mongodb-mbsit99.ovcdemo.com
 ovcNOSQLDB.maxWaitTime=5000
 ovcNOSQLDB.port=27017
 ovcNOSQLDB.socketTimeout=5000
 ovcNOSQLDB.username=root
-ovcServer.host=sit99-dash.ovcdemo.com
+ovcServer.host=mbsit99-dash.ovcdemo.com
 ovcServer.port=443
 ovcServer.scheme=https
 password=S9beBCmJbdLsitMzzpZ7qQ\=\=

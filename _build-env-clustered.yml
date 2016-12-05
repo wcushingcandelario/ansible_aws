@@ -8,6 +8,14 @@
   tags:
     - rds
 
+- name: Set universal facts
+  connection: local
+  hosts: localhost
+  tasks:
+    - set_fact:
+        new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
+        asg_name: "{{ deploy_type }}_autoscale"
+
 - name: Build Mongo Cluster
   include: _mongo-create-auto.yml
   remote_user: ec2-user
@@ -38,7 +46,11 @@
     - name: Use set_fact to AMI
       set_fact:
         image_id: "{{ ami_find.results[0].ami_id }}"
-      when: image_id is undefined
+      when: image_id is undefined and ami_find.results is defined
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: BAD_AMI_ID__LOOKUP_FAILED
+      when: image_id is undefined and ami_find.results is undefined
   tags:
     - asg
     - find_ovc_ami
@@ -56,7 +68,5 @@
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
-    asg_name: "{{ deploy_type }}_autoscale"
-    new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
   tags:
     - asg
