@@ -28,3 +28,15 @@
     elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
     min_size: 2
     max_size: 5
+
+    # Promo Engine
+    dockerrun_version: "2"
+    s3_bucket_docker: "ovc-github-access-2"
+    dockercfg: dockercfg
+    pe_version: 1.5.0
+    mongo_url: "mongodb://mongodb-{{ deploy_type }}01.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}02.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}03.{{ dns_domain }}:27017/ovcpromo"
+    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
+    tier: WebServer
+    security_group_ids: "sg-b12180d6,sg-12e5a275,sg-655eff02"
+    elb_security_group_id: sg-12e5a275
+    elbsubnets: "subnet-0abd536e,subnet-10948367"
