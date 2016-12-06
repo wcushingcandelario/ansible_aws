@@ -13,7 +13,7 @@
        set_fact:
          ovc_url: "http://{{ deploy_type }}.{{ dns_domain }}"
          dash_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
-       when: ssl_certificate_id is defined or (ssl_certificate_id == 'false')
+       when: ssl_certificate_id is undefined or (ssl_certificate_id == 'false')
 
  - name: Create a Promo Engine
    hosts: localhost
