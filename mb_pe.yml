@@ -3,9 +3,9 @@
    tasks:
     - name: Creating Beanstalk application
       elasticbeanstalk_app:
-         region: "{{ region }}"
-         app_name: "{{ deploy_type }}-Promo"
-         description: "{{ deploy_type }} Promo Engine"
+         region: us-east-1
+         app_name: MB-Promo
+         description: MB Promo Engine
          state: present
       register: application
 
@@ -13,10 +13,10 @@
 
     - name: Versioning the application
       elasticbeanstalk_version:
-         region: "{{ region }}"
-         app_name: "{{ deploy_type }}-Promo"
-         version_label: "{{ pe_version }}"
-         s3_bucket: "{{ s3_bucket }}"
+         region: us-east-1
+         app_name: MB-Promo
+         version_label: 1.5.0
+         s3_bucket: ovc-devops
          s3_key: Dockerrun.aws.json.zip
          state: present
       register: version
@@ -25,12 +25,12 @@
 
     - name: Create new Beanstalk environment
       elasticbeanstalk_env:
-         region: "{{ region }}"
-         app_name: "{{ deploy_type }}-Promo"
-         env_name: "{{ deploy_type }}Promo"
-         tier_name: "{{ tier }}"
-         version_label: "{{ pe_version }}"
-         solution_stack_name: "{{ solution_stack_name }}"
+         region: us-east-1
+         app_name: MB-Promo
+         env_name: MBPromo
+         tier_name: WebServer
+         version_label: 1.5.0
+         solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
          option_settings:
            - Namespace: aws:elb:loadbalancer
              OptionName: CrossZone
@@ -52,7 +52,7 @@
              Value: 3000
            - Namespace: aws:elb:listener:3000
              OptionName: SSLCertificateId
-             Value: "{{ ssl_certificate_id }}"
+             Value: "arn:aws:acm:us-east-1:748109554602:certificate/29bd18b2-2c4a-4581-a1bd-1e265a35d313"
            - Namespace: aws:elb:listener:443
              OptionName: InstanceProtocol
              Value: HTTP
@@ -64,7 +64,7 @@
              Value: 8888
            - Namespace: aws:elb:listener:443
              OptionName: SSLCertificateId
-             Value: "{{ ssl_certificate_id }}"
+             Value: "arn:aws:acm:us-east-1:748109554602:certificate/29bd18b2-2c4a-4581-a1bd-1e265a35d313"
            - Namespace: aws:elb:policies
              OptionName: LoadBalancerPorts
              Value: 3000, 443
@@ -73,51 +73,49 @@
              Value: 300
            - Namespace: aws:autoscaling:asg
              OptionName: MinSize
-             Value: "{{ min_size }}"
+             Value: 2
            - Namespace: aws:autoscaling:asg
              OptionName: MaxSize
-             Value: "{{ max_size }}"
+             Value: 5
            - Namespace: aws:elb:loadbalancer
              OptionName: SecurityGroups
-             Value: "{{ security_group_ids }}"
+             Value: sg-eeecf389, sg-6387e207, sg-6387e207, sg-05ee4c78
            - Namespace: aws:elb:loadbalancer
              OptionName: ManagedSecurityGroup
-             Value: "{{ elb_security_group_id }}"
+             Value: sg-05ee4c78
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: ServiceRole
-             Value: "{{ beanstalk_service_role }}"
+             Value: aws-elasticbeanstalk-service-role
            - Namespace: aws:elasticbeanstalk:environment
              OptionName: EnvironmentType
              Value: LoadBalanced
            - Namespace: aws:ec2:vpc
              OptionName: Subnets
-             Value: "{{ elbsubnets }}"
+             Value: subnet-9f8a92b7, subnet-a194589c
            - Namespace: aws:ec2:vpc
              OptionName: VPCId
-             Value: "{{ vpc_id }}"
+             Value: vpc-ccb0b5a9
            - Namespace: aws:ec2:vpc
              OptionName: ELBSubnets
-             Value: "{{ elbsubnets }}"
+             Value: subnet-9f8a92b7, subnet-a194589c
            - Namespace: aws:ec2:vpc
              OptionName: ELBScheme
-             Value: "{{ elb_scheme }}"
+             Value: external
            - Namespace: aws:ec2:vpc
              OptionName: AssociatePublicIpAddress
              Value: true
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: IamInstanceProfile
-             Value: "{{ beanstalk_iam_role }}"
+             Value: aws-elasticbeanstalk-ec2-role
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: InstanceType
-             Value: "{{ instance_type_pe }}"
+             Value: t2.medium
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: SecurityGroups
-             Value: "{{ security_group_ids }}"
+             Value: sg-eeecf389, sg-6387e207, sg-6387e207
            - Namespace: aws:autoscaling:launchconfiguration
              OptionName: EC2KeyName
-             Value: "{{ key }}"
-      tags:
-         - pe_env
+             Value: ovc-demo
 
     - name: Record ELB EndpointURL
       command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo` && Status==`Ready`].EndpointURL'"
@@ -129,13 +127,12 @@
     - name: Add Alias to Route53
       route53:
         command: "create"
-        zone: "{{ dns_domain }}"
-        record: "{{ deploy_type }}-promo.{{ dns_domain }}"
+        zone: "ovcdemo.com"
+        record: "mb-promo.ovcdemo.com"
         type: "A"
-        private_zone: "true"
         value: "{{ elb_dns.stdout }}"
         alias: "True"
-        alias_hosted_zone_id: "{{ alias_hosted_zone }}"
+        alias_hosted_zone_id: "Z35SXDOTRQ7X7K"
         overwrite: yes
       tags:
-        - pe_alias
+        - pe_env

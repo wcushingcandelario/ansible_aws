@@ -9,7 +9,7 @@
     key: ovc-tp-np
 
     # DB
-    environment_name: uat2-rds
+    environment_name: {{ deploy_type }}-rds
     rds_security_group: sg-be19edd9
     rds_subnet_group: pre-prod-rds
     multirdszone: no
@@ -28,3 +28,15 @@
     vpc_subnet_id: "subnet-69a24c0d"
     min_size: 1
     max_size: 1
+
+    # Promo Engine
+    dockerrun_version: "2"
+    s3_bucket_docker: "ovc-github-access-2"
+    dockercfg: dockercfg
+    pe_version: 1.5.0
+    mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
+    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
+    tier: WebServer
+    security_group_ids: "sg-4f04f028,sg-bd1aeeda,sg-11ce3976"
+    elb_security_group_id: sg-11ce3976
+    elbsubnets: "subnet-27ba4b51,subnet-69a24c0d"

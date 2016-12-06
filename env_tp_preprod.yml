@@ -9,7 +9,7 @@
     key: ovc-tp-np
 
     # DB
-    environment_name: preprod-rds
+    environment_name: {{ deploy_type }}-rds
     rds_security_group: sg-5bbc1f3c
     rds_subnet_group: pre-prod-rds
     multirdszone: no
@@ -23,14 +23,17 @@
     vpc_subnet_public: subnet-0a75a06e
     IAMROLE: "NonProdAppServer"
     instance_type_asg: "m4.xlarge"
-
-    security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
-    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
     min_size: 2
     max_size: 5
 
     # Promo Engine
-    s3_bucket: ovc-github-access-2
+    dockerrun_version: "2"
+    s3_bucket_docker: "ovc-github-access-2"
+    dockercfg: dockercfg
+    pe_version: 1.5.0
+    mongo_url: "mongodb://mongodb-{{ deploy_type }}01.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}02.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}03.{{ dns_domain }}:27017/ovcpromo"
+    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
     tier: WebServer
-    pe_version: v1.4.0
+    security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
     elb_security_group_id: sg-887dc9ef
+    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
