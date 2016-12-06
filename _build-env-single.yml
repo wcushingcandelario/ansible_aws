@@ -15,24 +15,6 @@
     - mongo
     - tagged
 
-- name: Set OVC URLs
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: Set SSL based facts
-      set_fact:
-        ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
-        dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
-      when: ssl_certificate_id is defined
-
-    - name: Set SSL based facts
-      set_fact:
-        ovc_url: "http://{{ deploy_type }}.{{ dns_domain }}"
-        dash_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
-      when: ssl_certificate_id is undefined
-  tags:
-    - promo_engine
-
 - name: Build Promo Engine
   include: _promo_engine.yml
   remote_user: ec2-user
