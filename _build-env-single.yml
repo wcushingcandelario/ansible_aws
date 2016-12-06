@@ -16,8 +16,10 @@
     - tagged
 
 - name: Build Promo Engine
-  include: _promo_engine.yml
-  remote_user: ec2-user
+  connection: local
+  hosts: localhost
+  roles:
+    - promo_engine
   tags:
     - tagged
     - promo_engine
