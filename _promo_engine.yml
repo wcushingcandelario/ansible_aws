@@ -1,5 +1,22 @@
 ---
- - hosts: localhost
+ - name: Set OVC URLs
+   hosts: localhost
+   connection: local
+   tasks:
+     - name: Set SSL based facts (SSL)
+       set_fact:
+         ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
+         dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
+       when: ssl_certificate_id is defined and (ssl_certificate_id != 'false')
+
+     - name: Set SSL based facts (Non-SSL)
+       set_fact:
+         ovc_url: "http://{{ deploy_type }}.{{ dns_domain }}"
+         dash_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
+       when: ssl_certificate_id is defined or (ssl_certificate_id == 'false')
+
+ - name: Create a Promo Engine
+   hosts: localhost
    tasks:
     - name: Creating Beanstalk application
       elasticbeanstalk_app:
