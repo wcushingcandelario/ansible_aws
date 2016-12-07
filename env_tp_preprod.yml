@@ -9,7 +9,7 @@
     key: ovc-tp-np
 
     # DB
-    environment_name: {{ deploy_type }}-rds
+    environment_name: "{{ deploy_type }}-rds"
     rds_security_group: sg-5bbc1f3c
     rds_subnet_group: pre-prod-rds
     multirdszone: no
