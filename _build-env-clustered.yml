@@ -30,6 +30,15 @@
     - tagged
     - mongo_single
 
+- name: Build Promo Engine
+  connection: local
+  hosts: localhost
+  roles:
+    - promo_engine
+  tags:
+    - tagged
+    - promo_engine
+
 - name: Find AMI ID
   hosts: localhost
   connection: local
