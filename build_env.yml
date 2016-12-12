@@ -1,0 +1,19 @@
+---
+
+- name: Build a clustered environment
+  hosts: localhost
+  connection: local
+  tasks:
+    - debug: msg='Clusteed'
+      when: clustered_environment
+
+    - debug: msg='Single'
+      when: not clustered_environment
+
+- name: Build a clustered environment
+  include: _build-env-clustered.yml
+  when: clustered_environment
+
+- name: Build a single environment
+  include: _build-env-single.yml
+  when: not clustered_environment
