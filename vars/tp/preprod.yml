@@ -1,38 +1,35 @@
----
+clustered_environment: Yes
 
-- name: Build PreProd
-  include: _build-env-clustered.yml
-  vars:
-    # Common
-    deploy_type: preprod
-    region: eu-west-1
-    key: ovc-tp-np
+# Common
+deploy_type: preprod
+region: eu-west-1
+key: ovc-tp-np
 
-    # DB
-    environment_name: "{{ deploy_type }}-rds"
-    rds_security_group: sg-5bbc1f3c
-    rds_subnet_group: pre-prod-rds
-    multirdszone: no
+# DB
+environment_name: "{{ deploy_type }}-rds"
+rds_security_group: sg-5bbc1f3c
+rds_subnet_group: pre-prod-rds
+multirdszone: no
 
-    # Mongo
-    mongo_instance_type: m4.large
-    mongo_security_groups: sg-5bbc1f3c
+# Mongo
+mongo_instance_type: m4.large
+mongo_security_groups: sg-5bbc1f3c
 
-    # AMI/ELB/ASG
-    ovc_security_groups: ['sg-71bc1f16']
-    vpc_subnet_public: subnet-0a75a06e
-    IAMROLE: "NonProdAppServer"
-    instance_type_asg: "m4.xlarge"
-    min_size: 2
-    max_size: 5
+# AMI/ELB/ASG
+ovc_security_groups: ['sg-71bc1f16']
+vpc_subnet_public: subnet-0a75a06e
+IAMROLE: "NonProdAppServer"
+instance_type_asg: "m4.xlarge"
+min_size: 2
+max_size: 5
 
-    # Promo Engine
-    dockerrun_version: "2"
-    s3_bucket_docker: "ovc-github-access-2"
-    dockercfg: dockercfg
-    mongo_url: "mongodb://mongodb-{{ deploy_type }}01.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}02.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}03.{{ dns_domain }}:27017/ovcpromo"
-    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
-    tier: WebServer
-    security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
-    elb_security_group_id: sg-887dc9ef
-    elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"
+# Promo Engine
+dockerrun_version: "2"
+s3_bucket_docker: "ovc-github-access-2"
+dockercfg: dockercfg
+mongo_url: "mongodb://mongodb-{{ deploy_type }}01.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}02.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}03.{{ dns_domain }}:27017/ovcpromo"
+promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
+tier: WebServer
+security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
+elb_security_group_id: sg-887dc9ef
+elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"

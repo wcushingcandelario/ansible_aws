@@ -1,31 +1,28 @@
----
+clustered_environment: Yes
 
-- name: Build Prod
-  include: _build-env-clustered.yml
-  vars:
-    # Common
-    deploy_type: sit99
-    region: us-east-1
-    key: ovcdemo
+# Common
+deploy_type: sit99
+region: us-east-1
+key: ovcdemo
 
-    # DB
-    environment_name: "{{ deploy_type }}-rds"
-    rds_security_group: sg-6387e207,sg-0591ee7f
-    rds_subnet_group: "rds subnet"
-    multirdszone: no
+# DB
+environment_name: "{{ deploy_type }}-rds"
+rds_security_group: sg-6387e207,sg-0591ee7f
+rds_subnet_group: "rds subnet"
+multirdszone: no
 
-    # Mongo
-    mongo_instance_type: m4.large
-    mongo_security_groups: sg-62fc7a06,sg-248af55e
+# Mongo
+mongo_instance_type: m4.large
+mongo_security_groups: sg-62fc7a06,sg-248af55e
 
-    # AMI/ELB/ASG
-    ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
-    vpc_subnet_public: subnet-9f8a92b7
-    vpc_subnet_id: "{{ vpc_subnet_public }}"
-    IAMROLE: S3_Release_Read
-    instance_type_asg: "m4.xlarge"
+# AMI/ELB/ASG
+ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
+vpc_subnet_public: subnet-9f8a92b7
+vpc_subnet_id: "{{ vpc_subnet_public }}"
+IAMROLE: S3_Release_Read
+instance_type_asg: "m4.xlarge"
 
-    security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
-    elbsubnets: subnet-9f8a92b7
-    min_size: 2
-    max_size: 5
+security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
+elbsubnets: subnet-9f8a92b7
+min_size: 2
+max_size: 5

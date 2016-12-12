@@ -1,41 +1,38 @@
----
+clustered_environment: No
 
-- name: Build UAT1
-  include: _build-env-single.yml
-  vars:
-    # Common
-    deploy_type: uat1
-    region: eu-west-1
-    key: ovc-tp-np
+# Common
+deploy_type: uat1
+region: eu-west-1
+key: ovc-tp-np
 
-    # DB
-    environment_name: "{{ deploy_type }}-rds"
-    rds_security_group: sg-a50010c1
-    rds_subnet_group: "uat1 rds subnet group"
-    multirdszone: no
+# DB
+environment_name: "{{ deploy_type }}-rds"
+rds_security_group: sg-a50010c1
+rds_subnet_group: "uat1 rds subnet group"
+multirdszone: no
 
-    # Mongo
-    mongo_instance_type: m4.micro
-    mongo_security_groups: FIXME
+# Mongo
+mongo_instance_type: m4.micro
+mongo_security_groups: FIXME
 
-    # AMI/ELB/ASG
-    ovc_security_groups: sg-a50010c1
-    vpc_subnet_public: subnet-b3bf51d7
-    IAMROLE: "NonProdAppServer"
-    instance_type_single: "m4.xlarge"
+# AMI/ELB/ASG
+ovc_security_groups: sg-a50010c1
+vpc_subnet_public: subnet-b3bf51d7
+IAMROLE: "NonProdAppServer"
+instance_type_single: "m4.xlarge"
 
-    group_id: "sg-2b00104f,sg-61001005"
-    vpc_subnet_id: "subnet-0ca54b68"
-    min_size: 1
-    max_size: 1
+group_id: "sg-2b00104f,sg-61001005"
+vpc_subnet_id: "subnet-0ca54b68"
+min_size: 1
+max_size: 1
 
-    # Promo Engine
-    dockerrun_version: "2"
-    s3_bucket_docker: "ovc-github-access-2"
-    dockercfg: dockercfg
-    mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
-    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
-    tier: WebServer
-    security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
-    elb_security_group_id: sg-4318e724
-    elbsubnets: "subnet-65fe0b13,subnet-0ca54b68"
+# Promo Engine
+dockerrun_version: "2"
+s3_bucket_docker: "ovc-github-access-2"
+dockercfg: dockercfg
+mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
+promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
+tier: WebServer
+security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
+elb_security_group_id: sg-4318e724
+elbsubnets: "subnet-65fe0b13,subnet-0ca54b68"

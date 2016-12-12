@@ -1,41 +1,38 @@
----
+clustered_environment: Yes
 
-- name: Build Prod
-  include: _build-env-clustered.yml
-  vars:
-    # Common
-    deploy_type: prod
-    region: eu-west-1
-    key: ovc-tp-prod
+# Common
+deploy_type: prod
+region: eu-west-1
+key: ovc-tp-prod
 
-    # DB
-    environment_name: prod-rds
-    rds_security_group: sg-be2081d9
-    rds_subnet_group: prod-rds
-    multirdszone: yes
+# DB
+environment_name: prod-rds
+rds_security_group: sg-be2081d9
+rds_subnet_group: prod-rds
+multirdszone: yes
 
-    # Mongo
-    mongo_instance_type: m4.large
-    mongo_security_groups: sg-be2081d9
+# Mongo
+mongo_instance_type: m4.large
+mongo_security_groups: sg-be2081d9
 
-    # AMI/ELB/ASG
-    ovc_security_groups: ['sg-b12180d6']
-    vpc_subnet_public: subnet-1d719879
-    IAMROLE: "ProdAppServer"
-    instance_type_asg: "m4.xlarge"
+# AMI/ELB/ASG
+ovc_security_groups: ['sg-b12180d6']
+vpc_subnet_public: subnet-1d719879
+IAMROLE: "ProdAppServer"
+instance_type_asg: "m4.xlarge"
 
-    security_group_ids: "sg-12e5a275,sg-655eff02,sg-b12180d6"
-    elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
-    min_size: 2
-    max_size: 5
+security_group_ids: "sg-12e5a275,sg-655eff02,sg-b12180d6"
+elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
+min_size: 2
+max_size: 5
 
-    # Promo Engine
-    dockerrun_version: "2"
-    s3_bucket_docker: "ovc-github-access-2"
-    dockercfg: dockercfg
-    mongo_url: "mongodb://mongodb-{{ deploy_type }}01.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}02.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}03.{{ dns_domain }}:27017/ovcpromo"
-    promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
-    tier: WebServer
-    security_group_ids: "sg-b12180d6,sg-12e5a275,sg-655eff02"
-    elb_security_group_id: sg-12e5a275
-    elbsubnets: "subnet-0abd536e,subnet-10948367"
+# Promo Engine
+dockerrun_version: "2"
+s3_bucket_docker: "ovc-github-access-2"
+dockercfg: dockercfg
+mongo_url: "mongodb://mongodb-{{ deploy_type }}01.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}02.{{ dns_domain }}:27017,mongodb-{{ deploy_type }}03.{{ dns_domain }}:27017/ovcpromo"
+promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
+tier: WebServer
+security_group_ids: "sg-b12180d6,sg-12e5a275,sg-655eff02"
+elb_security_group_id: sg-12e5a275
+elbsubnets: "subnet-0abd536e,subnet-10948367"
