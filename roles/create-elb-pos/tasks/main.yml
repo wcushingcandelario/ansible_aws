@@ -1,65 +1,57 @@
----
-- name: Create a new ELB for OVC POS
-  hosts: localhost
-  connection: local
-  gather_facts: False
-
-
-  tasks:
-  - name: create ELB
-    local_action:
-      module: ec2_elb_lb
-      name: "{{ deploy_pos }}"
-      state: present
-      region: "{{ region }}"
-      scheme: "{{ elb_scheme }}"
-      connection_draining_timeout: 120
-      idle_timeout: 300
-      subnets: "{{ elbsubnets }}"
-      security_group_ids: "{{ security_group_ids }}"
-      listeners:
-      - protocol: tcp
-        load_balancer_port: 443
-        instance_port: 443
-      - protocol: tcp
-        load_balancer_port: 8080
-        instance_port: 8080
-      health_check:
-        ping_protocol: tcp # options are http, https, ssl, tcp
-        ping_port: 443
-        ping_path: "/json/posservices/health" # not required for tcp or ssl
-        response_timeout: 5 # seconds
-        interval: 30 # seconds
-        unhealthy_threshold: 2
-        healthy_threshold: 10
+- name: create ELB
+  local_action:
+    module: ec2_elb_lb
+    name: "{{ deploy_pos }}"
+    state: present
+    region: "{{ region }}"
+    scheme: "{{ elb_scheme }}"
+    connection_draining_timeout: 120
+    idle_timeout: 300
+    subnets: "{{ elbsubnets }}"
+    security_group_ids: "{{ security_group_ids }}"
+    listeners:
+    - protocol: tcp
+      load_balancer_port: 443
+      instance_port: 443
+    - protocol: tcp
+      load_balancer_port: 8080
+      instance_port: 8080
+    health_check:
+      ping_protocol: tcp # options are http, https, ssl, tcp
+      ping_port: 443
+      ping_path: "/json/posservices/health" # not required for tcp or ssl
+      response_timeout: 5 # seconds
+      interval: 30 # seconds
+      unhealthy_threshold: 2
+      healthy_threshold: 10
 #      access_logs:
 #        interval: 5 # minutes (defaults to 60)
 #        s3_location: "sglogs" # This value is required if access_logs is set
 #        s3_prefix: "{{ deploy_type }}ELBlogs"
-    register: elb_new
+  register: elb_new
 
-  - name: Pause for 1 minute
-    pause: minutes=1
+- name: Pause for 1 minute
+  pause: minutes=1
 
-  - name: debug elb create
-    debug: "var=elb_new"
+- name: debug elb create
+  debug: "var=elb_new"
 
-  - name: Get ELB details after creation
-    local_action:
-      module: ec2_elb_facts
-      names:
-        - "{{ deploy_pos }}"
-      region: "{{ region }}"
-    register: elb_facts
+- name: Get ELB details after creation
+  local_action:
+    module: ec2_elb_facts
+    names:
+      - "{{ deploy_pos }}"
+    region: "{{ region }}"
+  register: elb_facts
 
-  - name: Add new Route53 entry
-    route53:
-      command: "create"
-      zone: "{{ dns_domain }}"
-      hosted_zone_id: "{{ dns_zone_id }}"
-      private_zone: "{{ dns_private_zone }}"
-      record: "{{ deploy_type }}.{{ dns_domain }}"
-      type: "CNAME"
-      ttl: 300
-      value: "{{ elb_facts.elbs.0.dns_name }}"
-      overwrite: yes
+- name: Add new Route53 entry
+  route53:
+    command: "create"
+    zone: "{{ dns_domain }}"
+    hosted_zone_id: "{{ dns_zone_id }}"
+    private_zone: "{{ dns_private_zone }}"
+    record: "{{ deploy_type }}.{{ dns_domain }}"
+    type: "CNAME"
+    ttl: 300
+    value: "{{ elb_facts.elbs.0.dns_name }}"
+    overwrite: yes
