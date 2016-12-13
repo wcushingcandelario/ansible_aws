@@ -18,18 +18,18 @@
   become: yes
   become_user: root
 
-- name: Make jetty user own ovcdashboard.zip
-  file:
-    path: "{{ ovc_install_dir }}/installFiles/OVC_Dashboard/ovcdashboard.zip"
-    mode: ug+rw
-    owner: jetty
-    group: jetty
-  sudo: yes
+- name: Find OVC Dashboard
+  find:
+    paths: "{{ ovc_install_dir }}/installFiles/OVC_Install"
+    patterns: '^ovcdashboard.*?\.(?:zip)$'
+    size: "10m"
+    use_regex: True
+  register: ovc_dashboard_zip
 
 - name: Unzip OVC Dashboard
   unarchive:
     copy: no
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Dashboard/ovcdashboard.zip"
+    src: "{{ovc_dashboard_zip['files'][0]['path']}}"
     dest: "{{ html_root }}"
     mode: ug+x
     owner: "{{ webserver_user }}"
@@ -72,11 +72,12 @@
 
 - name: Make jetty user own OVCBirt.war
   file:
-    path: "{{ html_root }}/ovcdashboard/webapps/OVCBIRT.war"
+    path: "{{ item }}"
     mode: ug+rw
     owner: jetty
     group: jetty
-  sudo: yes
+  with_fileglob:
+    - "{{ html_root }}/ovcdashboard/webapps/OVCBIRT*.war"
 
 - name: Set ovcdashboard/app to 777
   file:
