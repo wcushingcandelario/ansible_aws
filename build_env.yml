@@ -23,7 +23,7 @@
     - tagged
     - mongo
 
-- name: Build Mongo Cluster
+- name: Build Mongo Single
   include: _mongo-create-single.yml
   remote_user: ec2-user
   tags:
@@ -69,7 +69,7 @@
   tasks:
     - name: Present new AMI ID
       pause:
-        prompt: PreProd will now be launched with {{ image_id }}
+        prompt: "{{deploy_type}} will now be launched with {{ image_id }}"
         seconds: 30
 
 - name: Create ELB and ASG
