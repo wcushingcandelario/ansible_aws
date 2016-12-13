@@ -12,14 +12,14 @@ rds_subnet_group: "uat1 rds subnet group"
 multirdszone: no
 
 # Mongo
-mongo_instance_type: m4.micro
+mongo_instance_type: t2.micro
 mongo_security_groups: FIXME
 
 # AMI/ELB/ASG
 ovc_security_groups: sg-a50010c1
 vpc_subnet_public: subnet-b3bf51d7
 IAMROLE: "NonProdAppServer"
-instance_type_single: "m4.xlarge"
+instance_type_single: "t2.xlarge"
 
 group_id: "sg-2b00104f,sg-61001005"
 vpc_subnet_id: "subnet-0ca54b68"
