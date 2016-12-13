@@ -1,19 +1,106 @@
 ---
 
-- name: Build a clustered environment
+- name: Build an environment
   hosts: localhost
   connection: local
   tasks:
-    - debug: msg='Clusteed'
+    - debug: msg='Building Clustered'
       when: clustered_environment
 
-    - debug: msg='Single'
+    - debug: msg='Building Single'
       when: not clustered_environment
 
-- name: Build a clustered environment
-  include: _build-env-clustered.yml
-  when: clustered_environment
+- name: Create RDS
+  connection: local
+  hosts: localhost
+  roles:
+    - create_rds
+  tags:
+    - rds
 
-- name: Build a single environment
-  include: _build-env-single.yml
-  when: not clustered_environment
+- name: Set universal facts
+  connection: local
+  hosts: localhost
+  tasks:
+    - set_fact:
+        new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
+        asg_name: "{{ deploy_type }}_autoscale"
+
+- name: Build Mongo Cluster
+  include: _mongo-create-auto.yml
+  remote_user: ec2-user
+  tags:
+    - tagged
+    - mongo
+
+- name: Build Mongo Single
+  include: _mongo-create-single.yml
+  remote_user: ec2-user
+  tags:
+    - tagged
+    - mongo_single
+
+- name: Build Promo Engine
+  connection: local
+  hosts: localhost
+  roles:
+    - promo_engine
+  tags:
+    - tagged
+    - promo_engine
+
+- name: Find AMI ID
+  hosts: localhost
+  connection: local
+  roles:
+    - find_ovc_ami
+  tags:
+    - asg
+    - find_ovc_ami
+    - launch_ami
+
+- name: Add AMI ID to facts
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: "{{ ami_find.results[0].ami_id }}"
+      when: image_id is undefined and ami_find.results is defined
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: BAD_AMI_ID__LOOKUP_FAILED
+      when: image_id is undefined and ami_find.results is undefined
+  tags:
+    - asg
+    - find_ovc_ami
+    - launch_ami
+
+
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Display new AMI ID
+      debug:
+        msg="{{deploy_type}} will now be launched with {{ image_id }}"
+    - name: Present new AMI ID
+      pause:
+        prompt: "{{deploy_type}} will now be launched with {{ image_id }}"
+        seconds: 30
+
+- name: Launch New Instance
+  hosts: localhost
+  connection: local
+  roles:
+    - { role: launch_instance, when: not clustered_environment }
+  tags:
+    - launch_ami
+
+- name: Create ELB and ASG
+  include: _asg_main.yml
+  vars:
+    deploy_pos: "{{ deploy_type }}-POS"
+    deploy_dash: "{{ deploy_type }}-Dash"
+  when: clustered_environment
+  tags:
+    - asg
