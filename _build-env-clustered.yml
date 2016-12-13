@@ -43,7 +43,7 @@
   hosts: localhost
   connection: local
   roles:
-    - findovcami
+    - find_ovc_ami
   tags:
     - asg
     - find_ovc_ami

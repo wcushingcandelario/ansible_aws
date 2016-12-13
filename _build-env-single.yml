@@ -28,7 +28,7 @@
   hosts: localhost
   connection: local
   roles:
-    - findovcami
+    - find_ovc_ami
   tags:
     - find_ovc_ami
     - launch_ami
