@@ -1,5 +1,15 @@
 ---
 
+- name: Build an environment
+  hosts: localhost
+  connection: local
+  tasks:
+    - debug: msg='Building Clustered'
+      when: clustered_environment
+
+    - debug: msg='Building Single'
+      when: not clustered_environment
+
 - name: Create RDS
   connection: local
   hosts: localhost
