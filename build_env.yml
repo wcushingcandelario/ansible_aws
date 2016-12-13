@@ -57,6 +57,7 @@
   tags:
     - asg
     - find_ovc_ami
+    - launch_ami
 
 - name: Add AMI ID to facts
   hosts: localhost
@@ -73,6 +74,8 @@
   tags:
     - asg
     - find_ovc_ami
+    - launch_ami
+
 
 - hosts: localhost
   connection: local
