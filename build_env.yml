@@ -80,5 +80,6 @@
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
+  when: clustered_environment
   tags:
     - asg
