@@ -1,115 +1,35 @@
-- name: Build temporary instance
-  hosts: localhost
-  remote_user: ec2-user
-  connection: local
-  gather_facts: False
+- name: bundle ami
+  local_action:
+    module: ec2_ami
+    instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+    region: "{{ region }}"
+    state: present
+    description: This was provisioned {{ ansible_date_time.iso8601 }}
+    name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
+    wait: yes
+  register: amioutput
 
-  roles:
-  - find_ami
+- name: terminate temporary instance
+  local_action:
+    module: ec2
+    state: absent
+    region: "{{ region }}"
+    instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+  tags:
+    - terminate_ami
 
-  tasks:
-  - name: launch temporary instance
-    local_action:
-      module: ec2
-      assign_public_ip: yes
-      region: "{{ region }}"
-      key_name: "{{ key }}"
-      group_id: "{{ ovc_security_groups }}"
-      instance_type: "{{ instance_type }}"
-      vpc_subnet_id: "{{ vpc_subnet_public }}"
-      image: "{{ ami_find.results[0].ami_id }}"
-      wait: yes
-      instance_profile_name: "{{ ami_baker_instance_profile_name }}"
-      exact_count: 1
-      count_tag:
-        role: ami_builder
-      instance_tags:
-        role: ami_builder
-        Name: ami_builder
-    register: ami_instance
+- name: debug
+  debug: var=amioutput
 
-  - name: Set IP fact (public).
-    set_fact:
-      ssh_ip: "{{ ami_instance.tagged_instances.0.public_ip }}"
-    when: use_public_ip
+- name: Set image_id
+  set_fact:
+    image_id: "{{ amioutput.image_id }}"
 
-  - name: Set IP fact (private).
-    set_fact:
-      ssh_ip: "{{ ami_instance.tagged_instances.0.private_ip }}"
-    when: not use_public_ip
-
-  - name: Show IP
-    debug:
-      var: ssh_ip
-
-  - name: wait for ssh to come up
-    wait_for: host={{ ssh_ip }} delay=30 port=22 state=started timeout=640
-    with_items: ami_instance.instances
-
-  - name: Add host to group just_created
-    add_host: name={{ ssh_ip }} groups=just_created
-
-  - name: Add host to group just_baked
-    add_host: name={{ ssh_ip }} groups=just_baked
-
-- hosts: just_baked
-  remote_user: ec2-user
-  become: yes
-  become_user: root
-
-  roles:
-    - common
-    - jetty
-    - oneview
-    - { role: install_customizations_tp, when: not skip_custom }
-    - ricbra.logentries
-    - nginx_proxy
-    - Datadog.datadog
-    - datadog_config
-  vars:
-    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
-
-- hosts: just_baked
-  remote_user: ec2-user
-  become: yes
-  become_user: root
-
-- hosts: localhost
-  connection: local
-
-  tasks:
-  - name: bundle ami
-    local_action:
-      module: ec2_ami
-      instance_id: "{{ ami_instance.tagged_instances.0.id }}"
-      region: "{{ region }}"
-      state: present
-      description: This was provisioned {{ ansible_date_time.iso8601 }}
-      name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
-      wait: yes
-    register: amioutput
-
-  - name: terminate temporary instance
-    local_action:
-      module: ec2
-      state: absent
-      region: "{{ region }}"
-      instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
-    tags:
-      - terminate_ami
-
-  - name: debug
-    debug: var=amioutput
-
-  - name: Set image_id
-    set_fact:
-      image_id: "{{ amioutput.image_id }}"
-
-  - name: create vars file with  new ami info
-    copy:
-     content: |
-            image_id: {{ amioutput.image_id }}
-            lc_suffix: {{ ansible_date_time.epoch }}
-     dest: vars/settings.yml
-     force: yes
-    when: deploy is defined and deploy|bool == True
+- name: create vars file with  new ami info
+  copy:
+   content: |
+          image_id: {{ amioutput.image_id }}
+          lc_suffix: {{ ansible_date_time.epoch }}
+   dest: vars/settings.yml
+   force: yes
+  when: deploy is defined and deploy|bool == True
