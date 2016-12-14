@@ -39,6 +39,7 @@
     ttl: 300
     value: "{{ rds_instance.instance.endpoint }}"
     overwrite: "yes"
+  when: rds_instance.instance is defined
   tags:
     - dns
 
