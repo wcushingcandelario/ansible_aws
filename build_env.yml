@@ -97,7 +97,10 @@
     - launch_ami
 
 - name: Create ELB and ASG
-  include: _asg_main.yml
+  roles:
+    - create-elb-pos
+    - create-elb-dash
+    - create-auto
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
