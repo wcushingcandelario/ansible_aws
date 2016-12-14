@@ -79,7 +79,7 @@ take the latest OVC customised AMI.**
     each time it is run, it does not check for the existence of a cluster before
     running.
 
--   **Role: findovcami**
+-   **Role: find_ovc_ami**
     This part finds an AMI that has been built previously by this playbook and
     sets the variables up so that it will be used for the Auto Scaling Group.
     **This is an essential part of almost any play**
