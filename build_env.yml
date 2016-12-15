@@ -98,6 +98,7 @@
 
 - name: Create ELB and ASG
   hosts: localhost
+  connection: local
   roles:
     - { role: create-elb-pos, when: clustered_environment }
     - { role: create-elb-dash, when: clustered_environment }
