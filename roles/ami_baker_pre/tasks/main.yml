@@ -28,6 +28,10 @@
     ssh_ip: "{{ ami_instance.tagged_instances.0.private_ip }}"
   when: not use_public_ip
 
+- name: Set the Instance ID fact
+  set_fact:
+    just_created_instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+
 - name: Show IP
   debug:
     var: ssh_ip
