@@ -24,6 +24,7 @@
 - name: Set image_id
   set_fact:
     image_id: "{{ amioutput.image_id }}"
+  when: amioutput.image_id is defined
 
 - name: create vars file with  new ami info
   copy:
@@ -32,4 +33,4 @@
           lc_suffix: {{ ansible_date_time.epoch }}
    dest: vars/settings.yml
    force: yes
-  when: deploy is defined and deploy|bool == True
+  when: deploy is defined and deploy|bool == True and amioutput.image_id is defined
