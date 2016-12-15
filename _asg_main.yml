@@ -1,9 +1,0 @@
----
-- name: Create ELB for POS
-  include: _create-elb-pos.yml
-
-- name: Create ELB for Dashboard
-  include: _create-elb-dash.yml
-
-- name: Create Launch Config and Auto Scaling Group
-  include: _create-auto.yml

@@ -13,11 +13,67 @@
     rds_subnet_group: "{{ ami_baker_rds_subnet_group }}"
     multirdszone: no
 
-- name: Run ami-baker
-  include: _ami-baker.yml
-  tags:
-    - bake_ami
+- name: Build temporary instance
+  hosts: localhost
+  remote_user: ec2-user
+  connection: local
+  gather_facts: False
+  roles:
+    - find_ami
+    - ami_baker_pre
   vars:
+    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
+    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
+    region: "{{ region }}"
+    key: "{{ key }}"
+    ovc_security_groups: "{{ ami_baker_ovc_security_groups }}"
+    vpc_subnet_public: "{{ ami_baker_vpc_subnet_public }}"
+    instance_type: m4.large
+    jetty_user_login: jetty
+    jetty_dir: /opt/jetty
+    ovc_server_user_dir: /opt/ovc
+    webserver_user: www-data
+    s3install: true
+    ovcDB_host: "utility-mysql.{{ dns_domain }}"
+    ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
+
+- hosts: just_baked
+  remote_user: ec2-user
+  become: yes
+  become_user: root
+
+  roles:
+    - common
+    - jetty
+    - oneview
+    - { role: install_customizations_tp, when: not skip_custom }
+    - ricbra.logentries
+    - nginx_proxy
+    - Datadog.datadog
+    - datadog_config
+  vars:
+    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
+    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
+    region: "{{ region }}"
+    key: "{{ key }}"
+    ovc_security_groups: "{{ ami_baker_ovc_security_groups }}"
+    vpc_subnet_public: "{{ ami_baker_vpc_subnet_public }}"
+    instance_type: m4.large
+    jetty_user_login: jetty
+    jetty_dir: /opt/jetty
+    ovc_server_user_dir: /opt/ovc
+    webserver_user: www-data
+    s3install: true
+    ovcDB_host: "utility-mysql.{{ dns_domain }}"
+    ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
+
+
+- hosts: localhost
+  connection: local
+  roles:
+    - ami_baker_post
+  vars:
+    datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     region: "{{ region }}"
     key: "{{ key }}"

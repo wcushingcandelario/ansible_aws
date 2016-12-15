@@ -1,0 +1,36 @@
+- name: bundle ami
+  local_action:
+    module: ec2_ami
+    instance_id: "{{ just_created_instance_id }}"
+    region: "{{ region }}"
+    state: present
+    description: This was provisioned {{ ansible_date_time.iso8601 }}
+    name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
+    wait: yes
+  register: amioutput
+
+- name: terminate temporary instance
+  local_action:
+    module: ec2
+    state: absent
+    region: "{{ region }}"
+    instance_ids: "{{ just_created_instance_id }}"
+  tags:
+    - terminate_ami
+
+- name: debug
+  debug: var=amioutput
+
+- name: Set image_id
+  set_fact:
+    image_id: "{{ amioutput.image_id }}"
+  when: amioutput.image_id is defined
+
+- name: create vars file with  new ami info
+  copy:
+   content: |
+          image_id: {{ amioutput.image_id }}
+          lc_suffix: {{ ansible_date_time.epoch }}
+   dest: vars/settings.yml
+   force: yes
+  when: deploy is defined and deploy|bool == True and amioutput.image_id is defined
