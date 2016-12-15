@@ -28,7 +28,6 @@ max_size: 1
 
 # Promo Engine
 dockerrun_version: "2"
-s3_bucket_docker: "ovc-github-access-2"
 dockercfg: dockercfg
 mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
 promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
