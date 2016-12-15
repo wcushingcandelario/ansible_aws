@@ -98,12 +98,11 @@
 
 - name: Create ELB and ASG
   roles:
-    - create-elb-pos
-    - create-elb-dash
-    - create-auto
+    - { role: create-elb-pos, when: not clustered_environment }
+    - { role: create-elb-dash, when: not clustered_environment }
+    - { role: create-auto, when: not clustered_environment }
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
-  when: clustered_environment
   tags:
     - asg
