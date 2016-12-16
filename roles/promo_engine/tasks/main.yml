@@ -59,7 +59,7 @@
   elasticbeanstalk_env:
     region: "{{ region }}"
     app_name: "{{ deploy_type }}"
-    env_name: "{{ deploy_type }}Promo"
+    env_name: "{{ deploy_type }}-PromoEngine"
     tier_name: "{{ tier }}"
     version_label: "{{ pe_version }}"
     solution_stack_name: "{{ solution_stack_name }}"
@@ -142,7 +142,7 @@
   elasticbeanstalk_env:
     region: "{{ region }}"
     app_name: "{{ deploy_type }}"
-    env_name: "{{ deploy_type }}Promo"
+    env_name: "{{ deploy_type }}-PromoEngine"
     tier_name: "{{ tier }}"
     version_label: "{{ pe_version }}"
     solution_stack_name: "{{ solution_stack_name }}"
@@ -172,7 +172,7 @@
 
 
 - name: Record ELB EndpointURL
-  command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}Promo` && Status==`Ready`].EndpointURL'"
+  command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}-PromoEngine` && Status==`Ready`].EndpointURL'"
   register: elb_dns
 
 
