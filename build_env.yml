@@ -83,13 +83,14 @@
     - launch_ami
 
 - name: Create ELB and ASG
+  hosts: localhost
+  connection: local
   roles:
-    - create-elb-pos
-    - create-elb-dash
-    - create-auto
+    - { role: create-elb-pos, when: clustered_environment }
+    - { role: create-elb-dash, when: clustered_environment }
+    - { role: create-auto, when: clustered_environment }
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"
-  when: clustered_environment
   tags:
     - asg

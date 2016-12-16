@@ -16,17 +16,29 @@
     instance_tags:
       role: ami_builder
       Name: ami_builder
+  when: ami_find.results[0].ami_id is defined
   register: ami_instance
 
 - name: Set IP fact (public).
   set_fact:
     ssh_ip: "{{ ami_instance.tagged_instances.0.public_ip }}"
-  when: use_public_ip
+  when: use_public_ip and ami_instance.tagged_instances is defined
 
 - name: Set IP fact (private).
   set_fact:
     ssh_ip: "{{ ami_instance.tagged_instances.0.private_ip }}"
-  when: not use_public_ip
+  when: not use_public_ip and ami_instance.tagged_instances is defined
+
+- name: Set the Instance ID fact
+  set_fact:
+    just_created_instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+  when: ami_instance.tagged_instances is defined
+
+- name: Set fake data for --check
+  set_fact:
+    ssh_ip: "BAD_AMI_IP__LOOKUP_FAILED"
+    just_created_instance_id: "BAD_INSTANCE_ID"
+  when: ami_instance.tagged_instances is undefined
 
 - name: Show IP
   debug:
