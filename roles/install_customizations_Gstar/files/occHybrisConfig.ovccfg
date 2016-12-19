@@ -1,0 +1,106 @@
+{
+    "locationObj": {
+        "responseLocationGroupRoot": "locationGroups",
+        "responseLocationRoot": "locations",
+        "responseRoot": "locations",
+        "endPoint": "gstarcommercewebservices/v2/{baseSite}/ovc/locations/All",
+        "scheme":"https",
+        "method": "GET"
+    },
+    "merchandisingObj": {
+    	"responseRoot": "merchGroupRelationList",
+        "endPoint": "gstarcommercewebservices/v2/{baseSite}/ovc/merchandisingGroups/All",
+        "scheme":"https",
+        "method": "GET"
+    },
+    "productObj":{
+    	"responseRoot": "productList",
+        "endPoint": "gstarcommercewebservices/v2/{baseSite}/ovc/products",
+        "currency": "EUR",
+        "scheme":"https",
+        "method": "GET"
+    },
+    "purchasePriceObj":{
+    	"responseRoot": "prices",
+        "endPoint": "gstarcommercewebservices/v2/{baseSite}/ovc/{locationId}/purchaseprices",
+        "scheme":"https",
+        "method": "GET"
+    },
+    "stockObj":{
+    	"responseRoot": "stockByStoreDataList",
+        "endPoint": "gstarcommercewebservices/v2/{baseSite}/ovc/storestock",
+        "store": "All",
+        "scheme":"https",
+        "method": "POST"  
+    },
+    "employeeObj":{
+    	"responseRoot": "employeeDataByStoreList",
+        "endPoint": "extovcocc/v2/{baseSite}/ovc/employee/All",
+        "currency": "EUR",
+         "scheme":"https",
+        "method": "POST"
+    },
+   "searchOrderObj":{
+    	"responseRoot": "orders",
+        "searchEndPoint": "gstarcommercewebservices/v2/{baseSite}/ovc/order/search",
+        "detailsEndPoint":"gstarcommercewebservices/v2/{baseSite}/ovc/order/details",
+        "currency": "EUR",
+        "scheme":"https",
+        "method": "GET",
+        "limit":"2"
+    },
+   "createOrderObj":{
+    	"responseRoot": "orders",
+    	"endPoint":"gstarcommercewebservices/v2/{baseSite}/ovc/order/create",
+        "currency": "EUR",
+        "scheme":"https",
+        "method": "POST"
+    },
+    "searchLoyaltyObj":{
+    	"responseRoot": "customers",
+        "endPoint": "extovcocc/v2/{baseSite}/ovc/customer/search",
+        "scheme":"https",
+        "method": "POST"
+    },
+    "detailsLoyaltyObj":{
+    	"responseRoot": "customer",
+        "endPoint": "extovcocc/v2/{baseSite}/ovc/customer/{customerUid}/details",
+        "scheme":"https",
+        "method": "GET"
+    },
+    "searchLoyaltyOrdersObj":{
+    	"responseRoot": "orders",
+        "endPoint": "extovcocc/v2/{baseSite}/ovc/customer/{customerUid}/orders",
+        "scheme":"https",
+        "method": "GET"
+    },
+    "addEditLoyaltyObj":{
+    	"responseRoot": "customers",
+        "endPoint": "extovcocc/v2/{baseSite}/ovc/customer/addEdit",
+        "scheme":"https",
+        "method": "POST"
+    },
+    "ovcLoyaltyObjMapping":{
+    	"loyaltyId":"uid",
+    	"ovcId":"ovcId",
+    	"firstName":"firstName",
+    	"lastName":"lastName",
+    	"email":"email",
+    	"homePhone":"phone",
+    	"mobilePhone":"mobilePhone",
+    	"gender":"gender",
+    	"birthDate":"birthDate",
+    	"company":"company",
+    	"taxExemptCertificateId":"taxExemptCertificateId",
+    	"taxExemptCountryISO":"taxExemptCountryISO"
+    },
+    "ovcAddressObjMapping":{
+    	"contactAddress":"contactAddress",
+    	"addressLine1":"line1",
+    	"addressLine2":"line2",
+    	"postalCode":"postalCode",
+    	"city":"town",
+    	"state":"region",
+    	"country":"country"
+    }
+}
