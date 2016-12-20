@@ -48,6 +48,7 @@ ovcNOSQLDB.connectionsPerHost={{ ovcNOSQLDB_connectionsPerHost }}
 ovcNOSQLDB.maxWaitTime={{ ovcNOSQLDB_maxWaitTime }}
 ovcNOSQLDB.connectTimeout={{ ovcNOSQLDB_connectTimeout }}
 ovcNOSQLDB.socketTimeout={{ ovcNOSQLDB_socketTimeout }}
+jms.destination={{ jms_destination | default('jms/destination1') }}
 
 {% if ovc_server_url is defined %}
 ovcServer.host={{ ovc_server_url }}
@@ -68,3 +69,11 @@ jetty.contextXml.create={{ jetty_contexXml_create }}
 jetty.sysProps.append={{ jetty_sysProps_append }}
 jetty.loginConf.create={{ jetty_loginConf_create }}
 {% endif %}
+
+{% if crosschannel_alerts_scheme is defined %}
+additional.crosschannel.alerts.scheme={{crosschannel_alerts_scheme}}
+additional.crosschannel.alerts.host={{crosschannel_alerts_host}}
+additional.crosschannel.alerts.port={{crosschannel_alerts_port}}
+{% endif %}
+
+import.stock.type=product
