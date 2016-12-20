@@ -1,0 +1,95 @@
+---
+
+- name: See if hybris exists already
+  stat: path="{{ hybris_install_dir }}/hybris"
+  register: hybris_dir
+  
+- name: Stop hybris server
+  shell: ./hybrisserver.sh stop
+  args:
+        chdir: "{{ hybris_install_dir }}/hybris/bin/platform"
+  when: hybris_dir.stat.exists
+  sudo: yes
+  register: hybris_stop_stat
+  
+- debug: var=hybris_stop_stat
+  
+- name: Delete hybris directory
+  file:
+    path="{{ hybris_install_dir }}/hybris"
+    state=absent
+  when: hybris_dir.stat.exists
+  sudo: yes
+  
+- name: Download hybris
+  command: aws s3 cp s3://ovc-release-provisioner/hybris/{{ hybris_version }}/hybris.tar.gz .
+  args:
+        chdir: "{{ hybris_install_dir }}"
+  sudo_user: ec2-user
+  
+- name: Untar hybris
+  unarchive:
+    src: "{{ hybris_install_dir }}/hybris.tar.gz"
+    dest: "{{ hybris_install_dir }}"
+    copy: no
+    
+- name: Delete hybris.tar.gz
+  file:
+    path="{{ hybris_install_dir }}/hybris.tar.gz"
+    state=absent
+  sudo: yes
+  
+- name: Update local.properties - Set electronics HTTP website
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/hybris/config/local.properties"
+    state: present
+    regexp: "website.electronics.http=.*"
+    line: "website.electronics.http=http://{{ ecommerce_fromClient_host }}/yacceleratorstorefront"
+  sudo: yes  
+  
+- name: Update local.properties - Set electronics HTTPS website
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/hybris/config/local.properties"
+    state: present
+    regexp: "website.electronics.https=.*"
+    line: "website.electronics.https=https://{{ ecommerce_fromClient_host }}/yacceleratorstorefront"
+  sudo: yes  
+  
+- name: Update local.properties - Set electronics HTTP website
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/hybris/config/local.properties"
+    state: present
+    regexp: "website.apparel-uk.http=.*"
+    line: "website.apparel-uk.http=http://{{ ecommerce_fromClient_host }}/yacceleratorstorefront"
+  sudo: yes  
+  
+- name: Update local.properties - Set electronics HTTPS website
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/hybris/config/local.properties"
+    state: present
+    regexp: "website.apparel-uk.https=.*"
+    line: "website.apparel-uk.https=https://{{ ecommerce_fromClient_host }}/yacceleratorstorefront"
+  sudo: yes  
+  
+- name: Update ovc.pos.url - Set electronics HTTPS website
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/hybris/config/local.properties"
+    state: present
+    regexp: "ovc.pos.url.*"
+    line: "ovc.pos.url={{ ovcServer_scheme }}://{{ ovc_pos_url }}:{{ ovc_pos_port }}"
+  sudo: yes  
+
+- name: Run ant clean all
+  shell: . ./setantenv.sh && ant clean all
+  args:
+        chdir: "{{ hybris_install_dir }}/hybris/bin/platform"
+  sudo_user: ec2-user
+  register: cleanall_stat
+  
+- debug: var=cleanall_stat
+
+- name: Start hybris server
+  shell: ./hybrisserver.sh start
+  args:
+        chdir: "{{ hybris_install_dir }}/hybris/bin/platform"
+  sudo_user: ec2-user
