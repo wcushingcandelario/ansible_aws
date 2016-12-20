@@ -1,0 +1,113 @@
+#!/bin/bash
+#
+# rc file for starting hybris
+#
+# On most distributions, this file may be called:
+# /etc/rc.d/init.d/hybris or /etc/init.d/hybris
+#
+# If you are running multiple Hybris instances
+# You may want to give a more reasoneble name
+# Such as  /etc/init.d/hybris_instance
+#
+# For Redhat-ish systems
+#
+# chkconfig: 345 99 99
+# processname: java
+# config: $HYBRIS_HOME/config/local.properties
+# description: starts hybris server
+ 
+# Make sure the server starts as a non-root user, set that here.
+RUNAS="ec2-user"
+ 
+# Set the base path to your hybris installation.
+HYBRIS_HOME="{{ hybris_install_dir }}/hybris"
+ 
+# Set the path to the Tomcat 6 startup script included with Hybris.
+SERVSCRIPT="${HYBRIS_HOME}/bin/platform/hybrisserver.sh"
+ 
+HYBRUNNING=`ps auxwww | grep hybris | grep "jmxremote" | grep -v grep | wc -l`
+ 
+# Source function library.
+. /etc/init.d/functions
+ 
+# Make sure that this script is being run as the root user.
+if (( `/usr/bin/id -u` != 0 )); then
+{ echo "Sorry, this init script must be run as root.  Exiting...";
+exit; }
+fi
+ 
+# Start the Hybris server.
+start() {
+        echo -n "Attempting to start up hybris: "
+        echo
+        #/bin/su -m $RUNAS -c "${SERVSCRIPT} start &> /dev/null"
+ 
+        if ! /bin/su -m $RUNAS -c "${SERVSCRIPT} start >&/dev/null"; then
+           echo "FAILED: Could not start hybris."
+        else
+           #/bin/su -m $RUNAS -c "${SERVSCRIPT} &"
+           touch /var/lock/subsys/hybris
+           return 0
+        fi
+}
+ 
+#Stop the Hybris server.
+stop() {
+        echo -n "Attempting to shut down hybris: "
+        echo
+        /bin/su -m $RUNAS -c "${SERVSCRIPT} stop"
+        rm -f /var/lock/subsys/hybris
+        return 0
+}
+ 
+case "$1" in
+    start)
+        if [ ${HYBRUNNING} -eq 0 ]; then
+                start
+        else
+                echo "Hybris appears to be running, and will not be started."
+                echo "There are ${HYBRUNNING} related processes detected."
+                echo "Try restarting the server, with '/etc/init.d/hybris restart'."
+                exit 1
+        fi
+        ;;
+    stop)
+        if [ ${HYBRUNNING} -ne 0 ]; then
+                stop
+        else
+                echo "Hybris does not appear to be running."
+                echo "Total instances found running is ${HYBRUNNING}."
+                exit 1
+        fi
+        ;;
+    status)
+        if [ ${HYBRUNNING} -ne 0 ]; then
+                echo "Hybris appears to be running."
+        else
+                echo "Hybris is stopped."
+        fi
+        ;;
+    restart)
+        if [ ${HYBRUNNING} -ne 0 ]; then
+                COUNTER=1
+                while [ ${HYBRUNNING} -ne 0 ]; do
+                        stop
+                        echo "Sleeping for 10 seconds."
+                        sleep 10
+                        echo "Tried ${COUNTER} time(s)."
+                        HYBRUNNING=`ps auxwww | grep hybris | grep "jmxremote" | grep -v grep | wc -l`
+                        COUNTER+=1
+                done
+                start
+        else
+                echo "Hybris appears to be stopped, please use '/etc/init.d/hybris start' to bring up the server."
+                exit 1
+        fi
+        ;;
+ 
+    *)
+        echo "Usage: hybris {start|stop|status|restart}"
+        exit 1
+        ;;
+esac
+exit $?
