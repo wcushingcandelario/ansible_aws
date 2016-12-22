@@ -1,0 +1,13 @@
+[Unit]
+Description=Jetty
+After=network.target
+
+[Service]
+Type=forking
+Restart=always
+PIDFile=/var/run/jetty.pid
+ExecStart=/opt/jetty/bin/jetty.sh start
+ExecStop=/opt/jetty/bin/jetty.sh stop
+
+[Install]
+WantedBy=multi-user.target

@@ -86,6 +86,16 @@
   become: yes
   become_user: root
 
+# - name: SystemD service for jetty
+#   copy:
+#     src: jetty.service
+#     dest: /etc/systemd/system/jetty.service
+#     owner: jetty
+#     group: jetty
+#   become: yes
+#   become_user: root
+#   when: ansible_distribution == "CentOS" and ansible_lsb.major_release|int >= 7
+
 - name: Remove test.war
   file:
     path: "{{ jetty_dst_dir}}/jetty/webapps/test.war"
@@ -117,6 +127,8 @@
     state: present
     regexp: ".*--module=home-base-warning"
     line: "# --module=home-base-warning"
+  become: yes
+  become_user: root
 
 - name: Add modules in jettys start.ini
   lineinfile:
