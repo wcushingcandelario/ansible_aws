@@ -1,0 +1,11 @@
+- name: Install logrotate
+  yum:
+    name: logrotate
+    state: installed
+
+- name: Configure logrotate to handle our logs
+  copy:
+    src: oneview.conf
+    dest: /etc/logrotate.d/oneview.conf
+  become: yes
+  become_user: root
