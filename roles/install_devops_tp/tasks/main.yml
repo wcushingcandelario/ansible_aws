@@ -4,7 +4,7 @@
   no_log: true
 
 #- name: Jetty Server
-#  copy: 
+#  copy:
 #    src: ovchosting_co_uk.tar.gz
 #    dest: /var/tmp/ovchosting_co_uk.tar.gz
 
@@ -13,7 +13,7 @@
 #  sudo: yes
 
 - name: Jetty server | Copy SSL keys
-  copy: 
+  copy:
     dest: "{{ item.key }}"
     content: "{{ item.value.content }}"
     owner: "{{ item.value.owner }}"
@@ -21,7 +21,7 @@
     mode: "{{ item.value.mode }}"
   with_dict: ssl_secret_files
   sudo: yes
-##  no_log: true 
+##  no_log: true
 
 
 - name: Create a chained certificate
@@ -36,4 +36,4 @@
   become_user: root
   when: not skip_ssl
 
-- include: config.xml
+- include: config.yml

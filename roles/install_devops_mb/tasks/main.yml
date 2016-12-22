@@ -25,4 +25,4 @@
   become_user: root
   when: not skip_ssl
 
-- include: config.xml
+- include: config.yml
