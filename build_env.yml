@@ -93,6 +93,8 @@
   connection: local
   roles:
     - { role: launch_instance, when: not clustered_environment }
+  vars:
+    role_tag: "temporary"
   tags:
     - launch_ami
 
