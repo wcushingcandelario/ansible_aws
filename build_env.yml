@@ -88,6 +88,33 @@
         prompt: "{{deploy_type}} will now be launched with {{ image_id }}"
         seconds: 30
 
+- name: Launch temporary new instance
+  hosts: localhost
+  connection: local
+  roles:
+    - { role: launch_instance, when: not clustered_environment }
+  tags:
+    - launch_ami
+
+- name: Install tools on the temporary instance
+  hosts: {{ ami_instance.tagged_instances.0.private_ip }}
+  tasks:
+    - name: Install MySQL
+      yum:
+        name: mysql
+        state: installed
+
+- pause: Play paused, temporary disposable instance launced at: {{ ami_instance.tagged_instances.0.public_ip }}/{{ ami_instance.tagged_instances.0.private_ip }}
+
+- name: Terminate temporary instance
+  local_action:
+    module: ec2
+    state: absent
+    region: "{{ region }}"
+    instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+  tags:
+    - terminate_ami
+
 - name: Launch New Instance
   hosts: localhost
   connection: local
