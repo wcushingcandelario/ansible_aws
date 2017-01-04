@@ -7,6 +7,9 @@
     description: This was provisioned {{ ansible_date_time.iso8601 }}
     name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
     wait: yes
+    tags:
+      customer: "{{ ami_customer }}"
+      release: "{{ ami_release }}"
   register: amioutput
 
 - name: terminate temporary instance
