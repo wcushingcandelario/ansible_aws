@@ -7,6 +7,8 @@
     description: This was provisioned {{ ansible_date_time.iso8601 }}
     name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
     wait: yes
+    launch_permissions:
+      user_ids: ['748109554602', {{ customer_account_id }}]
   register: amioutput
 
 - name: terminate temporary instance
