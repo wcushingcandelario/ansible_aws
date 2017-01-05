@@ -5,6 +5,7 @@
     sort_order: descending
     region: "{{ region }}"
     sort_end: 1
+    owner: "{{ ami_owner }}"
   register: ami_find
 
 - name: AMI ID found
