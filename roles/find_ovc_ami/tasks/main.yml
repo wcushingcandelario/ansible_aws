@@ -6,6 +6,9 @@
     region: "{{ region }}"
     sort_end: 1
     owner: "{{ ami_owner }}"
+    ami_tags:
+      customer: "{{ ami_customer }}"
+      release: "{{ ami_release }}"
   register: ami_find
 
 - name: AMI ID found

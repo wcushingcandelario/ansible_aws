@@ -24,3 +24,4 @@ beanstalk_iam_role:
 beanstalk_service_role:
 s3_bucket_docker: "ovc-github-access-2"
 customer_account_id:
+ami_customer: mb

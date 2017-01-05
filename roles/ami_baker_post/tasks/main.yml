@@ -9,6 +9,9 @@
     wait: yes
     launch_permissions:
       user_ids: ['748109554602', {{ customer_account_id }}]
+    tags:
+      customer: "{{ ami_customer }}"
+      release: "{{ ami_release }}"
   register: amioutput
 
 - name: terminate temporary instance
