@@ -24,4 +24,5 @@ beanstalk_iam_role: aws-elasticbeanstalk-ec2-role
 beanstalk_service_role: aws-elasticbeanstalk-service-role
 s3_bucket_docker: "ovc-github-access-2"
 customer_account_id: 063725663692
+customer: tp
 ami_customer: tp
