@@ -23,6 +23,9 @@ instance_type_pe: t2.medium
 beanstalk_iam_role: aws-elasticbeanstalk-ec2-role
 beanstalk_service_role: aws-elasticbeanstalk-service-role
 s3_bucket_docker: "ovc-github-access-2"
+s3_bucket_beanstalk: "elasticbeanstalk-eu-west-1-063725663692"
+beanstalk_template_version: 1.0
 customer_account_id: 063725663692
+pe_role: promo-engine
 customer: tp
 ami_customer: tp
