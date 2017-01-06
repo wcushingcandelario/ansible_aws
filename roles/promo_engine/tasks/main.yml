@@ -3,12 +3,14 @@
   set_fact:
     ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
     dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
+    filetogo: "/tmp/testingv6"
   when: ssl_certificate_id is defined and (ssl_certificate_id != 'false')
 
 - name: Set SSL based facts (Non-SSL)
   set_fact:
     ovc_url: "http://{{ deploy_type }}.{{ dns_domain }}"
     dash_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
+    filetogo: "/tmp/testingv6"
   when: ssl_certificate_id is undefined or (ssl_certificate_id == 'false')
 
 
@@ -22,6 +24,9 @@
   register: application
 
 - debug: var=application
+
+- name: Upload Config Template to S3
+  command: "aws s3 cp {{ filetogo }} s3://elasticbeanstalk-eu-west-1-063725663692/resources/templates/testingv7/testingv6"
 
 - name: Making new docker file
   connection: local
@@ -62,7 +67,8 @@
     env_name: "{{ deploy_type }}-PromoEngine"
     tier_name: "{{ tier }}"
     version_label: "{{ pe_version }}"
-    solution_stack_name: "{{ solution_stack_name }}"
+    #solution_stack_name: "{{ solution_stack_name }}"
+    template_name: testingv6
     option_settings:
      - Namespace: aws:elb:loadbalancer
        OptionName: CrossZone
@@ -145,7 +151,8 @@
     env_name: "{{ deploy_type }}-PromoEngine"
     tier_name: "{{ tier }}"
     version_label: "{{ pe_version }}"
-    solution_stack_name: "{{ solution_stack_name }}"
+    #solution_stack_name: "{{ solution_stack_name }}"
+    template_name: testingv6
     option_settings:
      - Namespace: aws:elb:listener:8888
        OptionName: ListenerEnabled

@@ -1,0 +1,48 @@
+EnvironmentConfigurationMetadata:
+  DateCreated: '1483651244000'
+  DateModified: '1483651244000'
+SolutionStack: 64bit Amazon Linux 2016.03 v2.1.1 running Multi-container Docker 1.9.1 (Generic)
+OptionSettings:
+  aws:elasticbeanstalk:command:
+    BatchSize: '30'
+    BatchSizeType: Percentage
+    DeploymentPolicy: Rolling
+  aws:elasticbeanstalk:sns:topics:
+    Notification Endpoint: ''
+  aws:elb:policies:
+    ConnectionDrainingEnabled: true
+    ConnectionDrainingTimeout: '20'
+  aws:elb:listener:
+    ListenerEnabled: false
+  aws:elb:loadbalancer:
+    CrossZone: true
+  aws:elasticbeanstalk:environment:
+    ServiceRole: aws-elasticbeanstalk-service-role
+    EnvironmentType: LoadBalanced
+  aws:elasticbeanstalk:application:
+    Application Healthcheck URL: /
+  aws:elasticbeanstalk:healthreporting:system:
+    SystemType: enhanced
+    HealthCheckSuccessThreshold: Ok
+  aws:ec2:vpc:
+    Subnets: subnet-0ca54b68,subnet-65fe0b13
+    VPCId: vpc-ccb0b5a9
+    ELBSubnets: subnet-0ca54b68,subnet-65fe0b13
+    ELBScheme: internal
+    AssociatePublicIpAddress: true
+  aws:autoscaling:launchconfiguration:
+    SecurityGroups: sg-2b00104f,sg-61001005,sg-4318e724
+    IamInstanceProfile: aws-elasticbeanstalk-ec2-role
+    InstanceType: t2.medium
+    EC2KeyName: ovc-tp-np
+  aws:autoscaling:updatepolicy:rollingupdate:
+    RollingUpdateType: Health
+    RollingUpdateEnabled: true
+EnvironmentTier:
+  Type: Standard
+  Name: WebServer
+AWSConfigurationTemplateVersion: 1.1.0.0
+Tags:
+  environment: testpromo
+  role: PromoEngine
+  purpose: testing
