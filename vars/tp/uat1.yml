@@ -35,3 +35,4 @@ tier: WebServer
 security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
 elb_security_group_id: sg-4318e724
 elbsubnets: "subnet-65fe0b13,subnet-0ca54b68"
+pe_monitor: yes
