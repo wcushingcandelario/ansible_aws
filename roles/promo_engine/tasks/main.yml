@@ -191,7 +191,6 @@
 
 
 - name: Record ELB EndpointURL
-  connection: local
   command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}-PromoEngine` && Status==`Ready`].EndpointURL'"
   register: elb_dns
 
