@@ -69,7 +69,7 @@
        Value: true
      - Namespace: aws:elasticbeanstalk:application
        OptionName: Application Healthcheck URL
-       Value: TCP:22
+       Value: HTTP:3000/healthcheck
      - Namespace: aws:elb:listener
        OptionName: ListenerEnabled
        Value: false
@@ -174,10 +174,8 @@
 - name: Record ELB EndpointURL
   command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}-PromoEngine` && Status==`Ready`].EndpointURL'"
   register: elb_dns
+  when: promo_update is not defined
 
-
-- name: debug elb dns
-  debug: "var=elb_dns"
 
 - name: Add Alias to Route53
   route53:
