@@ -1,0 +1,8 @@
+---
+hybris_install_dir: /home/ec2-user
+
+ovc_pos_url: qamysql.ovcdemo.com
+ovc_pos_port: 8080
+ovcServer_scheme: http
+hybris_version: 5.5.1
+ecommerce_fromClient_host: "{{ hostvars[inventory_hostname]['inventory_hostname'] }}"

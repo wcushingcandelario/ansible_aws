@@ -1,0 +1,131 @@
+---
+
+- name: Make hybrisserver.sh executable
+  file:
+    path="{{ hybris_install_dir }}/bin/platform/hybrisserver.sh"
+    mode=u+rwx
+    owner=ec2-user
+    group=ec2-user
+    
+- name: Make catalina.sh executable
+  file:
+    path="{{ hybris_install_dir }}/bin/platform/tomcat/bin/catalina.sh"
+    mode=u+rwx
+    owner=ec2-user
+    group=ec2-user
+
+- name: Make wrapper.sh executable
+  file:
+    path="{{ hybris_install_dir }}/bin/platform/tomcat/bin/wrapper.sh"
+    mode=u+rwx
+    owner=ec2-user
+    group=ec2-user
+    
+    
+- name: Stop hybris server
+  shell: ./hybrisserver.sh stop
+  args:
+        chdir: "{{ hybris_install_dir }}/bin/platform"
+  sudo: yes
+  
+- name: Make ec2-user own hybris dir
+  file:
+    path: "{{ hybris_install_dir }}"
+    owner: ec2-user
+    group: ec2-user
+    recurse: yes
+    state: directory
+  sudo: yes
+
+- name: Delete extovc directory
+  file:
+    path="{{ hybris_install_dir }}/bin/custom/extovc"
+    state=absent
+  sudo: yes
+  
+- name: Delete extovcoccaddon directory
+  file:
+    path="{{ hybris_install_dir }}/bin/custom/extovcoccaddon"
+    state=absent
+  sudo: yes
+  
+- name: Create hybris custom directory
+  file:
+    path="{{ hybris_install_dir }}/bin/custom"
+    mode=g+rw
+    state=directory
+    owner=ec2-user
+    group=ec2-user
+  sudo: yes
+  
+- name: Unzip ovc-hybris-extension.tar.gz
+  unarchive:
+    src: ovc-hybris-extension/ovc-hybris-extension.tar.gz
+    dest: "{{ hybris_install_dir }}/bin/custom/"
+  
+- name: Remove extovcocc
+  file:
+    path="{{ hybris_install_dir }}/bin/platform/hybrisserver.sh"
+    mode=u+rwx
+    owner=ec2-user
+    group=ec2-user
+    
+- name: Add OVC extensions to localextensions.xml
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/config/localextensions.xml"
+    insertafter: '<path dir\=\"\${HYBRIS_BIN_DIR}\" \/>'
+    line: '<path autoload="true" dir="${HYBRIS_BIN_DIR}/custom" />'
+    
+- name: Comment out ycommercewebservices in localextensions.xml
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/config/localextensions.xml"
+    regexp: '<extension name="ycommercewebservices" />'
+    line: '<!--extension name="ycommercewebservices" /-->'
+    
+- name: Comment out ycommercewebserviceshmc in localextensions.xml
+  lineinfile:
+    dest: "{{ hybris_install_dir }}/config/localextensions.xml"
+    regexp: '<extension name="ycommercewebserviceshmc" />'
+    line: '<!--extension name="ycommercewebserviceshmc" /-->'
+
+- name: Run ant addoninstall for OCC
+  shell: . ./setantenv.sh && ant addoninstall -Daddonnames="extovcoccaddon" -DaddonStorefront.extovcoccaddon="extovcocc" 
+  args:
+        chdir: "{{ hybris_install_dir }}/bin/platform"
+  sudo_user: ec2-user
+  register: addoninstall_webservices_stat
+  
+- debug: var=addoninstall_webservices_stat
+
+- name: Run ant addoninstall for storefront
+  shell: . ./setantenv.sh && ant addoninstall -Daddonnames="extovc" -DaddonStorefront.yacceleratorstorefront="yacceleratorstorefront"
+  args:
+        chdir: "{{ hybris_install_dir }}/bin/platform"
+  sudo_user: ec2-user
+  register: addoninstall_storefront_stat
+  
+- debug: var=addoninstall_storefront_stat
+
+- name: Run ant clean all
+  shell: . ./setantenv.sh && ant clean all
+  args:
+        chdir: "{{ hybris_install_dir }}/bin/platform"
+  sudo_user: ec2-user
+  register: cleanall_stat
+  
+- debug: var=cleanall_stat
+
+- name: Run ant updatesystem
+  shell: . ./setantenv.sh && ant updatesystem
+  args:
+        chdir: "{{ hybris_install_dir }}/bin/platform"
+  sudo_user: ec2-user
+  register: updatesystem_stat
+  
+- debug: var=updatesystem_stat
+
+- name: Start hybris server
+  shell: ./hybrisserver.sh start
+  args:
+        chdir: "{{ hybris_install_dir }}/bin/platform"
+  sudo_user: ec2-user

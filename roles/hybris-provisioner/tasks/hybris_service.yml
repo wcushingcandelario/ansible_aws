@@ -1,0 +1,16 @@
+---
+- name: Create hybris service
+  template:
+    src: hybris.j2
+    dest: /etc/init.d/hybris
+    owner: ec2-user
+    group: ec2-user
+    mode: 0755
+  sudo: yes
+
+- name: Enable hybris to start on boot
+  service:
+    name: hybris
+    state: stopped
+    enabled: yes
+  sudo: yes

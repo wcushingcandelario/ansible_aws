@@ -1,14 +1,13 @@
-
-#Mon Sep 19 19:20:01 EDT 2016
+#Mon May 09 12:04:56 EDT 2016
 #Updated by OVCInstaller
 appDataImporter.async=true
 appDataImporter.useLocalHashcodes=true
-calendarDataImport.encrypted.password=C9VdD8e5BH/IMIuSNhwkvg\=\=
+calendarDataImport.encrypted.password=1D6DfFDrZTJ2/Tt17Fn2l4tj+MlBjtnm+CR4NGge5+tey6ynSbEyAoFBDvVmipoN
 calendarDataImport.username=eCommerce
 custDataImporter.async=false
 custDataImporter.ignoreJsonValidationErrors=true
 eComServer.baseSiteId=wickesStores
-eComServer.encrypted.password=C9VdD8e5BH/IMIuSNhwkvg\=\=
+eComServer.encrypted.password=lHl7Wgn7Z0YCFD6PEhnqUg\=\=
 eComServer.retailerId=defaultRetailer
 eComServer.username=eCommerce
 import.endpoint.temp.location=/tmp
@@ -24,6 +23,10 @@ ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
 ovcServer.webcontext=
 posMClientSyncUpdater.browser=true
 posMClientSyncUpdater.store=All
-staffDiscount.bucketName=ovc-uat2-filerepo
+staffDiscount.bucketName=ovc-uat1-filerepo
 staffDiscount.protocol=https
 staffDiscount.region=eu-west-1
+
+###Added in 5.12.0 Release
+ovcServer.adoPath=/opt/ovc/Application-Dynamic-Objects
+ovcServer.importFilesPath=/opt/ovc/Base-Location-Import-Files/ovc-all-OvcStore

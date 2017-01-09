@@ -5,8 +5,6 @@
 - include: dashboard.yml
   tags: dashboard
 
-- include: config.yml
-
 - include: importers.yml
   tags:
     - importers

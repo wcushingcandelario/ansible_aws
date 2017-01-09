@@ -23,6 +23,10 @@ ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
 ovcServer.webcontext=
 posMClientSyncUpdater.browser=true
 posMClientSyncUpdater.store=All
-staffDiscount.bucketName=ovc-cand-filerepo
+staffDiscount.bucketName=ovc-prod-filerepo
 staffDiscount.protocol=https
 staffDiscount.region=eu-west-1
+
+###Added in 5.12.0 Release
+ovcServer.adoPath=/opt/ovc/Application-Dynamic-Objects
+ovcServer.importFilesPath=/opt/ovc/Base-Location-Import-Files/ovc-all-OvcStore
