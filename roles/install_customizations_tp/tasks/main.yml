@@ -45,7 +45,7 @@
   become_user: "{{ jetty_user_login }}"
 
 - name: Download tpdata.tar.gz from S3
-  command: "aws s3 cp s3://ovc-travisperkins-releases/{{ ovc_version }}/tpdata.tar.gz {{ ovc_server_user_dir }}/installFiles/tpdata.tar.gz"
+  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/tpdata.tar.gz {{ ovc_server_user_dir }}/installFiles/tpdata.tar.gz"
   when: s3install is defined and s3install
   become: yes
   become_user: root
@@ -151,13 +151,13 @@
   become_user: root
 
 - name: Download TPExtensions from S3
-  command: "aws s3 cp s3://ovc-travisperkins-releases/{{ ovc_version }}/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
+  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
   when: s3install is defined and s3install
   become: yes
   become_user: jetty
 
 - name: Download TPPopulators from S3
-  command: "aws s3 cp s3://ovc-travisperkins-releases/{{ ovc_version }}/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
+  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
   when: s3install is defined and s3install
   become: yes
   become_user: jetty
