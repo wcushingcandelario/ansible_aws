@@ -11,34 +11,40 @@ These playbooks are available to run from RunDeck.
 
 -   **README.md** This file.
 
--   **_ami-baker.yml** This builds the AMI, deploys the software, deploys the
-    configuration, then saves an image of the AMI and terminates it.
+-   **build_env.yml** Deploy an environment including:
 
--   **_asg_main.yml** This file builds the Auto Scaling Group, Launch
-    Configuration, and two Elastic Load Balancers.
+    -   **RDS** (immutable, can be run repeatedly without issue)
 
--   **aws-create-ovc-from-ami.yml** I'm not aware of what this is (or what it
-    is used for), if you do please add the details here.
+    -   **Promo Engine** *Bill to explain this*
 
--   **_create-auto.yml** This creates the Launch Config and Auto Scaling Group.
+    -   **Inventory Manager** *Bill to explain this*
 
--   **_create-elb-dash.yml** This creates the ELB for the Dashboard.
+    -   **Either:**
 
--   **_create-elb-pos.yml** This creates the ELB for the POS.
+        -   Launch a single instance when `clustered_environment` is *False*, or
 
--   **_mongo-cluster.yml** This builds and deploys the mongo cluster. It will
-    deploy a new cluster each time it is run, it does not check for the
-    existence of a cluster before running.
+        -   Set up an autoscaled environment (LC, ASG, ELB) when a `clustered_environment`
 
--   **env_preprod.yml** The playbook for the PreProd environment
+-   **build-new-ami.yml** This creates new machine images with the OVC software.
 
--   **env_prod.yml** The playbook for the Prod environment.
-
--   **env_uat1.yml** The playbook for the UAT1 environment.
-
--   **env_uat2.yml** The playbook for the UAT2 environment.
+-   **vars/mb.yml**
+-   **vars/tp.yml**
+-   **vars/demo.yml** For building an AMI to be deployed in our local environments (runs install_devops_demo)
+-   **vars/vanilla.yml** Just for building an AMI, no custom work at all.
 
 -   **test.yml** Does nothing, good for testing the dynamic inventory.
+
+## Nomenclature
+
+**Vanilla** This is a term used for AMIs that have not been customised for any customer including no certificates for the demo account. These AMIs can be customised for any customer without traces of any other.
+
+## Additional -e variables added from the commandline
+
+-   **full_build** This will create an AMI from scratch starting with an Amazon Linux AMI and building the entire thing.
+
+-   **ovc_version** The version of OVC software to find on S3
+
+-   **tp_extension_version** The version of the TP extensions to find on S3
 
 ## Run Playbooks from the command line
 
@@ -47,13 +53,21 @@ These playbooks are available to run from RunDeck.
 -   The .vault_pass.txt file MUST be accessible from your user account.
 -   You almost definitely want to skip importers.
 
-## Including variable data for TP hosted environments.
+## Including variable data for customer hosted environments.
 
-You must include the TP variables -e @vars/tp.yml
+You must include the customer variables, for example: `-e @vars/tp.yml`
+
+-   **vars/tp.yml** for Travis Perkins
+
+-   **vars/mb.yml** for Molton Brown
+
+-   **vars/demo.yml** for the Demo account deployment
+
+-   **vars/vanilla.yml** for building a completely non-custom AMI (no extensions, certificates, etc.)
 
 ## Building Whole Environments
 
-If you run a playbook in without any tags or  skip-tags then you will get an
+If you run a playbook in without any tags or skip-tags then you will get an
 entire environment built with the settings default to that playbook. **This will
 take the latest OVC customised AMI.**
 
@@ -64,9 +78,14 @@ take the latest OVC customised AMI.**
 -   **Role: create_rds**
     This builds the utility RDS database.
 
--   **File: _ami-baker.yml**
-    This builds the AMI, deploys the software, deploys the configuration, then
-    saves an image of the AMI and terminates it.
+-   **Role:promo_engine**
+    Builds a promo_engine *Bill*
+
+-   **Role:inventory_manager**
+    Builds an inventory_manager *Bill*
+
+-   **The rest**
+    This builds the AMI, deploys the software, deploys the configuration, then saves an image of the AMI and terminates it.
 
 
 ### What a play runs
@@ -74,37 +93,26 @@ take the latest OVC customised AMI.**
 -   **Role: create_rds**
     This builds the main database for the environment.
 
--   **File: _mongo-cluster.yml**
-    *(PreProd/Prod only)* This builds and deploys the mongo cluster. It will deploy a new cluster
-    each time it is run, it does not check for the existence of a cluster before
-    running.
-
 -   **Role: find_ovc_ami**
     This part finds an AMI that has been built previously by this playbook and
     sets the variables up so that it will be used for the Auto Scaling Group.
     **This is an essential part of almost any play**
 
--   **File: _asg_main.yml**
+-   **Role: asg_main**
     This area of the playbook rolls out the Auto Scaling Group. This will take
     either the AMI just created or the latest AMI to be previously created and
     build out **one** Launch Configuration which then gets run by **one** Auto
     Scaling Groups which is accessible through **two** Load Balancer.
 
-### Skip Mongo
-
-You may want to skip Mongo if it is already installed. *(PreProd/Prod only)*
-
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,mongo
-
 ### Skip RDS
 
-You may want to skip RDS if it is already installed.
+You may want to skip RDS if it is already installed. All this does is speed things up.
 
     ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
 
 ### Build with a specific image (AMI)
 
-    ansible-playbook preprod.yml -e "image_id=x ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' -e @vars/tp.yml deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
+    ansible-playbook preprod.yml -e "image_id=abc12345 ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' -e @vars/tp.yml deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
 
 ## Updating Specific Components
 
@@ -118,15 +126,23 @@ explanations below.
 
 #### ...build an AMI
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/vanilla.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
-#### ...build an AMI and test it
+#### ...customise an AMI
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,terminate_ami
+    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+
+#### ...build and customise an AMI from scratch
+
+    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true full_build=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+
+#### ...customise an AMI and test it
+
+    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,terminate_ami
 
 ### ...deploy an AMI
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
 
 ### Building RDS
 
@@ -140,18 +156,7 @@ This command will install the production database RDS. Notably:
 -   This must be run during the rollout of a new environment
 
 
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=rds
-
-### Building MongoDB
-
-This is the playbook part for the rolls out **three** Mongo database servers in
-a cluster and sets the DNS for them. *(PreProd/Prod only)*
-
-If you do not skip this then Mongo will redeploy **each and every time** you
-run the playbook. You will get a new MongoDB cluster each time you run this
-playbook, it does not skip if there are servers already.
-
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=mongo
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml --vault-password-file ~/.ssh/.vault_pass.txt --tags=rds
 
 ### Building a new AMI
 
@@ -159,10 +164,17 @@ This playbook will build a new AMI and terminate it. This is **relatively safe**
 to run without disrupting the network as long as you **only** bake the AMI and
 do not deploy it.
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+#### Build a vanilla AMI without any customer data
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true filebeat=true" -e @vars/vanilla.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
-If you want to build an AMI but **not** terminate it so you can evaluate it
-before deploying then you can skip the termination of the AMI.
+#### Add customer data to a vanilla AMI and save it for deployment
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+
+#### Build a customer AMI from scratch skipping the vanilla stage
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true filebeat=true full_build=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+
+#### Build a customer AMI but don't terminate after saving it
+This is usually used just for testing. If you want to build an AMI but **not** terminate it so you can evaluate it before deploying then you can skip the termination of the AMI.
 
     ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
 
@@ -173,21 +185,7 @@ using the playbook below. After running this playbook **AMI will be live** in
 the environment you have deployed it in. This is limited to the `asg` tag which
 just builds the Auto Scaling Group.
 
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers --tags=asg
-
-## AMI flow - Build and deploy to PreProd in two plays
-
-This is a simple play which will create a new AMI and deploy it to the ASG
-
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
-
-## AMI flow - Build and deploy to PreProd in one play w/Mongo
-
-This is a simple play which will create a new AMI and deploy it to the ASG.
-
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,mongo
+    ansible-playbook build_env.yml  -e @vars/tp.yml  -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true"--vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds,promo_engine,inventory_manager
 
 ## AMI flow - non-production to Production
 
