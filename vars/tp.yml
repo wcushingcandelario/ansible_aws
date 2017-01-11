@@ -25,6 +25,8 @@ beanstalk_service_role: aws-elasticbeanstalk-service-role
 s3_bucket_docker: "ovc-github-access-2"
 customer_account_id: 063725663692
 customer: tp
+ami_release: release
 ami_customer: tp
+ami_owner: 74810554602 # The OVC Demo account
 s3_bucket_customer: ovc-travisperkins-releases
 s3_bucket: ovc-travisperkins-releases
