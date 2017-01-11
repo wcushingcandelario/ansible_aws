@@ -88,17 +88,27 @@ take the latest OVC customised AMI.**
     This builds the AMI, deploys the software, deploys the configuration, then saves an image of the AMI and terminates it.
 
 
-### What a play runs
+### What an environment play runs
 
 -   **Role: create_rds**
     This builds the main database for the environment.
+
+-   **Role: promo_engine**
+    *Bill*
+
+-   **Role: inventory_manager**
+    *Bill*
 
 -   **Role: find_ovc_ami**
     This part finds an AMI that has been built previously by this playbook and
     sets the variables up so that it will be used for the Auto Scaling Group.
     **This is an essential part of almost any play**
 
--   **Role: asg_main**
+-   **Role: launch_ami**
+    Like asg_main this is where the play will launch an individual instance if the environment is non-clustered. We set clustering of an environment with the `clustered_environment` variable.
+
+
+-   **Role: create-elb-pos, create-elb-dash, create-auto**
     This area of the playbook rolls out the Auto Scaling Group. This will take
     either the AMI just created or the latest AMI to be previously created and
     build out **one** Launch Configuration which then gets run by **one** Auto
