@@ -71,7 +71,7 @@ If you run a playbook in without any tags or skip-tags then you will get an
 entire environment built with the settings default to that playbook. **This will
 take the latest OVC customised AMI.**
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt
 
 ### What the AMI builder (build-new-ami.yml) does
 
