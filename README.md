@@ -185,18 +185,28 @@ using the playbook below. After running this playbook **AMI will be live** in
 the environment you have deployed it in. This is limited to the `asg` tag which
 just builds the Auto Scaling Group.
 
-    ansible-playbook build_env.yml  -e @vars/tp.yml  -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true"--vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds,promo_engine,inventory_manager
+    ansible-playbook build_env.yml -e @vars/tp.yml  -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true"--vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds,promo_engine,inventory_manager
 
-## AMI flow - non-production to Production
+## AMI flow - Customer non-production to Production
 
 This is an example of a flow where you build an AMI, test it, and then
 progressively roll it out to environments. When we start using this process for
 UAT1/UAT2 we can start to create AMI's there and push them through UAT# ->
 PreProd -> Production to ensure better testing.
 
+**Pre-customer: Build a vanilla AMI and test it**
+
+*Run from: Demo account*
+
+    ansible-playbook build-new-ami.yml -e @vars/vanilla.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
+
+Now you should have an AMI that can be used in local environments for testing of the OVC core functionality, in the next step we will make it specific to the customer.
+
 **Firstly build the AMI without terminating:**
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
+*Run from: Demo account*
+
+    ansible-playbook build-new-ami.yml  -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
 
 Once this is done you can SSH into the the environment and confirm that
 everything has been deployed correctly and is ready to be rolled out into
@@ -204,7 +214,9 @@ environments.
 
 **Deploy the AMI into UAT1 (or UAT2):**
 
-    ansible-playbook uat1.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
+*Run from: Customer account*
+
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/uat1.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
 
 The AMI is now rolled out into UAT1/UAT2 and can be tested to confirm it is
 functional. This means specifically that the version of the AMI will work for
@@ -212,7 +224,9 @@ a non-clustered environment.
 
 **Deploy the AMI into PreProd:**
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
+*Run from: Customer account*
+
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
 
 The AMI is now rolled out into PreProd and can be tested to confirm it is
 functional. At this point we can roll it out into production knowing it has
@@ -220,7 +234,9 @@ worked for PreProd.
 
 **Deploy the AMI into Production:**
 
-    ansible-playbook prod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,mongo
+*Run from: Customer account*
+
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/prod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
 
 Deployment complete!
 
