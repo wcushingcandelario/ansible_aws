@@ -11,9 +11,6 @@ rds_security_group: sg-be19edd9
 rds_subnet_group: pre-prod-rds
 multirdszone: no
 
-# Mongo
-mongo_instance_type: t2.micro
-mongo_security_groups: FIXME
 
 # AMI/ELB/ASG
 ovc_security_groups: sg-be19edd9
