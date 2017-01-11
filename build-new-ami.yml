@@ -19,7 +19,8 @@
   connection: local
   gather_facts: False
   roles:
-    - find_ami
+    - { role: find_ami, when: customer == 'vanilla' or full_build }
+    - { role: find_ovc_ami, when: customer != 'vanilla' }
     - ami_baker_pre
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
@@ -40,21 +41,23 @@
   remote_user: ec2-user
   become: yes
   become_user: root
-
   roles:
-    - common
-    - jetty
-    - oneview
+    - { role: common, when: customer == 'vanilla' or full_build or full_build }
+    - { role: jetty, when: customer == 'vanilla' or full_build }
+    - { role: oneview, when: customer == 'vanilla' or full_build }
+
     - { role: install_customizations_dt, when: customer == 'dt' }
     - { role: install_customizations_tp, when: customer == 'tp' }
     - { role: install_customizations_gstar, when: customer == 'gs' }
-#   - { role: install_customizations_demo, when: customer == 'ovc' }
-    - ricbra.logentries
-    - nginx_proxy
-    - newrelic_infrastructure
+#    - { role: install_customizations_demo, when: customer == 'ovc' }
+
+    - { role: ricbra.logentries, when: customer == 'vanilla' or full_build }
+    - { role: nginx_proxy, when: customer == 'vanilla' or full_build }
+    - { role: newrelic_infrastructure, when: customer == 'vanilla' or full_build }
+
     - { role: install_devops_dt, when: customer == 'dt' }
     - { role: install_devops_tp, when: customer == 'tp' }
-    - { role: install_devops_gstar, when: customer == 'gs' }
+#    - { role: install_devops_gstar, when: customer == 'gs' }
     - { role: install_devops_demo, when: customer == 'ovc' }
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
