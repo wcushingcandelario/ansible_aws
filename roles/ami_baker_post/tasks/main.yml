@@ -8,7 +8,7 @@
     name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
     wait: yes
     launch_permissions:
-      user_ids: ['748109554602', {{ customer_account_id }}]
+      user_ids: ['748109554602', "{{ customer_account_id }}"]
     tags:
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"

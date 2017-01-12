@@ -12,6 +12,8 @@
     rds_security_group: "{{ ami_baker_rds_security_group }}"
     rds_subnet_group: "{{ ami_baker_rds_subnet_group }}"
     multirdszone: no
+    rds_instance_type: "db.m4.micro"
+    deploy_type: utility
 
 - name: Build temporary instance
   hosts: localhost
@@ -20,7 +22,7 @@
   gather_facts: False
   roles:
     - { role: find_ami, when: customer == 'vanilla' or full_build }
-    - { role: find_ovc_ami, when: customer != 'vanilla' }
+  #  - { role: find_ovc_ami, when: customer != 'vanilla' and not full_build}
     - ami_baker_pre
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
@@ -34,7 +36,7 @@
     ovc_server_user_dir: /opt/ovc
     webserver_user: www-data
     s3install: true
-    ovcDB_host: "utility-mysql.{{ dns_domain }}"
+    ovcDB_host: "mysql-utility.{{ dns_domain }}"
     ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
 
 - hosts: just_baked
@@ -48,6 +50,7 @@
 
     - { role: install_customizations_dt, when: customer == 'dt' }
     - { role: install_customizations_tp, when: customer == 'tp' }
+#    - { role: install_customizations_mb, when: customer == 'mb' }
     - { role: install_customizations_gstar, when: customer == 'gs' }
 #    - { role: install_customizations_demo, when: customer == 'ovc' }
 
@@ -55,8 +58,9 @@
     - { role: nginx_proxy, when: customer == 'vanilla' or full_build }
     - { role: newrelic_infrastructure, when: customer == 'vanilla' or full_build }
 
-    - { role: install_devops_dt, when: customer == 'dt' }
+#    - { role: install_devops_dt, when: customer == 'dt' }
     - { role: install_devops_tp, when: customer == 'tp' }
+    - { role: install_devops_mb, when: customer == 'mb' }
 #    - { role: install_devops_gstar, when: customer == 'gs' }
     - { role: install_devops_demo, when: customer == 'ovc' }
   vars:
