@@ -1,0 +1,390 @@
+{
+	"AWSEBDockerrunVersion": "2",
+	"Authentication": {
+		"Bucket": "{{ s3_bucket_docker }}",
+		"Key": "{{ dockercfg }}"
+	},
+    "containerDefinitions":[
+    	{
+		  "name": "apigateway",
+	      "image": "oneviewcommerce/sar-apigateway:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "apigateway"
+	        },
+	        {
+	          "name": "API_PORT",
+	          "value": "3000"
+	        },
+	        {
+	          "name": "DASH_PATH",
+	          "value": "{{ dash_path }}"
+	        },
+	        {
+	          "name": "JMS_PATH",
+	          "value": "{{ jms_path }}"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "BROADCAST_PATH",
+	          "value": "{{ broadcast_path }}"
+	        },
+	        {
+	          "name": "AUTH_PATH",
+	          "value": "{{ auth_path }}"
+	        }
+	      ],
+	      "essential": true,
+	      "memory": 384,
+	      "portMappings": [
+	        {
+	          "hostPort": 3007,
+	          "containerPort": 3000
+	        },
+	        {
+	          "hostPort": 3008,
+	          "containerPort": 3008
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+	      "name": "client",
+	      "image": "oneviewcommerce/sar-client:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "client"
+	        },
+	        {
+	          "name": "CLIENT_PORT",
+	          "value": "3000"
+	        },
+	        {
+	          "name": "API_PATH",
+	          "value": "{{ api_path }}"
+	        },
+	        {
+	          "name": "JMS_QUEUEPOSUBMIT",
+	          "value": "posubmit"
+	        },
+	        {
+	          "name": "JMS_QUEUESTOCKEXPORT",
+	          "value": "stockexport"
+	        },
+	        {
+	          "name": "DASH_PATH",
+	          "value": "{{ dash_path }}"
+	        },
+	        {
+	          "name": "AUTH_PATH",
+	          "value": "{{ auth_path }}"
+	        }
+	      ],
+	      "essential": true,
+	      "memory": 384,
+	      "portMappings": [
+	        {
+	          "hostPort": 80,
+	          "containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "oauth2",
+	      "image": "oneviewcommerce/sar-oauth2:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "client"
+	        },
+	        {
+	          "name": "AUTH_PORT",
+	          "value": "3000"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        }
+	      ],
+	      "essential": true,
+	      "memory": 384,
+	      "portMappings": [
+	        {
+	          "hostPort": 3009,
+	          "containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "location",
+	      "image": "oneviewcommerce/sar-location:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "location"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        }
+	      ],
+	      "essential": false,
+	      "memory": 384,
+	      "portMappings": [
+	        {
+				"containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "vendor",
+	      "image": "oneviewcommerce/sar-vendor:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "vendor"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        }
+	      ],
+	      "essential": false,
+	      "memory": 384,
+	      "portMappings": [
+	        {
+				"containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "transaction",
+	      "image": "oneviewcommerce/sar-transaction:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "transaction"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "API_PATH",
+	          "value": "{{ api_path }}"
+	        },
+	        {
+	          "name": "DASH_PATH",
+	          "value": "{{ dash_path }}"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        }
+	      ],
+	      "essential": false,
+	      "memory": 512,
+	      "portMappings": [
+	        {
+				"containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "order",
+	      "image": "oneviewcommerce/sar-order:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "order"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "DASH_PATH",
+	          "value": "{{ dash_path }}"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        },
+	        {
+	          "name": "API_PATH",
+	          "value": "{{ api_path }}"
+	        }
+	      ],
+	      "essential": false,
+	      "memory": 512,
+	      "portMappings": [
+	        {
+				"containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "product",
+	      "image": "oneviewcommerce/sar-product:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "product"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        },
+	        {
+	          "name": "DASH_PATH",
+	          "value": "{{ dash_path }}"
+	        },
+	        {
+	          "name": "API_PATH",
+	          "value": "{{ api_path }}"
+	        }
+	      ],
+	      "essential": false,
+	      "memory": 512,
+	      "portMappings": [
+	        {
+				"containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "dashboard",
+	      "image": "oneviewcommerce/sar-dashboard:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "dashboard"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        },
+	        {
+	          "name": "DASH_PATH",
+	          "value": "{{ dash_path }}"
+	        },
+	        {
+	          "name": "API_PATH",
+	          "value": "{{ api_path }}"
+	        }
+	      ],
+	      "essential": false,
+	      "memory": 512,
+	      "portMappings": [
+	        {
+				"containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    },
+	    {
+		  "name": "loadjson",
+	      "image": "oneviewcommerce/sar-loadjson:{{ im_version }}",
+	      "environment": [
+	        {
+	          "name": "Container",
+	          "value": "loadjson"
+	        },
+	        {
+	          "name": "API_PATH",
+	          "value": "{{ api_path }}"
+	        },
+	        {
+	          "name": "JMS_PATH",
+	          "value": "{{ jms_path }}"
+	        },
+	        {
+	          "name": "JMS_QUEUEPOCONFIRMED",
+	          "value": "poconfirm"
+	        },
+	        {
+	          "name": "JMS_QUEUEPOASN",
+	          "value": "poasn"
+	        },
+	        {
+	          "name": "JMS_QUEUEPOS",
+	          "value": "mpos_{{ deploy_type }}im"
+	        },
+	        {
+	          "name": "AUTH_PATH",
+	          "value": "{{ auth_path }}"
+	        },
+	        {
+	          "name": "BROKER_PATH",
+	          "value": "{{ broker_path }}"
+	        },
+	        {
+	          "name": "DB_CONN",
+	          "value": "{{ mongo_url }}{{ invtmgr_db }}"
+	        },
+			{
+	          "name": "DASH_PATH",
+	          "value": "{{ dash_path }}"
+	        }
+	      ],
+	      "essential": false,
+	      "memory": 512,
+	      "portMappings": [
+	        {
+				"containerPort": 3000
+	        }
+	      ],
+	      "mountPoints": [
+
+	      ]
+	    }
+
+	  ]
+
+}

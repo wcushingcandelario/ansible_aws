@@ -3,7 +3,7 @@ clustered_environment: Yes
 # Common
 deploy_type: sit99
 region: us-east-1
-key: ovc-private
+key: ovcdemo
 
 # DB
 environment_name: "{{ deploy_type }}-rds"
@@ -19,15 +19,7 @@ vpc_subnet_id: "{{ vpc_subnet_public }}"
 IAMROLE: S3_Release_Read
 instance_type_asg: "m4.xlarge"
 
-security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389,sg-e3b59c87
-elbsubnets: subnet-9f8a92b7,subnet-a194589c
+security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
+elbsubnets: subnet-9f8a92b7
 min_size: 2
 max_size: 5
-
-# Promo Engine
-dockerrun_version: "2"
-s3_bucket_docker: "ovc-github-access"
-dockercfg: dockercfg
-mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}:{{ mongo_port }}/"
-tier: WebServer
-elb_security_group_id: sg-62fc7a06
