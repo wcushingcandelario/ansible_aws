@@ -35,6 +35,15 @@
     - tagged
     - promo_engine
 
+- name: Build Inventory Manager
+  connection: local
+  hosts: localhost
+  roles:
+    - inventory_manager
+  tags:
+    - tagged
+    - inventory_manager
+
 - name: Find AMI ID
   hosts: localhost
   connection: local
