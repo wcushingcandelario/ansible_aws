@@ -1,33 +1,64 @@
 ---
 
 - name: first make sure dest exists.
-  file: dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config state=directory
+  file:
+    dest: {{ ovc_install_dir }}/Platform-Dynamic-Objects/config state: directory
 
-- name: Copy out the unifiedConfig/tools.properties files
-  copy: src={{ item }} dest={{ ovc_install_dir }}/Platform-Dynamic-Objects/config/ owner=jetty group=www-data
-  with_fileglob:
-    - env_files/unifiedConfig.properties.*
-    - env_files/tools.properties.*
+- name: template out the unifiedConfig.properties files
+  template:
+    src: unifiedConfig.properties.j2
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties.{{ item.value.name }}"
+    owner: jetty
+    group: www-data
   become: yes
   become_user: root
 
-- name: Copy out the context.xml files
-  template: src={{ item }} dest=/opt/jetty/webapps/ owner=jetty group=jetty
-  with_fileglob:
-    - env_files/context.xml.*
+- name: template out the tools.properties files
+  template:
+    src: tools.properties.j2
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties.{{ item.value.name }}"
+    owner: jetty
+    group: www-data
   become: yes
   become_user: root
+  with_dict: "{{ environments }}"
 
-- name: Copy out the database/settings_var.php files
-  copy: src={{ item }} dest=/var/www/html/ovcdashboard/app/Config/ owner=www-data group=www-data
-  with_fileglob:
-    - env_files/database.php.*
-    - env_files/setting_var.php.*
+- name: template out the context.xml files
+  template:
+    src: context.xml.j2
+    dest: "/opt/jetty/webapps/context.xml.{{ item.value.name }}"
+    owner: jetty
+    group: jetty
   become: yes
   become_user: root
+  with_dict: "{{ environments }}"
+
+- name: template out the database/settings_var.php files
+  template:
+    src: database.php.j2
+    dest: "/var/www/html/ovcdashboard/app/Config/.{{ item.value.name }}"
+    owner: www-data
+    group: www-data
+  become: yes
+  become_user: root
+  with_dict: "{{ environments }}"
+
+- name: template out the database/settings_var.php files
+  template:
+    src: setting_var.php.j2
+    dest: "/var/www/html/ovcdashboard/app/Config/.{{ item.value.name }}"
+    owner: www-data
+    group: www-data
+  become: yes
+  become_user: root
+  with_dict: "{{ environments }}"
 
 - name: Copy the war.xml patch files
-  copy: src={{ item }} dest=/opt/ovc/posWebapp/WEB-INF/ owner=jetty group=jetty
+  copy:
+    src: "{{ item }}"
+    dest: /opt/ovc/posWebapp/WEB-INF/
+    owner: jetty
+    group: jetty
   with_fileglob:
     - cometd/web.xml.patch.*
   become: yes
