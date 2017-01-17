@@ -26,5 +26,5 @@ s3_bucket_docker: "ovc-github-access-2"
 customer_account_id: 748109554602
 customer: ovc
 ami_release: alpha
-ami_customer: tp
+ami_customer: ovc
 ami_owner: 74810554602 # The OVC Demo account

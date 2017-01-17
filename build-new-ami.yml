@@ -44,7 +44,7 @@
   become: yes
   become_user: root
   roles:
-    - { role: common, when: customer == 'vanilla' or full_build or full_build }
+    - { role: common, when: customer == 'vanilla' or full_build }
     - { role: jetty, when: customer == 'vanilla' or full_build }
     - { role: oneview, when: customer == 'vanilla' or full_build }
 
