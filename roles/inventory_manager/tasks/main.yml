@@ -136,7 +136,7 @@
        Value: "{{ max_size }}"
      - Namespace: aws:elb:loadbalancer
        OptionName: SecurityGroups
-       Value: "{{ security_group_ids }}"
+       Value: "{{ im_security_groups }}"
      - Namespace: aws:elb:loadbalancer
        OptionName: ManagedSecurityGroup
        Value: "{{ elb_security_group_id }}"
@@ -148,13 +148,13 @@
        Value: LoadBalanced
      - Namespace: aws:ec2:vpc
        OptionName: Subnets
-       Value: "{{ elbsubnets }}"
+       Value: "{{ elb_im_subnets }}"
      - Namespace: aws:ec2:vpc
        OptionName: VPCId
        Value: "{{ vpc_id }}"
      - Namespace: aws:ec2:vpc
        OptionName: ELBSubnets
-       Value: "{{ elbsubnets }}"
+       Value: "{{ elb_im_subnets }}"
      - Namespace: aws:ec2:vpc
        OptionName: ELBScheme
        Value: "{{ elb_scheme }}"
@@ -169,7 +169,7 @@
        Value: "{{ instance_type_invtmgr }}"
      - Namespace: aws:autoscaling:launchconfiguration
        OptionName: SecurityGroups
-       Value: "{{ security_group_ids }}"
+       Value: "{{ im_security_groups }}"
      - Namespace: aws:autoscaling:launchconfiguration
        OptionName: EC2KeyName
        Value: "{{ key }}"
@@ -226,7 +226,7 @@
        Value: "{{ max_size }}"
      - Namespace: aws:elb:loadbalancer
        OptionName: SecurityGroups
-       Value: "{{ security_group_ids }}"
+       Value: "{{ im_security_groups }}"
      - Namespace: aws:elb:loadbalancer
        OptionName: ManagedSecurityGroup
        Value: "{{ elb_security_group_id }}"
@@ -238,13 +238,13 @@
        Value: LoadBalanced
      - Namespace: aws:ec2:vpc
        OptionName: Subnets
-       Value: "{{ elbsubnets }}"
+       Value: "{{ elb_im_subnets }}"
      - Namespace: aws:ec2:vpc
        OptionName: VPCId
        Value: "{{ vpc_id }}"
      - Namespace: aws:ec2:vpc
        OptionName: ELBSubnets
-       Value: "{{ elbsubnets }}"
+       Value: "{{ elb_im_subnets }}"
      - Namespace: aws:ec2:vpc
        OptionName: ELBScheme
        Value: "{{ elb_scheme }}"
@@ -259,7 +259,7 @@
        Value: "{{ instance_type_invtmgr }}"
      - Namespace: aws:autoscaling:launchconfiguration
        OptionName: SecurityGroups
-       Value: "{{ security_group_ids }}"
+       Value: "{{ im_security_groups }}"
      - Namespace: aws:autoscaling:launchconfiguration
        OptionName: EC2KeyName
        Value: "{{ key }}"

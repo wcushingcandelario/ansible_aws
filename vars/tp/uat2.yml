@@ -26,7 +26,7 @@ max_size: 1
 # Promo Engine
 dockerrun_version: "2"
 dockercfg: dockercfg
-mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
+mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}:{{ mongo_port }}/"
 promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
 tier: WebServer
 security_group_ids: "sg-4f04f028,sg-bd1aeeda,sg-11ce3976"
