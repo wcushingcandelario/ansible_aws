@@ -1,7 +1,7 @@
 environments:
   uat1:
     name: uat1
-    url: https://uat1.ovchosting.co.uk
+    url: uat1.ovchosting.co.uk
     mysql_host: uat1-mysql.ovchosting.co.uk
     nosql_host: mongodb-uat1.ovchosting.co.uk
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
@@ -9,7 +9,7 @@ environments:
     ecommerce_host: ws-uat.dev.wickes-tills.co.uk
   uat2:
    name: uat2
-    url: https://uat2.ovchosting.co.uk
+    url: uat2.ovchosting.co.uk
     mysql_host: uat2-mysql.ovchosting.co.uk
     nosql_host: mongodb-uat2.ovchosting.co.uk
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT2-Queue
@@ -17,7 +17,7 @@ environments:
     ecommerce_host: ws-uat.dev.wickes-tills.co.uk
   preprod:
     name: preprod
-    url: https://preprod.ovchosting.co.uk
+    url: preprod.ovchosting.co.uk
     mysql_host: preprod-mysql.ovchosting.co.uk
     nosql_host: mongodb-preprod01.ovchosting.co.uk
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/PreProd-Queue
@@ -25,7 +25,7 @@ environments:
     ecommerce_host: ws-cand.dev.wickes-tills.co.uk
   prod:
     name: prod
-    url: https://prod.ovchosting.co.uk
+    url: prod.ovchosting.co.uk
     mysql_host: prod-mysql.ovchosting.co.uk
     nosql_host: mongodb-prod01.ovchosting.co.uk
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/Prod-Queue
