@@ -26,3 +26,5 @@ s3_bucket_docker: "ovc-github-access-2"
 customer_account_id: 063725663692
 customer: tp
 ami_customer: tp
+s3_bucket_customer: ovc-travisperkins-releases
+s3_bucket: ovc-travisperkins-releases
