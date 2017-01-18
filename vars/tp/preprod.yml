@@ -11,9 +11,6 @@ rds_security_group: sg-5bbc1f3c
 rds_subnet_group: pre-prod-rds
 multirdszone: no
 
-# Mongo
-mongo_instance_type: m4.large
-mongo_security_groups: sg-5bbc1f3c
 
 # AMI/ELB/ASG
 ovc_security_groups: ['sg-71bc1f16']

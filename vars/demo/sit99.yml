@@ -11,9 +11,6 @@ rds_security_group: sg-6387e207,sg-0591ee7f
 rds_subnet_group: "rds subnet"
 multirdszone: no
 
-# Mongo
-mongo_instance_type: m4.large
-mongo_security_groups: sg-62fc7a06,sg-248af55e
 
 # AMI/ELB/ASG
 ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
