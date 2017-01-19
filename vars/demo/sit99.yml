@@ -3,7 +3,7 @@ clustered_environment: Yes
 # Common
 deploy_type: sit99
 region: us-east-1
-key: ovcdemo
+key: ovc-private
 
 # DB
 environment_name: "{{ deploy_type }}-rds"
@@ -13,7 +13,7 @@ multirdszone: no
 
 
 # AMI/ELB/ASG
-ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
+ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389,
 vpc_subnet_public: subnet-9f8a92b7
 vpc_subnet_id: "{{ vpc_subnet_public }}"
 IAMROLE: S3_Release_Read
@@ -23,3 +23,12 @@ security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
 elbsubnets: subnet-9f8a92b7
 min_size: 2
 max_size: 5
+
+# Promo Engine
+dockerrun_version: "2"
+dockercfg: dockercfg
+mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
+promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
+tier: WebServer
+elb_security_group_id: sg-6387e207
+pe_monitor: yes
