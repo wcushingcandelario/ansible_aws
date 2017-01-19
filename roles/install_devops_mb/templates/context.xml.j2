@@ -38,7 +38,7 @@
 		<Arg>
 
 			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-				<Set name="URL">jdbc:mysql://mysql-mbsit99.ovcdemo.com:3306/xdb</Set>
+				<Set name="URL">jdbc:mysql://{{ item.value.mysql_host }}:3306/xdb</Set>
 				<Set name="user">root</Set>
 				<Set name="password">
 					<Ref refid="password"/>
@@ -72,7 +72,7 @@
 		<Arg>
 			<New class="org.skyscreamer.nevado.jms.destination.NevadoQueue">
 				<Arg>destination1</Arg>
-				<Set name="queueUrl">https://sqs.us-east-1.amazonaws.com/748109554602/ovctest</Set>
+				<Set name="queueUrl">{{ item.value.sqs_queue }}</Set>
 			</New>
 		</Arg>
 	</New>
