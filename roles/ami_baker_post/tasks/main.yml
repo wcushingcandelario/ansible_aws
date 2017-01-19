@@ -1,11 +1,15 @@
-- name: bundle ami
+- set_fact:
+    ami_temp_name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}-temp"
+    ami_name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}"
+
+- name: Bundle AMI
   local_action:
     module: ec2_ami
     instance_id: "{{ just_created_instance_id }}"
     region: "{{ region }}"
     state: present
     description: This was provisioned {{ ansible_date_time.iso8601 }}
-    name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
+    name: "{{ ami_name }}"
     wait: yes
     launch_permissions:
       user_ids: ['748109554602', "{{ customer_account_id }}"]
@@ -14,7 +18,94 @@
       release: "{{ ami_release }}"
   register: amioutput
 
-- name: terminate temporary instance
+- name: debug
+  debug: var=amioutput
+
+- name: Bundle AMI - Temporary name for copying/booting
+  local_action:
+    module: ec2_ami
+    instance_id: "{{ just_created_instance_id }}"
+    region: "{{ region }}"
+    state: present
+    description: This was provisioned {{ ansible_date_time.iso8601 }}
+    name: "{{ ami_temp_name }}"
+    wait: yes
+    launch_permissions:
+      user_ids: ['748109554602', "{{ customer_account_id }}"]
+    tags:
+      customer: "{{ ami_customer }}"
+      release: "{{ ami_release }}"
+  register: ami_tmp_output
+  when: ami_target_region != region
+
+- name: debug
+  debug: var=ami_tmp_output
+
+- name: Copy AMI - Temporary name for copying/booting
+  ec2_ami_copy:
+    source_region: "{{ region }}"
+    region: "{{ ami_target_region }}"
+    source_image_id: "{{ ami_tmp_output.image_id }}"
+    wait: yes
+  register: amicopy
+  when: ami_target_region != region
+
+- name: debug
+  debug: var=amicopy
+  when: ami_target_region != region
+
+- name: Launch temporary instance for cross-region deployment
+  local_action:
+    module: ec2
+    assign_public_ip: yes
+    region: "{{ ami_target_region }}"
+#    key_name: "{{ key }}"
+#    group_id: "{{ ovc_security_groups }}"
+    instance_type: "{{ instance_type }}"
+    vpc_subnet_id: "{{ ami_temp_vpc_subnet_public }}"
+    image: "{{ amicopy.image_id }}"
+    wait: yes
+    instance_profile_name: "{{ ami_baker_instance_profile_name }}"
+    exact_count: 1
+    count_tag:
+      role: ami_builder
+    instance_tags:
+      role: ami_builder
+      Name: ami_builder
+  when: ami_target_region != region
+  register: ami_instance
+
+- name: Bundle ANI in target region
+  local_action:
+    module: ec2_ami
+    instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+    region: "{{ ami_target_region }}"
+    state: present
+    description: This was provisioned {{ ansible_date_time.iso8601 }}
+    name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}"
+    wait: yes
+    launch_permissions:
+      user_ids: ['748109554602', "{{ customer_account_id }}"]
+    tags:
+      customer: "{{ ami_customer }}"
+      release: "{{ ami_release }}"
+      copyied_from: "{{ ami_name }}"
+  when: ami_target_region != region
+  register: amioutput
+
+- name: debug
+  debug: var=amioutput
+  when: ami_target_region != region
+
+- name: Terminate temporary instance in target region
+  local_action:
+    module: ec2
+    state: absent
+    region: "{{ ami_target_region }}"
+    instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+  when: ami_target_region != region
+
+- name: Terminate temporary instance
   local_action:
     module: ec2
     state: absent
@@ -23,8 +114,21 @@
   tags:
     - terminate_ami
 
-- name: debug
-  debug: var=amioutput
+# - name: Delete temporary copies
+#   ec2_ami:
+#     region: "{{ ani_target_region }}"
+#     image_id: "{{ amicopy.image_id }}"
+#     delete_snapshot: True
+#     state: absent
+#   when: ami_target_region != region
+#
+# - name: Delete temporary copies
+#   ec2_ami:
+#     region: "{{ region }}"
+#     image_id: "{{ ami_tmp_output.image_id }}"
+#     delete_snapshot: True
+#     state: absent
+#   when: ami_target_region != region
 
 - name: Set image_id
   set_fact:
