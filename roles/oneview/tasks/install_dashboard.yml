@@ -26,6 +26,13 @@
     use_regex: True
   register: ovc_dashboard_zip
 
+- debug: var=ovc_dashboard_zip
+
+- set_fact:
+    new_ovc_dashboard_file_format: Yes
+  when: "{{ovc_dashboard_zip['files'][0]}} is defined"
+
+
 - name: Unzip OVC Dashboard
   unarchive:
     copy: no
@@ -36,6 +43,19 @@
     group: "{{ webserver_user }}"
   become: yes
   become_user: "{{ webserver_user }}"
+  when: new_ovc_dashboard_file_format is defined
+
+- name: Unzip OVC Dashboard
+  unarchive:
+    copy: no
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Dashboard/ovcdashboard.zip"
+    dest: "{{ html_root }}"
+    mode: ug+x
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+  become: yes
+  become_user: "{{ webserver_user }}"
+  when: new_ovc_dashboard_file_format is undefined
 
 - name: Setup database connection
   template:
