@@ -8,6 +8,7 @@ ami_baker_rds_subnet_group: "uat1 rds subnet group"
 ami_baker_ovc_security_groups: sg-71bc1f16
 ami_baker_vpc_subnet_public: subnet-cae8ffbd
 ami_baker_instance_profile_name: UtilityServer
+ami_baker_region: us-east-1
 ssl_certificate_id: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
 datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 skip_ssl: No
@@ -30,3 +31,4 @@ ami_customer: tp
 ami_owner: 748109554602 # The OVC Demo account
 s3_bucket_customer: ovc-travisperkins-releases
 s3_bucket: ovc-travisperkins-releases
+ami_target_region: eu-west-1

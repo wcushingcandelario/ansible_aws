@@ -6,7 +6,7 @@
   local_action:
     module: ec2_ami
     instance_id: "{{ just_created_instance_id }}"
-    region: "{{ region }}"
+    region: "{{ ami_baker_region }}"
     state: present
     description: This was provisioned {{ ansible_date_time.iso8601 }}
     name: "{{ ami_name }}"
@@ -26,7 +26,7 @@
   local_action:
     module: ec2_ami
     instance_id: "{{ just_created_instance_id }}"
-    region: "{{ region }}"
+    region: "{{ ami_baker_region }}"
     state: present
     description: This was provisioned {{ ansible_date_time.iso8601 }}
     name: "{{ ami_temp_name }}"
@@ -38,23 +38,23 @@
       release: "{{ ami_release }}"
       source: "{{ source_ami }}"
   register: ami_tmp_output
-  when: ami_target_region != region
+  when: ami_target_region !=  ami_baker_region
 
 - name: debug
   debug: var=ami_tmp_output
 
 - name: Copy AMI - Temporary name for copying/booting
   ec2_ami_copy:
-    source_region: "{{ region }}"
+    source_region: "{{ ami_baker_region }}"
     region: "{{ ami_target_region }}"
     source_image_id: "{{ ami_tmp_output.image_id }}"
     wait: yes
   register: amicopy
-  when: ami_target_region != region
+  when: ami_target_region !=  ami_baker_region
 
 - name: debug
   debug: var=amicopy
-  when: ami_target_region != region
+  when: ami_target_region != ami_baker_region
 
 - name: Launch temporary instance for cross-region deployment
   local_action:
@@ -74,8 +74,8 @@
     instance_tags:
       role: ami_builder
       Name: ami_builder
-  when: ami_target_region != region
   register: ami_instance
+  when: ami_target_region != ami_baker_region
 
 - name: Bundle ANI in target region
   local_action:
@@ -92,12 +92,12 @@
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"
       copyied_from: "{{ ami_name }}"
-  when: ami_target_region != region
+  when: ami_target_region != ami_baker_region
   register: amioutput
 
 - name: debug
   debug: var=amioutput
-  when: ami_target_region != region
+  when: ami_target_region !=  ami_baker_region
 
 - name: Terminate temporary instance in target region
   local_action:
@@ -105,13 +105,13 @@
     state: absent
     region: "{{ ami_target_region }}"
     instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
-  when: ami_target_region != region
+  when: ami_target_region !=  ami_baker_region
 
 - name: Terminate temporary instance
   local_action:
     module: ec2
     state: absent
-    region: "{{ region }}"
+    region: "{{ ami_baker_region }}"
     instance_ids: "{{ just_created_instance_id }}"
   tags:
     - terminate_ami
