@@ -19,6 +19,10 @@
   when: ami_find.results[0].ami_id is defined
   register: ami_instance
 
+- name: Record source AMI
+  set_fact:
+    source_ami: "{{ ami_find.results[0].ami_id }}"
+
 - name: Set IP fact (public).
   set_fact:
     ssh_ip: "{{ ami_instance.tagged_instances.0.public_ip }}"

@@ -16,6 +16,7 @@
     tags:
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"
+      source: "{{ source_ami }}"
   register: amioutput
 
 - name: debug
@@ -35,6 +36,7 @@
     tags:
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"
+      source: "{{ source_ami }}"
   register: ami_tmp_output
   when: ami_target_region != region
 
