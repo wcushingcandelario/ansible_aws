@@ -21,8 +21,7 @@
   connection: local
   gather_facts: False
   roles:
-    - { role: find_ami, when: customer == 'vanilla' or full_build }
-  #  - { role: find_ovc_ami, when: customer != 'vanilla' and not full_build}
+    - { role: find_ovc_ami, force_ami_customer: 'ovc' }
     - ami_baker_pre
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
