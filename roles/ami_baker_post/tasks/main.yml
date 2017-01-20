@@ -130,21 +130,21 @@
   tags:
     - terminate_ami
 
-# - name: Delete temporary copies
-#   ec2_ami:
-#     region: "{{ ani_target_region }}"
-#     image_id: "{{ amicopy.image_id }}"
-#     delete_snapshot: True
-#     state: absent
-#   when: ami_target_region != region
-#
-# - name: Delete temporary copies
-#   ec2_ami:
-#     region: "{{ region }}"
-#     image_id: "{{ ami_tmp_output.image_id }}"
-#     delete_snapshot: True
-#     state: absent
-#   when: ami_target_region != region
+- name: Delete temporary copies
+  ec2_ami:
+    region: "{{ ami_target_region }}"
+    image_id: "{{ amicopy.image_id }}"
+    delete_snapshot: True
+    state: absent
+  when: ami_target_region !=  ami_baker_region
+
+- name: Delete temporary copies
+  ec2_ami:
+    region: "{{ ami_baker_region }}"
+    image_id: "{{ ami_tmp_output.image_id }}"
+    delete_snapshot: True
+    state: absent
+  when: ami_target_region !=  ami_baker_region
 
 - name: Set image_id
   set_fact:
