@@ -84,8 +84,8 @@
     instance_tags:
       role: ami_builder
       Name: ami_builder
-  register: ami_instance
   when: ami_target_region != ami_baker_region
+  register: tmp_ami_instance
 
 - pause:
     seconds: 45
@@ -93,7 +93,7 @@
 - name: Bundle ANI in target region
   local_action:
     module: ec2_ami
-    instance_id: "{{ ami_instance.tagged_instances.0.id }}"
+    instance_id: "{{ tmp_ami_instance.tagged_instances.0.id }}"
     region: "{{ ami_target_region }}"
     state: present
     description: This was provisioned {{ ansible_date_time.iso8601 }}
@@ -106,6 +106,7 @@
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"
       copyied_from: "{{ ami_name }}"
+      source: "{{ source_ami }}"
   when: ami_target_region != ami_baker_region
   register: amioutput
 
@@ -118,7 +119,7 @@
     module: ec2
     state: absent
     region: "{{ ami_target_region }}"
-    instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+    instance_ids: "{{ tmp_ami_instance.tagged_instances.0.id }}"
   when: ami_target_region !=  ami_baker_region
 
 - name: Terminate temporary instance

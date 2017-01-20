@@ -2,8 +2,8 @@
   local_action:
     module: ec2
     assign_public_ip: yes
-    key_name: "{{ key }}"
     region: "{{ ami_baker_region }}"
+    key_name: "{{ ami_baker_key }}"
     group_id: "{{ ovc_security_groups }}"
     instance_type: "{{ instance_type }}"
     vpc_subnet_id: "{{ vpc_subnet_public }}"
