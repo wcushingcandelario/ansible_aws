@@ -43,9 +43,9 @@
   become: yes
   become_user: root
   roles:
-    - { role: common, when: customer == 'vanilla' or full_build }
-    - { role: jetty, when: customer == 'vanilla' or full_build }
-    - { role: oneview, when: customer == 'vanilla' or full_build }
+    - { role: common, when: customer == 'vanilla'}
+    - { role: jetty, when: customer == 'vanilla'}
+    - { role: oneview, when: customer == 'vanilla'}
 
     - { role: install_customizations_dt, when: customer == 'dt' }
     - { role: install_customizations_tp, when: customer == 'tp' }
@@ -53,9 +53,9 @@
     - { role: install_customizations_gstar, when: customer == 'gs' }
 #    - { role: install_customizations_demo, when: customer == 'ovc' }
 
-    - { role: ricbra.logentries, when: customer == 'vanilla' or full_build }
-    - { role: nginx_proxy, when: customer == 'vanilla' or full_build }
-    - { role: newrelic_infrastructure, when: customer == 'vanilla' or full_build }
+    - { role: ricbra.logentries, when: customer == 'vanilla'}
+    - { role: nginx_proxy, when: customer == 'vanilla'}
+    - { role: newrelic_infrastructure, when: customer == 'vanilla'}
 
 #    - { role: install_devops_dt, when: customer == 'dt' }
     - { role: install_devops_tp, when: customer == 'tp' }
