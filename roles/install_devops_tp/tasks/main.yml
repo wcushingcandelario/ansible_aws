@@ -19,9 +19,9 @@
     owner: "{{ item.value.owner }}"
     group: "{{ item.value.group }}"
     mode: "{{ item.value.mode }}"
-  with_dict: ssl_secret_files
+  with_dict: "{{ ssl_secret_files }}"
   sudo: yes
-##  no_log: true
+  no_log: true
 
 
 - name: Create a chained certificate

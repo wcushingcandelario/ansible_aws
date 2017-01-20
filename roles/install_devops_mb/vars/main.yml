@@ -1,0 +1,9 @@
+environments:
+  mbsit99:
+    name: mbsit99
+    url: mbsit99-dash.ovchosting.co.uk
+    mysql_host: mysql-mbsit99.ovcdemo.com
+    nosql_host: mongodb-mbsit99.ovchosting.co.uk
+    sqs_queue:
+    staff_discount_bucket:
+    ecommerce_host: qamysqlhybris.ovcdemo.com

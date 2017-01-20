@@ -1,0 +1,9 @@
+environments:
+  sit99:
+    name: sit99
+    url: sit99-dash.ovchosting.co.uk
+    mysql_host: mysql-sit99.ovcdemo.com
+    nosql_host: mongodb-sit99.ovchosting.co.uk
+    sqs_queue:
+    staff_discount_bucket:
+    ecommerce_host: qamysqlhybris.ovcdemo.com
