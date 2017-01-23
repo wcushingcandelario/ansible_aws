@@ -204,7 +204,8 @@ Ensure the ansible beanstalk modules have been copied into the library directory
 -   Modules: elasticbeanstalk_app.py, elasticbeanstalk_env.py, elasticbeanstalk_version.py
 -   Can be downloaded or cloned from git: https://github.com/hsingh/ansible-elastic-beanstalk
 
-The play can be run for both initial deployment or updating an already built beanstalk environment. The promotion engine's version variable (pe_version) will need to be defined as an extra variable ( -e ) in the playbook command.
+The play can be included in a new environment deployment. It can also be run to update any changes in the environment (i.e. new version of Promotion Engine ). The promotion engine's version variable (pe_version) will need to be defined as an extra variable
+( -e ) in the playbook command.
 
 **Deploy Promo Engine only**
 
@@ -217,15 +218,6 @@ The play can be run for both initial deployment or updating an already built bea
 *Run from: Demo account*
 
    ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e pe_version=1.8.0 -e promo_update=true --tags promo_engine
-
-### Deploying Inventory Manager
-
-Ensure the ansible beanstalk modules have been copied into the library directory for the play is run.
--   Modules: elasticbeanstalk_app.py, elasticbeanstalk_env.py, elasticbeanstalk_version.py
--   Can be downloaded or cloned from git: https://github.com/hsingh/ansible-elastic-beanstalk
-
-The play can be run for both initial deployment or updating an already built beanstalk environment. The promotion engine's version variable (im_version) will need to be defined as an extra variable ( -e ) in the playbook command.
-
 
 ## AMI flow - Customer non-production to Production
 
