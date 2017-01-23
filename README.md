@@ -209,13 +209,13 @@ The play can be included in a new environment deployment. It can also be run to 
 
 **Deploy Promo Engine only**
 
-*Run from: Demo account*
+*Run from: Customer account*
 
    ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e pe_version=1.8.0 --tags promo_engine
 
 **Deploy Promo Engine update only**
 
-*Run from: Demo account*
+*Run from: Customer account*
 
    ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e pe_version=1.8.0 -e promo_update=true --tags promo_engine
 
