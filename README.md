@@ -202,13 +202,13 @@ The play can be included in a new environment deployment. It can also be run to 
 
 **Deploy Inventory Manager update only**
 
-*Run from: Demo account*
+*Run from: Customer account*
 
    ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e im_version=2.3.0 --tags inventory_manager
 
 **Deploy Inventory Manager only**
 
-*Run from: Demo account*
+*Run from: Customer account*
 
    ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e im_version=2.3.0 -e im_update=true --tags inventory_manager
 
