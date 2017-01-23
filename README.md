@@ -15,9 +15,9 @@ These playbooks are available to run from RunDeck.
 
     -   **RDS** (immutable, can be run repeatedly without issue)
 
-    -   **Promo Engine** *Bill to explain this*
+    -   **Promo Engine** Optional module. Deploys to Beanstalk.
 
-    -   **Inventory Manager** *Bill to explain this*
+    -   **Inventory Manager** Optional module. Deploys to Beanstalk.
 
     -   **Either:**
 
@@ -78,12 +78,6 @@ take the latest OVC customised AMI.**
 -   **Role: create_rds**
     This builds the utility RDS database.
 
--   **Role:promo_engine**
-    Builds a promo_engine *Bill*
-
--   **Role:inventory_manager**
-    Builds an inventory_manager *Bill*
-
 -   **The rest**
     This builds the AMI, deploys the software, deploys the configuration, then saves an image of the AMI and terminates it.
 
@@ -94,10 +88,10 @@ take the latest OVC customised AMI.**
     This builds the main database for the environment.
 
 -   **Role: promo_engine**
-    *Bill*
+    Builds and/or updates the Promotion Engine in a beanstalk environment.
 
 -   **Role: inventory_manager**
-    *Bill*
+      Builds and/or updates the Promotion Engine in a beanstalk environment.
 
 -   **Role: find_ovc_ami**
     This part finds an AMI that has been built previously by this playbook and
@@ -204,7 +198,7 @@ Ensure the ansible beanstalk modules have been copied into the library directory
 -   Modules: elasticbeanstalk_app.py, elasticbeanstalk_env.py, elasticbeanstalk_version.py
 -   Can be downloaded or cloned from git: https://github.com/hsingh/ansible-elastic-beanstalk
 
-The play can be run for both initial deployment or updating an already built beanstalk environment. The promotion engine's version variable (im_version) will need to be defined as an extra variable ( -e ) in the playbook command.
+The play can be included in a new environment deployment. It can also be run to update any changes in the environment (i.e. new version of Inventory Manager ). The promotion engine's version variable (im_version) will need to be defined as an extra variable ( -e ) in the playbook command.
 
 **Deploy Inventory Manager update only**
 
