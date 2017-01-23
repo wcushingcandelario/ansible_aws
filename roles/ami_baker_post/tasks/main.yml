@@ -105,7 +105,7 @@
     tags:
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"
-      copyied_from: "{{ ami_name }}"
+      copied_from: "{{ ami_name }}"
       source: "{{ source_ami }}"
   when: ami_target_region != ami_baker_region
   register: amioutput

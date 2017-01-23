@@ -5,4 +5,4 @@ rds_security_group: "{{ rds_security_group }}"
 rds_subnet_group: "{{ rds_subnet_group }}"
 region: eu-west-1
 multirdszone: "{{ multirdszone }}"
-rds_instance_type: db.m4.large
+rds_instance_type: db.t2.large
