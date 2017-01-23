@@ -9,7 +9,6 @@
 	<Set name="maxFormContentSize">20000000</Set>
 
 	<Set name="overrideDescriptor">/opt/jetty/webapps/pos.d/pos-override.xml</Set>
-	<Set name="extraClasspath">/opt/ovc/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar;/opt/ovc/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar</Set>
 
 	<Set name="securityHandler">
 		<New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
@@ -39,7 +38,7 @@
 		<Arg>
 
 			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-				<Set name="URL">jdbc:mysql://uat1-rds.ckzc29y1mvlx.eu-west-1.rds.amazonaws.com:3306/xdb</Set>
+				<Set name="URL">jdbc:mysql://{{ item.value.mysql_host }}:3306/xdb</Set>
 				<Set name="user">root</Set>
 				<Set name="password">
 					<Ref refid="password"/>
@@ -57,9 +56,11 @@
 		<Arg>
 			<New class="org.skyscreamer.nevado.jms.NevadoConnectionFactory">
 				<Set name="sqsConnectorFactory">
-					<New class="org.skyscreamer.nevado.jms.connector.oneviewcommerce.ShadedNoCredPlainTextAmazonSQSConnectorFactory"/>
+					<New class="org.skyscreamer.nevado.jms.connector.oneviewcommerce.ShadedPlainTextAmazonSQSConnectorFactory"/>
 				</Set>
-				<Set name="awsSQSEndpoint">sqs.eu-west-1.amazonaws.com</Set>
+				<Set name="awsSQSEndpoint">sqs.us-east-1.amazonaws.com</Set>
+				<Set name="awsAccessKey"></Set>
+				<Set name="awsSecretKey"></Set>
 			</New>
 		</Arg>
 	</New>
@@ -71,7 +72,7 @@
 		<Arg>
 			<New class="org.skyscreamer.nevado.jms.destination.NevadoQueue">
 				<Arg>destination1</Arg>
-				<Set name="queueUrl">https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1</Set>
+				<Set name="queueUrl">{{ item.value.sqs_queue }}</Set>
 			</New>
 		</Arg>
 	</New>
