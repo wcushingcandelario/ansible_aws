@@ -53,6 +53,9 @@
 - name: debug
   debug: var=ami_tmp_output
 
+- pause:
+    seconds: 45
+
 - name: Copy AMI - Temporary name for copying/booting
   ec2_ami_copy:
     source_region: "{{ ami_baker_region }}"
