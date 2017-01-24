@@ -49,6 +49,7 @@
     bucket: "{{ s3_bucket_customer }}"
     object: "{{ s3_full_zip_prefix }}/{{ tp_extension_version }}/TPCustomPackage-{{ tp_extension_version }}.zip"
     dest: "/tmp/TPCustomPackage-{{ tp_extension_version }}.zip"
+    mode: get
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Extract contents of zip file
