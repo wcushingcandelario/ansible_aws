@@ -42,7 +42,7 @@
     - find_ovc_ami
   tags:
     - asg
-    - find_ovc_ami
+    - { role: find_ovc_ami, ami_region: "{{ region }}" }
     - launch_ami
 
 - name: Add AMI ID to facts
