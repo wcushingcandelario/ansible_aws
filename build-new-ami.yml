@@ -51,7 +51,7 @@
     - { role: install_customizations_dt, when: customer == 'dt' }
     - { role: install_customizations_tp, when: customer == 'tp' }
 #    - { role: install_customizations_mb, when: customer == 'mb' }
-    - { role: install_customizations_gstar, when: customer == 'gs' }
+    - { role: install_customizations_Gstar, when: customer == 'gs' }
 #    - { role: install_customizations_demo, when: customer == 'ovc' }
 
     - { role: ricbra.logentries, when: customer == 'vanilla'}
