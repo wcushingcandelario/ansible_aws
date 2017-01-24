@@ -39,10 +39,10 @@
   hosts: localhost
   connection: local
   roles:
-    - find_ovc_ami
+    -  { role: find_ovc_ami, ami_region: "{{ region }}" }
   tags:
     - asg
-    - { role: find_ovc_ami, ami_region: "{{ region }}" }
+    - find_ovc_ami
     - launch_ami
 
 - name: Add AMI ID to facts
