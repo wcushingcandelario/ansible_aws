@@ -52,10 +52,14 @@
     mode: get
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
+- file:
+    path: "/tmp/TPCustomPackage-{{ tp_extension_version }}/"
+    state: directory
+
 - name: Extract contents of zip file
   unarchive:
     src: "/tmp/TPCustomPackage-{{ tp_extension_version }}.zip"
-    dest: "/tmp/"
+    dest: "/tmp/TPCustomPackage-{{ tp_extension_version }}/"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
