@@ -30,13 +30,13 @@
 
 - set_fact:
     new_ovc_dashboard_file_format: Yes
-  when: "{{ovc_dashboard_zip['files'][0]}} is defined"
+  when: "{{ ovc_dashboard_zip['files'][0]['path'] }} is defined"
 
 
 - name: Unzip OVC Dashboard
   unarchive:
     copy: no
-    src: "{{ovc_dashboard_zip['files'][0]['path']}}"
+    src: "{{ ovc_dashboard_zip['files'][0]['path'] }}"
     dest: "{{ html_root }}"
     mode: ug+x
     owner: "{{ webserver_user }}"
