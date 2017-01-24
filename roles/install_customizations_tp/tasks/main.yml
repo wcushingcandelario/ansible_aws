@@ -47,20 +47,20 @@
 - name: Download full zip file
   s3:
     bucket: "{{ s3_bucket_customer }}"
-    object: "{{ s3_full_zip_prefix }}/{{ ovc_version }}/TPCustomPackage-{{ ovc_version }}.zip"
-    dest: "/tmp/TPCustomPackage-{{ ovc_version }}.zip"
+    object: "{{ s3_full_zip_prefix }}/{{ tp_extension_version }}/TPCustomPackage-{{ tp_extension_version }}.zip"
+    dest: "/tmp/TPCustomPackage-{{ tp_extension_version }}.zip"
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Extract contents of zip file
   unarchive:
-    src: "/tmp/TPCustomPackage-{{ ovc_version }}.zip"
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}.zip"
     dest: "/tmp/"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Copy tpdata.tar.gz into the right place
   copy:
-    src: "/tmp/TPCustomPackage-{{ ovc_version }}/OVC_Custom/tpdata.tar.gz"
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/tpdata.tar.gz"
     dest: "{{ ovc_server_user_dir }}/installFiles/tpdata.tar.gz"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
@@ -173,14 +173,14 @@
 
 - name: Copy TPExtensions into the right place
   copy:
-    src: "/tmp/TPCustomPackage-{{ ovc_version }}/OVC_Custom/TPExtensions-{{ tp_extension_version }}.jar"
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/TPExtensions-{{ tp_extension_version }}.jar"
     dest: "{{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Copy TPPopulators into the right place
   copy:
-    src: "/tmp/TPCustomPackage-{{ ovc_version }}/OVC_Custom/TPPopulators-{{ tp_extension_version }}.jar"
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/TPPopulators-{{ tp_extension_version }}.jar"
     dest: "{{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
