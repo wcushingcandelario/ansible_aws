@@ -4,5 +4,5 @@
   connection: local
   hosts: localhost
   tasks:
-    shell:
-      cmd: "aws ec2 create-tags --resources {{ ami_id }} --tags {{ tags }}"
+    - shell:
+        cmd: "aws ec2 create-tags --resources {{ ami_id }} --tags {{ tags }}"
