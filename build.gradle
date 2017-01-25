@@ -1,0 +1,50 @@
+group 'com.oneview'
+
+buildscript {
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.oneview:gradle-plugin:1.0.0'
+    }
+}
+
+apply plugin: 'base'
+apply plugin: 'com.oneview.buildplugin'
+
+task zipAnsible(type: Zip) {
+
+    from "."
+    from versionProperties
+    into('ansible-scripts')
+    exclude '**/*.log'
+    exclude '**/*.retry'
+		exclude 'build/**'
+		exclude '.gradle/**'
+		exclude 'gradlew'
+		exclude 'gradlew.bat'
+		exclude 'build.gradle'
+		exclude 'settings.gradle'
+		exclude '.git/**'
+		exclude '.gitignore'
+		exclude 'gradle/**'
+
+    baseName 'ansible'
+    version project.version
+
+    destinationDir file("$buildDir/distributions")
+
+}
+
+build.dependsOn tasks.zipAnsible
+
+publishing {
+    publications {
+        ansible(MavenPublication) {
+            artifact zipAnsible
+        }
+    }
+
+}
