@@ -15,7 +15,7 @@ These playbooks are available to run from RunDeck.
 
     -   **RDS** (immutable, can be run repeatedly without issue)
 
-    -   **Promo Engine** *Bill to explain this*
+    -   **Promo Engine** 
 
     -   **Inventory Manager** *Bill to explain this*
 
@@ -71,7 +71,7 @@ If you run a playbook in without any tags or skip-tags then you will get an
 entire environment built with the settings default to that playbook. **This will
 take the latest OVC customised AMI.**
 
-    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt
 
 ### What the AMI builder (build-new-ami.yml) does
 
@@ -118,11 +118,11 @@ take the latest OVC customised AMI.**
 
 You may want to skip RDS if it is already installed. All this does is speed things up.
 
-    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
+    ansible-playbook preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
 
 ### Build with a specific image (AMI)
 
-    ansible-playbook preprod.yml -e "image_id=abc12345 ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' -e @vars/tp.yml deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
+    ansible-playbook preprod.yml -e "image_id=abc12345 ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' -e @vars/tp.yml deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds
 
 ## Updating Specific Components
 
@@ -136,23 +136,23 @@ explanations below.
 
 #### ...build an AMI
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/vanilla.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true" -e @vars/vanilla.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 #### ...customise an AMI
 
-    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 #### ...build and customise an AMI from scratch
 
-    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true full_build=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true full_build=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 #### ...customise an AMI and test it
 
-    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,terminate_ami
+    ansible-playbook build-new-ami.yml -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,terminate_ami
 
 ### ...deploy an AMI
 
-    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers --tags=asg
 
 ### Building RDS
 
@@ -175,18 +175,18 @@ to run without disrupting the network as long as you **only** bake the AMI and
 do not deploy it.
 
 #### Build a vanilla AMI without any customer data
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true filebeat=true" -e @vars/vanilla.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true" -e @vars/vanilla.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 #### Add customer data to a vanilla AMI and save it for deployment
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 #### Build a customer AMI from scratch skipping the vanilla stage
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true filebeat=true full_build=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0' deploy=true full_build=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers
 
 #### Build a customer AMI but don't terminate after saving it
 This is usually used just for testing. If you want to build an AMI but **not** terminate it so you can evaluate it before deploying then you can skip the termination of the AMI.
 
-    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true filebeat=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
+    ansible-playbook build-new-ami.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 s3_bucket='ovc-travisperkins-releases' deploy=true" -e @vars/tp.yml --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
 
 ### Deploying a new AMI
 
@@ -195,7 +195,29 @@ using the playbook below. After running this playbook **AMI will be live** in
 the environment you have deployed it in. This is limited to the `asg` tag which
 just builds the Auto Scaling Group.
 
-    ansible-playbook build_env.yml -e @vars/tp.yml  -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true"--vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds,promo_engine,inventory_manager
+    ansible-playbook build_env.yml -e @vars/tp.yml  -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true"--vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds,promo_engine,inventory_manager
+
+
+### Deploying Promo Engine
+
+Ensure the ansible beanstalk modules have been copied into the library directory for the play is run.
+-   Modules: elasticbeanstalk_app.py, elasticbeanstalk_env.py, elasticbeanstalk_version.py
+-   Can be downloaded or cloned from git: https://github.com/hsingh/ansible-elastic-beanstalk
+
+The play can be included in a new environment deployment. It can also be run to update any changes in the environment (i.e. new version of Promotion Engine ). The promotion engine's version variable (pe_version) will need to be defined as an extra variable
+( -e ) in the playbook command.
+
+**Deploy Promo Engine only**
+
+*Run from: Customer account*
+
+   ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e pe_version=1.8.0 --tags promo_engine
+
+**Deploy Promo Engine update only**
+
+*Run from: Customer account*
+
+   ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e pe_version=1.8.0 -e promo_update=true --tags promo_engine
 
 ## AMI flow - Customer non-production to Production
 
@@ -208,7 +230,7 @@ PreProd -> Production to ensure better testing.
 
 *Run from: Demo account*
 
-    ansible-playbook build-new-ami.yml -e @vars/vanilla.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
+    ansible-playbook build-new-ami.yml -e @vars/vanilla.yml -e "ovc_version=5.4.0 deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
 
 Now you should have an AMI that can be used in local environments for testing of the OVC core functionality, in the next step we will make it specific to the customer.
 
@@ -216,7 +238,7 @@ Now you should have an AMI that can be used in local environments for testing of
 
 *Run from: Demo account*
 
-    ansible-playbook build-new-ami.yml  -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
+    ansible-playbook build-new-ami.yml  -e @vars/tp.yml -e "ovc_version=5.4.0 tp_extension_version=5.4.0 deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers,terminate_ami
 
 Once this is done you can SSH into the the environment and confirm that
 everything has been deployed correctly and is ready to be rolled out into
@@ -226,7 +248,7 @@ environments.
 
 *Run from: Customer account*
 
-    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/uat1.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/uat1.yml -e "ovc_version=5.4.0 deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
 
 The AMI is now rolled out into UAT1/UAT2 and can be tested to confirm it is
 functional. This means specifically that the version of the AMI will work for
@@ -236,7 +258,7 @@ a non-clustered environment.
 
 *Run from: Customer account*
 
-    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
 
 The AMI is now rolled out into PreProd and can be tested to confirm it is
 functional. At this point we can roll it out into production knowing it has
@@ -246,7 +268,7 @@ worked for PreProd.
 
 *Run from: Customer account*
 
-    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/prod.yml -e "ovc_version=5.4.0 deploy=true filebeat=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
+    ansible-playbook build_env.yml -e @vars/tp.yml -e @vars/tp/prod.yml -e "ovc_version=5.4.0 deploy=true" --vault-password-file ~/.ssh/.vault_pass.txt --skip-tags=importers
 
 Deployment complete!
 

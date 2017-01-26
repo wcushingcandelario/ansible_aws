@@ -33,5 +33,8 @@ beanstalk_iam_role: aws-elasticbeanstalk-ec2-role
 beanstalk_service_role: aws-elasticbeanstalk-service-role
 s3_bucket_docker: "ovc-github-access"
 pe_role: promo-engine
-customer: ovc
 customer_account_id: 748109554602
+customer: ovc
+ami_release: alpha
+ami_customer: ovc
+ami_owner: 748109554602 # The OVC Demo account

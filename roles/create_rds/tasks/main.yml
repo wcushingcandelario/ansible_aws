@@ -17,7 +17,7 @@
     db_engine: MySQL
     db_name: xdb
     size: 100
-    instance_type: db.m4.large
+    instance_type: "{{ rds_instance_type }}"
     wait: yes
     wait_timeout: 1200
     username: root
