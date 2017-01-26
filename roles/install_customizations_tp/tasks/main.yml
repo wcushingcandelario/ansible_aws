@@ -44,9 +44,35 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Download full zip file
+  s3:
+    bucket: "{{ s3_bucket_customer }}"
+    object: "{{ s3_full_zip_prefix }}/{{ tp_extension_version }}/TPCustomPackage-{{ tp_extension_version }}.zip"
+    dest: "/tmp/TPCustomPackage-{{ tp_extension_version }}.zip"
+    mode: get
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
+- file:
+    path: "/tmp/TPCustomPackage-{{ tp_extension_version }}/"
+    state: directory
+
+- name: Extract contents of zip file
+  unarchive:
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}.zip"
+    dest: "/tmp/TPCustomPackage-{{ tp_extension_version }}/"
+    remote_src: True
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
+- name: Copy tpdata.tar.gz into the right place
+  copy:
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/tpdata.tar.gz"
+    dest: "{{ ovc_server_user_dir }}/installFiles/tpdata.tar.gz"
+    remote_src: True
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
 - name: Download tpdata.tar.gz from S3
   command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/tpdata.tar.gz {{ ovc_server_user_dir }}/installFiles/tpdata.tar.gz"
-  when: s3install is defined and s3install
+  when: s3install is defined and s3install and s3_full_zip_prefix is undefined and not s3_full_zip_prefix
   become: yes
   become_user: root
 
@@ -150,15 +176,29 @@
   become: yes
   become_user: root
 
+- name: Copy TPExtensions into the right place
+  copy:
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/TPExtensions-{{ tp_extension_version }}.jar"
+    dest: "{{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
+    remote_src: True
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
+- name: Copy TPPopulators into the right place
+  copy:
+    src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/TPPopulators-{{ tp_extension_version }}.jar"
+    dest: "{{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
+    remote_src: True
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
 - name: Download TPExtensions from S3
   command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
-  when: s3install is defined and s3install
+  when: s3install is defined and s3install and s3_full_zip_prefix is undefined and not s3_full_zip_prefix
   become: yes
   become_user: jetty
 
 - name: Download TPPopulators from S3
   command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
-  when: s3install is defined and s3install
+  when: s3install is defined and s3install and s3_full_zip_prefix is undefined and not s3_full_zip_prefix
   become: yes
   become_user: jetty
 

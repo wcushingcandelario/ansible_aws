@@ -39,7 +39,7 @@
   hosts: localhost
   connection: local
   roles:
-    - find_ovc_ami
+    -  { role: find_ovc_ami, ami_region: "{{ region }}" }
   tags:
     - asg
     - find_ovc_ami

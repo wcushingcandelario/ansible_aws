@@ -1,0 +1,19 @@
+test:
+  override:
+    - ./gradlew build --daemon
+  post:
+    - cp build/distributions/ansible-*.zip $CIRCLE_ARTIFACTS/
+
+deployment:
+  release:
+    branch: master
+    commands:
+      - ./gradlew publish --daemon
+  rcs:
+    branch: /release-.*/
+    commands:
+      - ./gradlew publish --daemon
+  snapshot:
+    branch: develop
+    commands:
+      - ./gradlew publish --daemon
