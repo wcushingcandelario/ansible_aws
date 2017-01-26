@@ -1,2 +1,8 @@
 pe_db: ovcpromo
-mongo_port: 27017
+pe_role: promo-engine
+solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
+instance_type_pe: t2.medium
+s3_bucket_docker: "ovc-github-access-2"
+#s3_bucket_beanstalk: "elasticbeanstalk-eu-west-1-063725663692"
+beanstalk_template_version: 1.1.0.0
+dockercfg: dockercfg
