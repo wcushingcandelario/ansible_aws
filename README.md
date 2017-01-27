@@ -15,7 +15,7 @@ These playbooks are available to run from RunDeck.
 
     -   **RDS** (immutable, can be run repeatedly without issue)
 
-    -   **Promo Engine** 
+    -   **Promo Engine**
 
     -   **Inventory Manager** *Bill to explain this*
 
