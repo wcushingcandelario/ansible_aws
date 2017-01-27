@@ -181,6 +181,9 @@
     src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/TPExtensions-{{ tp_extension_version }}.jar"
     dest: "{{ ovc_install_dir }}/lib/ext/TPExtensions-{{ tp_extension_version | default(5.4.0) }}.jar"
     remote_src: True
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_user_login }}"
+    mode: 0644
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Copy TPPopulators into the right place
@@ -188,6 +191,9 @@
     src: "/tmp/TPCustomPackage-{{ tp_extension_version }}/OVC_Custom/TPPopulators-{{ tp_extension_version }}.jar"
     dest: "{{ ovc_install_dir }}/lib/ext/TPPopulators-{{ tp_extension_version | default(5.4.0) }}.jar"
     remote_src: True
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_user_login }}"
+    mode: 0644
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Download TPExtensions from S3
