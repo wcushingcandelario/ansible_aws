@@ -6,7 +6,7 @@ environments:
     nosql_host: mongodb-uat1.ovchosting.co.uk
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
     staff_discount_bucket: ovc-uat1-filerepo
-    ecommerce_host: ws-uat.dev.wickes-tills.co.uk
+    ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
   uat2:
     name: uat2
     url: uat2.ovchosting.co.uk
@@ -14,7 +14,7 @@ environments:
     nosql_host: mongodb-uat2.ovchosting.co.uk
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT2-Queue
     staff_discount_bucket: ovc-uat2-filerepo
-    ecommerce_host: ws-uat.dev.wickes-tills.co.uk
+    ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
   preprod:
     name: preprod
     url: preprod.ovchosting.co.uk
