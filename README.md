@@ -14,10 +14,11 @@ These playbooks are available to run from RunDeck.
 -   **build_env.yml** Deploy an environment including:
 
     -   **RDS** (immutable, can be run repeatedly without issue)
+    
+    -   **Promo Engine** Optional module. Deploys to Beanstalk.
 
-    -   **Promo Engine**
+    -   **Inventory Manager** Optional module. Deploys to Beanstalk.
 
-    -   **Inventory Manager** *Bill to explain this*
 
     -   **Either:**
 
@@ -78,12 +79,6 @@ take the latest OVC customised AMI.**
 -   **Role: create_rds**
     This builds the utility RDS database.
 
--   **Role:promo_engine**
-    Builds a promo_engine *Bill*
-
--   **Role:inventory_manager**
-    Builds an inventory_manager *Bill*
-
 -   **The rest**
     This builds the AMI, deploys the software, deploys the configuration, then saves an image of the AMI and terminates it.
 
@@ -94,10 +89,10 @@ take the latest OVC customised AMI.**
     This builds the main database for the environment.
 
 -   **Role: promo_engine**
-    *Bill*
+    Builds and/or updates the Promotion Engine in a beanstalk environment.
 
 -   **Role: inventory_manager**
-    *Bill*
+      Builds and/or updates the Promotion Engine in a beanstalk environment.
 
 -   **Role: find_ovc_ami**
     This part finds an AMI that has been built previously by this playbook and
@@ -198,12 +193,13 @@ just builds the Auto Scaling Group.
     ansible-playbook build_env.yml -e @vars/tp.yml  -e @vars/tp/preprod.yml -e "ovc_version=5.4.0 deploy=true"--vault-password-file ~/.ssh/.vault_pass.txt  --skip-tags=importers,rds,promo_engine,inventory_manager
 
 
-### Deploying Promo Engine
+### Deploying Inventory Manager
 
 Ensure the ansible beanstalk modules have been copied into the library directory for the play is run.
 -   Modules: elasticbeanstalk_app.py, elasticbeanstalk_env.py, elasticbeanstalk_version.py
 -   Can be downloaded or cloned from git: https://github.com/hsingh/ansible-elastic-beanstalk
 
+The play can be included in a new environment deployment. It can also be run to update any changes in the environment (i.e. new version of Inventory Manager ). The promotion engine's version variable (im_version) will need to be defined as an extra variable ( -e ) in the playbook command.
 The play can be included in a new environment deployment. It can also be run to update any changes in the environment (i.e. new version of Promotion Engine ). The promotion engine's version variable (pe_version) will need to be defined as an extra variable
 ( -e ) in the playbook command.
 
@@ -213,11 +209,18 @@ The play can be included in a new environment deployment. It can also be run to 
 
    ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e pe_version=1.8.0 --tags promo_engine
 
-**Deploy Promo Engine update only**
+
+**Deploy Inventory Manager update only**
 
 *Run from: Customer account*
 
-   ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e pe_version=1.8.0 -e promo_update=true --tags promo_engine
+   ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e im_version=2.3.0 --tags inventory_manager
+
+**Deploy Inventory Manager only**
+
+*Run from: Customer account*
+
+   ansible-playbook  build_env.yml -e @vars/demo.yml -e @vars/demo/sit99.yml -e im_version=2.3.0 -e im_update=true --tags inventory_manager
 
 ## AMI flow - Customer non-production to Production
 
