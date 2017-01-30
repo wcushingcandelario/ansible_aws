@@ -26,9 +26,12 @@ max_size: 5
 
 # Promo Engine
 dockerrun_version: "2"
+s3_bucket_docker: "ovc-github-access"
 dockercfg: dockercfg
-mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}/ovcpromo"
-promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
+mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}:{{ mongo_port }}/"
 tier: WebServer
-elb_security_group_id: sg-6387e207
-pe_monitor: yes
+elb_security_group_id: sg-62fc7a06
+
+#Inventory Manager
+im_security_groups: sg-62fc7a06,sg-eeecf389,sg-e3b59c87
+elb_im_subnets: subnet-9f8a92b7,subnet-a194589c
