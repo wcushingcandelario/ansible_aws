@@ -19,7 +19,7 @@
       release: "{{ ami_release }}"
       source: "{{ source_ami }}"
       git_sha: "{{ ovc_git_sha }}"
-      git_branch: "{{ ami_git_branch }}"
+      git_branch: "{{ ovc_circle_branch }}"
   register: amioutput
 
 - name: debug
@@ -50,7 +50,7 @@
       release: "{{ ami_release }}"
       source: "{{ source_ami }}"
       git_sha: "{{ ovc_git_sha }}"
-      git_branch: "{{ ami_git_branch }}"
+      git_branch: "{{ ovc_circle_branch }}"
   register: ami_tmp_output
   when: ami_target_region !=  ami_baker_region
 
@@ -115,7 +115,7 @@
       copied_from: "{{ ami_name }}"
       source: "{{ source_ami }}"
       git_sha: "{{ ovc_git_sha }}"
-      git_branch: "{{ ami_git_branch }}"
+      git_branch: "{{ ovc_circle_branch }}"
   when: ami_target_region != ami_baker_region
   register: amioutput
 
