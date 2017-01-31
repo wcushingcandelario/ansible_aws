@@ -1,0 +1,53 @@
+---
+
+- name: ensures New Relic folder exists
+  file:
+    path="{{newrelic_dir}}"
+    state=directory
+    mode=0755
+
+- name: ensures New Relic package is present by downloading from s3
+  s3:
+    bucket: "{{s3_bucket}}"
+    object: "newrelic-java-{{newrelic_version}}.zip"
+    dest: "{{newrelic_dir}}/newrelic-java-{{newrelic_version}}.zip"
+    mode: get
+
+- name: unpack New Relic
+  unarchive:
+    src="{{newrelic_dir}}/newrelic-java-{{newrelic_version}}.zip"
+    dest="{{newrelic_dir}}"
+    remote_src=True
+
+- name: moves New Relic content to its rightfull place
+  shell:
+    mv newrelic/* ./; rm -rf newrelic
+    chdir="{{newrelic_dir}}"
+    creates="{{newrelic_dir}}"/newrelic.jar
+
+- name: get the instance ID
+  shell: curl -s http://169.254.169.254/latest/meta-data/instance-id
+  register: INSTANCE_ID
+
+- name: get the instances ENV tag
+  shell: aws ec2 describe-tags --region=eu-west-1 --filters "Name=resource-id,Values={{INSTANCE_ID.stdout}}" "Name=key,Values=ENV" --output=text | cut -f5
+  register: env_tag
+
+- set_fact: 
+    newrelic_app_name: "{{ env_tag.stdout }}"
+
+- name: configures newrelic.yml
+  template:
+    src="newrelic.yml.j2"
+    dest="{{newrelic_dir}}/newrelic.yml"
+
+- name: run installer
+  shell: 
+    java -jar newrelic.jar install
+    chdir="{{newrelic_dir}}"
+  register: installerout
+- debug: msg="{{ installerout.stdout }}"
+    
+
+#- include: jetty.yml
+#  when: newrelic_container == 'jetty'
