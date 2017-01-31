@@ -13,9 +13,11 @@
     exact_count: 1
     count_tag:
       role: ami_builder
+      git_sha: "{{ ovc_git_sha }}"
     instance_tags:
       role: ami_builder
       Name: ami_builder
+      git_sha: "{{ ovc_git_sha }}"
   when: ami_find.results[0].ami_id is defined
   register: ami_instance
 
