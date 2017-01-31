@@ -82,7 +82,11 @@
        Value: true
      - Namespace: aws:elasticbeanstalk:application
        OptionName: Application Healthcheck URL
+
+       Value: HTTP:3007/getHealthCheck
+
        Value: TCP:22
+
      - Namespace: aws:elb:listener:443
        OptionName: ListenerProtocol
        Value: HTTPS
@@ -190,7 +194,11 @@
        Value: true
      - Namespace: aws:elasticbeanstalk:application
        OptionName: Application Healthcheck URL
+
+       Value: HTTP:3007/getHealthCheck
+
        Value: TCP:22
+
      - Namespace: aws:elb:listener:3007
        OptionName: ListenerProtocol
        Value: HTTP

@@ -25,8 +25,13 @@ solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container 
 alias_hosted_zone: Z35SXDOTRQ7X7K
 vpc_id: vpc-e8932b8d
 instance_type_pe: t2.medium
+
+queue_name: "{{ deploy_type }}-invtmgr"
+s3_bucket_docker: "ovc-github-access-2"
+
 s3_bucket_docker: "ovc-github-access-2"
 queue_name: "{{ deploy_type }}-invtmgr"
+
 s3_bucket_beanstalk: "elasticbeanstalk-us-east-1-748109554602"
 beanstalk_template_version: 1.1.0.0
 beanstalk_iam_role: aws-elasticbeanstalk-ec2-role
