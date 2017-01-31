@@ -18,6 +18,7 @@
     src="{{newrelic_dir}}/newrelic-java-{{newrelic_version}}.zip"
     dest="{{newrelic_dir}}"
     remote_src=True
+    owner=jetty
 
 - name: moves New Relic content to its rightfull place
   shell:
@@ -29,8 +30,8 @@
   shell: curl -s http://169.254.169.254/latest/meta-data/instance-id
   register: INSTANCE_ID
 
-- name: get the instances ENV tag
-  shell: aws ec2 describe-tags --region=eu-west-1 --filters "Name=resource-id,Values={{INSTANCE_ID.stdout}}" "Name=key,Values=ENV" --output=text | cut -f5
+- name: get the instances environment tag
+  shell: aws ec2 describe-tags --region=eu-west-1 --filters "Name=resource-id,Values={{INSTANCE_ID.stdout}}" "Name=key,Values=environment" --output=text | cut -f5
   register: env_tag
 
 - set_fact: 
@@ -47,7 +48,12 @@
     chdir="{{newrelic_dir}}"
   register: installerout
 - debug: msg="{{ installerout.stdout }}"
-    
 
+- name: fix the installer brokenness
+  lineinfile:
+    dest: /etc/init.d/jetty
+    regexp: 'newrelic/newrelic.jar'
+    line: 'NR_JAR=/opt/jetty-distribution-9.3.7.v20160115/newrelic-java/newrelic.jar; export NR_JAR'
+    
 #- include: jetty.yml
 #  when: newrelic_container == 'jetty'
