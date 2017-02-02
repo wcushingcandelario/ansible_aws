@@ -57,6 +57,7 @@
     - { role: ricbra.logentries, when: customer == 'vanilla'}
     - { role: nginx_proxy, when: customer == 'vanilla'}
     - { role: newrelic_infrastructure, when: customer == 'vanilla'}
+    - { role: newrelic_infrastructure, when: customer == 'tp'}
 
 #    - { role: install_devops_dt, when: customer == 'dt' }
     - { role: install_devops_tp, when: customer == 'tp' }

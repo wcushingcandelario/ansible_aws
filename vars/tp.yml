@@ -38,3 +38,4 @@ s3_bucket_customer: ovc-travisperkins-releases
 s3_bucket: ovc-travisperkins-releases
 ami_target_region: eu-west-1
 ami_temp_vpc_subnet_public: subnet-4f93d938
+newrelic_license_key: 2b1b3cf31650234b93dd0a967896eea332ed8b33

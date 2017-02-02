@@ -1,0 +1,12 @@
+description "NewRelic Infrastructure Agent for monitoring system health"
+author      "Jeremy Warrick"
+
+start on (runlevel [345] and started network)
+stop on (runlevel [!345] or stopping network)
+
+respawn limit 20 5
+
+script
+    echo $$ > /usr/newrelic-infra/newrelic-infra.pid
+    exec /usr/bin/newrelic-infra
+end script
