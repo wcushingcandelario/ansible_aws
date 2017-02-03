@@ -1,13 +1,15 @@
 dns_zone_id: Z3A98VA7X0SL0T
 dns_domain: ovchosting.co.uk
-ansible_ssh_private_key_file: "~/.ssh/ovc-tp-np.pem"
+ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
 region: eu-west-1
 key: ovc-tp-np
-ami_baker_rds_security_group: sg-5bbc1f3c
-ami_baker_rds_subnet_group: "uat1 rds subnet group"
-ami_baker_ovc_security_groups: sg-71bc1f16
-ami_baker_vpc_subnet_public: subnet-cae8ffbd
-ami_baker_instance_profile_name: UtilityServer
+ami_baker_key: ovc-private
+ami_baker_rds_security_group: sg-6387e207,sg-0591ee7f
+ami_baker_rds_subnet_group: "rds subnet"
+ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
+ami_baker_vpc_subnet_public: subnet-9f8a92b7
+ami_baker_instance_profile_name: S3_Release_Read
+ami_baker_region: us-east-1
 ssl_certificate_id: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
 datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 skip_ssl: No
@@ -23,4 +25,17 @@ instance_type_pe: t2.medium
 beanstalk_iam_role: aws-elasticbeanstalk-ec2-role
 beanstalk_service_role: aws-elasticbeanstalk-service-role
 s3_bucket_docker: "ovc-github-access-2"
+s3_bucket_beanstalk: "elasticbeanstalk-eu-west-1-063725663692"
+beanstalk_template_version: 1.1.0.0
+customer_account_id: 063725663692
+pe_role: promo-engine
+customer: tp
+ami_release: release
 ami_customer: tp
+mongo_port: 27017
+ami_owner: 748109554602 # The OVC Demo account
+s3_bucket_customer: ovc-travisperkins-releases
+s3_bucket: ovc-travisperkins-releases
+ami_target_region: eu-west-1
+ami_temp_vpc_subnet_public: subnet-4f93d938
+newrelic_license_key: 2b1b3cf31650234b93dd0a967896eea332ed8b33

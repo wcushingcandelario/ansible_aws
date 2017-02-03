@@ -1,0 +1,6 @@
+pe_db: ovcpromo
+mongo_port: 27017
+s3_bucket_beanstalk: "elasticbeanstalk-eu-west-1-063725663692"
+s3_bucket_docker: "ovc-github-access-2"
+pe_role: promo-engine
+dockercfg: dockercfg

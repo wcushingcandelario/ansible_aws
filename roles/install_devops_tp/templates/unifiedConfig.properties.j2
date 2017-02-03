@@ -1,0 +1,56 @@
+#Tue Jun 07 15:45:15 EDT 2016
+#Updated through OVCInstaller
+#oort.url=
+MESSAGE_COUNTER=10
+TIMEOUT=10000
+catalogs.url=/v2/%s/ovc/merchandisingGroups/All
+ecommerce.fromClient.context=yacceleratorstorefront
+ecommerce.fromClient.host={{ item.value.ecommerce_host }}
+ecommerce.fromClient.logout_relative_url=/en/logout
+ecommerce.fromClient.port=443
+ecommerce.fromClient.scheme=https
+ecommerce.fromServer.baseSiteId=wickesStores
+ecommerce.fromServer.host={{ item.value.ecommerce_host }}
+ecommerce.fromServer.occ.type=1
+ecommerce.fromServer.port=443
+ecommerce.fromServer.scheme=https
+ecommerce.vendor=1
+export.products.url=v2/%s/ovc/products/paginated
+export.stock.url=v2/%s/ovc/storestock/%s
+grant_type=client_credentials
+grant_type_pwd=password
+jms.destination=jms/destination1
+mailServer.encrypted.password=RbNGPpJVCZ6CIIvlQ8d/cg\=\=
+mailServer.from=donotreply@company.com
+mailServer.smtp.auth=True
+mailServer.smtp.host=smtp.gmail.com
+mailServer.smtp.port=587
+mailServer.smtp.starttls.enable=True
+mailServer.username=donotreply@company.com
+oAuth.required=false
+oort.cloud=
+others.import.pageSize=1500
+ovcDB.db=xdb
+ovcDB.driver=com.mysql.jdbc.Driver
+ovcDB.encrypted.password=L3Q5kQqII0OlaJ9FGCaukQ==
+ovcDB.host={{ item.value.mysql_host }}
+ovcDB.params=autoReconnect\=true
+ovcDB.port=3306
+ovcDB.scheme=jdbc\:mysql
+ovcDB.username=root
+ovcNOSQLDB.connectTimeout=5000
+ovcNOSQLDB.connectionsPerHost=20
+ovcNOSQLDB.db=xdb
+ovcNOSQLDB.encrypted.password=pS6Uu4KU3B9G9FRg5IlnBg==
+ovcNOSQLDB.host={{ item.value.nosql_host }}
+ovcNOSQLDB.maxWaitTime=5000
+ovcNOSQLDB.port=27017
+ovcNOSQLDB.socketTimeout=5000
+ovcNOSQLDB.username=root
+ovcServer.host={{ item.value.url }}
+ovcServer.port=443
+ovcServer.scheme=https
+products.import.pageSize=1500
+secure.occhost.context=/omnicommercewebservices
+stores.url=/v2/%s/ovc/locations/All
+import.stock.type=product

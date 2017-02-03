@@ -1,11 +1,11 @@
 
-- name: Set SSL based facts (SSL)
+- name: Set SSL based facts
   set_fact:
     ovc_url: "https://{{ deploy_type }}.{{ dns_domain }}"
     dash_path: "https://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
   when: ssl_certificate_id is defined and (ssl_certificate_id != 'false')
 
-- name: Set SSL based facts (Non-SSL)
+- name: Set Non-SSL based facts
   set_fact:
     ovc_url: "http://{{ deploy_type }}.{{ dns_domain }}"
     dash_path: "http://{{ deploy_type }}.{{ dns_domain }}/ovcdashboard/"
@@ -23,13 +23,32 @@
 
 - debug: var=application
 
-- name: Making new docker file
+- name: Copy Beanstalk template to temp directory
+  connection: local
+  template:
+     src: pe_tags.j2
+     dest: "/tmp/pe_tags"
+
+- name: Upload Beanstalk template to S3
+  s3:
+   bucket: "{{ s3_bucket_beanstalk }}"
+   object: "/resources/templates/{{ deploy_type }}/pe_tags"
+   src: "/tmp/pe_tags"
+   mode: put
+
+- name: Remove Beanstalk template
+  connection: local
+  file:
+    path: "/tmp/pe_tags"
+    state: absent
+
+- name: Create the application source file
   connection: local
   template:
      src: Dockerrun.aws.json.j2
      dest: "/tmp/{{ deploy_type }}.Dockerrun.aws.json"
 
-- name: Uploading new docker file to S3
+- name: Upload the application source file to S3
   connection: local
   s3:
     bucket: "{{ s3_bucket_docker }}"
@@ -37,13 +56,13 @@
     object: "{{ deploy_type }}.Dockerrun.aws.json"
     src: "/tmp/{{ deploy_type }}.Dockerrun.aws.json"
 
-- name: Removing docker temp file
+- name: Remove the application source file from temp
   connection: local
   file:
     path: "/tmp/{{ deploy_type }}.Dockerrun.aws.json"
     state: absent
 
-- name: Versioning the application
+- name: Versioning the application source file
   elasticbeanstalk_version:
     region: "{{ region }}"
     app_name: "{{ deploy_type }}"
@@ -55,21 +74,21 @@
 
 - debug: var=version
 
-- name: Create new Beanstalk environment
+- name: Create Non-SSL Beanstalk environment
   elasticbeanstalk_env:
     region: "{{ region }}"
     app_name: "{{ deploy_type }}"
     env_name: "{{ deploy_type }}-PromoEngine"
     tier_name: "{{ tier }}"
     version_label: "{{ pe_version }}"
-    solution_stack_name: "{{ solution_stack_name }}"
+    template_name: pe_tags
     option_settings:
      - Namespace: aws:elb:loadbalancer
        OptionName: CrossZone
        Value: true
      - Namespace: aws:elasticbeanstalk:application
        OptionName: Application Healthcheck URL
-       Value: TCP:22
+       Value: HTTP:3000/healthcheck
      - Namespace: aws:elb:listener
        OptionName: ListenerEnabled
        Value: false
@@ -138,14 +157,14 @@
        Value: "{{ key }}"
 
 
-- name: Create new Beanstalk SSL environment
+- name: Create SSL Beanstalk environment
   elasticbeanstalk_env:
     region: "{{ region }}"
     app_name: "{{ deploy_type }}"
     env_name: "{{ deploy_type }}-PromoEngine"
     tier_name: "{{ tier }}"
     version_label: "{{ pe_version }}"
-    solution_stack_name: "{{ solution_stack_name }}"
+    template_name: pe_tags
     option_settings:
      - Namespace: aws:elb:listener:8888
        OptionName: ListenerEnabled
@@ -174,6 +193,7 @@
 - name: Record ELB EndpointURL
   command: "aws elasticbeanstalk describe-environments --query='Environments[?EnvironmentName==`{{ deploy_type }}-PromoEngine` && Status==`Ready`].EndpointURL'"
   register: elb_dns
+  when: promo_update is not defined
 
 
 - name: debug elb dns

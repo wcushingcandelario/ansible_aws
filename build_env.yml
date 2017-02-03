@@ -26,20 +26,6 @@
         new_lc_name: "lc-{{ deploy_type }}-{{ ansible_date_time.epoch }}_config"
         asg_name: "{{ deploy_type }}_autoscale"
 
-- name: Build Mongo Cluster
-  include: _mongo-create-auto.yml
-  remote_user: ec2-user
-  tags:
-    - tagged
-    - mongo
-
-- name: Build Mongo Single
-  include: _mongo-create-single.yml
-  remote_user: ec2-user
-  tags:
-    - tagged
-    - mongo_single
-
 - name: Build Promo Engine
   connection: local
   hosts: localhost
@@ -49,11 +35,20 @@
     - tagged
     - promo_engine
 
+- name: Build Inventory Manager
+  connection: local
+  hosts: localhost
+  roles:
+    - inventory_manager
+  tags:
+    - tagged
+    - inventory_manager
+
 - name: Find AMI ID
   hosts: localhost
   connection: local
   roles:
-    - find_ovc_ami
+    -  { role: find_ovc_ami, ami_region: "{{ region }}" }
   tags:
     - asg
     - find_ovc_ami

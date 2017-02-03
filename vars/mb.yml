@@ -23,4 +23,8 @@ instance_type_pe: t2.medium
 beanstalk_iam_role:
 beanstalk_service_role:
 s3_bucket_docker: "ovc-github-access-2"
+customer_account_id:
+customer: mb
+ami_release: release
 ami_customer: mb
+ami_owner: 748109554602 # The OVC Demo account

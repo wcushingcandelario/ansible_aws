@@ -15,6 +15,7 @@
     volumes:
       - device_name: /dev/xvda
         volume_size: 100
+#        encrypted: "{{ encrypt_instance }}"
     exact_count: 1
     count_tag:
       Name: "{{ deploy_type }}.{{ dns_domain }}"
