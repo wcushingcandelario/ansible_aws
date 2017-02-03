@@ -1,2 +1,7 @@
 invtmgr_db: invtmgr
 mongo_port: 27017
+
+im_role: inventory-manager
+im_monitor: true
+
+
