@@ -27,9 +27,11 @@
 
 - name: Create NewRelic PID directory
   file:
-    path: /etc/newrelic-infra
+    path: /usr/newrelic-infra
     state: directory
     mode: "u=rw,g=r,o=r"
+  become: yes
+  become_user: root
 
 - name: Create upstart script
   template:
