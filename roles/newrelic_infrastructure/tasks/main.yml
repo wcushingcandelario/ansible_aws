@@ -12,7 +12,7 @@
   yum_repository:
     name: newrelic-infra
     description: New Relic Infrastructure
-    baseurl: http://download.newrelic.com/infrastructure_agent/linux/yum/el/6/x86_64
+    baseurl: http://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64
     gpgcheck: no
   become: yes
   become_user: root
@@ -24,3 +24,24 @@
     enablerepo: newrelic-infra
   become: yes
   become_user: root
+
+- name: Create NewRelic PID directory
+  file:
+    path: /usr/newrelic-infra
+    state: directory
+    mode: "u=rw,g=r,o=r"
+  become: yes
+  become_user: root
+
+- name: Create upstart script
+  template:
+    src: newrelic-infra.conf.j2
+    dest: /etc/init/newrelic-infra.conf
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+
+- name: Enable service
+  service:
+    name: newrelic-infra
+    enabled: yes

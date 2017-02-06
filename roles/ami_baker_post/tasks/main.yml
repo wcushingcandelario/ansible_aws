@@ -1,30 +1,160 @@
-- name: bundle ami
+- set_fact:
+    ami_temp_name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}-temp"
+    ami_name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}"
+
+- name: Bundle AMI
   local_action:
     module: ec2_ami
     instance_id: "{{ just_created_instance_id }}"
-    region: "{{ region }}"
+    region: "{{ ami_baker_region }}"
     state: present
     description: This was provisioned {{ ansible_date_time.iso8601 }}
-    name: ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}
+    name: "{{ ami_name }}"
     wait: yes
+    wait_timeout: 1500
     launch_permissions:
-      user_ids: ['748109554602', {{ customer_account_id }}]
+      user_ids: ['748109554602', "{{ customer_account_id }}"]
     tags:
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"
+      source: "{{ source_ami }}"
+      git_sha: "{{ ovc_git_sha }}"
+      git_branch: "{{ ovc_circle_branch }}"
   register: amioutput
 
-- name: terminate temporary instance
+- name: debug
+  debug: var=amioutput
+
+- name: wait for ssh to come up
+  wait_for:
+    host: "{{ ssh_ip }}"
+    delay: 30
+    port: 22
+    state: started
+    timeout: 640
+
+- name: Bundle AMI - Temporary name for copying/booting
+  local_action:
+    module: ec2_ami
+    instance_id: "{{ just_created_instance_id }}"
+    region: "{{ ami_baker_region }}"
+    state: present
+    description: This was provisioned {{ ansible_date_time.iso8601 }}
+    name: "{{ ami_temp_name }}"
+    wait: yes
+    wait_timeout: 1500
+    launch_permissions:
+      user_ids: ['748109554602', "{{ customer_account_id }}"]
+    tags:
+      customer: "{{ ami_customer }}"
+      release: "{{ ami_release }}"
+      source: "{{ source_ami }}"
+      git_sha: "{{ ovc_git_sha }}"
+      git_branch: "{{ ovc_circle_branch }}"
+  register: ami_tmp_output
+  when: ami_target_region !=  ami_baker_region
+
+- name: debug
+  debug: var=ami_tmp_output
+
+- pause:
+    seconds: 45
+
+- name: Copy AMI - Temporary name for copying/booting
+  ec2_ami_copy:
+    source_region: "{{ ami_baker_region }}"
+    region: "{{ ami_target_region }}"
+    source_image_id: "{{ ami_tmp_output.image_id }}"
+    wait: yes
+  register: amicopy
+  when: ami_target_region !=  ami_baker_region
+
+- name: debug
+  debug: var=amicopy
+  when: ami_target_region != ami_baker_region
+
+- name: Launch temporary instance for cross-region deployment
+  local_action:
+    module: ec2
+    assign_public_ip: yes
+    region: "{{ ami_target_region }}"
+#    key_name: "{{ key }}"
+#    group_id: "{{ ovc_security_groups }}"
+    instance_type: "{{ instance_type }}"
+    vpc_subnet_id: "{{ ami_temp_vpc_subnet_public }}"
+    image: "{{ amicopy.image_id }}"
+    wait: yes
+    instance_profile_name: "{{ ami_baker_instance_profile_name }}"
+    exact_count: 1
+    count_tag:
+      role: ami_builder
+    instance_tags:
+      role: ami_builder
+      Name: ami_builder
+  when: ami_target_region != ami_baker_region
+  register: tmp_ami_instance
+
+- pause:
+    seconds: 45
+
+- name: Bundle ANI in target region
+  local_action:
+    module: ec2_ami
+    instance_id: "{{ tmp_ami_instance.tagged_instances.0.id }}"
+    region: "{{ ami_target_region }}"
+    state: present
+    description: This was provisioned {{ ansible_date_time.iso8601 }}
+    name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}"
+    wait: yes
+    wait_timeout: 1500
+    launch_permissions:
+      user_ids: ['748109554602', "{{ customer_account_id }}"]
+    tags:
+      customer: "{{ ami_customer }}"
+      release: "{{ ami_release }}"
+      copied_from: "{{ ami_name }}"
+      source: "{{ source_ami }}"
+      git_sha: "{{ ovc_git_sha }}"
+      git_branch: "{{ ovc_circle_branch }}"
+  when: ami_target_region != ami_baker_region
+  register: amioutput
+
+- name: debug
+  debug: var=amioutput
+  when: ami_target_region !=  ami_baker_region
+
+- name: Terminate temporary instance in target region
   local_action:
     module: ec2
     state: absent
-    region: "{{ region }}"
+    region: "{{ ami_target_region }}"
+    instance_ids: "{{ tmp_ami_instance.tagged_instances.0.id }}"
+  when: ami_target_region !=  ami_baker_region
+
+- name: Terminate temporary instance
+  local_action:
+    module: ec2
+    state: absent
+    region: "{{ ami_baker_region }}"
     instance_ids: "{{ just_created_instance_id }}"
   tags:
     - terminate_ami
 
-- name: debug
-  debug: var=amioutput
+- name: Delete temporary copies
+  ec2_ami:
+    region: "{{ ami_target_region }}"
+    image_id: "{{ amicopy.image_id }}"
+    delete_snapshot: True
+    state: absent
+  when: ami_target_region !=  ami_baker_region
+
+- name: Delete temporary copies
+  ec2_ami:
+    region: "{{ ami_baker_region }}"
+    image_id: "{{ ami_tmp_output.image_id }}"
+    delete_snapshot: True
+    state: absent
+  when: ami_target_region !=  ami_baker_region
 
 - name: Set image_id
   set_fact:

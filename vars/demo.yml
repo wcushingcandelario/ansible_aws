@@ -11,17 +11,25 @@ ami_baker_instance_profile_name: S3_Release_Read
 ssl_certificate_id: "arn:aws:acm:us-east-1:748109554602:certificate/29bd18b2-2c4a-4581-a1bd-1e265a35d313"
 datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 skip_ssl: Yes
+solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
+beanstalk_iam_role: aws-elasticbeanstalk-ec2-role
+beanstalk_service_role: aws-elasticbeanstalk-service-role
 s3_bucket: ovc-release
+customer: ovc
 use_public_ip: Yes
 elb_scheme: internet-facing
 skip_custom: Yes
 dns_private_zone: No
-solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
-alias_hosted_zone:
-vpc_id:
+alias_hosted_zone: Z35SXDOTRQ7X7K
+vpc_id: vpc-e8932b8d
 instance_type_pe: t2.medium
-beanstalk_iam_role:
-beanstalk_service_role:
-s3_bucket_docker: "ovc-github-access-2"
-customer: ovc
+queue_name: "{{ deploy_type }}-invtmgr"
+s3_bucket_beanstalk: "elasticbeanstalk-us-east-1-748109554602"
+beanstalk_template_version: 1.1.0.0
+pe_role: promo-engine
+s3_bucket_docker: "ovc-github-access"
 customer_account_id: 748109554602
+customer: ovc
+ami_release: alpha
+ami_customer: ovc
+ami_owner: 748109554602 # The OVC Demo account
