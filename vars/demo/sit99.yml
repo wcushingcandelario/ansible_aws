@@ -30,7 +30,8 @@ s3_bucket_docker: "ovc-github-access"
 dockercfg: dockercfg
 mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}:{{ mongo_port }}/"
 tier: WebServer
-elb_security_group_id: sg-62fc7a06
+elb_security_group_id: sg-6387e207
+pe_monitor: yes
 
 #Inventory Manager
 im_security_groups: sg-62fc7a06,sg-eeecf389,sg-e3b59c87

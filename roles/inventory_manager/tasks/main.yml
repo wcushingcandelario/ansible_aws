@@ -31,7 +31,28 @@
     state: present
   register: application
 
+
+- name: Copy Beanstalk template to temp directory
+  connection: local
+  template:
+     src: im_tags.j2
+     dest: "/tmp/im_tags"
+
+- name: Upload Beanstalk template to S3
+  s3:
+   bucket: "{{ s3_bucket_beanstalk }}"
+   object: "/resources/templates/{{ deploy_type }}/im_tags"
+   src: "/tmp/im_tags"
+   mode: put
+
+- name: Remove Beanstalk template
+  connection: local
+  file:
+    path: "/tmp/im_tags"
+    state: absent
+
 - debug: var=application
+
 
 - name: Making new Inventory Manger docker file
   connection: local
@@ -72,7 +93,11 @@
     env_name: "{{ deploy_type }}-InventoryManager"
     tier_name: "{{ tier }}"
     version_label: "{{ im_version }}"
+
+    template_name: im_tags
+    
     solution_stack_name: "{{ solution_stack_name }}"
+
     option_settings:
      - Namespace: aws:elb:listener
        OptionName: ListenerEnabled
@@ -187,7 +212,11 @@
     env_name: "{{ deploy_type }}-InventoryManager"
     tier_name: "{{ tier }}"
     version_label: "{{ im_version }}"
+
+    template_name: im_tags
+
     solution_stack_name: "{{ solution_stack_name }}"
+
     option_settings:
      - Namespace: aws:elb:loadbalancer
        OptionName: CrossZone

@@ -29,7 +29,23 @@
       customer: "{{ _ami_customer }}"
       release: "{{ ami_release }}"
   register: ovc_ami_find
-  when: customer != 'vanilla'
+  when: customer != 'vanilla' and find_ami_branch is undefined
+
+- name: Finding latest OVC customised Amazon Linux ami with a branch
+  ec2_ami_find:
+    name: "ovc-{{ ovc_version }}*"
+    sort: name
+    sort_order: descending
+    region: "{{ ami_region }}"
+    sort_end: 1
+    owner: "{{ ami_owner }}"
+    no_result_action: fail
+    ami_tags:
+      customer: "{{ _ami_customer }}"
+      release: "{{ ami_release }}"
+      git_branch: "{{ find_ami_branch }}"
+  register: ovc_ami_find_branch
+  when: customer != 'vanilla' and find_ami_branch is defined
 
 - set_fact:
     ami_find: "{{ al_ami_find }}"
@@ -37,8 +53,11 @@
 
 - set_fact:
     ami_find: "{{ ovc_ami_find }}"
-  when: customer != 'vanilla'
+  when: customer != 'vanilla' and find_ami_branch is undefined
 
+- set_fact:
+    ami_find: "{{ ovc_ami_find_branch }}"
+  when: customer != 'vanilla' and find_ami_branch is defined
 
 - name: AMI ID found
   debug: "var=ami_find.results"
