@@ -1,0 +1,34 @@
+---
+#play will install mongod automation agent
+
+- name: Create data directory for mongod user and group
+  file:
+    path: /data
+    state: directory
+    mode: 0755
+    owner: mongod
+    group: mongod
+    become: yes
+    become_user: root
+
+- name: Download Automation agent
+  yum:
+    name: https://cloud.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager-3.4.1.1996-1.x86_64.rpm
+    state: present
+
+- name: Copy Auto agent config file
+  copy:
+    src: automation-agent.config
+    dest: /etc/mongodb-mms/automation-agent.config
+    force: yes
+  become: yes
+  become_user: root
+
+
+- name: Start agent
+  service:
+    name: mongodb-mms-automation-agent
+    state: started
+    enabled: yes
+  become: yes
+  become_user: root
