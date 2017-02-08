@@ -408,9 +408,7 @@
   become_user: root
 
 - name: Add CA to the Java cacerts
-  command: sudo keytool -keystore cacerts -importcert -alias tp_int_ca3 -file ~/etc/tp_int_ca3.cer -noprompt -storepass changeit
-  args:
-    chdir: /etc/pki/java/
+  command: keytool -keystore /etc/pki/java/cacerts -importcert -alias tp_int_ca3 -file /etc/tp_int_ca3.cer -noprompt -storepass changeit
   become: yes
   become_user: root
 
