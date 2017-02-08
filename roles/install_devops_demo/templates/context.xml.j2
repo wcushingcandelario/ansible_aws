@@ -25,7 +25,7 @@
 	<Get id="encryptionHelper" class="com.oneview.util.AESEncryptionHelper" name="instance"/>
 	<Ref refid="encryptionHelper">
 		<Call id="password" name="decrypt">
-			<Arg>L3Q5kQqII0OlaJ9FGCaukQ==</Arg>
+			<Arg>pS6Uu4KU3B9G9FRg5IlnBg==</Arg>
 		</Call>
 	</Ref>
 
@@ -38,7 +38,7 @@
 		<Arg>
 
 			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-				<Set name="URL">jdbc:mysql://{{ item.value.mysql_host }}:3306/xdb</Set>
+				<Set name="URL">jdbc:mysql://{{ item.value.mysql_host }}:3306/{{ item.value.name }}_xdb</Set>
 				<Set name="user">root</Set>
 				<Set name="password">
 					<Ref refid="password"/>
