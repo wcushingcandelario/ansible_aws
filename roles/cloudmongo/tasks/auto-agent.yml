@@ -18,20 +18,16 @@
   #connection: local
   yum: name=/tmp/automation-agent.rpm state=present
 
-- name: Back up Automation Agent config file if exists
-  command: mv /etc/mongodb-mms/automation-agent.config /etc/mongodb-mms/automation-agent.config.bak
-  become: yes
-  become_user: root
-  when: config_file.stat.exists
-
-- name: Copy automation config
-  copy:
-    src: templates/automation-agent.config.j2
-    dest: /etc/mongodb-mms/automation-agent.config
-  owner: mongod
-  group: mongod
-  mode: 0755
-  
+- name: Configure Automation Agent config file
+  shell: >
+    echo -e 'mmsGroupId={{mms_group_id}}' > /etc/mongodb-mms/automation-agent.config &&
+    echo -e 'mmsApiKey={{mms_api_key}}' >> /etc/mongodb-mms/automation-agent.config &&
+    echo -e 'mmsBaseUrl={{mms_base_url}}' >> /etc/mongodb-mms/automation-agent.config &&
+    echo -e 'mmsConfigBackup={{mms_config_backup}}' >> /etc/mongodb-mms/automation-agent.config &&
+    echo -e 'logFile={{log_file}}' >> /etc/mongodb-mms/automation-agent.config &&
+    echo -e 'logLevel={{log_level}}' >> /etc/mongodb-mms/automation-agent.config &&
+    echo -e 'maxLogFiles={{max_log_files}}' >> /etc/mongodb-mms/automation-agent.config &&
+    echo -e 'maxLogFileSize={{max_log_file_size}}' >> /etc/mongodb-mms/automation-agent.config
 
 - name: Collect status on /data directory
   stat: path=/data
