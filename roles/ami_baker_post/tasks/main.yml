@@ -131,15 +131,6 @@
     instance_ids: "{{ tmp_ami_instance.tagged_instances.0.id }}"
   when: ami_target_region !=  ami_baker_region
 
-- name: Terminate temporary instance
-  local_action:
-    module: ec2
-    state: absent
-    region: "{{ ami_baker_region }}"
-    instance_ids: "{{ just_created_instance_id }}"
-  tags:
-    - terminate_ami
-
 - name: Delete temporary copies
   ec2_ami:
     region: "{{ ami_target_region }}"
