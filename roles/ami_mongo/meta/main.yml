@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: find_ovc_ami, force_ami_customer: 'ovc' }
+  - { role: ami_baker_pre, ami_role: 'mongo' }
