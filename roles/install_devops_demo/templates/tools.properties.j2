@@ -2,12 +2,12 @@
 #Updated by OVCInstaller
 appDataImporter.async=true
 appDataImporter.useLocalHashcodes=true
-calendarDataImport.encrypted.password=1D6DfFDrZTJ2/Tt17Fn2l4tj+MlBjtnm+CR4NGge5+tey6ynSbEyAoFBDvVmipoN
+calendarDataImport.encrypted.password=C9VdD8e5BH/IMIuSNhwkvg\=\=
 calendarDataImport.username=eCommerce
 custDataImporter.async=false
 custDataImporter.ignoreJsonValidationErrors=true
-eComServer.baseSiteId=apparel-uk
-eComServer.encrypted.password=lHl7Wgn7Z0YCFD6PEhnqUg\=\=
+eComServer.baseSiteId={{ item.value.basesiteid }}
+eComServer.encrypted.password=C9VdD8e5BH/IMIuSNhwkvg\=\=
 eComServer.retailerId=defaultRetailer
 eComServer.username=eCommerce
 import.endpoint.temp.location=/tmp
@@ -18,7 +18,7 @@ importFiles.staffDiscountImportFiles=staffDiscountImportFiles
 importFiles.standaloneImportsDir=eCommerceImportFiles
 importer_mode=production
 ovcServer.adoPath=/opt/ovc/Application-Dynamic-Objects
-ovcServer.customer-all={{ ovc_customer }}
+ovcServer.customer-all={{ item.value.ovc_customer }}
 ovcServer.importFilesPath=/opt/ovc/Base-Location-Import-Files/ovc-all-OvcStore
 ovcServer.prop_dir=/opt/ovc/Platform-Dynamic-Objects/config
 ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
@@ -26,7 +26,7 @@ ovcServer.webcontext=
 posMClientSyncUpdater.browser=true
 posMClientSyncUpdater.concurrentDevices=4
 posMClientSyncUpdater.concurrentStores=4
-posMClientSyncUpdater.store=OvcStore
+posMClientSyncUpdater.store={{ item.value.store }}
 staffDiscount.bucketName={{ item.value.staff_discount_bucket }}
 staffDiscount.protocol=https
 staffDiscount.region=us-east-1

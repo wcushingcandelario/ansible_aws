@@ -7,3 +7,65 @@ environments:
     sqs_queue:
     staff_discount_bucket:
     ecommerce_host: qamysqlhybris.ovcdemo.com
+    ovc_customer: ovc-all
+    store: OvcStore
+    basesiteid: apparel-uk
+    crosschannel_alerts_host: crosschannel.ovcdemo.com
+  devmysql:
+    name: devmysql
+    url: devmysql-dash.ovcdemo.com
+    mysql_host:
+    nosql_host:
+    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
+    staff_discount_bucket: ovc-tp-staffdiscount
+    ecommerce_host: devmysqlhybris.ovcdemo.com
+    ovc_customer: ovc-all
+    store: OvcStore
+    basesiteid: apparel-uk
+    crosschannel_alerts_host: crosschannel.ovcdemo.com
+  qamysql:
+    name: qamysql
+    url: qamysql-dash.ovcdemo.com
+    mysql_host:
+    nosql_host:
+    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
+    staff_discount_bucket: ovc-tp-staffdiscount
+    ecommerce_host: qamysqlhybris.ovcdemo.com
+    ovc_customer: ovc-all
+    store: OvcStore
+    basesiteid: apparel-uk
+    crosschannel_alerts_host: crosschannel.ovcdemo.com
+  rcmysql:
+    name: rcmysql
+    url: rcmysql-dash.ovcdemo.com
+    mysql_host:
+    nosql_host:
+    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
+    staff_discount_bucket: ovc-tp-staffdiscount
+    ecommerce_host: qamysqlhybris.ovcdemo.com
+    ovc_customer: ovc-all
+    store: OvcStore
+    basesiteid: apparel-uk
+    crosschannel_alerts_host: rccrosschannel.ovcdemo.com
+  tpdev:
+    name: tpdev
+    url: tpdev-dash.ovcdemo.com
+    mysql_host:
+    nosql_host:
+    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
+    staff_discount_bucket:
+    ecommerce_host: 192.168.98.160
+    ovc_customer: tp-all
+    store: 8971
+    basesiteid: wickesStores
+  tpqa:
+    name: tpqa
+    url: tpqa-dash.ovcdemo.com
+    mysql_host:
+    nosql_host:
+    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
+    staff_discount_bucket:
+    ecommerce_host:
+    ovc_customer: tp-all
+    basesiteid: wickesStores
+    store: 8971
