@@ -8,30 +8,11 @@
       become: yes
       become_user: root
       with_items:
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.preprod', src: '/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.preprod', src: '/opt/ovc/Platform-Dynamic-Objects/config/tools.properties' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.preprod', src: '/opt/jetty/webapps/context.xml' }
-        - { dest: 'roles/oneview/files/env_files/database.php.preprod', src: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.preprod', src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.prod', src: '/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.prod', src: '/opt/ovc/Platform-Dynamic-Objects/config/tools.properties' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.prod', src: '/opt/jetty/webapps/context.xml' }
-        - { dest: 'roles/oneview/files/env_files/database.php.prod', src: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.prod', src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat1', src: '/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.uat1', src: '/opt/ovc/Platform-Dynamic-Objects/config/tools.properties' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.uat1', src: '/opt/jetty/webapps/context.xml' }
-        - { dest: 'roles/oneview/files/env_files/database.php.uat1', src: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.uat1', src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat2', src: '/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.uat2', src: '/opt/ovc/Platform-Dynamic-Objects/config/tools.properties' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.uat2', src: '/opt/jetty/webapps/context.xml' }
-        - { dest: 'roles/oneview/files/env_files/database.php.uat2', src: '/var/www/html/ovcdashboard/app/Config/database.php' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.uat2', src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
-        - { dest: 'roles/oneview/files/cometd/original.xml', src: '/opt/ovc/posWebapp/WEB-INF/web.xml' }
+        - { dest: 'roles/install_devops_demo/templates/unifiedConfig.properties.{{ inventory_hostname }}', src: '/opt/ovc/Platform-Dynamic-Objects/config/unifiedConfig.properties' }
+        - { dest: 'roles/install_devops_demo/templates/tools.properties.{{ inventory_hostname }}', src: '/opt/ovc/Platform-Dynamic-Objects/config/tools.properties' }
+        - { dest: 'roles/install_devops_demo/templates/context.xml.{{ inventory_hostname }}', src: '/opt/jetty/webapps/context.xml' }
+        - { dest: 'roles/install_devops_demo/templates/database.php.{{ inventory_hostname }}', src: '/var/www/html/ovcdashboard/app/Config/database.php' }
+        - { dest: 'roles/install_devops_demo/templates/setting_var.php.{{ inventory_hostname }}', src: '/var/www/html/ovcdashboard/app/Config/setting_var.php' }
       fetch:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
@@ -39,52 +20,3 @@
         fail_on_missing: yes
       tags:
         - fetch
-    - name: Replace database hosts preprod
-      delegate_to: localhost
-      with_items:
-        - { dest: 'roles/oneview/files/env_files/context.xml.preprod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-preprod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.preprod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'preprod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.prod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-prod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.prod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'prod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.uat1', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-uat1.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.uat1', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat1-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.uat2', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-uat2.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/context.xml.uat2', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat2-mysql.ovchosting.co.uk' }
-
-        - { dest: 'roles/oneview/files/env_files/database.php.preprod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-preprod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/database.php.preprod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'preprod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/database.php.prod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-prod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/database.php.prod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'prod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/database.php.uat1', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat1-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/database.php.uat2', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat2-mysql.ovchosting.co.uk' }
-
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.preprod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-preprod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.preprod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'preprod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.prod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-prod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.prod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'prod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.uat1', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat1-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/setting_var.php.uat2', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat2-mysql.ovchosting.co.uk' }
-
-        - { dest: 'roles/oneview/files/env_files/tools.properties.preprod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-preprod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.preprod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'preprod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.prod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-prod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.prod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'prod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.uat1', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-uat1.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.uat1', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat1-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.uat2', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-uat2.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/tools.properties.uat2', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat2-mysql.ovchosting.co.uk' }
-
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.preprod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-preprod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.preprod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'preprod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.prod', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-prod01.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.prod', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'prod-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat1', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-uat1.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat1', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat1-mysql.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat2', regexp: 'mongodb-utility01\.ovchosting\.co\.uk', replace: 'mongodb-uat2.ovchosting.co.uk' }
-        - { dest: 'roles/oneview/files/env_files/unifiedConfig.properties.uat2', regexp: 'rds-utility\.ckzc29y1mvlx\.eu-west-1\.rds\.amazonaws\.com', replace: 'uat2-mysql.ovchosting.co.uk' }
-      replace:
-        dest: "{{ item.dest }}"
-        regexp: "{{ item.regexp }}"
-        replace: "{{ item.replace }}"
-      tags:
-        - patch
