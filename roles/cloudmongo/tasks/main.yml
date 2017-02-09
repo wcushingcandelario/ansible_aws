@@ -26,12 +26,12 @@
 
 - name: Copy automation config
   copy:
-    src: templates/automation-agent.config.j2
-    dest: /etc/mongodb-mms/automation-agent.config
-  owner: mongod
-  group: mongod
-  mode: 0755
-  
+     src: templates/automation-agent.config.j2
+     dest: /etc/mongodb-mms/automation-agent.config
+     owner: mongod
+     group: mongod
+     mode: 0755
+
 
 - name: Collect status on /data directory
   stat: path=/data
