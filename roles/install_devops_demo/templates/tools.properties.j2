@@ -17,16 +17,16 @@ importFiles.rootLocationsDir=importRootLocations
 importFiles.staffDiscountImportFiles=staffDiscountImportFiles
 importFiles.standaloneImportsDir=eCommerceImportFiles
 importer_mode=production
-ovcServer.customer-all=ovc--all
+ovcServer.adoPath=/opt/ovc/Application-Dynamic-Objects
+ovcServer.customer-all={{ ovc_customer }}
+ovcServer.importFilesPath=/opt/ovc/Base-Location-Import-Files/ovc-all-OvcStore
 ovcServer.prop_dir=/opt/ovc/Platform-Dynamic-Objects/config
 ovcServer.repo_loc=/opt/ovc/Platform-Dynamic-Objects
 ovcServer.webcontext=
 posMClientSyncUpdater.browser=true
-posMClientSyncUpdater.store=All
+posMClientSyncUpdater.concurrentDevices=4
+posMClientSyncUpdater.concurrentStores=4
+posMClientSyncUpdater.store=OvcStore
 staffDiscount.bucketName={{ item.value.staff_discount_bucket }}
 staffDiscount.protocol=https
 staffDiscount.region=us-east-1
-
-###Added in 5.12.0 Release
-ovcServer.adoPath=/opt/ovc/Application-Dynamic-Objects
-ovcServer.importFilesPath=/opt/ovc/Base-Location-Import-Files/ovc-all-OvcStore

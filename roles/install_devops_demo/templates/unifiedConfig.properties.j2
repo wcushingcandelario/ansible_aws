@@ -19,6 +19,7 @@ export.products.url=v2/%s/ovc/products/paginated
 export.stock.url=v2/%s/ovc/storestock/%s
 grant_type=client_credentials
 grant_type_pwd=password
+import.stock.type=product
 jms.destination=jms/destination1
 mailServer.encrypted.password=RbNGPpJVCZ6CIIvlQ8d/cg\=\=
 mailServer.from=donotreply@company.com
@@ -30,7 +31,7 @@ mailServer.username=donotreply@company.com
 oAuth.required=false
 oort.cloud=
 others.import.pageSize=1500
-ovcDB.db=xdb
+ovcDB.db={{ item.value.name }}_xdb
 ovcDB.driver=com.mysql.jdbc.Driver
 ovcDB.encrypted.password=L3Q5kQqII0OlaJ9FGCaukQ==
 ovcDB.host={{ item.value.mysql_host }}
@@ -40,7 +41,7 @@ ovcDB.scheme=jdbc\:mysql
 ovcDB.username=root
 ovcNOSQLDB.connectTimeout=5000
 ovcNOSQLDB.connectionsPerHost=20
-ovcNOSQLDB.db=xdb
+ovcNOSQLDB.db={{ item.value.name }}_xdb
 ovcNOSQLDB.encrypted.password=pS6Uu4KU3B9G9FRg5IlnBg==
 ovcNOSQLDB.host={{ item.value.nosql_host }}
 ovcNOSQLDB.maxWaitTime=5000
@@ -53,4 +54,3 @@ ovcServer.scheme=https
 products.import.pageSize=1500
 secure.occhost.context=/omnicommercewebservices
 stores.url=/v2/%s/ovc/locations/All
-import.stock.type=product
