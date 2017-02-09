@@ -2,10 +2,10 @@ environments:
   sit99:
     name: sit99
     url: sit99-dash.ovchosting.co.uk
-    mysql_host: mysql-sit99.ovcdemo.com
-    nosql_host: mongodb-sit99.ovchosting.co.uk
+    mysql_host: mysql-development.ovcdemo.com
+    nosql_host: nosql-development.ovcdemo.com
     sqs_queue:
-    staff_discount_bucket:
+    staff_discount_bucket: bob-barker
     ecommerce_host: qamysqlhybris.ovcdemo.com
     ovc_customer: ovc-all
     store: OvcStore
@@ -14,8 +14,8 @@ environments:
   devmysql:
     name: devmysql
     url: devmysql-dash.ovcdemo.com
-    mysql_host:
-    nosql_host:
+    mysql_host: mysql-development.ovcdemo.com
+    nosql_host: nosql-development.ovcdemo.com
     sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
     staff_discount_bucket: ovc-tp-staffdiscount
     ecommerce_host: devmysqlhybris.ovcdemo.com
@@ -26,8 +26,8 @@ environments:
   qamysql:
     name: qamysql
     url: qamysql-dash.ovcdemo.com
-    mysql_host:
-    nosql_host:
+    mysql_host: mysql-development.ovcdemo.com
+    nosql_host: nosql-development.ovcdemo.com
     sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
     staff_discount_bucket: ovc-tp-staffdiscount
     ecommerce_host: qamysqlhybris.ovcdemo.com
@@ -38,8 +38,8 @@ environments:
   rcmysql:
     name: rcmysql
     url: rcmysql-dash.ovcdemo.com
-    mysql_host:
-    nosql_host:
+    mysql_host: mysql-development.ovcdemo.com
+    nosql_host: nosql-development.ovcdemo.com
     sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
     staff_discount_bucket: ovc-tp-staffdiscount
     ecommerce_host: qamysqlhybris.ovcdemo.com
@@ -50,8 +50,8 @@ environments:
   tpdev:
     name: tpdev
     url: tpdev-dash.ovcdemo.com
-    mysql_host:
-    nosql_host:
+    mysql_host: mysql-development.ovcdemo.com
+    nosql_host: nosql-development.ovcdemo.com
     sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
     staff_discount_bucket:
     ecommerce_host: 192.168.98.160
@@ -61,8 +61,8 @@ environments:
   tpqa:
     name: tpqa
     url: tpqa-dash.ovcdemo.com
-    mysql_host:
-    nosql_host:
+    mysql_host: mysql-development.ovcdemo.com
+    nosql_host: nosql-development.ovcdemo.com
     sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
     staff_discount_bucket:
     ecommerce_host:
