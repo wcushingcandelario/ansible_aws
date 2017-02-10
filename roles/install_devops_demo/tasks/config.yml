@@ -85,4 +85,4 @@
   become: yes
   become_user: root
   with_dict: "{{ environments }}"
-  when: item.value.name == 'tpdev.ovcdemo.com' or tem.value.name == 'tpqa.ovcdemo.com'
+  when: item.value.name == 'tpdev.ovcdemo.com' or item.value.name == 'tpqa.ovcdemo.com'
