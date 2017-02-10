@@ -2,7 +2,8 @@
 
 - name: first make sure dest exists.
   file:
-    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config state: directory"
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config"
+    state: directory
 
 - name: template out the unifiedConfig.properties files
   template:
