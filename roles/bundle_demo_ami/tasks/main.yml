@@ -5,7 +5,7 @@
     region: "{{ ami_baker_region }}"
     state: present
     description: This was provisioned {{ ansible_date_time.iso8601 }}
-    name: "{{ ami_name }}"
+    name: "{{ ami_name }}_demo"
     wait: yes
     wait_timeout: 1500
     tags:
