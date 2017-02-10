@@ -91,28 +91,6 @@
   tags:
     - launch_ami
 
-- name: Launch new vanilla instance
-  hosts: localhost
-  connection: local
-  roles:
-    - launch_vanilla_instance
-  tags:
-    - launch_vanilla
-
-
-- name: Define hostname and ip in /etc/hosts and /etc/sysconfig/network
-  hosts: launched
-  remote_user: ec2-user
-  gather_facts: true
-  become: yes
-  become_user: root
-  roles:
-    - customize_hostname
-    - cloudmongo
-  tags:
-    - launch_vanilla
-    - customize_hostname
-
 - name: Create ELB and ASG
   hosts: localhost
   connection: local
