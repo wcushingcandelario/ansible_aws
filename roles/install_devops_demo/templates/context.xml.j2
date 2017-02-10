@@ -56,11 +56,9 @@
 		<Arg>
 			<New class="org.skyscreamer.nevado.jms.NevadoConnectionFactory">
 				<Set name="sqsConnectorFactory">
-					<New class="org.skyscreamer.nevado.jms.connector.oneviewcommerce.ShadedPlainTextAmazonSQSConnectorFactory"/>
+					<New class="org.skyscreamer.nevado.jms.connector.oneviewcommerce.ShadedNoCredPlainTextAmazonSQSConnectorFactory"/>
 				</Set>
 				<Set name="awsSQSEndpoint">sqs.us-east-1.amazonaws.com</Set>
-				<Set name="awsAccessKey"></Set>
-				<Set name="awsSecretKey"></Set>
 			</New>
 		</Arg>
 	</New>
