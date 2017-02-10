@@ -48,13 +48,7 @@
 
 - name: Tag AMI
   shell:
-    cmd: "aws ec2 create-tags  --region {{ ami_target_region }} --resources {{ amioutput.image_id }} --tags '{{ item }}'"
-  with_items:
-    - "Key=customer,Value={{ ami_customer }}""
-    - "Key=release,Value={{ ami_release }}"
-    - "Key=source,Value={{ source_ami }}"
-    - "Key=git_sha,Value={{ ovc_git_sha }}"
-    - "Key=git_branch,Value={{ ovc_circle_branch }}"
+    cmd: "aws ec2 create-tags  --region {{ ami_target_region }} --resources {{ amioutput.image_id }} --tags 'Key=customer,Value={{ ami_customer }} Key=release,Value={{ ami_release }} Key=source,Value={{ source_ami }}' Key=git_sha,Value={{ ovc_git_sha }} Key=git_branch,Value={{ ovc_circle_branch }}"
   when: ami_target_region !=  ami_baker_region
 
 - name: Share AMI with customer account
