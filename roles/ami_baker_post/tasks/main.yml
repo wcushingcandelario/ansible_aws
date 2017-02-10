@@ -53,7 +53,7 @@
 
 - name: Share AMI with customer account
   shell:
-    cmd: "aws ec2 modify-image-attribute --image-id ami-5731123e --launch-permission '{\"Add\": [{\"UserId\":\"{{ customer_account_id }}\"}]}'"
+    cmd: "aws ec2 modify-image-attribute --region {{ ami_target_region }} --image-id ami-5731123e --launch-permission '{\"Add\": [{\"UserId\":\"{{ customer_account_id }}\"}]}'"
   when: ami_target_region !=  ami_baker_region
 
 - name: Set image_id
