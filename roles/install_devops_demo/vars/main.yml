@@ -55,9 +55,10 @@ environments:
     sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
     staff_discount_bucket:
     ecommerce_host: 192.168.98.160
-    ovc_customer: tp-all
+    ovc_customer: tp-all 
     store: 8971
     basesiteid: wickesStores
+    crosschannel_alerts_host: crosschannel.ovcdemo.com
   tpqa:
     name: tpqa
     url: tpqa-dash.ovcdemo.com
@@ -68,4 +69,5 @@ environments:
     ecommerce_host:
     ovc_customer: tp-all
     basesiteid: wickesStores
+    crosschannel_alerts_host: crosschannel.ovcdemo.com
     store: 8971
