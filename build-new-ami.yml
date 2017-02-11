@@ -23,7 +23,8 @@
   gather_facts: False
   roles:
     - { role: find_ovc_ami, force_ami_customer: 'ovc' }
-    - ami_baker_pre
+    - {role: ami_baker_pre, when: ami_role != 'mongo_ami'}
+    - {role: ami_baker_pre, instance_type: t2.small, when: ami_role == 'mongo_ami'}
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     ami_region: "{{ ami_baker_region }}"
@@ -38,6 +39,7 @@
     s3install: true
     ovcDB_host: "mysql-utility.{{ dns_domain }}"
     ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
+
 
 - hosts: just_baked
   remote_user: ec2-user
@@ -55,7 +57,7 @@
 #    - { role: install_customizations_demo, when: customer == 'ovc' }
 
     - { role: ricbra.logentries, when: customer == 'vanilla' and ami_role is not defined }
-    - { role: mongo_cloud_manager, when ami_role is defined }
+    - { role: ami_mongo_cm, when ami_role is defined }
     - { role: nginx_proxy, when: customer == 'vanilla' and ami_role is not defined }
     - { role: newrelic_infrastructure, when: customer == 'vanilla' and ami_role is not defined }
     - { role: newrelic_infrastructure, when: customer == 'tp' and ami_role is not defined }
@@ -84,7 +86,7 @@
 - hosts: localhost
   connection: local
   roles:
-    - { role: ami_baker_post, when: ami_role is not defined }
+    - ami_baker_post
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     region: "{{ ami_baker_region }}"
