@@ -4,6 +4,7 @@ clustered_environment: Yes
 #deploy_type: # Commented to force picking a deployment name
 region: us-east-1
 key: ovc-demo
+ami_release: development
 
 # DB
 environment_name: "{{ deploy_type }}-rds"
