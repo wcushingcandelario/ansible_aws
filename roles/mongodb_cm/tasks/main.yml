@@ -1,0 +1,4 @@
+---
+- include: find_mongo_ami.yml
+
+- include: launch_mongo_ami.yml

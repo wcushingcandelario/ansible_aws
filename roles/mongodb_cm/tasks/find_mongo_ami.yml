@@ -1,0 +1,46 @@
+---
+- set_fact:
+    _ami_customer: "{{ ami_customer }}"
+  when: force_ami_customer is undefined
+
+- name: Finding latest Mongo CM ami
+  ec2_ami_find:
+    name: "mongo-mms-*"
+    sort: name
+    sort_order: descending
+    region: "{{ ami_region }}"
+    sort_end: 1
+    owner: "{{ ami_owner }}"
+    no_result_action: fail
+    ami_tags:
+      customer: "{{ _ami_customer }}"
+      release: "{{ ami_release }}"
+  register: ovc_ami_find
+  when: customer != 'vanilla' and find_ami_branch is undefined
+
+- name: Finding latest Mongo CM ami with branch
+  ec2_ami_find:
+    name: "mongo-mms-*"
+    sort: name
+    sort_order: descending
+    region: "{{ ami_region }}"
+    sort_end: 1
+    owner: "{{ ami_owner }}"
+    no_result_action: fail
+    ami_tags:
+      customer: "{{ _ami_customer }}"
+      release: "{{ ami_release }}"
+      git_branch: "{{ find_ami_branch }}"
+  register: ovc_ami_find_branch
+  when: customer != 'vanilla' and find_ami_branch is defined
+
+- set_fact:
+    ami_find: "{{ ovc_ami_find }}"
+  when: customer != 'vanilla' and find_ami_branch is undefined
+
+- set_fact:
+    ami_find: "{{ ovc_ami_find_branch }}"
+  when: customer != 'vanilla' and find_ami_branch is defined
+
+- name: AMI ID found
+  debug: "var=ami_find.results"

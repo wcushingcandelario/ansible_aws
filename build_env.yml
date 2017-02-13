@@ -44,6 +44,14 @@
     - tagged
     - inventory_manager
 
+- name: Build Mongo CM environment
+  connection: local
+  hosts: localhost
+  roles:
+    - mongodb_cm
+  tags:
+    - mongodb_cm
+
 - name: Find AMI ID
   hosts: localhost
   connection: local
@@ -70,7 +78,6 @@
     - asg
     - find_ovc_ami
     - launch_ami
-
 
 - hosts: localhost
   connection: local

@@ -57,7 +57,7 @@
 #    - { role: install_customizations_demo, when: customer == 'ovc' }
 
     - { role: ricbra.logentries, when: customer == 'vanilla' and ami_role is not defined }
-    - { role: ami_mongo_cm, when ami_role is defined }
+    - { role: ami_mongo_cm, when: ami_role is defined }
     - { role: nginx_proxy, when: customer == 'vanilla' and ami_role is not defined }
     - { role: newrelic_infrastructure, when: customer == 'vanilla' and ami_role is not defined }
     - { role: newrelic_infrastructure, when: customer == 'tp' and ami_role is not defined }
@@ -107,7 +107,7 @@
   become: yes
   become_user: root
   roles:
-    - install_devops_demo
+    - { role: install_devops_demo, when: ami_role is not defined }
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     region: "{{ ami_baker_region }}"
@@ -127,4 +127,4 @@
 - hosts: localhost
   connection: local
   roles:
-    - bundle_demo_ami
+    - { role: install_devops_demo, when: ami_role is not defined }

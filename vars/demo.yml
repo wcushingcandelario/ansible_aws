@@ -8,6 +8,7 @@ ami_baker_rds_subnet_group: "rds subnet"
 ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
 ami_baker_vpc_subnet_public: subnet-9f8a92b7
 ami_baker_instance_profile_name: S3_Release_Read
+ami_region: us-east-1
 ssl_certificate_id: "arn:aws:acm:us-east-1:748109554602:certificate/29bd18b2-2c4a-4581-a1bd-1e265a35d313"
 datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 skip_ssl: Yes
@@ -23,6 +24,7 @@ dns_private_zone: No
 alias_hosted_zone: Z35SXDOTRQ7X7K
 vpc_id: vpc-e8932b8d
 instance_type_pe: t2.medium
+instance_type_mongo: t2.small
 queue_name: "{{ deploy_type }}-invtmgr"
 s3_bucket_beanstalk: "elasticbeanstalk-us-east-1-748109554602"
 beanstalk_template_version: 1.1.0.0

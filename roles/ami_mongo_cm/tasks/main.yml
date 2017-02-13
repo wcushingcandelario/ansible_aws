@@ -2,7 +2,7 @@
 
 - name: Download Automation Agent
   get_url:
-     url: "{{automation_agent_pkg}}"
+     url: "{{ automation_agent_pkg }}"
      dest: /tmp/automation-agent.rpm
 
 - name: Install automation agent
@@ -10,20 +10,28 @@
     name: /tmp/automation-agent.rpm
     state: present
 
+- name: Copy automation config
+  template:
+     src: automation-agent.config.j2
+     dest: "{{ automation_agent_config }}"
+     owner: mongod
+     group: mongod
+     mode: 0755
+
 - name: Create /data directory
   file:
-    path=/data
-    mode=0755
-    state=directory
-    owner=mongod
-    group=mongod
+    path: /data
+    mode: 0755
+    state: directory
+    owner: mongod
+    group: mongod
   become: yes
   become_user: root
 
 - name: Start Automation Agent, and enable start on boot
   service:
-    name=mongodb-mms-automation-agent
-    state=restarted
-    enabled=yes
+    name: mongodb-mms-automation-agent
+    state: restarted
+    enabled: yes
   become: yes
   become_user: root
