@@ -17,9 +17,11 @@ dns_private_zone: No
 customer: vanilla
 customer_account_id: 748109554602
 staffDiscount_bucketName: FAKE_VALUE
-automation_agent_pkg: https://cloud.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager-3.4.1.1996-1.x86_64.rpm
 ssl_secret_files:
   bob: barker
 
 ami_target_region: us-east-1
 ami_temp_vpc_subnet_public:
+
+## MongoDB CM
+automation_agent_pkg: https://cloud.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager-3.4.1.1996-1.x86_64.rpm

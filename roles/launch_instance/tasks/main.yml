@@ -3,12 +3,12 @@
     assign_public_ip: yes
     region: "{{ region }}"
     key_name: "{{ key }}"
-    group_id: "{{ group_id }}"
-    instance_type: "{{ instance_type_single }}"
+    group_id: "{{ security_group_ids }}"
+    instance_type: "{{ instance_type }}"
     vpc_subnet_id: "{{ vpc_subnet_id }}"
     image: "{{ image_id }}"
     instance_profile_name: "{{ IAMROLE }}"
-    user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
+    #user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
     termination_protection: yes
     wait: yes
     wait_timeout: 500
@@ -19,17 +19,36 @@
     exact_count: 1
     count_tag:
       Name: "{{ deploy_type }}.{{ dns_domain }}"
-      role: webapp
+      role: "{{ role }}"
       environment: "{{ deploy_type }}"
     instance_tags:
       Name: "{{ deploy_type }}.{{ dns_domain }}"
-      role: webapp
+      role: "{{ role }}"
       environment: "{{ deploy_type }}"
   register: ami_instance
 
 - name: Display AMI Instance Details
   debug:
     msg="{{ami_instance}}"
+
+- name: Set IP fact (public).
+  set_fact:
+    ssh_ip_public: "{{ ami_instance.tagged_instances.0.public_ip }}"
+    ssh_ip_private: "{{ ami_instance.tagged_instances.0.private_ip }}"
+    ssh_dns_public: "{{ ami_instance.tagged_instances.0.public_dns_name }}"
+  when: use_public_ip and role == "mongodb"
+
+- name: wait for ssh to come up
+  wait_for: host={{ ssh_ip_public }} delay=30 port=22 state=started timeout=640
+  with_items: ami_instance.instances
+
+- name: Add host to group just_baked
+  add_host:
+    name: "{{ ssh_ip_public }}"
+    groups: just_baked
+    ip_private: "{{ ssh_ip_private }}"
+    dns_name: "{{ ssh_dns_public }}"
+  when: role == "mongodb"
 
 - name: Add or Update Route53 entry
   route53:

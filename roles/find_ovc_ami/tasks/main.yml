@@ -6,7 +6,7 @@
     region: "{{ ami_region }}"
     sort_end: 1
   register: al_ami_find
-  when: customer == 'vanilla'
+  when: customer == 'vanilla' and role != 'mongodb'
 
 - set_fact:
     _ami_customer: "{{ force_ami_customer }}"
@@ -63,9 +63,40 @@
   register: ovc_ami_find_sha
   when: customer != 'vanilla' and find_ami_sha is defined
 
+- name: Finding latest Mongo CM ami
+  ec2_ami_find:
+    name: "mongo-mms-*"
+    sort: name
+    sort_order: descending
+    region: "{{ ami_region }}"
+    sort_end: 1
+    owner: "{{ ami_owner }}"
+    no_result_action: fail
+    ami_tags:
+      customer: "{{ _ami_customer }}"
+      release: "{{ ami_release }}"
+  register: ovc_ami_find
+  when: role == 'mongodb' and find_ami_branch is undefined
+
+- name: Finding latest Mongo CM ami with branch
+  ec2_ami_find:
+    name: "mongo-mms-*"
+    sort: name
+    sort_order: descending
+    region: "{{ ami_region }}"
+    sort_end: 1
+    owner: "{{ ami_owner }}"
+    no_result_action: fail
+    ami_tags:
+      customer: "{{ _ami_customer }}"
+      release: "{{ ami_release }}"
+      git_branch: "{{ find_ami_branch }}"
+  register: ovc_ami_find_branch
+  when: role == 'mongodb' and find_ami_branch is defined
+
 - set_fact:
     ami_find: "{{ al_ami_find }}"
-  when: customer == 'vanilla'
+  when: customer == 'vanilla' and role != 'mongodb'
 
 - set_fact:
     ami_find: "{{ ovc_ami_find }}"
@@ -73,6 +104,10 @@
 
 - name: Setting AMI ID to AMI ID found with git branch
   set_fact:
+    ami_find: "{{ ovc_ami_find }}"
+  when: role == 'mongodb' and find_ami_branch is undefined
+
+- set_fact:
     ami_find: "{{ ovc_ami_find_branch }}"
   when: customer != 'vanilla' and find_ami_branch is defined
 
