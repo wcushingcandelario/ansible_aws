@@ -1,4 +1,26 @@
 ---
-- include: find_mongo_ami.yml
 
-- include: launch_mongo_ami.yml
+- name: Copy api keys
+  include_vars: "api_keys.yml"
+  #no_log: true
+
+- name: copy out configs
+  template:
+    src: automation-agent.config.j2
+    dest: /etc/mongodb-mms/automation-agent.config
+
+- name: Overwriting host file from template
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+
+- name: Setting hostname for /etc/sysconfig/network
+  template:
+    src: network.j2
+    dest: /etc/sysconfig/network
+
+- name: Restart server
+  command: /sbin/shutdown -r +1
+  async: 0
+  poll: 0
+  ignore_errors: true

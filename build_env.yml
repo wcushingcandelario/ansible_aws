@@ -44,14 +44,6 @@
     - tagged
     - inventory_manager
 
-- name: Build Mongo CM environment
-  connection: local
-  hosts: localhost
-  roles:
-    - mongodb_cm
-  tags:
-    - mongodb_cm
-
 - name: Find AMI ID
   hosts: localhost
   connection: local
@@ -61,6 +53,7 @@
     - asg
     - find_ovc_ami
     - launch_ami
+    - mongodb_cm
 
 - name: Add AMI ID to facts
   hosts: localhost
@@ -78,6 +71,7 @@
     - asg
     - find_ovc_ami
     - launch_ami
+    - mongodb_cm
 
 - hosts: localhost
   connection: local
@@ -95,8 +89,20 @@
   connection: local
   roles:
     - { role: launch_instance, when: not clustered_environment }
+    - { role: launch_instance, when: role == 'mongodb'}
   tags:
     - launch_ami
+    - mongodb_cm
+
+- hosts: just_baked
+  remote_user: ec2-user
+  become: yes
+  become_user: root
+  gather_facts: true
+  roles:
+    - mongodb_cm
+  tags:
+    - mongodb_cm
 
 - name: Create ELB and ASG
   hosts: localhost
