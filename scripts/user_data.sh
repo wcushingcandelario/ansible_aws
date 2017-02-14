@@ -73,3 +73,6 @@ sudo /sbin/service httpd restart
 aws s3 cp s3://ovc-userdata-scripts/${ENV}/auto-userdata.sh auto-userdata.sh
 chmod +x auto-userdata.sh
 source auto-userdata.sh
+
+#Sets app name for newrelic
+sed 's/UNDEFINED/$ENV/g' /opt/jetty/newrelic-java/newrelic.yml > /opt/jetty/newrelic-java/newrelic.yml
