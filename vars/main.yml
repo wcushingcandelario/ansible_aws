@@ -1,1 +1,4 @@
 ami_role: ami_builder
+
+## MongoDB CM
+automation_agent_pkg: https://cloud.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager-3.4.1.1996-1.x86_64.rpm

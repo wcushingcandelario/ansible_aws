@@ -172,6 +172,7 @@ the CircleCI-like AMIs. You will need to declair or replace the variables:
 ```
 ansible-playbook build-new-ami.yml \
   -e @vars/tp.yml \
+  -e @vars/tp.yml.encrypted \
   -e "ovc_version=${RD_OPTION_OVC_VERSION} tp_extension_version=${RD_OPTION_EXT_VERSION}" \
   -e "s3_bucket_customer=${RD_OPTION_S3_BUCKET_CUSTOMER}" \
   -e "s3_full_zip_prefix=${RD_OPTION_S3_FULL_ZIP_PREFIX}" \

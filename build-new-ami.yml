@@ -45,22 +45,28 @@
   become: yes
   become_user: root
   roles:
+    # Basics for all AMIs and the Vanilla stuff for MPOS AMIs
     - { role: common, when: customer == 'vanilla' and ami_role == 'ami_builder' }
     - { role: jetty, when: customer == 'vanilla' and ami_role == 'ami_builder' }
     - { role: oneview, when: customer == 'vanilla' and ami_role == 'ami_builder' }
 
+    # Mongo AMI
+    - { role: mongo_cm_ami, when: ami_role == 'mongo_ami' }
+
+    # Custom JAR and data files
     - { role: install_customizations_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
     - { role: install_customizations_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
 #    - { role: install_customizations_mb, when: customer == 'mb' }
     - { role: install_customizations_Gstar, when: customer == 'gs' and ami_role == 'ami_builder' }
 #    - { role: install_customizations_demo, when: customer == 'ovc' }
 
+    # Extras tjat meed to be done after the custom JARS/data
     - { role: ricbra.logentries, when: customer == 'vanilla' and ami_role == 'ami_builder' }
-    - { role: ami_mongo_cm, when: ami_role == 'mongo_ami' }
     - { role: nginx_proxy, when: customer == 'vanilla' and ami_role == 'ami_builder' }
     - { role: newrelic_infrastructure, when: customer == 'vanilla' and ami_role == 'ami_builder' }
     - { role: newrelic_infrastructure, when: customer == 'tp' and ami_role == 'ami_builder' }
 
+    # DevOps customisations specific to a customer (SSL certs, configs, etc.)
 #    - { role: install_devops_dt, when: customer == 'dt' }
     - { role: install_devops_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
     - { role: install_devops_mb, when: customer == 'mb' and ami_role == 'ami_builder' }

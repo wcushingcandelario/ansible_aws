@@ -63,7 +63,7 @@
 - name: Configure Mongo Cloud Manager environment
   hosts: mongo_hosts
   roles:
-    - mongodb_cm
+    - mongo_cm_configure
   tags:
     - mongodb_cm
 

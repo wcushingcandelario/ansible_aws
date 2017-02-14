@@ -10,14 +10,6 @@
     name: /tmp/automation-agent.rpm
     state: present
 
-- name: Copy automation config
-  template:
-     src: automation-agent.config.j2
-     dest: "{{ automation_agent_config }}"
-     owner: mongod
-     group: mongod
-     mode: 0755
-
 - name: Create /data directory
   file:
     path: /data
@@ -28,10 +20,10 @@
   become: yes
   become_user: root
 
-- name: Start Automation Agent, and enable start on boot
+- name: Stop and disable agent until configured
   service:
     name: mongodb-mms-automation-agent
-    state: restarted
-    enabled: yes
+    state: stopped
+    enabled: no
   become: yes
   become_user: root
