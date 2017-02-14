@@ -26,17 +26,6 @@
     chdir="{{newrelic_dir}}"
     creates="{{newrelic_dir}}"/newrelic.jar
 
-- name: get the instance ID
-  shell: curl -s http://169.254.169.254/latest/meta-data/instance-id
-  register: INSTANCE_ID
-
-- name: get the instances environment tag
-  shell: aws ec2 describe-tags --region=eu-west-1 --filters "Name=resource-id,Values={{INSTANCE_ID.stdout}}" "Name=key,Values=environment" --output=text | cut -f5
-  register: env_tag
-
-- set_fact: 
-    newrelic_app_name: "{{ env_tag.stdout }}"
-
 - name: configures newrelic.yml
   template:
     src="newrelic.yml.j2"
