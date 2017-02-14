@@ -43,4 +43,3 @@ pe_monitor: yes
 #security_group_ids: "sg-b12180d6,sg-12e5a275,sg-655eff02"
 #elb_security_group_id: sg-12e5a275
 #elbsubnets: "subnet-0abd536e,subnet-10948367"
-

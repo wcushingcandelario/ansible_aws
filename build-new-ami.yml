@@ -23,15 +23,14 @@
   gather_facts: False
   roles:
     - { role: find_ovc_ami, force_ami_customer: 'ovc' }
-    - {role: ami_baker_pre, when: ami_role != 'mongo_ami'}
-    - {role: ami_baker_pre, instance_type: t2.small, when: ami_role == 'mongo_ami'}
+    - ami_baker_pre
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     ami_region: "{{ ami_baker_region }}"
     key: "{{ key }}"
     ovc_security_groups: "{{ ami_baker_ovc_security_groups }}"
     vpc_subnet_public: "{{ ami_baker_vpc_subnet_public }}"
-    instance_type: m4.large
+    instance_type: t2.small
     jetty_user_login: jetty
     jetty_dir: /opt/jetty
     ovc_server_user_dir: /opt/ovc
@@ -46,27 +45,27 @@
   become: yes
   become_user: root
   roles:
-    - { role: common, when: customer == 'vanilla' and ami_role is not defined }
-    - { role: jetty, when: customer == 'vanilla' and ami_role is not defined }
-    - { role: oneview, when: customer == 'vanilla' and ami_role is not defined }
+    - { role: common, when: customer == 'vanilla' and ami_role == 'ami_builder' }
+    - { role: jetty, when: customer == 'vanilla' and ami_role == 'ami_builder' }
+    - { role: oneview, when: customer == 'vanilla' and ami_role == 'ami_builder' }
 
-    - { role: install_customizations_dt, when: customer == 'dt' and ami_role is not defined }
-    - { role: install_customizations_tp, when: customer == 'tp' and ami_role is not defined }
+    - { role: install_customizations_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
+    - { role: install_customizations_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
 #    - { role: install_customizations_mb, when: customer == 'mb' }
-    - { role: install_customizations_Gstar, when: customer == 'gs' and ami_role is not defined }
+    - { role: install_customizations_Gstar, when: customer == 'gs' and ami_role == 'ami_builder' }
 #    - { role: install_customizations_demo, when: customer == 'ovc' }
 
-    - { role: ricbra.logentries, when: customer == 'vanilla' and ami_role is not defined }
-    - { role: ami_mongo_cm, when: ami_role is defined }
-    - { role: nginx_proxy, when: customer == 'vanilla' and ami_role is not defined }
-    - { role: newrelic_infrastructure, when: customer == 'vanilla' and ami_role is not defined }
-    - { role: newrelic_infrastructure, when: customer == 'tp' and ami_role is not defined }
+    - { role: ricbra.logentries, when: customer == 'vanilla' and ami_role == 'ami_builder' }
+    - { role: ami_mongo_cm, when: ami_role == 'mongo_ami' }
+    - { role: nginx_proxy, when: customer == 'vanilla' and ami_role == 'ami_builder' }
+    - { role: newrelic_infrastructure, when: customer == 'vanilla' and ami_role == 'ami_builder' }
+    - { role: newrelic_infrastructure, when: customer == 'tp' and ami_role == 'ami_builder' }
 
 #    - { role: install_devops_dt, when: customer == 'dt' }
-    - { role: install_devops_tp, when: customer == 'tp' and ami_role is not defined }
-    - { role: install_devops_mb, when: customer == 'mb' and ami_role is not defined }
+    - { role: install_devops_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
+    - { role: install_devops_mb, when: customer == 'mb' and ami_role == 'ami_builder' }
 #    - { role: install_devops_gstar, when: customer == 'gs' }
-    - { role: install_devops_demo, when: customer == 'ovc' and ami_role is not defined }
+    - { role: install_devops_demo, when: customer == 'ovc' and ami_role == 'ami_builder' }
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     region: "{{ ami_baker_region }}"
@@ -107,7 +106,7 @@
   become: yes
   become_user: root
   roles:
-    - { role: install_devops_demo, when: ami_role is not defined }
+    - { role: install_devops_demo, when: ami_role == 'ami_builder' }
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     region: "{{ ami_baker_region }}"
@@ -127,4 +126,4 @@
 - hosts: localhost
   connection: local
   roles:
-    - { role: install_devops_demo, when: ami_role is not defined }
+    - { role: install_devops_demo, when: ami_role == 'ami_builder' }

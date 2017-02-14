@@ -3,7 +3,7 @@
     assign_public_ip: yes
     region: "{{ region }}"
     key_name: "{{ key }}"
-    group_id: "{{ security_group_ids }}"
+    group_id: "{{ group_id }}"
     instance_type: "{{ instance_type }}"
     vpc_subnet_id: "{{ vpc_subnet_id }}"
     image: "{{ image_id }}"
@@ -16,16 +16,23 @@
       - device_name: /dev/xvda
         volume_size: 100
 #        encrypted: "{{ encrypt_instance }}"
-    exact_count: 1
+    exact_count: "{{ launch_exact_count }}"
     count_tag:
-      Name: "{{ deploy_type }}.{{ dns_domain }}"
-      role: "{{ role }}"
+      Name: "{{ launch_tag_name }}"
+      role: "{{ launch_tag_role }}"
       environment: "{{ deploy_type }}"
     instance_tags:
-      Name: "{{ deploy_type }}.{{ dns_domain }}"
-      role: "{{ role }}"
+      Name: "{{ launch_tag_name }}"
+      role: "{{ launch_tag_role }}"
       environment: "{{ deploy_type }}"
   register: ami_instance
+
+- name: Add host to group just_created
+  add_host:
+    name: item.private_ip
+    groups: mongo_hosts
+  with_items: ami_instances.tagged_instances
+  when: ami_instance.tagged_instances is defined and launch_tag_role == 'mongo'
 
 - name: Display AMI Instance Details
   debug:
@@ -61,6 +68,6 @@
     ttl: 300
     value: "{{ ami_instance.tagged_instances[0].private_ip }}"
     overwrite: "yes"
-  when: ami_instance.tagged_instances is defined
+  when: ami_instance.tagged_instances is defined and launch_tag_role == 'webapp'
   tags:
     - dns

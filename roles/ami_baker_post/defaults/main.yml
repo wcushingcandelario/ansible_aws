@@ -1,4 +1,4 @@
 ami_customer: ovc
 ami_release: alpha
-ovc_git_sha: unknown
-ovc_circle_branch: unknown
+ovc_git_sha: unset
+ovc_circle_branch: unset

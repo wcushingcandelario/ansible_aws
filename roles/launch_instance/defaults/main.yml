@@ -1,2 +1,4 @@
 encrypt_instance: yes
-role: webapp
+launch_exact_count: 1
+launch_tag_role: webapp
+launch_tag_name: "{{ deploy_type }}.{{ dns_domain }}"

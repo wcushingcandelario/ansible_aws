@@ -1,11 +1,10 @@
 - set_fact:
-    ami_temp_name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}-temp"
     ami_name: "ovc-{{ ovc_version }}-{{ ansible_date_time.epoch }}"
-  when: ami_role is undefined
+  when: ami_role == 'ami_builder'
+
 - set_fact:
-    ami_temp_name: "mongo-mms-{{ ansible_date_time.epoch }}-temp"
     ami_name: "mongo-mms-{{ ansible_date_time.epoch }}"
-  when: ami_role is defined
+  when: ami_role == 'mongo_ami'
 
 - name: Bundle AMI
   local_action:

@@ -29,7 +29,7 @@
       customer: "{{ _ami_customer }}"
       release: "{{ ami_release }}"
   register: ovc_ami_find
-  when: customer != 'vanilla' and find_ami_branch is undefined
+  when: customer != 'vanilla' and find_ami_branch is undefined and ami_role == 'ami_builder'
 
 - name: Finding latest OVC customised Amazon Linux ami with a branch
   ec2_ami_find:
@@ -45,7 +45,7 @@
       release: "{{ ami_release }}"
       git_branch: "{{ find_ami_branch }}"
   register: ovc_ami_find_branch
-  when: customer != 'vanilla' and find_ami_branch is defined
+  when: customer != 'vanilla' and find_ami_branch is defined and ami_role == 'ami_builder'
 
 - name: Finding latest OVC customised Amazon Linux AMI with a git SHA
   ec2_ami_find:
@@ -63,7 +63,7 @@
   register: ovc_ami_find_sha
   when: customer != 'vanilla' and find_ami_sha is defined
 
-- name: Finding latest Mongo CM ami
+- name: Finding latest OVC customised Amazon Linux AMI with Mongo Cloud Manager
   ec2_ami_find:
     name: "mongo-mms-*"
     sort: name
@@ -72,27 +72,8 @@
     sort_end: 1
     owner: "{{ ami_owner }}"
     no_result_action: fail
-    ami_tags:
-      customer: "{{ _ami_customer }}"
-      release: "{{ ami_release }}"
-  register: ovc_ami_find
-  when: role == 'mongodb' and find_ami_branch is undefined
-
-- name: Finding latest Mongo CM ami with branch
-  ec2_ami_find:
-    name: "mongo-mms-*"
-    sort: name
-    sort_order: descending
-    region: "{{ ami_region }}"
-    sort_end: 1
-    owner: "{{ ami_owner }}"
-    no_result_action: fail
-    ami_tags:
-      customer: "{{ _ami_customer }}"
-      release: "{{ ami_release }}"
-      git_branch: "{{ find_ami_branch }}"
-  register: ovc_ami_find_branch
-  when: role == 'mongodb' and find_ami_branch is defined
+  register: ovc_ami_find_mongo
+  when: customer != 'vanilla' and ami_role == 'mongo_ami'
 
 - set_fact:
     ami_find: "{{ al_ami_find }}"
@@ -115,6 +96,11 @@
   set_fact:
     ami_find: "{{ ovc_ami_find_sha }}"
   when: customer != 'vanilla' and find_ami_sha is defined
+
+- name: Set fact to Mongo AMI
+  set_fact:
+    ami_find: "{{ ovc_ami_find_mongo }}"
+  when: customer != 'vanilla' and ami_role == 'mongo_ami'
 
 - name: AMI ID found
   debug: "var=ami_find.results"

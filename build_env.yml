@@ -44,6 +44,30 @@
     - tagged
     - inventory_manager
 
+- name: Launch Mongo Cloud Manager environment
+  connection: local
+  hosts: localhost
+  roles:
+    - find_ovc_ami
+    - launch_instance
+  vars:
+    instance_type: ""{{ instance_type_mongo }}
+    ami_role: 'mongo_ami'
+    ami_region: "{{ region }}"
+    launch_exact_count: "{{ mongo_instance_count }}"
+    launch_tag_role: 'mongo'
+    launch_tag_name: "mongo-{{ deploy_type }}.{{ dns_domain }}"
+  tags:
+    - mongodb_cm
+
+- name: Configure Mongo Cloud Manager environment
+  hosts: mongo_hosts
+  roles:
+    - mongodb_cm
+  tags:
+    - mongodb_cm
+
+
 - name: Find AMI ID
   hosts: localhost
   connection: local
@@ -89,7 +113,8 @@
   connection: local
   roles:
     - { role: launch_instance, when: not clustered_environment }
-    - { role: launch_instance, when: role == 'mongodb'}
+  vars:
+    instance_type: ""{{ instance_type_single }}
   tags:
     - launch_ami
     - mongodb_cm
