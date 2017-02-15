@@ -20,6 +20,17 @@
   become: yes
   become_user: root
 
+- name: Set /etc/mongodb-mms to mongod
+  file:
+    path: /etc/mongodb-mms
+    mode: 0755
+    state: directory
+    owner: mongod
+    group: mongod
+  become: yes
+  become_user: root
+
+
 - name: Stop and disable agent until configured
   service:
     name: mongodb-mms-automation-agent
