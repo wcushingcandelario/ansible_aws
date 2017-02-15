@@ -44,14 +44,13 @@
     - tagged
     - inventory_manager
 
-- name: Launch Mongo Cloud Manager environment
+- name: Find Mongo CM AMI
   connection: local
   hosts: localhost
   roles:
     - find_ovc_ami
-    - launch_instance
   vars:
-    instance_type: ""{{ instance_type_mongo }}
+    instance_type: "{{ instance_type_mongo }}"
     ami_role: 'mongo_ami'
     ami_region: "{{ region }}"
     launch_exact_count: "{{ mongo_instance_count }}"
@@ -60,8 +59,34 @@
   tags:
     - mongodb_cm
 
-- name: Configure Mongo Cloud Manager environment
-  hosts: mongo_hosts
+- name: Add Mongo AMI ID to facts
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: "{{ ami_find.results[0].ami_id }}"
+  tags:
+    - mongodb_cm
+
+- name: Launch then apply Mongo CM configurations
+  connection: local
+  hosts: localhost
+  roles:
+    - launch_instance
+  vars:
+    instance_type: "{{ instance_type_mongo }}"
+    ami_role: 'mongo_ami'
+    ami_region: "{{ region }}"
+    launch_exact_count: "{{ mongo_instance_count }}"
+    launch_tag_role: 'mongo'
+    launch_tag_name: "mongo-{{ deploy_type }}.{{ dns_domain }}"
+  tags:
+    - mongodb_cm
+
+- hosts: mongo_hosts
+  remote_user: ec2-user
+  gather_facts: False
   roles:
     - mongo_cm_configure
   tags:
@@ -77,7 +102,7 @@
     - asg
     - find_ovc_ami
     - launch_ami
-    - mongodb_cm
+
 
 - name: Add AMI ID to facts
   hosts: localhost
@@ -95,7 +120,7 @@
     - asg
     - find_ovc_ami
     - launch_ami
-    - mongodb_cm
+
 
 - hosts: localhost
   connection: local
@@ -114,20 +139,10 @@
   roles:
     - { role: launch_instance, when: not clustered_environment }
   vars:
-    instance_type: ""{{ instance_type_single }}
+    instance_type: "{{ instance_type_single }}"
   tags:
     - launch_ami
-    - mongodb_cm
 
-- hosts: just_baked
-  remote_user: ec2-user
-  become: yes
-  become_user: root
-  gather_facts: true
-  roles:
-    - mongodb_cm
-  tags:
-    - mongodb_cm
 
 - name: Create ELB and ASG
   hosts: localhost

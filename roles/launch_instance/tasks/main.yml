@@ -3,12 +3,13 @@
     assign_public_ip: yes
     region: "{{ region }}"
     key_name: "{{ key }}"
-    group_id: "{{ group_id }}"
+    group_id: "{{ mongo_security_group }}"
     instance_type: "{{ instance_type }}"
-    vpc_subnet_id: "{{ vpc_subnet_id }}"
+    #vpc_subnet_id: "{{ vpc_subnet_id }}"
+    vpc_subnet_id: " {{ mongo_subnet_id }}"
     image: "{{ image_id }}"
     instance_profile_name: "{{ IAMROLE }}"
-    #user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
+    user_data: "{{ lookup('file', 'scripts/user_data_mongo.sh') }}"
     termination_protection: yes
     wait: yes
     wait_timeout: 500
@@ -27,12 +28,20 @@
       environment: "{{ deploy_type }}"
   register: ami_instance
 
-- name: Add host to group just_created
+- name: Set Mongo IP fact (public)
+  set_fact:
+    mongo_ip_public: "{{ ami_instance.tagged_instances.0.public_ip }}"
+  when: launch_tag_role == 'mongo'
+
+- name: Add host to group mongo_hosts
   add_host:
-    name: item.private_ip
+    name: "{{ mongo_ip_public }}"
     groups: mongo_hosts
-  with_items: ami_instances.tagged_instances
   when: ami_instance.tagged_instances is defined and launch_tag_role == 'mongo'
+
+- name: wait for ssh to come up on mongo host
+  wait_for: host={{ mongo_ip_public }} delay=30 port=22 state=started timeout=640
+  with_items: ami_instance.tagged_instances
 
 - name: Display AMI Instance Details
   debug:
@@ -41,21 +50,12 @@
 - name: Set IP fact (public).
   set_fact:
     ssh_ip_public: "{{ ami_instance.tagged_instances.0.public_ip }}"
-    ssh_ip_private: "{{ ami_instance.tagged_instances.0.private_ip }}"
-    ssh_dns_public: "{{ ami_instance.tagged_instances.0.public_dns_name }}"
-  when: use_public_ip and role == "mongodb"
+  when: use_public_ip and launch_tag_role != 'mongo'
 
 - name: wait for ssh to come up
   wait_for: host={{ ssh_ip_public }} delay=30 port=22 state=started timeout=640
   with_items: ami_instance.instances
-
-- name: Add host to group just_baked
-  add_host:
-    name: "{{ ssh_ip_public }}"
-    groups: just_baked
-    ip_private: "{{ ssh_ip_private }}"
-    dns_name: "{{ ssh_dns_public }}"
-  when: role == "mongodb"
+  when: launch_tag_role != 'mongo'
 
 - name: Add or Update Route53 entry
   route53:
