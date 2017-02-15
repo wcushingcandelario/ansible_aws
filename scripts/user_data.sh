@@ -75,4 +75,4 @@ chmod +x auto-userdata.sh
 source auto-userdata.sh
 
 #Sets app name for newrelic
-sed 's/UNDEFINED/$ENV/g' /opt/jetty/newrelic-java/newrelic.yml > /opt/jetty/newrelic-java/newrelic.yml
+sed -i "s/UNDEFINED/${ENV}/g" /opt/jetty/newrelic-java/newrelic.yml
