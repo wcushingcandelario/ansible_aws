@@ -81,6 +81,9 @@
     launch_exact_count: "{{ mongo_instance_count }}"
     launch_tag_role: 'mongo'
     launch_tag_name: "mongo-{{ deploy_type }}.{{ dns_domain }}"
+    _security_group: "{{ mongo_security_group }}"
+    _subnet_id: "{{ mongo_subnet_id }}"
+    _user_data: "{{ lookup('file', 'scripts/user_data_mongo.sh') }}"
   tags:
     - mongodb_cm
 
@@ -140,6 +143,9 @@
     - { role: launch_instance, when: not clustered_environment }
   vars:
     instance_type: "{{ instance_type_single }}"
+    _security_group: "{{ group_id }}"
+    _subnet_id: "{{ vpc_subnet_id }}"
+    _user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
   tags:
     - launch_ami
 

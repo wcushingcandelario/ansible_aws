@@ -132,4 +132,14 @@
 - hosts: localhost
   connection: local
   roles:
-    - { role: install_devops_demo, when: ami_role == 'ami_builder' }
+    - { role: bundle_demo_ami, when: ami_role == 'ami_builder' }
+  tasks:
+    - name: terminate temporary instance
+      local_action:
+        module: ec2
+        state: absent
+        region: "{{ region }}"
+        instance_ids: "{{ just_created_instance_id }}"
+      when: ami_role == 'mongo_ami'
+      tags:
+        - terminate_ami

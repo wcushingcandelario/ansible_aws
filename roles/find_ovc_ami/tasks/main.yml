@@ -100,7 +100,7 @@
 - name: Setting AMI ID to Mongo AMI
   set_fact:
     ami_find: "{{ ovc_ami_find_mongo }}"
-  when: ami_role == 'mongo_ami'
+  when: customer != 'vanilla' and ami_role == 'mongo_ami'
 
 - name: AMI ID found
   debug: "var=ami_find.results"
