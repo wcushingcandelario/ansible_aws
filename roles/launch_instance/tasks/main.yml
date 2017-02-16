@@ -41,7 +41,6 @@
 
 - name: wait for ssh to come up on mongo host
   wait_for: host={{ mongo_ip_public }} delay=30 port=22 state=started timeout=640
-  with_items: ami_instance.tagged_instances
 
 - name: Display AMI Instance Details
   debug:
