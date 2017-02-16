@@ -6,7 +6,7 @@
     region: "{{ ami_region }}"
     sort_end: 1
   register: al_ami_find
-  when: customer == 'vanilla' and ami_role != 'mongo_ami'
+  when: customer == 'vanilla'
 
 - set_fact:
     _ami_customer: "{{ force_ami_customer }}"
@@ -77,7 +77,7 @@
 
 - set_fact:
     ami_find: "{{ al_ami_find }}"
-  when: customer == 'vanilla' and ami_role != 'mongo_ami'
+  when: customer == 'vanilla'
 
 - set_fact:
     ami_find: "{{ ovc_ami_find }}"
@@ -90,12 +90,12 @@
 
 - set_fact:
     ami_find: "{{ ovc_ami_find_branch }}"
-  when: customer != 'vanilla' and find_ami_branch is defined and ami_role != 'mongo_ami'
+  when: customer != 'vanilla' and find_ami_branch is defined
 
 - name: Setting AMI ID to AMI ID found with git SHA (overrides branch!)
   set_fact:
     ami_find: "{{ ovc_ami_find_sha }}"
-  when: customer != 'vanilla' and find_ami_sha is defined and ami_role != 'mongo_ami'
+  when: customer != 'vanilla' and find_ami_sha is defined
 
 - name: Setting AMI ID to Mongo AMI
   set_fact:
