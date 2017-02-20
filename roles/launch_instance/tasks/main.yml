@@ -28,19 +28,21 @@
       environment: "{{ deploy_type }}"
   register: ami_instance
 
+- debug: var=ami_instance.tagged_instances.0
+
 - name: Add host to group mongo_hosts (Public IPs)
   add_host:
     name: "{{ item.public_ip }}"
     groups: mongo_hosts
   when: ami_instance.tagged_instances is defined and launch_tag_role == 'mongo' and use_public_ip
-  with_items: ami_instance.tagged_instances
+  with_items: "{{ ami_instance.tagged_instances }}"
 
 - name: Add host to group mongo_hosts (Private IPs)
   add_host:
     name: "{{ item.private_ip }}"
     groups: mongo_hosts
   when: ami_instance.tagged_instances is defined and launch_tag_role == 'mongo' and not use_public_ip
-  with_items: ami_instance.tagged_instances
+  with_items: "{{ ami_instance.tagged_instances }}"
 
 
 - name: Wait for SSH to come up on launched hosts (Public IPs)
@@ -50,7 +52,7 @@
     port: 22
     state: started
     timeout: 640
-  with_items: ami_instance.tagged_instances
+  with_items: "{{ ami_instance.tagged_instances }}"
   when: ami_instance.tagged_instances is defined and use_public_ip
 
 - name: Wait for SSH to come up on launched hosts (Private IPs)
