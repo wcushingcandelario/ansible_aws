@@ -14,7 +14,7 @@ multirdszone: no
 
 
 # AMI/ELB/ASG
-ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389,
+ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
 vpc_subnet_public: subnet-9f8a92b7
 vpc_subnet_id: "{{ vpc_subnet_public }}"
 IAMROLE: S3_Release_Read
