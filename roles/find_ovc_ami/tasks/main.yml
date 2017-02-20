@@ -59,7 +59,7 @@
     ami_tags:
       customer: "{{ _ami_customer }}"
       release: "{{ ami_release }}"
-      git_branch: "{{ find_ami_sha }}"
+      git_sha: "{{ find_ami_sha }}"
   register: ovc_ami_find_sha
   when: customer != 'vanilla' and find_ami_sha is defined
 
