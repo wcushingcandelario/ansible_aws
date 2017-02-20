@@ -65,10 +65,6 @@
   with_items: ami_instance.tagged_instances
   when: ami_instance.tagged_instances is defined and not use_public_ip
 
-- name: wait for ssh to come up on mongo host
-  wait_for: host={{ item.public_ip }} delay=30 port=22 state=started timeout=640
-  with_items: ami_instance.tagged_instances
-
 - name: Display AMI Instance Details
   debug:
     msg="{{ami_instance}}"
