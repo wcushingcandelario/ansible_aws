@@ -16,7 +16,7 @@ multirdszone: no
 ovc_security_groups: ['sg-71bc1f16']
 vpc_subnet_public: subnet-0a75a06e
 IAMROLE: "NonProdAppServer"
-instance_type_asg: "m4.xlarge"
+instance_type_asg: "t2.xlarge"
 min_size: 2
 max_size: 5
 

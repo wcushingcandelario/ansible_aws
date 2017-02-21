@@ -16,7 +16,7 @@ multirdszone: yes
 ovc_security_groups: ['sg-b12180d6']
 vpc_subnet_public: subnet-1d719879
 IAMROLE: "ProdAppServer"
-instance_type_asg: "m4.xlarge"
+instance_type_asg: "t2.xlarge"
 
 security_group_ids: "sg-12e5a275,sg-655eff02,sg-b12180d6"
 elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
@@ -43,4 +43,3 @@ pe_monitor: yes
 #security_group_ids: "sg-b12180d6,sg-12e5a275,sg-655eff02"
 #elb_security_group_id: sg-12e5a275
 #elbsubnets: "subnet-0abd536e,subnet-10948367"
-
