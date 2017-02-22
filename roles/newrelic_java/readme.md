@@ -5,7 +5,7 @@ This role installs the NewRelic Java Agent only.
 * newrelic_license_key - Your license key as provided by NewRelic.  This should be encrypted in `/vars/newrelic_license.yml`
 * newrelic_version - The version of newrelic being run. (3.35.2)
 * jetty_dir - The directory that jetty is installed in. (/opt/jetty)
-* s3_bucket - 
+* s3_bucket - Where to download the newrelic package
 
 #### Tags
 
