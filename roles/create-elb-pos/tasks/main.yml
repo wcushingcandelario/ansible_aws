@@ -56,3 +56,5 @@
     value: "{{ elb_facts.elbs.0.dns_name }}"
     overwrite: yes
   when: elb_facts.elbs is defined
+  tags:
+    - dns
