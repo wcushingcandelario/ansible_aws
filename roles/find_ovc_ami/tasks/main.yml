@@ -47,7 +47,7 @@
   register: ovc_ami_find_branch
   when: customer != 'vanilla' and find_ami_branch is defined
 
-- name: Finding latest OVC customised Amazon Linux AMI with a git SHA
+- name: Finding latest OVC customised Amazon Linux AMI with a git SHA (reties for four minutes for the build system)
   ec2_ami_find:
     name: "ovc-{{ ovc_version }}*"
     sort: name
@@ -60,6 +60,8 @@
       customer: "{{ _ami_customer }}"
       release: "{{ ami_release }}"
       git_sha: "{{ find_ami_sha }}"
+  retry: 24
+  delay: 10
   register: ovc_ami_find_sha
   when: customer != 'vanilla' and find_ami_sha is defined
 
