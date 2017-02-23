@@ -60,9 +60,10 @@
       customer: "{{ _ami_customer }}"
       release: "{{ ami_release }}"
       git_sha: "{{ find_ami_sha }}"
-  retry: 24
-  delay: 10
   register: ovc_ami_find_sha
+  until: ovc_ami_find_sha|success
+  retries: 24
+  delay: 10
   when: customer != 'vanilla' and find_ami_sha is defined
 
 - set_fact:
