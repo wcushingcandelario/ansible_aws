@@ -1,0 +1,130 @@
+- name: Create a single ELB with SSL forward instead of HTTPS
+  local_action:
+    module: ec2_elb_lb
+    name: "{{ deploy_pos }}"
+    state: present
+    region: "{{ region }}"
+    scheme: "{{ elb_scheme }}"
+    connection_draining_timeout: 120
+    idle_timeout: 300
+    subnets: "{{ elbsubnets }}"
+    security_group_ids: "{{ security_group_ids }}"
+    listeners:
+    - protocol: http
+      load_balancer_port: 8080
+      instance_protocol: http
+      instance_port: 8080
+    - protocol: http
+      load_balancer_port: 9080
+      instance_protocol: http
+      instance_port: 9080
+    - protocol: ssl
+      load_balancer_port: 443
+      instance_protocol: ssl
+      instance_port: 443
+      ssl_certificate_id: "{{ ssl_certificate_id }}"
+    stickiness:
+      type: loadbalancer
+      enabled: yes
+      expiration: 300
+    health_check:
+      ping_protocol: tcp # options are http, https, ssl, tcp
+      ping_port: 443
+      ping_path: "/ovcdashboard/login" # not required for tcp or ssl
+      response_timeout: 5 # seconds
+      interval: 30 # seconds
+      unhealthy_threshold: 2
+      healthy_threshold: 10
+  register: elb_new
+
+- name: debug elb create
+  debug: "var=elb_new"
+
+- name: Get ELB details after creation
+  local_action:
+    module: ec2_elb_facts
+    names:
+      - "{{ deploy_pos }}"
+    region: "{{ region }}"
+  register: elb_facts
+
+- name: Add new Route53 entry
+  route53:
+    command: "create"
+    zone: "{{ dns_domain }}"
+    hosted_zone_id: "{{ dns_zone_id }}"
+    private_zone: "{{ dns_private_zone }}"
+    record: "{{ deploy_type }}.{{ dns_domain }}"
+    type: "CNAME"
+    ttl: 300
+    value: "{{ elb_facts.elbs.0.dns_name }}"
+    overwrite: yes
+  when: elb_facts.elbs is defined
+  tags:
+    - dns
+
+- name: Add new Route53 entry
+  route53:
+    command: "create"
+    zone: "{{ dns_domain }}"
+    hosted_zone_id: "{{ dns_zone_id }}"
+    private_zone: "{{ dns_private_zone }}"
+    record: "{{ deploy_type }}-dash.{{ dns_domain }}"
+    type: "CNAME"
+    ttl: 300
+    value: "{{ elb_facts.elbs.0.dns_name }}"
+    overwrite: yes
+  when: elb_facts.elbs is defined
+  tags:
+    - dns
+
+- name: create launch config
+  local_action:
+    module: ec2_lc
+    name: "{{ new_lc_name }}"
+    image_id: "{{ image_id }}"
+    key_name: "{{ key }}"
+    region: "{{ region }}"
+    security_groups: "{{ ovc_security_groups }}"
+    instance_type: "{{ instance_type_asg }}"
+    instance_monitoring: yes
+    assign_public_ip: yes
+    instance_profile_name: "{{ IAMROLE }}"
+    volumes:
+      - device_name: /dev/xvda
+        volume_size: "{{ ec2_volume_size | default(100) }}"
+        encrypted: yes
+# Note
+#    Lookups are executed with a cwd relative to the role or play, as opposed to
+#   local tasks which are executed with the cwd of the executed script.
+# http://docs.ansible.com/ansible/playbooks_lookups.html
+    user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
+  register: debuglaunch
+
+- name: Debug script copy
+  debug: "var=debuglaunch"
+
+
+- name: Create Auto Scaling Group (ASG)
+  local_action:
+    module: ec2_asg
+    name: "{{ asg_name }}"
+    launch_config_name: "{{ new_lc_name }}"
+    vpc_zone_identifier: "{{ elbsubnets }}"
+    load_balancers: "{{ deploy_pos }}"
+    replace_all_instances: yes
+    health_check_type: ELB
+    min_size: "{{ min_size }}"
+    max_size: "{{ max_size }}"
+    desired_capacity: "{{ min_size }}"
+    wait_for_instances: False # Do not wait for deployment, this is development anyway
+    region: "{{ region }}"
+    tags:
+      - Name: "{{ deploy_type }}-{{ ovc_version }}"
+      - monitor: true
+      - environment: "{{ deploy_type }}"
+      - role: webapp
+  register: asglaunch
+
+- name: Debug Auto Scaling update
+  debug: "var=asglaunch"
