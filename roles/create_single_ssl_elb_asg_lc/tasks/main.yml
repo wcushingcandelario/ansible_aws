@@ -32,8 +32,8 @@
       ping_port: 443
       ping_path: "/ovcdashboard/login" # not required for tcp or ssl
       response_timeout: 5 # seconds
-      interval: 30 # seconds
-      unhealthy_threshold: 2
+      interval: 10 # seconds
+      unhealthy_threshold: 6
       healthy_threshold: 10
   register: elb_new
 
@@ -117,7 +117,8 @@
     min_size: "{{ min_size }}"
     max_size: "{{ max_size }}"
     desired_capacity: "{{ min_size }}"
-    wait_for_instances: False # Do not wait for deployment, this is development anyway
+    wait_for_instances: no # Do not wait for deployment, this is development anyway
+    wait_timeout: 1200
     region: "{{ region }}"
     tags:
       - Name: "{{ deploy_type }}-{{ ovc_version }}"
