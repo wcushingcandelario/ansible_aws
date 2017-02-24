@@ -23,7 +23,7 @@ instance_type_asg: "t2.large"
 security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
 elbsubnets: subnet-9f8a92b7
 min_size: 1
-max_size: 2
+max_size: 1
 
 # Promo Engine
 dockerrun_version: "2"

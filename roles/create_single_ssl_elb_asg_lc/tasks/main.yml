@@ -18,6 +18,10 @@
       load_balancer_port: 9080
       instance_protocol: http
       instance_port: 9080
+    - protocol: http
+      load_balancer_port: 80
+      instance_protocol: http
+      instance_port: 80
     - protocol: ssl
       load_balancer_port: 443
       instance_protocol: ssl
@@ -114,9 +118,9 @@
     load_balancers: "{{ deploy_pos }}"
     replace_all_instances: yes
     health_check_type: ELB
-    min_size: "{{ min_size }}"
-    max_size: "{{ max_size }}"
-    desired_capacity: "{{ min_size }}"
+    min_size: 1
+    max_size: 2
+    desired_capacity: 1
     wait_for_instances: no # Do not wait for deployment, this is development anyway
     wait_timeout: 1200
     region: "{{ region }}"
