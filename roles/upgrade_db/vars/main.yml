@@ -1,150 +1,27 @@
 alters_files:
-  - file: alters-350-mysql.sql
-    version: 3.5.0
-  - file: alters-360-mysql.sql
-    version: 3.6.0
-  - file: alters-370-mysql.sql
-    version: 3.7.0
-  - file: alters-371-mysql.sql
-    version: 3.7.1
-  - file: alters-400-mysql.sql
-    version: 3.8.0
-  - file: alters-410-mysql.sql
-    version: 4.1.0
-  - file: alters-411-mysql.sql
-    version: 4.1.1
-  - file: alters-420-mysql.sql
-    version: 4.2.0
-  - file: alters-430-mysql.sql
-    version: 4.3.0
-  - file: alters-440-mysql.sql
-    version: 4.4.0
-  - file: alters-450-mysql.sql
-    version: 4.5.0
-  - file: alters-460-mysql.sql
-    version: 4.6.0
-  - file: alters-470-mysql.sql
-    version: 4.7.0
-  - file: alters-480-mysql.sql
-    version: 4.8.0
-  - file: alters-490-mysql.sql
-    version: 4.9.0
-  - file: alters-4100-mysql.sql
-    version: 4.10.0
-  - file: alters-4110-mysql.sql
-    version: 4.11.0
-  - file: alters-4120-mysql.sql
-    version: 4.12.0
-  - file: alters-500-mysql.sql
-    version: 5.0.0
-  - file: alters-520-mysql.sql
-    version: 5.2.0
-  - file: alters-530-mysql.sql
-    version: 5.3.0
-  - file: alters-531-mysql.sql
-    version: 5.3.1
-  - file: alters-540-mysql.sql
-    version: 5.4.0
-  - file: alters-550-mysql.sql
-    version: 5.5.0
-  - file: alters-551-mysql.sql
-    version: 5.5.1
-  - file: alters-560-mysql.sql
-    version: 5.6.0
-  - file: alters-570-mysql.sql
-    version: 5.7.0
-  - file: alters-571-mysql.sql
-    version: 5.7.1
-  - file: alters-580-mysql.sql
-    version: 5.8.0
-  - file: alters-581-mysql.sql
-    version: 5.8.1
-  - file: alters-590-mysql.sql
-    version: 5.9.0
   - file: alters-5100-mysql.sql
+    version: 5.10.0
+  - file: alters-data-import-5100.sql
     version: 5.10.0
   - file: alters-5110-mysql.sql
     version: 5.11.0
+  - file: alters-data-import-5110.sql
+    version: 5.11.0
   - file: alters-5111-mysql.sql
+    version: 5.11.1
+  - file: alters-data-import-5111.sql
     version: 5.11.1
   - file: alters-5120-mysql.sql
     version: 5.12.0
+  - file: alters-data-import-5120.sql
+    version: 5.12.0
   - file: alters-5130-mysql.sql
+    version: 5.13.0
+  - file: alters-data-import-5130.sql
+    version: 5.13.0
+  - file: tp-alters-5130-mysql.sql
     version: 5.13.0
   - file: alters-5131-mysql.sql
     version: 5.13.1
-
-alters_data_import_files:
-  - file: alters-data-import-550.sql
-    version: 5.5.0
-  - file: alters-data-import-551.sql
-    version: 5.5.1
-  - file: alters-data-import-560.sql
-    version: 5.6.0
-  - file: alters-data-import-570.sql
-    version: 5.7.0
-  - file: alters-data-import-571.sql
-    version: 5.7.1
-  - file: alters-data-import-580.sql
-    version: 5.8.0
-  - file: alters-data-import-581.sql
-    version: 5.8.1
-  - file: alters-data-import-590.sql
-    version: 5.9.0
-  - file: alters-data-import-5100.sql
-    version: 5.10.0
-  - file: alters-data-import-5110.sql
-    version: 5.11.0
-  - file: alters-data-import-5111.sql
-    version: 5.11.1
-  - file: alters-data-import-5120.sql
-    version: 5.12.0
-  - file: alters-data-import-5130.sql
-    version: 5.13.0
   - file: alters-data-import-5131.sql
     version: 5.13.1
-
-
-tp_alters_files:
-  - file: tp-alters-422-mysql.sql
-    version: 4.2.2
-  - file: tp-alters-440-mysql.sql
-    version: 4.4.0
-  - file: tp-alters-450-mysql.sql
-    version: 4.5.0
-  - file: tp-alters-460-mysql.sql
-    version: 4.6.0
-  - file: tp-alters-470-mysql.sql
-    version: 4.7.0
-  - file: tp-alters-480-mysql.sql
-    version: 4.8.0
-  - file: tp-alters-490-mysql.sql
-    version: 4.9.0
-  - file: tp-alters-4100-mysql.sql
-    version: 4.10.0
-  - file: tp-alters-4110-mysql.sql
-    version: 4.11.0
-  - file: tp-alters-4111-mysql.sql
-    version: 4.11.1
-  - file: tp-alters-4120-mysql.sql
-    version: 4.12.0
-  - file: tp-alters-520-mysql.sql
-    version: 5.2.0
-  - file: tp-alters-530-mysql.sql
-    version: 5.3.0
-  - file: tp-alters-540-mysql.sql
-    version: 5.4.0
-  - file: tp-alters-560-mysql.sql
-    version: 5.6.0
-  - file: tp-alters-570-mysql.sql
-    version: 5.7.0
-  - file: tp-alters-580-mysql.sql
-    version: 5.8.0
-  - file: tp-alters-581-mysql.sql
-    version: 5.8.1
-  - file: tp-alters-590-mysql.sql
-    version: 5.9.0
-  - file: tp-alters-5100-mysql.sql
-    version: 5.10.0
-  - file: tp-alters-5130-mysql.sql
-    version: 5.13.0

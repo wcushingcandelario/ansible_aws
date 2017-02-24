@@ -3,16 +3,3 @@
     msg: "Running /opt/ovc/installFiles/OVC_Install/{{ item.file }}"
   when: "{{ item.version | version_compare(upgrade_from, '>') }}"
   with_items: "{{ alters_files }}"
-
-
-- name: Run SQL statements for this upgrade
-  debug:
-    msg: "Running /opt/ovc/installFiles/OVC_Install/{{ item.file }}"
-  when: "{{ item.version | version_compare(upgrade_from, '>') }}"
-  with_items: "{{ alters_data_import_files }}"
-
-- name: Run SQL statements for this upgrade
-  debug:
-    msg: "Running /opt/ovc/installFiles/OVC_Customizations/customerData/sql{{ item.file }}"
-  when: "{{ item.version | version_compare(upgrade_from, '>') }}"
-  with_items: "{{ tp_alters_files }}"
