@@ -99,6 +99,8 @@
   tasks:
     - local_action: wait_for port=22 host="{{ inventory_hostname }}" search_regex=OpenSSH delay=10
     - name: Install MySQL
+      become: yes
+      become_user: root
       yum:
         name: mysql
         state: installed
