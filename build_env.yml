@@ -94,7 +94,7 @@
     - upgrade_databases
 
 - name: Install tools on the temporary instance
-  hosts: {{ ami_instance.tagged_instances.0.private_ip }}
+  hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
   tasks:
     - local_action:
       wait_for:
