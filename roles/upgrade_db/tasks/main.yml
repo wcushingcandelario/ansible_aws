@@ -1,8 +1,8 @@
 - set_fact:
-  upgrade_to: "{{ ovc_version }}"
+    upgrade_to: "{{ ovc_version }}"
 
 - set_fact:
-  upgrade_to: "{{ ovc_version.split('-')[0] }}"
+    upgrade_to: "{{ ovc_version.split('-')[0] }}"
   when: "ovc_version.endswith('SNAPSHOT')"
 
 - name: Display SQL statements for this upgrade
