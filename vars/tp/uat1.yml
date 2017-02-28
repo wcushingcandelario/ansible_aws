@@ -4,6 +4,7 @@ clustered_environment: No
 deploy_type: uat1
 region: eu-west-1
 key: ovc-tp-np
+ansible_ssh_private_key_file: "~/.ssh/ovc-tp-np.pem"
 
 # DB
 environment_name: "{{ deploy_type }}-rds"
