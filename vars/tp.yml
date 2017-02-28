@@ -30,6 +30,7 @@ beanstalk_template_version: 1.1.0.0
 customer_account_id: 063725663692
 pe_role: promo-engine
 customer: tp
+customer_long: TravisPerkins
 ami_release: release
 ami_customer: tp
 mongo_port: 27017
