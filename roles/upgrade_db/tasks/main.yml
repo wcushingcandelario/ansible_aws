@@ -1,5 +1,5 @@
-- name: Run SQL statements for this upgrade
+- name: Display SQL statements for this upgrade
   debug:
-    msg: "Running /opt/ovc/installFiles/OVC_Install/{{ item.file }}"
+    msg: "Running {{ item.file }}"
   when: "{{ item.version | version_compare(upgrade_from, '>') }} and ({{ item.customer is undefined or item.customer == customer}})"
   with_items: "{{ alters_files }}"
