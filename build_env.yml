@@ -112,6 +112,8 @@
 - hosts: ami_instance.0.private_ip
   role:
     - upgrade_db
+  vars:
+    upgrade_from: 5.11.0
   tags:
     - upgrade_databases
 
