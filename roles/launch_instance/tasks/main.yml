@@ -31,6 +31,9 @@
   debug:
     msg="{{ami_instance}}"
 
+- set_fact:
+    ami_instance: "{{ ami_instance }}"
+
 - name: Add or Update Route53 entry
   route53:
     command: "create"
