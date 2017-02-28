@@ -131,6 +131,7 @@
   connection: local
   roles:
     - { role: launch_instance, when: not clustered_environment }
+    - { role: launch_instance_dns, when: not clustered_environment }
   tags:
     - launch_ami
 
