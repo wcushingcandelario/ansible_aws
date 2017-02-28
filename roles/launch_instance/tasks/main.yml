@@ -19,11 +19,11 @@
     exact_count: 1
     count_tag:
       Name: "{{ deploy_type }}.{{ dns_domain }}"
-      role: webapp
+      role: "{{ role_tag }}"
       environment: "{{ deploy_type }}"
     instance_tags:
       Name: "{{ deploy_type }}.{{ dns_domain }}"
-      role: webapp
+      role: "{{ role_tag }}"
       environment: "{{ deploy_type }}"
   register: ami_instance
 

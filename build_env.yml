@@ -83,6 +83,47 @@
         prompt: "{{deploy_type}} will now be launched with {{ image_id }}"
         seconds: 30
 
+- name: Launch temporary new instance
+  hosts: localhost
+  connection: local
+  roles:
+    - launch_instance
+  vars:
+    role_tag: "temporary"
+  tags:
+    - upgrade_databases
+
+- name: Install tools on the temporary instance
+  hosts: {{ ami_instance.tagged_instances.0.private_ip }}
+  tasks:
+    - local_action:
+      wait_for:
+        port: 22
+        host: "{{ ami_instance.tagged_instances.0.private_ip }}"
+        search_regex: OpenSSH
+        delay: 10
+    - name: Install MySQL
+      yum:
+        name: mysql
+        state: installed
+  tags:
+    - upgrade_databases
+
+- hosts: ami_instance.0.private_ip
+  role:
+    - upgrade_db
+  tags:
+    - upgrade_databases
+
+- name: Terminate temporary instance
+  tasks:
+     - ec2:
+        state: absent
+        region: "{{ region }}"
+        instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+  tags:
+    - upgrade_databases
+
 - name: Launch New Instance
   hosts: localhost
   connection: local

@@ -1,0 +1,11 @@
+- name: Display SQL statements for this upgrade
+  debug:
+    msg: "Running {{ item.file }}"
+  when: "{{ item.version | version_compare(upgrade_from, '>') }} and ({{ item.customer is undefined or item.customer == customer}})"
+  with_items: "{{ alters_files }}"
+
+- name: Run SQL statements for this upgrade
+  shell:
+    cmd: "mysql --host={{ mysql_host }} --user=root --password={{ mysql_password }} {{ mysql_database }} < {{ item.file }}"
+  when: "{{ item.version | version_compare(upgrade_from, '>') }} and ({{ item.customer is undefined or item.customer == customer}})"
+  with_items: "{{ alters_files }}"
