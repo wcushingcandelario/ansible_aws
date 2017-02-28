@@ -1,0 +1,26 @@
+- name: Bundle AMI
+  local_action:
+    module: ec2_ami
+    instance_id: "{{ just_created_instance_id }}"
+    region: "{{ ami_baker_region }}"
+    state: present
+    description: This was provisioned {{ ansible_date_time.iso8601 }}
+    name: "{{ ami_name }}_demo"
+    wait: yes
+    wait_timeout: 1500
+    tags:
+      customer: "{{ ami_customer }}"
+      release: "development"
+      source: "{{ source_ami }}"
+      git_sha: "{{ ovc_git_sha }}"
+      git_branch: "{{ ovc_circle_branch }}"
+  register: amioutput
+
+- name: Terminate temporary instance
+  local_action:
+    module: ec2
+    state: absent
+    region: "{{ ami_baker_region }}"
+    instance_ids: "{{ just_created_instance_id }}"
+  tags:
+    - terminate_ami

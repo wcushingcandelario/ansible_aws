@@ -47,17 +47,42 @@
   register: ovc_ami_find_branch
   when: customer != 'vanilla' and find_ami_branch is defined
 
+- name: Finding latest OVC customised Amazon Linux AMI with a git SHA (reties for four minutes for the build system)
+  ec2_ami_find:
+    name: "ovc-{{ ovc_version }}*"
+    sort: name
+    sort_order: descending
+    region: "{{ ami_region }}"
+    sort_end: 1
+    owner: "{{ ami_owner }}"
+    no_result_action: fail
+    ami_tags:
+      customer: "{{ _ami_customer }}"
+      release: "{{ ami_release }}"
+      git_sha: "{{ find_ami_sha }}"
+  register: ovc_ami_find_sha
+  until: ovc_ami_find_sha|success
+  retries: 24
+  delay: 10
+  when: customer != 'vanilla' and find_ami_sha is defined
+
 - set_fact:
     ami_find: "{{ al_ami_find }}"
   when: customer == 'vanilla'
 
 - set_fact:
     ami_find: "{{ ovc_ami_find }}"
-  when: customer != 'vanilla' and find_ami_branch is undefined
+  when: customer != 'vanilla' and find_ami_branch is undefined and find_ami_sha is undefined
 
-- set_fact:
+- name: Setting AMI ID to AMI ID found with git branch
+  set_fact:
     ami_find: "{{ ovc_ami_find_branch }}"
   when: customer != 'vanilla' and find_ami_branch is defined
+
+- name: Setting AMI ID to AMI ID found with git SHA (overrides branch!)
+  set_fact:
+    ami_find: "{{ ovc_ami_find_sha }}"
+  when: customer != 'vanilla' and find_ami_sha is defined
 
 - name: AMI ID found
   debug: "var=ami_find.results"

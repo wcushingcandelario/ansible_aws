@@ -136,9 +136,10 @@
   hosts: localhost
   connection: local
   roles:
-    - { role: create-elb-pos, when: clustered_environment }
-    - { role: create-elb-dash, when: clustered_environment }
-    - { role: create-auto, when: clustered_environment }
+    - { role: create-elb-pos, when: clustered_environment and max_size > 1 }
+    - { role: create-elb-dash, when: clustered_environment and max_size > 1 }
+    - { role: create-auto, when: clustered_environment and max_size > 1 }
+    - { role: create_single_ssl_elb_asg_lc, when: clustered_environment and max_size == 1 }
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"

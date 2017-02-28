@@ -22,7 +22,7 @@ environments:
     nosql_host: mongodb-preprod01.ovchosting.co.uk
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/PreProd-Queue
     staff_discount_bucket: ovc-cand-filerepo
-    ecommerce_host: ws-cand.dev.wickes-tills.co.uk
+    ecommerce_host: ws-cand1.dev.wickes-tills.co.uk
   prod:
     name: prod
     url: prod.ovchosting.co.uk
