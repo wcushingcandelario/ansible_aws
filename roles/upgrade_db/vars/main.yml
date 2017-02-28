@@ -26,3 +26,7 @@ alters_files:
     version: 5.13.1
   - file: /opt/ovc/installFiles/OVC_Install/alters-data-import-5131.sql
     version: 5.13.1
+  - file: /opt/ovc/installFiles/OVC_Install/alters-5132-mysql.sql
+    version: 5.13.2
+  - file: /opt/ovc/installFiles/OVC_Install/alters-data-import-5132.sql
+    version: 5.13.2
