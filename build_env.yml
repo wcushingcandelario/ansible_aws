@@ -83,6 +83,43 @@
         prompt: "{{deploy_type}} will now be launched with {{ image_id }}"
         seconds: 30
 
+- name: Launch temporary new instance
+  hosts: localhost
+  connection: local
+  roles:
+    - { role: launch_instance, when: not clustered_environment }
+  vars:
+    role_tag: "temporary"
+  tags:
+    - launch_ami
+
+- name: Install tools on the temporary instance
+  hosts: {{ ami_instance.tagged_instances.0.private_ip }}
+  tasks:
+    - name: Install MySQL
+      yum:
+        name: mysql
+        state: installed
+
+- local_action: wait_for port=22 host="{{ ami_instance.tagged_instances.0.private_ip }}" search_regex=OpenSSH delay=10
+
+- debug:
+    msg: Play paused, temporary disposable instance launced at: {{ ami_instance.tagged_instances.0.public_ip }}/{{ ami_instance.tagged_instances.0.private_ip }}
+
+- pause:
+    seconds: 10
+
+- local_action: wait_for port=22 host="{{ ami_instance.tagged_instances.0.private_ip }}" delay=10 state=stopped
+
+- name: Terminate temporary instance
+  local_action:
+    module: ec2
+    state: absent
+    region: "{{ region }}"
+    instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+  tags:
+    - terminate_ami
+
 - name: Launch New Instance
   hosts: localhost
   connection: local
