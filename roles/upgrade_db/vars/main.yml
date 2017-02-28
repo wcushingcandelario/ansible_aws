@@ -21,6 +21,7 @@ alters_files:
     version: 5.13.0
   - file: tp-alters-5130-mysql.sql
     version: 5.13.0
+    customer: tp
   - file: alters-5131-mysql.sql
     version: 5.13.1
   - file: alters-data-import-5131.sql
