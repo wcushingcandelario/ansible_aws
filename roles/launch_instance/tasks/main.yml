@@ -31,8 +31,19 @@
   debug:
     msg="{{ami_instance}}"
 
-- set_fact:
-    ami_instance: "{{ ami_instance }}"
+- name: Add host to group launch_instance_hosts (Public IPs)
+  add_host:
+    name: "{{ item.public_ip }}"
+    groups: launch_instance_hosts
+  when: ami_instance.tagged_instances is defined and use_public_ip
+  with_items: "{{ ami_instance.tagged_instances }}"
+
+- name: Add host to group launch_instance_hosts (Private IPs)
+  add_host:
+    name: "{{ item.private_ip }}"
+    groups: launch_instance_hosts
+  when: ami_instance.tagged_instances is defined and not use_public_ip
+  with_items: "{{ ami_instance.tagged_instances }}"
 
 - name: Add or Update Route53 entry
   route53:

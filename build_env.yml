@@ -94,7 +94,7 @@
     - upgrade_databases
 
 - name: Install tools on the temporary instance
-  hosts: "{{ ami_instance.tagged_instances.0.private_ip }}"
+  hosts: launch_instance_hosts
   tasks:
     - local_action: wait_for port=22 host="{{ ami_instance.tagged_instances.0.private_ip }}" search_regex=OpenSSH delay=10
     - name: Install MySQL
@@ -104,7 +104,7 @@
   tags:
     - upgrade_databases
 
-- hosts: "{{ ami_instance.0.private_ip }}"
+- hosts: launch_instance_hosts
   roles:
     - upgrade_db
   vars:
@@ -113,11 +113,16 @@
     - upgrade_databases
 
 - name: Terminate temporary instance
+  hosts: launch_instance_hosts
+  gather_facts: no
   tasks:
-    - ec2:
-        state: absent
-        region: "{{ region }}"
-        instance_ids: "{{ ami_instance.tagged_instances.0.id }}"
+    - name: Shutdown
+      command: sleep 2; /sbin/shutdown -h now
+      become: yes
+      become_user: root
+      async: 1
+      poll: 0
+      ignore_errors: yes
   tags:
     - upgrade_databases
 
