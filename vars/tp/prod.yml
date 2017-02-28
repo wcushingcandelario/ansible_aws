@@ -7,6 +7,7 @@ key: ovc-tp-prod
 
 # DB
 environment_name: prod-rds
+mysql_host: "mysql-{{ deploy_type }}.{{ dns_domain }}"
 rds_security_group: sg-be2081d9
 rds_subnet_group: prod-rds
 multirdszone: yes

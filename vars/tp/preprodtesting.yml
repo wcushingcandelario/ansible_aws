@@ -7,6 +7,7 @@ key: ovc-tp-np
 
 # DB
 environment_name: preprodtest-rds
+mysql_host: "mysql-{{ deploy_type }}.{{ dns_domain }}"
 rds_security_group: sg-5bbc1f3c
 rds_subnet_group: pre-prod-rds
 multirdszone: no
