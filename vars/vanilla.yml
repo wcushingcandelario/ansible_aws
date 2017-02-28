@@ -21,4 +21,4 @@ ssl_secret_files:
   bob: barker
 
 ami_target_region: us-east-1
-ami_temp_vpc_subnet_public: 
+ami_temp_vpc_subnet_public:
