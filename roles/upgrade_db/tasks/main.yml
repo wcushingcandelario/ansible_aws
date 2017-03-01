@@ -16,3 +16,4 @@
     cmd: "mysql --host={{ mysql_host }} --user=root --password={{ mysql_password }} {{ mysql_database }} < {{ item.file }}"
   when: "({{ item.version | version_compare(upgrade_from, '>') }} and {{ item.version | version_compare(upgrade_to, '<=') }} ) and (item.customer is undefined or item.customer == customer)"
   with_items: "{{ alters_files }}"
+  ignore_errors: "{{ ignore_database_errors }}"
