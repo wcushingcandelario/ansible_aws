@@ -4,9 +4,11 @@ clustered_environment: Yes
 deploy_type: preprod
 region: eu-west-1
 key: ovc-tp-np
+ansible_ssh_private_key_file: "~/.ssh/ovc-tp-np.pem"
 
 # DB
 environment_name: "{{ deploy_type }}-rds"
+mysql_host: "mysql-{{ deploy_type }}.{{ dns_domain }}"
 rds_security_group: sg-5bbc1f3c
 rds_subnet_group: pre-prod-rds
 multirdszone: no
@@ -16,7 +18,12 @@ multirdszone: no
 ovc_security_groups: ['sg-71bc1f16']
 vpc_subnet_public: subnet-0a75a06e
 IAMROLE: "NonProdAppServer"
-instance_type_asg: "m4.xlarge"
+instance_type_single: "t2.xlarge"
+instance_type_asg: "t2.xlarge"
+
+group_id: "{{ ovc_security_groups }}"
+vpc_subnet_id: subnet-ac2d02f5
+
 min_size: 2
 max_size: 5
 

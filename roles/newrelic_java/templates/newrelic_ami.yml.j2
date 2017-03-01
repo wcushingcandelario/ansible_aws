@@ -27,7 +27,7 @@ common: &default_settings
   # For example, to report data to "My Application" and "My Application 2" use this:
   # app_name: My Application;My Application 2
   # This setting is required.
-  app_name: {{ newrelic_app_name | default('My Application') }}
+  app_name: UNDEFINED 
 
   # Set to true to enable support for auto app naming.
   # The name of each web app is detected automatically
@@ -263,15 +263,15 @@ common: &default_settings
 
 development:
   <<: *default_settings
-  app_name: {{ newrelic_app_name }} (Development)
+  app_name: UNDEFINED (Development)
 
 test:
   <<: *default_settings
-  app_name: {{ newrelic_app_name }} (Test)
+  app_name: UNDEFINED (Test)
 
 production:
   <<: *default_settings
 
 staging:
   <<: *default_settings
-  app_name: {{ newrelic_app_name }} (Staging)
+  app_name: UNDEFINED (Staging)

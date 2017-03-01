@@ -1,0 +1,6 @@
+- hosts: localhost
+  connection: local
+  roles:
+    - upgrade_db
+  vars:
+    upgrade_from: 5.11.0

@@ -136,11 +136,60 @@
         prompt: "{{deploy_type}} will now be launched with {{ image_id }}"
         seconds: 30
 
+- name: Launch temporary new instance
+  hosts: localhost
+  connection: local
+  roles:
+    - launch_instance
+  vars:
+    role_tag: "temporary"
+    termination_protection: no
+  tags:
+    - upgrade_databases
+
+- name: Install tools on the temporary instance
+  hosts: launch_instance_hosts
+  remote_user: ec2-user
+  tasks:
+    - name: Install MySQL
+      become: yes
+      become_user: root
+      yum:
+        name: mysql
+        state: installed
+  tags:
+    - upgrade_databases
+
+- hosts: launch_instance_hosts
+  remote_user: ec2-user
+  roles:
+    - upgrade_db
+  vars:
+    upgrade_from: 5.11.0
+  tags:
+    - upgrade_databases
+
+- name: Terminate temporary instance
+  hosts: launch_instance_hosts
+  remote_user: ec2-user
+  gather_facts: no
+  tasks:
+    - name: Shutdown
+      shell: sleep 2 && /sbin/shutdown -h now
+      become: yes
+      become_user: root
+      async: 1
+      poll: 0
+      ignore_errors: yes
+  tags:
+    - upgrade_databases
+
 - name: Launch New Instance
   hosts: localhost
   connection: local
   roles:
     - { role: launch_instance, when: not clustered_environment }
+    - { role: launch_instance_dns, when: not clustered_environment }
   vars:
     instance_type: "{{ instance_type_single }}"
     _security_group: "{{ group_id }}"
@@ -154,9 +203,10 @@
   hosts: localhost
   connection: local
   roles:
-    - { role: create-elb-pos, when: clustered_environment }
-    - { role: create-elb-dash, when: clustered_environment }
-    - { role: create-auto, when: clustered_environment }
+    - { role: create-elb-pos, when: clustered_environment and max_size > 1 }
+    - { role: create-elb-dash, when: clustered_environment and max_size > 1 }
+    - { role: create-auto, when: clustered_environment and max_size > 1 }
+    - { role: create_single_ssl_elb_asg_lc, when: clustered_environment and max_size == 1 }
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"

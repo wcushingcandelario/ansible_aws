@@ -7,6 +7,7 @@ key: ovc-tp-np
 
 # DB
 environment_name: preprodtest-rds
+mysql_host: "mysql-{{ deploy_type }}.{{ dns_domain }}"
 rds_security_group: sg-5bbc1f3c
 rds_subnet_group: pre-prod-rds
 multirdszone: no
@@ -16,7 +17,7 @@ multirdszone: no
 ovc_security_groups: ['sg-71bc1f16']
 vpc_subnet_public: subnet-0a75a06e
 IAMROLE: "NonProdAppServer"
-instance_type_asg: "m4.xlarge"
+instance_type_asg: "t2.xlarge"
 
 security_group_ids: "sg-887dc9ef,sg-9fbd1ef8,sg-71bc1f16"
 elbsubnets: "subnet-ac2d02f5,subnet-cae8ffbd,subnet-d4a14fb0"

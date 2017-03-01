@@ -18,7 +18,7 @@
 #    Lookups are executed with a cwd relative to the role or play, as opposed to
 #   local tasks which are executed with the cwd of the executed script.
 # http://docs.ansible.com/ansible/playbooks_lookups.html
-    user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
+    user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
   register: debuglaunch
 
 - name: ovc_security_groups
@@ -41,7 +41,7 @@
     min_size: "{{ min_size }}"
     max_size: "{{ max_size }}"
     wait_timeout: 1200
-    desired_capacity: 2
+    desired_capacity: "{{ min_size }}"
     region: "{{ region }}"
     tags:
       - Name: "{{ deploy_type }}-{{ ovc_version }}"

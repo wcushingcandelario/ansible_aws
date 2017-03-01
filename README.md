@@ -125,7 +125,7 @@ If an AMI build did not happen for any reason, or if you need to build an AMI
 from **before** the CircleCI automatic AMI building was implemented this is
 available through the OVC Demo RunDeck on
 <http://rundeck.ovcdemo.com:4440/project/AMI_environment_management/jobs/AMI_Builds>.
-To build an AMI one would chose `TP CIrcleCI AMI Builder`; there you fill
+To build an AMI one would chose `TP CircleCI AMI Builder`; there you fill
 out the OVC Version with the version that you need (no need to add `-SNAPSHOT`
 for develop, this will be done automatically), the branch to build from and the
 git SHA of the commit you want. This information is used to access the S3 bucket
