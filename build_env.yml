@@ -142,8 +142,9 @@
   roles:
     - launch_instance
   vars:
-    role_tag: "temporary"
+    launch_tag_role: "temporary"
     termination_protection: no
+    _user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
   tags:
     - upgrade_databases
 
@@ -194,7 +195,7 @@
     instance_type: "{{ instance_type_single }}"
     _security_group: "{{ group_id }}"
     _subnet_id: "{{ vpc_subnet_id }}"
-    _user_data: "{{ lookup('file', 'scripts/user_data.sh') }}"
+    _user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
   tags:
     - launch_ami
 
