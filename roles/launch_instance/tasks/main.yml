@@ -44,3 +44,23 @@
     groups: launch_instance_hosts
   when: ami_instance.tagged_instances is defined and not use_public_ip
   with_items: "{{ ami_instance.tagged_instances }}"
+
+- name: Wait for SSH to come up on launched hosts (Public IPs)
+  wait_for:
+    host: "{{ item.public_ip }}"
+    delay: 30
+    port: 22
+    state: started
+    timeout: 640
+  with_items: "{{ ami_instance.tagged_instances }}"
+  when: ami_instance.tagged_instances is defined and use_public_ip
+
+- name: Wait for SSH to come up on launched hosts (Private IPs)
+  wait_for:
+    host: "{{ item.private_ip }}"
+    delay: 30
+    port: 22
+    state: started
+    timeout: 640
+  with_items: ami_instance.tagged_instances
+  when: ami_instance.tagged_instances is defined and not use_public_ip
