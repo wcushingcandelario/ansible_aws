@@ -122,7 +122,7 @@
   gather_facts: no
   tasks:
     - name: Shutdown
-      command: sleep 2; /sbin/shutdown -h now
+      shell: sleep 2 && /sbin/shutdown -h now
       become: yes
       become_user: root
       async: 1
