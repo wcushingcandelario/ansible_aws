@@ -1,0 +1,40 @@
+---
+
+- name: Download Automation Agent
+  get_url:
+     url: "{{ automation_agent_pkg }}"
+     dest: /tmp/automation-agent.rpm
+
+- name: Install automation agent
+  yum:
+    name: /tmp/automation-agent.rpm
+    state: present
+
+- name: Create /data directory
+  file:
+    path: /data
+    mode: 0755
+    state: directory
+    owner: mongod
+    group: mongod
+  become: yes
+  become_user: root
+
+- name: Set /etc/mongodb-mms to mongod
+  file:
+    path: /etc/mongodb-mms
+    mode: 0755
+    state: directory
+    owner: mongod
+    group: mongod
+  become: yes
+  become_user: root
+
+
+- name: Stop and disable agent until configured
+  service:
+    name: mongodb-mms-automation-agent
+    state: stopped
+    enabled: no
+  become: yes
+  become_user: root

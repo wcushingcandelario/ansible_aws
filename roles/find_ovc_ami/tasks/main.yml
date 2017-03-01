@@ -29,7 +29,7 @@
       customer: "{{ _ami_customer }}"
       release: "{{ ami_release }}"
   register: ovc_ami_find
-  when: customer != 'vanilla' and find_ami_branch is undefined
+  when: customer != 'vanilla' and find_ami_branch is undefined and ami_role == 'ami_builder'
 
 - name: Finding latest OVC customised Amazon Linux ami with a branch
   ec2_ami_find:
@@ -45,7 +45,7 @@
       release: "{{ ami_release }}"
       git_branch: "{{ find_ami_branch }}"
   register: ovc_ami_find_branch
-  when: customer != 'vanilla' and find_ami_branch is defined
+  when: customer != 'vanilla' and find_ami_branch is defined and ami_role == 'ami_builder'
 
 - name: Finding latest OVC customised Amazon Linux AMI with a git SHA (reties for four minutes for the build system)
   ec2_ami_find:
@@ -66,6 +66,18 @@
   delay: 10
   when: customer != 'vanilla' and find_ami_sha is defined
 
+- name: Finding latest OVC customised Amazon Linux AMI with Mongo Cloud Manager
+  ec2_ami_find:
+    name: "mongo-mms-*"
+    sort: name
+    sort_order: descending
+    region: "{{ ami_region }}"
+    sort_end: 1
+    owner: "{{ ami_owner }}"
+    no_result_action: fail
+  register: ovc_ami_find_mongo
+  when: ami_role == 'mongo_ami'
+
 - set_fact:
     ami_find: "{{ al_ami_find }}"
   when: customer == 'vanilla'
@@ -76,6 +88,10 @@
 
 - name: Setting AMI ID to AMI ID found with git branch
   set_fact:
+    ami_find: "{{ ovc_ami_find }}"
+  when: customer != 'vanilla' and find_ami_branch is undefined
+
+- set_fact:
     ami_find: "{{ ovc_ami_find_branch }}"
   when: customer != 'vanilla' and find_ami_branch is defined
 
@@ -83,6 +99,11 @@
   set_fact:
     ami_find: "{{ ovc_ami_find_sha }}"
   when: customer != 'vanilla' and find_ami_sha is defined
+
+- name: Setting AMI ID to Mongo AMI
+  set_fact:
+    ami_find: "{{ ovc_ami_find_mongo }}"
+  when: customer != 'vanilla' and ami_role == 'mongo_ami'
 
 - name: AMI ID found
   debug: "var=ami_find.results"

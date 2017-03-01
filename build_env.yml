@@ -44,6 +44,58 @@
     - tagged
     - inventory_manager
 
+- name: Find Mongo CM AMI
+  connection: local
+  hosts: localhost
+  roles:
+    - find_ovc_ami
+  vars:
+    instance_type: "{{ instance_type_mongo }}"
+    ami_role: 'mongo_ami'
+    ami_region: "{{ region }}"
+    launch_exact_count: "{{ mongo_instance_count }}"
+    launch_tag_role: 'mongo'
+    launch_tag_name: "mongo-{{ deploy_type }}.{{ dns_domain }}"
+  tags:
+    - mongodb_cm
+
+- name: Add Mongo AMI ID to facts
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Use set_fact to AMI
+      set_fact:
+        image_id: "{{ ami_find.results[0].ami_id }}"
+  tags:
+    - mongodb_cm
+
+- name: Launch then apply Mongo CM configurations
+  connection: local
+  hosts: localhost
+  roles:
+    - launch_instance
+  vars:
+    instance_type: "{{ instance_type_mongo }}"
+    ami_role: 'mongo_ami'
+    ami_region: "{{ region }}"
+    launch_exact_count: "{{ mongo_instance_count }}"
+    launch_tag_role: 'mongo'
+    launch_tag_name: "mongo-{{ deploy_type }}.{{ dns_domain }}"
+    _security_group: "{{ mongo_security_group }}"
+    _subnet_id: "{{ mongo_subnet_id }}"
+    _user_data: "{{ lookup('file', 'scripts/user_data_mongo.sh') }}"
+  tags:
+    - mongodb_cm
+
+- hosts: mongo_hosts
+  remote_user: ec2-user
+  gather_facts: False
+  roles:
+    - mongo_cm_configure
+  tags:
+    - mongodb_cm
+
+
 - name: Find AMI ID
   hosts: localhost
   connection: local
@@ -53,6 +105,7 @@
     - asg
     - find_ovc_ami
     - launch_ami
+
 
 - name: Add AMI ID to facts
   hosts: localhost
@@ -89,8 +142,9 @@
   roles:
     - launch_instance
   vars:
-    role_tag: "temporary"
+    launch_tag_role: "temporary"
     termination_protection: no
+    _user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
   tags:
     - upgrade_databases
 
@@ -137,8 +191,14 @@
   roles:
     - { role: launch_instance, when: not clustered_environment }
     - { role: launch_instance_dns, when: not clustered_environment }
+  vars:
+    instance_type: "{{ instance_type_single }}"
+    _security_group: "{{ group_id }}"
+    _subnet_id: "{{ vpc_subnet_id }}"
+    _user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
   tags:
     - launch_ami
+
 
 - name: Create ELB and ASG
   hosts: localhost
