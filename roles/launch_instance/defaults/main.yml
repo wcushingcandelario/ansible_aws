@@ -1,2 +1,3 @@
 role_tag: webapp
 encrypt_instance: yes
+termination_protection: yes

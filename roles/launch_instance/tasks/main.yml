@@ -9,7 +9,7 @@
     image: "{{ image_id }}"
     instance_profile_name: "{{ IAMROLE }}"
     user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
-    termination_protection: yes
+    termination_protection: "{{ termination_protection }}"
     wait: yes
     wait_timeout: 500
     volumes:

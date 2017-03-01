@@ -90,6 +90,7 @@
     - launch_instance
   vars:
     role_tag: "temporary"
+    termination_protection: no
   tags:
     - upgrade_databases
 
