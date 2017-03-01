@@ -205,6 +205,10 @@ progressively roll it out to environments. When we start using this process for
 UAT1/UAT2 we can start to create AMI's there and push them through UAT# ->
 PreProd -> Production to ensure better testing.
 
+### Deploy a mongo AMI
+
+This will build an AMI using MongoDB Cloud Manager.  
+
 **Pre-customer: Build a vanilla AMI and test it**
 
 *Run from: Demo account*
@@ -317,6 +321,7 @@ You must include the customer variables, for example: `-e @vars/tp.yml`
 -   **vars/demo.yml** for the Demo account deployment
 -   **vars/vanilla.yml** for building a completely non-custom AMI (no
     extensions, certificates, etc.)
+-   **vars/demo.yml.encrypted** for building mongo instance
 
 You must also include the environment variables, such as `-e @vars/tp/uat1.yml`.
 
@@ -331,6 +336,17 @@ ansible-playbook build_env.yml \
   -e @vars/tp.yml \
   -e @vars/tp/preprod.yml \
   -e "ovc_version=5.4.0 deploy=true" \
+  --vault-password-file ~/.ssh/.vault_pass.txt
+```
+
+### Building Whole Environments with MongoDB
+
+```
+ansible-playbook build_env.yml \
+  -e @vars/tp.yml \
+  -e @vars/tp/preprod.yml \
+  -e "ovc_version=5.4.0 deploy=true" \
+  -e @vars/demo.yml.encrypted \
   --vault-password-file ~/.ssh/.vault_pass.txt
 ```
 
@@ -351,6 +367,9 @@ ansible-playbook build_env.yml \
 
 -   **Role: launch_ami**
     Like asg_main this is where the play will launch an individual instance if the environment is non-clustered. We set clustering of an environment with the `clustered_environment` variable.
+
+-   **Role: mongodb_cm**
+    Builds a mongo instance through MongoDB Cloud Manager
 
 
 -   **Role: create-elb-pos, create-elb-dash, create-auto**
@@ -487,7 +506,7 @@ ansible-playbook build-new-ami.yml \
   -e "ovc_git_sha=${RD_OPTION_GIT_SHA1} ovc_circle_branch=${RD_OPTION_GIT_BRANCH} ami_release=${AMI_RELEASE}" \
   -e "find_ami_branch=${RD_OPTION_GIT_BRANCH}" \
   --vault-password-file ~/.ssh/.vault_pass.txt \
-  --skip-tags=importers,import_custom_db,startjetty,rds_util \
+  --skip-tags=importers,import_custom_db,startjetty,rds_util,mongodb_cm \
   -vv
 ```
 
@@ -506,7 +525,7 @@ ansible-playbook build-new-ami.yml \
   -e "ovc_git_sha=${RD_OPTION_GIT_SHA1} ovc_circle_branch=${RD_OPTION_GIT_BRANCH} ami_release=${AMI_RELEASE}" \
   -e "find_ami_branch=${RD_OPTION_GIT_BRANCH}" \
   --vault-password-file ~/.ssh/.vault_pass.txt \
-  --skip-tags=importers,import_custom_db,startjetty,rds_util,terminate_ami \
+  --skip-tags=importers,import_custom_db,startjetty,rds_util,terminate_ami,mongodb_cm \
   -vv
 ```
 
@@ -575,6 +594,17 @@ ansible-playbook build_env.yml \
   --tags inventory_manager
 ```
 
+**Deploy Mongo Only**
+
+*Run from: Customer account*
+
+```
+ansible-playbook build_env.yml \
+  -e @vars/demo.yml \
+  -e @vars/demo/sit99.yml \
+  -e @vars/demo.yml.encrypted \
+  --tags mongodb_cm
+```
 
 ### Maintenance
 
