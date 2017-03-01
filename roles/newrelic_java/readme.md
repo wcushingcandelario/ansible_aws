@@ -24,4 +24,7 @@ roles:
 ```
 ansible-playbook playbook.yml -i inventory_file --skip-tags "baking_ami"
 ```
-
+#### Sample Ad-Hoc Execution
+````
+ansible-playbook -i hosts newrelic.yml --private-key ~/.ssh/private-key-here.pem --vault-password-file ~/.ssh/.vault_pass_here.txt --extra-vars=" newrelic_version=3.35.2 jetty_dir=/opt/jetty s3_bucket=ovc-userdata-scripts" --skip-tags "baking_ami" -v
+````
