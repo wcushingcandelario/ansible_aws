@@ -144,6 +144,8 @@
   vars:
     launch_tag_role: "temporary"
     termination_protection: no
+    _security_group: "{{ group_id }}"
+    _subnet_id: "{{ vpc_subnet_id }}"
     _user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
   tags:
     - upgrade_databases
