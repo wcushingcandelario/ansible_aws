@@ -30,6 +30,10 @@ elbsubnets: subnet-9f8a92b7
 min_size: 1
 max_size: 1
 
+# Mongo CM
+mongo_security_group: UNUSED_VALUE
+mongo_subnet_id: UNUSED_VALUE
+
 # Promo Engine
 dockerrun_version: "2"
 s3_bucket_docker: "ovc-github-access"
