@@ -1,4 +1,5 @@
 ami_customer: ovc
 ami_release: alpha
 ovc_git_sha: unset
+ami_role: ami_builder
 ovc_circle_branch: unset
