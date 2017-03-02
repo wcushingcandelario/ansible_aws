@@ -1,3 +1,4 @@
 ami_customer: ovc
+ami_role: ami_builder
 ovc_git_sha:
 ovc_circle_branch:
