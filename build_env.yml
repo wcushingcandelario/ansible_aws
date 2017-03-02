@@ -144,6 +144,7 @@
   vars:
     launch_tag_role: "temporary"
     termination_protection: no
+    instance_type: "{{ instance_type_single }}"
     _security_group: "{{ group_id }}"
     _subnet_id: "{{ vpc_subnet_id }}"
     _user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
