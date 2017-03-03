@@ -129,6 +129,7 @@
       - monitor: true
       - environment: "{{ deploy_type }}"
       - role: webapp
+      - git_sha: "{{ find_ami_sha }}"
   register: asglaunch
 
 - name: Debug Auto Scaling update
