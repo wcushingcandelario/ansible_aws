@@ -16,7 +16,7 @@ aws s3 cp s3://ovc-travisperkins-whitelist/${ENV}/locationWhiteList.ovccfg /opt/
 logentries_config() {
     if hash le 2>/dev/null; then
         echo "Logentries installed.  Configuring the instance."
-        sed -i "s/TEST_environment_name/[TravisPerkins]-${ENV}/g" /etc/le/config
+        sed -i "s/TEST_environment_name/[{{ customer_long }}]-${ENV}/g" /etc/le/config
         le reinit
         service logentries restart
     else
@@ -73,3 +73,6 @@ sudo /sbin/service httpd restart
 aws s3 cp s3://ovc-userdata-scripts/${ENV}/auto-userdata.sh auto-userdata.sh
 chmod +x auto-userdata.sh
 source auto-userdata.sh
+
+#Sets app name for newrelic
+sed -i "s/UNDEFINED/${ENV}/g" /opt/jetty/newrelic-java/newrelic.yml

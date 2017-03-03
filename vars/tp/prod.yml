@@ -4,9 +4,11 @@ clustered_environment: Yes
 deploy_type: prod
 region: eu-west-1
 key: ovc-tp-prod
+ansible_ssh_private_key_file: "~/.ssh/ovc-tp-prod.pem"
 
 # DB
 environment_name: prod-rds
+mysql_host: "mysql-{{ deploy_type }}.{{ dns_domain }}"
 rds_security_group: sg-be2081d9
 rds_subnet_group: prod-rds
 multirdszone: yes
@@ -43,4 +45,3 @@ pe_monitor: yes
 #security_group_ids: "sg-b12180d6,sg-12e5a275,sg-655eff02"
 #elb_security_group_id: sg-12e5a275
 #elbsubnets: "subnet-0abd536e,subnet-10948367"
-

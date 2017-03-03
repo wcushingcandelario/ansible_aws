@@ -1,0 +1,48 @@
+clustered_environment: Yes
+
+# Common
+#deploy_type: # Commented to force picking a deployment name
+region: us-east-1
+key: ovc-demo
+ansible_ssh_private_key_file: "~/.ssh/ovc-demo.pem"
+ami_release: development
+
+# DB
+environment_name: "{{ deploy_type }}-rds"
+mysql_host: mysql-development.ovcdemo.com
+rds_security_group: sg-6387e207,sg-0591ee7f
+rds_subnet_group: "rds subnet"
+multirdszone: no
+
+
+# AMI/ELB/ASG
+ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
+vpc_subnet_public: subnet-9f8a92b7
+vpc_subnet_id: "{{ vpc_subnet_public }}"
+IAMROLE: S3_Release_Read
+instance_type_asg: "t2.large"
+
+instance_type_single: m4.large
+group_id: sg-62fc7a06,sg-6387e207,sg-eeecf389
+
+security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
+elbsubnets: subnet-9f8a92b7
+min_size: 1
+max_size: 1
+
+# Mongo CM
+mongo_security_group: UNUSED_VALUE
+mongo_subnet_id: UNUSED_VALUE
+
+# Promo Engine
+dockerrun_version: "2"
+s3_bucket_docker: "ovc-github-access"
+dockercfg: dockercfg
+mongo_url: "mongodb://nosql-development.ovcdemo.com:{{ mongo_port }}/"
+tier: WebServer
+elb_security_group_id: sg-6387e207
+pe_monitor: yes
+
+#Inventory Manager
+im_security_groups: sg-62fc7a06,sg-eeecf389,sg-e3b59c87
+elb_im_subnets: subnet-9f8a92b7,subnet-a194589c

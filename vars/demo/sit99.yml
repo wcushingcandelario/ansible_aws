@@ -17,12 +17,16 @@ ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389,
 vpc_subnet_public: subnet-9f8a92b7
 vpc_subnet_id: "{{ vpc_subnet_public }}"
 IAMROLE: S3_Release_Read
-instance_type_asg: "m4.xlarge"
+instance_type_asg: "t2.xlarge"
 
 security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
 elbsubnets: subnet-9f8a92b7
 min_size: 2
 max_size: 5
+
+# Mongo CM
+mongo_security_group: sg-388baf45
+mongo_subnet_id: subnet-1e399968
 
 # Promo Engine
 dockerrun_version: "2"

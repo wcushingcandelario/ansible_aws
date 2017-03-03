@@ -4,7 +4,7 @@
         $config['setting'] = array(
 
 
-                'DBURL' => 'com.mysql.jdbc.Driver://{{ item.value.mysql_host }}:3306/xdb',
+                'DBURL' => 'com.mysql.jdbc.Driver://{{ item.value.mysql_host }}:3306/{{ item.value.name }}_xdb',
                 'DBType' => 'MySQL',
                 'DBUserId' => 'root',
                 'DBPassword' => '0n3v13w123',

@@ -2,7 +2,7 @@
 
 - name: ensures New Relic folder exists
   file:
-    path="{{newrelic_dir}}"
+    path="{{ jetty_dir }}/newrelic"
     state=directory
     mode=0755
 
@@ -10,50 +10,76 @@
   s3:
     bucket: "{{s3_bucket}}"
     object: "newrelic-java-{{newrelic_version}}.zip"
-    dest: "{{newrelic_dir}}/newrelic-java-{{newrelic_version}}.zip"
+    dest: "{{ jetty_dir }}/newrelic/newrelic-java-{{newrelic_version}}.zip"
     mode: get
 
 - name: unpack New Relic
-  unarchive:
-    src="{{newrelic_dir}}/newrelic-java-{{newrelic_version}}.zip"
-    dest="{{newrelic_dir}}"
-    remote_src=True
-    owner=jetty
+  command: "unzip {{ jetty_dir }}/newrelic/newrelic-java-{{newrelic_version}}.zip"
+  args:
+    chdir: "{{ jetty_dir }}/newrelic"
+    creates: "{{ jetty_dir }}/newrelic/newrelic.jar"
+  register: unpacked
 
 - name: moves New Relic content to its rightfull place
   shell:
     mv newrelic/* ./; rm -rf newrelic
-    chdir="{{newrelic_dir}}"
-    creates="{{newrelic_dir}}"/newrelic.jar
+    chdir="{{ jetty_dir }}/newrelic"
+    creates="{{ jetty_dir }}/newrelic/newrelic.jar"
 
 - name: get the instance ID
   shell: curl -s http://169.254.169.254/latest/meta-data/instance-id
   register: INSTANCE_ID
+  tags:
+    - ad_hoc
 
 - name: get the instances environment tag
   shell: aws ec2 describe-tags --region=eu-west-1 --filters "Name=resource-id,Values={{INSTANCE_ID.stdout}}" "Name=key,Values=environment" --output=text | cut -f5
   register: env_tag
+  tags:
+    - ad_hoc
 
-- set_fact: 
+- set_fact:
     newrelic_app_name: "{{ env_tag.stdout }}"
+  tags:
+    - ad_hoc
 
-- name: configures newrelic.yml
+- name: configures newrelic.yml for an AMI
+  template:
+    src="newrelic_ami.yml.j2"
+    dest="{{ jetty_dir }}/newrelic/newrelic.yml"
+  tags:
+    - baking_ami
+
+- name: Configure newrelic.yml for ad_hoc
   template:
     src="newrelic.yml.j2"
-    dest="{{newrelic_dir}}/newrelic.yml"
+    dest="{{ jetty_dir }}/newrelic/newrelic.yml"
+  tags:
+    - ad_hoc
 
 - name: run installer
-  shell: 
+  shell:
     java -jar newrelic.jar install
-    chdir="{{newrelic_dir}}"
+    chdir="{{ jetty_dir }}/newrelic"
   register: installerout
+
 - debug: msg="{{ installerout.stdout }}"
 
 - name: fix the installer brokenness
   lineinfile:
     dest: /etc/init.d/jetty
     regexp: 'newrelic/newrelic.jar'
-    line: 'NR_JAR=/opt/jetty-distribution-9.3.7.v20160115/newrelic-java/newrelic.jar; export NR_JAR'
-    
+    line: 'NR_JAR={{ jetty_dir }}/newrelic/newrelic.jar; export NR_JAR'
+
+- name: Make jetty own NewRelic directory
+  file:
+    path: "{{ jetty_dir }}/newrelic"
+    owner: jetty
+    group: jetty
+    recurse: yes
+    state: directory
+  become: yes
+  become_user: root
+
 #- include: jetty.yml
 #  when: newrelic_container == 'jetty'
