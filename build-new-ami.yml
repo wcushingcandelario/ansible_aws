@@ -91,21 +91,22 @@
 - hosts: localhost
   connection: local
   roles:
-    - ami_baker_post
+    - { role: ami_baker_post, when: ami_role == 'ami_builder', _ami_target_region: "{{ ami_target_region }}", _customer_account_id: "{{ customer_account_id }}" }
+    - { role: ami_baker_post, when: ami_role == 'mongo_ami', _ami_target_region: "eu-west-1", _customer_account_id: "063725663692" }
   vars:
-    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
+    #ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     region: "{{ ami_baker_region }}"
-    key: "{{ key }}"
+    #key: "{{ key }}"
     ovc_security_groups: "{{ ami_baker_ovc_security_groups }}"
     vpc_subnet_public: "{{ ami_baker_vpc_subnet_public }}"
-    instance_type: m4.large
-    jetty_user_login: jetty
-    jetty_dir: /opt/jetty
-    ovc_server_user_dir: /opt/ovc
-    webserver_user: www-data
-    s3install: true
-    ovcDB_host: "utility-mysql.{{ dns_domain }}"
-    ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
+  #  instance_type: m4.large
+  #  jetty_user_login: jetty
+  #  jetty_dir: /opt/jetty
+  #  ovc_server_user_dir: /opt/ovc
+  #  webserver_user: www-data
+  #  s3install: true
+  #  ovcDB_host: "utility-mysql.{{ dns_domain }}"
+  #  ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
 
 - hosts: just_baked
   remote_user: ec2-user

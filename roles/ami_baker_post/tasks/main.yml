@@ -17,7 +17,7 @@
     wait: yes
     wait_timeout: 1500
     launch_permissions:
-      user_ids: ['748109554602', "{{ customer_account_id }}"]
+      user_ids: ['748109554602', "{{ _customer_account_id }}"]
     tags:
       customer: "{{ ami_customer }}"
       release: "{{ ami_release }}"
@@ -40,25 +40,25 @@
 - name: Copy AMI - Temporary name for copying/booting
   ec2_ami_copy:
     source_region: "{{ ami_baker_region }}"
-    region: "{{ ami_target_region }}"
+    region: "{{ _ami_target_region }}"
     source_image_id: "{{ amioutput.image_id }}"
     wait: yes
   register: amicopy
-  when: ami_target_region !=  ami_baker_region
+  when: _ami_target_region !=  ami_baker_region
 
 - name: debug
   debug: var=amicopy
-  when: ami_target_region != ami_baker_region
+  when: _ami_target_region != ami_baker_region
 
 - name: Tag AMI
   shell:
-    cmd: "aws ec2 create-tags  --region {{ ami_target_region }} --resources {{ amicopy.image_id }} --tags Key=customer,Value={{ ami_customer }} Key=release,Value={{ ami_release }} Key=source,Value={{ source_ami }} Key=git_sha,Value={{ ovc_git_sha }} Key=git_branch,Value={{ ovc_circle_branch }}"
-  when: ami_target_region !=  ami_baker_region
+    cmd: "aws ec2 create-tags  --region {{ _ami_target_region }} --resources {{ amicopy.image_id }} --tags Key=customer,Value={{ ami_customer }} Key=release,Value={{ ami_release }} Key=source,Value={{ source_ami }} Key=git_sha,Value={{ ovc_git_sha }} Key=git_branch,Value={{ ovc_circle_branch }}"
+  when: _ami_target_region !=  ami_baker_region
 
 - name: Share AMI with customer account
   shell:
-    cmd: "aws ec2 modify-image-attribute --region {{ ami_target_region }} --image-id {{ amicopy.image_id }} --launch-permission '{\"Add\": [{\"UserId\":\"{{ customer_account_id }}\"}]}'"
-  when: ami_target_region !=  ami_baker_region
+    cmd: "aws ec2 modify-image-attribute --region {{ _ami_target_region }} --image-id {{ amicopy.image_id }} --launch-permission '{\"Add\": [{\"UserId\":\"{{ _customer_account_id }}\"}]}'"
+  when: _ami_target_region !=  ami_baker_region
 
 - name: Set image_id
   set_fact:

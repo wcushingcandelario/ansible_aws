@@ -10,7 +10,7 @@ ami_release: development
 # DB
 environment_name: "{{ deploy_type }}-rds"
 mysql_host: mysql-development.ovcdemo.com
-rds_security_group: sg-6387e207,sg-0591ee7f
+rds_security_group: sg-6387e207,sg-0591ee7fd
 rds_subnet_group: "rds subnet"
 multirdszone: no
 
@@ -31,8 +31,8 @@ min_size: 1
 max_size: 1
 
 # Mongo CM
-mongo_security_group: UNUSED_VALUE
-mongo_subnet_id: UNUSED_VALUE
+mongo_security_group: sg-388baf45
+mongo_subnet_id: subnet-1e399968
 
 # Promo Engine
 dockerrun_version: "2"
