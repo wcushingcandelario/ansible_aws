@@ -48,6 +48,7 @@
       - monitor: true
       - environment: "{{ deploy_type }}"
       - role: webapp
+      - deployment_type: Cluster-1.0
   register: asglaunch
 
 - name: debug auto scaling update
