@@ -130,6 +130,7 @@
       - environment: "{{ deploy_type }}"
       - role: webapp
       - git_sha: "{{ find_ami_sha }}"
+      - deployment_type: Co1-1.0
   register: asglaunch
 
 - name: Debug Auto Scaling update
