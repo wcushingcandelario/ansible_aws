@@ -34,6 +34,7 @@ customer_long: TravisPerkins
 ami_release: release
 ami_customer: tp
 mongo_port: 27017
+nosql_port: 27000
 ami_owner: 748109554602 # The OVC Demo account
 s3_bucket_customer: ovc-travisperkins-releases
 s3_bucket: ovc-travisperkins-releases

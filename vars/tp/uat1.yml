@@ -30,7 +30,7 @@ max_size: 1
 # Promo Engine
 dockerrun_version: "2"
 dockercfg: dockercfg
-mongo_url: "mongodb://mongodb-{{ deploy_type }}.{{ dns_domain }}:{{ mongo_port }}/"
+mongo_url: "mongodb://nosql-nonprod.{{ dns_domain }}:{{ nosql_port }}/"
 promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
 tier: WebServer
 security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
