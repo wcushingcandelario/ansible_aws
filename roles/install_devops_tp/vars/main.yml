@@ -4,7 +4,7 @@ environments:
     url: uat1.ovchosting.co.uk
     mysql_host: uat1-mysql.ovchosting.co.uk
     nosql_host: nosql-nonprod.ovchosting.co.uk
-    nosql_db: nonprod_xdb
+    nosql_db: uat1_xdb
     nosql_port: 27000
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
     staff_discount_bucket: ovc-uat1-filerepo
