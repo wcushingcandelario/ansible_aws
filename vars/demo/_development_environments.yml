@@ -10,7 +10,7 @@ ami_release: development
 # DB
 environment_name: "{{ deploy_type }}-rds"
 mysql_host: mysql-development.ovcdemo.com
-rds_security_group: sg-6387e207,sg-0591ee7fd
+rds_security_group: sg-6387e207,sg-0591ee7f
 rds_subnet_group: "rds subnet"
 multirdszone: no
 
