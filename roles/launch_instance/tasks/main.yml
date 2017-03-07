@@ -22,10 +22,12 @@
       Name: "{{ launch_tag_name }}"
       role: "{{ launch_tag_role }}"
       environment: "{{ deploy_type }}"
+      git_sha: "{{ ovc_git_sha }}"
     instance_tags:
       Name: "{{ launch_tag_name }}"
       role: "{{ launch_tag_role }}"
       environment: "{{ deploy_type }}"
+      git_sha: "{{ ovc_git_sha }}"
   register: ami_instance
 
 - debug: var=ami_instance.tagged_instances.0
