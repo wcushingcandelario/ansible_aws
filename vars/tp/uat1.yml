@@ -1,5 +1,3 @@
-clustered_environment: No
-
 # Common
 deploy_type: uat1
 region: eu-west-1

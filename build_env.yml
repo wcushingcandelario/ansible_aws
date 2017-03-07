@@ -5,10 +5,10 @@
   connection: local
   tasks:
     - debug: msg='Building Clustered'
-      when: clustered_environment
+      when: max_size > 1
 
     - debug: msg='Building Single'
-      when: not clustered_environment
+      when: not max_size == 1
 
 - name: Create RDS
   connection: local
@@ -188,29 +188,15 @@
   tags:
     - upgrade_databases
 
-- name: Launch New Instance
-  hosts: localhost
-  connection: local
-  roles:
-    - { role: launch_instance, when: not clustered_environment }
-    - { role: launch_instance_dns, when: not clustered_environment }
-  vars:
-    instance_type: "{{ instance_type_single }}"
-    _security_group: "{{ group_id }}"
-    _subnet_id: "{{ vpc_subnet_id }}"
-    _user_data: "{{ lookup('template', 'scripts/user_data.sh.j2') }}"
-  tags:
-    - launch_ami
-
 
 - name: Create ELB and ASG
   hosts: localhost
   connection: local
   roles:
-    - { role: create-elb-pos, when: clustered_environment and max_size > 1 }
-    - { role: create-elb-dash, when: clustered_environment and max_size > 1 }
-    - { role: create-auto, when: clustered_environment and max_size > 1 }
-    - { role: create_single_ssl_elb_asg_lc, when: clustered_environment and max_size == 1 }
+    - { role: create-elb-pos, when: max_size > 1 }
+    - { role: create-elb-dash, when: max_size > 1 }
+    - { role: create-auto, when: max_size > 1 }
+    - { role: create_single_ssl_elb_asg_lc, when: max_size == 1 }
   vars:
     deploy_pos: "{{ deploy_type }}-POS"
     deploy_dash: "{{ deploy_type }}-Dash"

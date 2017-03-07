@@ -1,5 +1,3 @@
-clustered_environment: Yes
-
 # Common
 deploy_type: prod
 region: eu-west-1
