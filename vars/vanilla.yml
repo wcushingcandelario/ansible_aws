@@ -1,24 +1,24 @@
-dns_zone_id: Z1IY8P6OMVL5SH
-dns_domain: ovcdemo.com
-ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
-region: us-east-1
-key: ovc-private
+
+  bob: barker
+ami_baker_instance_profile_name: S3_Release_Read
 ami_baker_key: ovc-private
+ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
 ami_baker_rds_security_group: sg-6387e207,sg-0591ee7f
 ami_baker_rds_subnet_group: "rds subnet"
-ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
-ami_baker_vpc_subnet_public: subnet-9f8a92b7
-ami_baker_instance_profile_name: S3_Release_Read
 ami_baker_region: us-east-1
-s3_bucket: ovc-release
-use_public_ip: Yes
-elb_scheme: internet-facing
-dns_private_zone: No
-customer: vanilla
-customer_account_id: 748109554602
-staffDiscount_bucketName: FAKE_VALUE
-ssl_secret_files:
-  bob: barker
-
+ami_baker_vpc_subnet_public: subnet-9f8a92b7
 ami_target_region: us-east-1
 ami_temp_vpc_subnet_public:
+ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
+customer: vanilla
+customer_account_id: 748109554602
+dns_domain: ovcdemo.com
+dns_private_zone: No
+dns_zone_id: Z1IY8P6OMVL5SH
+elb_scheme: internet-facing
+key: ovc-private
+region: us-east-1
+s3_bucket: ovc-release
+ssl_secret_files:
+staffDiscount_bucketName: FAKE_VALUE
+use_public_ip: Yes
