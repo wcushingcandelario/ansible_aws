@@ -1,20 +1,19 @@
 ---
 
-- name: ensures New Relic folder exists
+- name: Ensure New Relic folder exists
   file:
     path="{{ jetty_dir }}/newrelic"
     state=directory
     mode=0755
 
-- name: ensures New Relic package is present by downloading from s3
-  s3:
-    bucket: "{{s3_bucket}}"
-    object: "newrelic-java-{{newrelic_version}}.zip"
-    dest: "{{ jetty_dir }}/newrelic/newrelic-java-{{newrelic_version}}.zip"
-    mode: get
+- name: Download New Relic package from NewRelic
+  get_url:
+    url: 'https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip'
+    dest: "{{ jetty_dir }}/newrelic/newrelic-java.zip"
+    mode: 0755
 
 - name: unpack New Relic
-  command: "unzip {{ jetty_dir }}/newrelic/newrelic-java-{{newrelic_version}}.zip"
+  command: "unzip {{ jetty_dir }}/newrelic/newrelic-java.zip"
   args:
     chdir: "{{ jetty_dir }}/newrelic"
     creates: "{{ jetty_dir }}/newrelic/newrelic.jar"
