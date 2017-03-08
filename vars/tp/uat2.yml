@@ -13,6 +13,9 @@ rds_security_group: sg-be19edd9
 rds_subnet_group: pre-prod-rds
 multirdszone: no
 
+# Mongo CM
+mongo_security_group: sg-4af56f2c
+mongo_subnet_id: "subnet-74609202"
 
 # AMI/ELB/ASG
 ovc_security_groups: sg-be19edd9
