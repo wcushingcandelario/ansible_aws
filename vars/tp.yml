@@ -33,6 +33,7 @@ customer: tp
 customer_long: TravisPerkins
 ami_release: release
 ami_customer: tp
+mongo_instance_count: 1
 instance_type_mongo: t2.medium
 mongo_port: 27017
 nosql_port: 27000
