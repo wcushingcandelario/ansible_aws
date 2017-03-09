@@ -1,6 +1,6 @@
 dns_zone_id:
 dns_domain:
-ansible_ssh_private_key_file:
+ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
 region: eu-west-1
 key:
 ami_baker_key: ovc-private
