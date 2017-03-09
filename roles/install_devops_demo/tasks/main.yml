@@ -12,7 +12,7 @@
 #     mode: "{{ item.value.mode }}"
 #   with_dict: "{{ ssl_secret_files }}"
 #   sudo: yes
-# 
+#
 # - name: Create a chained certificate
 #   shell: cat /etc/ssl/certs/6eb20afcb39167a3.crt /etc/ssl/certs/gd_bundle-g2-g1.crt > /etc/ssl/certs/nginx-chained.crt
 #   become: yes
@@ -26,3 +26,15 @@
 #   when: not skip_ssl
 
 - include: config.yml
+
+- name: Configure newrelic.yml for ad_hoc
+  lineinfile:
+    line: "   license_key: '{{newrelic_license_key_demo}}'"
+    regexp: "  license_key:"
+    name: "{{ jetty_dir }}/newrelic/newrelic.yml"
+
+- name: Configure newrelic.yml for ad_hoc
+  lineinfile:
+    line: "license_key: '{{newrelic_license_key_demo}}'"
+    regexp: "license_key:"
+    name: "/etc/newrelic-infra.yml"
