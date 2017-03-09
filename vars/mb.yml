@@ -2,7 +2,7 @@ dns_zone_id:
 dns_domain:
 ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
 region: eu-west-1
-key:
+key: moltonbrown-ops
 ami_baker_key: ovc-private
 ami_baker_rds_security_group: sg-6387e207,sg-0591ee7f
 ami_baker_rds_subnet_group: "rds subnet"
@@ -25,7 +25,7 @@ vpc_id:
 instance_type_pe: t2.medium
 beanstalk_iam_role:
 beanstalk_service_role:
-s3_bucket_docker: "ovc-github-access-2"
+s3_bucket_docker: "ovc-github-access"
 customer_account_id: 020743871807
 customer: mb
 customer_long: MoltonBrown
