@@ -3,11 +3,14 @@ dns_domain:
 ansible_ssh_private_key_file:
 region: eu-west-1
 key:
-ami_baker_rds_security_group:
-ami_baker_rds_subnet_group:
-ami_baker_ovc_security_groups:
-ami_baker_vpc_subnet_public:
-ami_baker_instance_profile_name: UtilityServer
+ami_baker_key: ovc-private
+ami_baker_rds_security_group: sg-6387e207,sg-0591ee7f
+ami_baker_rds_subnet_group: "rds subnet"
+ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
+ami_baker_vpc_subnet_public: subnet-9f8a92b7
+ami_baker_instance_profile_name: S3_Release_Read
+ami_baker_region: us-east-1
+ami_target_region: eu-west-1
 ssl_certificate_id:
 datadog_api_key:
 skip_ssl: No
