@@ -15,11 +15,12 @@
     group: www-data
   become: yes
   become_user: root
+  with_dict: "{{ environments }}"
 
 - name: template out the tools.properties files
   template:
     src: tools.properties.j2
-    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties.{{ item.value.name }}"
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties.{{ item.value.name }}"
     owner: jetty
     group: www-data
   become: yes
@@ -39,7 +40,7 @@
 - name: template out the database/settings_var.php files
   template:
     src: database.php.j2
-    dest: "/var/www/html/ovcdashboard/app/Config/.{{ item.value.name }}"
+    dest: "/var/www/html/ovcdashboard/app/Config/database.php.{{ item.value.name }}"
     owner: www-data
     group: www-data
   become: yes
@@ -49,7 +50,7 @@
 - name: template out the database/settings_var.php files
   template:
     src: setting_var.php.j2
-    dest: "/var/www/html/ovcdashboard/app/Config/.{{ item.value.name }}"
+    dest: "/var/www/html/ovcdashboard/app/Config/setting_var.php.{{ item.value.name }}"
     owner: www-data
     group: www-data
   become: yes
