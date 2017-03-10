@@ -26,8 +26,8 @@ instance_type_asg: t2.large
 # Load Balancer Config
 elbsubnets: "subnet-c22e3ea6,subnet-cee2bf96,subnet-33e5f445"
 
-group_id: sg-148a7f6d #Used for temp instance to setup DB at deploy time
-vpc_subnet_id: subnet-c22e3ea6 #Used for temp instance to setup DB at deploy time
+group_id: sg-fa8a7f83 # Security group associated with the temporary EC2 Instance
+vpc_subnet_id: subnet-c22e3ea6 # Used for temp instance to setup DB at deploy time
 
 min_size: 1
 max_size: 1
