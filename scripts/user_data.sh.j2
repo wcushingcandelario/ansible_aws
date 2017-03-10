@@ -54,6 +54,8 @@ for I in `seq 1 254`; do echo 10.0.0.$I ip-10-0-0-$I ip-10-0-0-$I.ec2.local >> /
 
 sed -i "s/env\:unknown/env:${ENV}/" /etc/dd-agent/conf.d/http_check.yaml
 
+sed -i "s/env\:UNDEFINED/${ENV}/" /opt/jetty/newrelic/newrelic.yml
+
 sed -i.bak '/-Dorg\.quartz\.scheduler\.hostName=.*/c\#This line is removed by the admin.' /opt/jetty/start.ini
 
 sed -i s#SITE_URL\',\"http:#SITE_URL\',\"https:#g /var/www/html/ovcdashboard/app/Config/bootstrap.php

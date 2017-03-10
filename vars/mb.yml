@@ -32,3 +32,4 @@ customer_long: MoltonBrown
 ami_release: release
 ami_customer: mb
 ami_owner: 748109554602 # The OVC Demo account
+newrelic_license_key: "{{ enc_newrelic_license_key }}"
