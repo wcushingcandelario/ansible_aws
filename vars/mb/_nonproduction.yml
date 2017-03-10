@@ -23,9 +23,11 @@ IAMROLE: posserver
 instance_type_single: t2.large
 instance_type_asg: t2.large
 
+
 # Load Balancer Config
 elbsubnets: "subnet-c22e3ea6,subnet-cee2bf96,subnet-33e5f445"
 
+security_group_ids: sg-fa8a7f83 # Security group for BOTH POS Server and PE if using
 group_id: sg-fa8a7f83 # Security group associated with the temporary EC2 Instance
 vpc_subnet_id: subnet-c22e3ea6 # Used for temp instance to setup DB at deploy time
 
@@ -38,6 +40,5 @@ dockercfg: dockercfg
 mongo_url: "mongodb://nosql-nonprod.{{ dns_domain }}:{{ nosql_port }}/"
 promo_path: "https://{{ deploy_type }}-promo.{{ dns_domain }}:3000/promotions/"
 tier: WebServer
-security_group_ids: "sg-2b00104f,sg-61001005,sg-4318e724"
-elb_security_group_id: sg-4318e724
+elb_security_group_id: sg-4318e724 # Used for PromoEngine AND Inventory Manager
 pe_monitor: yes
