@@ -28,17 +28,20 @@
 - name: get the instance ID
   shell: curl -s http://169.254.169.254/latest/meta-data/instance-id
   register: INSTANCE_ID
+  when: ami_role != 'ami_builder'
   tags:
     - ad_hoc
 
 - name: get the instances environment tag
   shell: aws ec2 describe-tags --region=eu-west-1 --filters "Name=resource-id,Values={{INSTANCE_ID.stdout}}" "Name=key,Values=environment" --output=text | cut -f5
   register: env_tag
+  when: ami_role != 'ami_builder'
   tags:
     - ad_hoc
 
 - set_fact:
     newrelic_app_name: "{{ env_tag.stdout }}"
+  when: ami_role != 'ami_builder'
   tags:
     - ad_hoc
 
@@ -46,6 +49,7 @@
   template:
     src="newrelic_ami.yml.j2"
     dest="{{ jetty_dir }}/newrelic/newrelic.yml"
+  when: ami_role == 'ami_builder'
   tags:
     - baking_ami
 
@@ -53,6 +57,7 @@
   template:
     src="newrelic.yml.j2"
     dest="{{ jetty_dir }}/newrelic/newrelic.yml"
+  when: ami_role != 'ami_builder'
   tags:
     - ad_hoc
 

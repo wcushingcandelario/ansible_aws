@@ -63,8 +63,8 @@
     # Extras tjat meed to be done after the custom JARS/data
     - { role: ricbra.logentries, when: customer == 'vanilla' and ami_role == 'ami_builder' }
     - { role: nginx_proxy, when: customer == 'vanilla' and ami_role == 'ami_builder' }
-    - { role: newrelic_infrastructure, when: customer == 'vanilla' and ami_role == 'ami_builder' }
-    - { role: newrelic_infrastructure, when: customer == 'tp' and ami_role == 'ami_builder' }
+    - { role: newrelic_infrastructure, when: ami_role == 'ami_builder' }
+    - { role: newrelic_java, when: ami_role == 'ami_builder' }
 
     # DevOps customisations specific to a customer (SSL certs, configs, etc.)
 #    - { role: install_devops_dt, when: customer == 'dt' }
