@@ -27,13 +27,13 @@
 
 - include: config.yml
 
-- name: Configure newrelic.yml for ad_hoc
+- name: Configure newrelic.yml
   lineinfile:
     line: "   license_key: '{{newrelic_license_key_demo}}'"
     regexp: "  license_key:"
     name: "{{ jetty_dir }}/newrelic/newrelic.yml"
 
-- name: Configure newrelic.yml for ad_hoc
+- name: Configure newrelic.yml
   lineinfile:
     line: "license_key: '{{newrelic_license_key_demo}}'"
     regexp: "license_key:"
