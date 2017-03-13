@@ -18,6 +18,10 @@ destination = {{ environment_name | default('TEST_environment_name') }}/Jetty
 path = {{ jetty_dir }}/logs/ip*.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Importers
 
+[Importer Logs]
+path = {{ jetty_dir }}/logs/quartz*.log
+destination = {{ environment_name | default('TEST_environment_name') }}/Importers
+
 [Dashboard Error logs]
 path = {{ html_root }}/ovcdashboard/app/tmp/logs/error.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Dashboard
