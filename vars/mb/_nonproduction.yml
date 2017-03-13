@@ -18,7 +18,7 @@ mongo_security_group: sg-de8a7fa7
 mongo_subnet_id: subnet-c12e3ea5
 
 # AMI/ELB/ASG
-ovc_security_groups: sg-fa8a7f83
+ovc_security_groups: sg-fa8a7f83 # Used for the POS server instances
 IAMROLE: posserver
 instance_type_single: t2.large
 instance_type_asg: t2.large
@@ -27,7 +27,7 @@ instance_type_asg: t2.large
 # Load Balancer Config
 elbsubnets: "subnet-c22e3ea6,subnet-cee2bf96,subnet-33e5f445"
 
-security_group_ids: sg-fa8a7f83 # Security group for BOTH POS Server and PE if using
+security_group_ids: sg-148a7f6d # Security group for BOTH POS Server ELB and PE if using
 group_id: sg-fa8a7f83 # Security group associated with the temporary EC2 Instance
 vpc_subnet_id: subnet-c22e3ea6 # Used for temp instance to setup DB at deploy time
 

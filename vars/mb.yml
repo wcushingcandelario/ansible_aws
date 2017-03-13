@@ -1,5 +1,5 @@
-dns_zone_id:
-dns_domain:
+dns_zone_id: Z1F1Y0GUYLTJLJ
+dns_domain: mb-ovc.co.uk
 ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
 region: eu-west-1
 key: moltonbrown-ops
