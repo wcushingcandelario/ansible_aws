@@ -1,28 +1,40 @@
 ---
-- name: Jetty Server | Load SSL Keys
-  include_vars: "ssl-secrets.yml"
-  no_log: true
-
-- name: Jetty server | Copy SSL keys
-  copy:
-    dest: "{{ item.key }}"
-    content: "{{ item.value.content }}"
-    owner: "{{ item.value.owner }}"
-    group: "{{ item.value.group }}"
-    mode: "{{ item.value.mode }}"
-  with_dict: "{{ ssl_secret_files }}"
-  sudo: yes
-
-- name: Create a chained certificate
-  shell: cat /etc/ssl/certs/6eb20afcb39167a3.crt /etc/ssl/certs/gd_bundle-g2-g1.crt > /etc/ssl/certs/nginx-chained.crt
-  become: yes
-  become_user: root
-  when: not skip_ssl
-
-- name: Copy the private to a known location
-  shell: cp /etc/ssl/certs/ovchosting.noencrypt.key /etc/ssl/certs/nginx-noencrypt.key
-  become: yes
-  become_user: root
-  when: not skip_ssl
+# - name: Jetty Server | Load SSL Keys
+#   include_vars: "ssl-secrets.yml"
+#   no_log: true
+#
+# - name: Jetty server | Copy SSL keys
+#   copy:
+#     dest: "{{ item.key }}"
+#     content: "{{ item.value.content }}"
+#     owner: "{{ item.value.owner }}"
+#     group: "{{ item.value.group }}"
+#     mode: "{{ item.value.mode }}"
+#   with_dict: "{{ ssl_secret_files }}"
+#   sudo: yes
+#
+# - name: Create a chained certificate
+#   shell: cat /etc/ssl/certs/6eb20afcb39167a3.crt /etc/ssl/certs/gd_bundle-g2-g1.crt > /etc/ssl/certs/nginx-chained.crt
+#   become: yes
+#   become_user: root
+#   when: not skip_ssl
+#
+# - name: Copy the private to a known location
+#   shell: cp /etc/ssl/certs/ovchosting.noencrypt.key /etc/ssl/certs/nginx-noencrypt.key
+#   become: yes
+#   become_user: root
+#   when: not skip_ssl
 
 - include: config.yml
+
+- name: Configure newrelic.yml
+  lineinfile:
+    line: "   license_key: '{{newrelic_license_key_moltonbrown}}'"
+    regexp: "  license_key:"
+    name: "{{ jetty_dir }}/newrelic/newrelic.yml"
+
+- name: Configure newrelic.yml
+  lineinfile:
+    line: "license_key: '{{newrelic_license_key_moltonbrown}}'"
+    regexp: "license_key:"
+    name: "/etc/newrelic-infra.yml"

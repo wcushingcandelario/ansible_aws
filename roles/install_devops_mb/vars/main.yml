@@ -7,3 +7,11 @@ environments:
     sqs_queue:
     staff_discount_bucket:
     ecommerce_host: qamysqlhybris.ovcdemo.com
+  dev:
+    name: dev
+    url: mbdev.mb-ovc.co.uk
+    mysql_host: mysql-dev.mb-ovc.ovcdemo.com
+    nosql_host: mongodb-dev.mb-ovc.co.uk
+    sqs_queue:
+    staff_discount_bucket:
+    ecommerce_host: NONE
