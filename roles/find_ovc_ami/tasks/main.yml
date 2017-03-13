@@ -18,7 +18,7 @@
 
 - name: Finding latest OVC customised Amazon Linux ami
   ec2_ami_find:
-    name: "ovc-{{ ovc_version }}*"
+    name: "ovc-{{ find_ovc_version }}*"
     sort: name
     sort_order: descending
     region: "{{ ami_region }}"
@@ -33,7 +33,7 @@
 
 - name: Finding latest OVC customised Amazon Linux ami with a branch
   ec2_ami_find:
-    name: "ovc-{{ ovc_version }}*"
+    name: "ovc-{{ find_ovc_version }}*"
     sort: name
     sort_order: descending
     region: "{{ ami_region }}"
@@ -49,7 +49,7 @@
 
 - name: Finding latest OVC customised Amazon Linux AMI with a git SHA (reties for four minutes for the build system)
   ec2_ami_find:
-    name: "ovc-{{ ovc_version }}*"
+    name: "ovc-{{ find_ovc_version }}*"
     sort: name
     sort_order: descending
     region: "{{ ami_region }}"

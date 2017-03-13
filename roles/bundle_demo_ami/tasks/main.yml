@@ -16,6 +16,10 @@
       git_branch: "{{ ovc_circle_branch }}"
   register: amioutput
 
+
+- name: Demo AMI created
+  debug: "var=amioutput"
+
 - name: Terminate temporary instance
   local_action:
     module: ec2

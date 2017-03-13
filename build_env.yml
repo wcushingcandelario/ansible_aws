@@ -169,7 +169,7 @@
   roles:
     - upgrade_db
   vars:
-    upgrade_from: 5.11.0
+    upgrade_from: 5.14.0
   tags:
     - upgrade_databases
 

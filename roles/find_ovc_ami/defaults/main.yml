@@ -2,3 +2,4 @@ ami_customer: ovc
 ami_release: alpha
 ami_owner: self
 #ami_owner: 748109554602 # The OVC Demo account
+find_ovc_version: "{{ ovc_version }}"

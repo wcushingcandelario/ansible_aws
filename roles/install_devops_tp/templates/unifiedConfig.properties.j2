@@ -40,11 +40,11 @@ ovcDB.scheme=jdbc\:mysql
 ovcDB.username=root
 ovcNOSQLDB.connectTimeout=5000
 ovcNOSQLDB.connectionsPerHost=20
-ovcNOSQLDB.db=xdb
+ovcNOSQLDB.db={{ item.value.nosql_db }}
 ovcNOSQLDB.encrypted.password=pS6Uu4KU3B9G9FRg5IlnBg==
 ovcNOSQLDB.host={{ item.value.nosql_host }}
 ovcNOSQLDB.maxWaitTime=5000
-ovcNOSQLDB.port=27017
+ovcNOSQLDB.port={{ item.value.nosql_port }}
 ovcNOSQLDB.socketTimeout=5000
 ovcNOSQLDB.username=root
 ovcServer.host={{ item.value.url }}
