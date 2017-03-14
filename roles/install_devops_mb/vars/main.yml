@@ -10,7 +10,7 @@ environments:
   dev:
     name: dev
     url: mbdev.mb-ovc.co.uk
-    mysql_host: mysql-dev.mb-ovc.ovcdemo.com
+    mysql_host: mysql-dev.mb-ovc.co.uk
     nosql_host: mongodb-dev.mb-ovc.co.uk
     sqs_queue:
     staff_discount_bucket:
