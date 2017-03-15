@@ -22,7 +22,7 @@ vpc_subnet_id: "{{ vpc_subnet_public }}"
 IAMROLE: S3_Release_Read
 instance_type_asg: "t2.large"
 
-instance_type_single: m4.large
+instance_type_single: "t2.large"
 group_id: sg-62fc7a06,sg-6387e207,sg-eeecf389
 
 security_group_ids: sg-62fc7a06,sg-6387e207,sg-eeecf389
