@@ -21,6 +21,7 @@ IAMROLE: "ProdAppServer"
 instance_type_single: "m4.xlarge"
 instance_type_asg: "m4.xlarge"
 
+group_id: "{{ ovc_security_groups }}"
 security_group_ids: "sg-12e5a275,sg-655eff02,sg-b12180d6"
 elbsubnets: "subnet-0abd536e,subnet-10948367,subnet-354f656c"
 vpc_subnet_id: subnet-0abd536e
