@@ -127,8 +127,8 @@
     min_size: 1
     max_size: 2
     desired_capacity: 1
-    # Just under 10 minutes
-    wait_timeout: 580
+    # 9 minutes
+    wait_timeout: 540
     region: "{{ region }}"
     tags:
       - Name: "{{ deploy_type }}-{{ ovc_version }}"
