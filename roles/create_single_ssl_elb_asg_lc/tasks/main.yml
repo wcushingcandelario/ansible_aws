@@ -118,11 +118,17 @@
     load_balancers: "{{ deploy_pos }}"
     replace_all_instances: yes
     health_check_type: ELB
+    # Defaults to 500s which is 8.3 minutes, which is most of out 10 minute timeout
+    health_check_period: 30
+    # Faster replacement when the ASG/ELB decide to replace more than one instance
+    default_cooldown: 10
+    # Don't replace instances which already have the right LC.
+    lc_check: true
     min_size: 1
     max_size: 2
     desired_capacity: 1
-    wait_for_instances: no # Do not wait for deployment, this is development anyway
-    wait_timeout: 1200
+    # Just under 10 minutes
+    wait_timeout: 580
     region: "{{ region }}"
     tags:
       - Name: "{{ deploy_type }}-{{ ovc_version }}"
@@ -132,6 +138,9 @@
       - git_sha: "{{ find_ami_sha }}"
       - deployment_type: Co1-1.0
   register: asglaunch
+  until: asglaunch|success
+  retries: 3
+  delay: 30
 
 - name: Debug Auto Scaling update
   debug: "var=asglaunch"
