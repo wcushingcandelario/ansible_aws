@@ -263,6 +263,16 @@ worked for PreProd.
 
 Deployment complete!
 
+## Ad-Hoc Playbooks
+The following are a list of plays that can be run ad-hoc against a running Amazon Linux based OneView server with examples.
+
+##### logentries.yml
+LogEntries is a tool that offloads logs to https://www.logentries.com.  As a *best practice* (since LogEntries doesn't have environment sorting) include the customer name and environment in the `environment_type` variable.  This variable shows up in the LogEntries UI and makes finding your environment easy.  _*Note:*_ Internal environments with `ovcdemo.com` domains have `OVCDevelopment` as the `CUSTOMER_NAME`.
+```
+ansible-playbook -i hosts logentries.yml -e "environment_name=[CUSTOMER_NAME_GOES_HERE]-ENVIRONMENT_GOES_HERE" --vault-password-file ~/.ssh/.vault_pass.txt
+```
+
+
 
 ## Development Information
 
