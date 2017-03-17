@@ -9,6 +9,7 @@ environments:
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
     staff_discount_bucket: ovc-uat1-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
+    ovcNOSQLDB_uri: mongodb://root:root@{{nosql_host}}:{{nosql_port}}/{{nosql_db}}?authSource={{nosql_db}}
   uat2:
     name: uat2
     url: uat2.ovchosting.co.uk
@@ -19,6 +20,7 @@ environments:
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT2-Queue
     staff_discount_bucket: ovc-uat2-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
+    ovcNOSQLDB_uri: mongodb://root:root@{{nosql_host}}:{{nosql_port}}/{{nosql_db}}?authSource={{nosql_db}}
   preprod:
     name: preprod
     url: preprod.ovchosting.co.uk
@@ -29,6 +31,7 @@ environments:
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/PreProd-Queue
     staff_discount_bucket: ovc-cand-filerepo
     ecommerce_host: ws-cand1.dev.wickes-tills.co.uk
+    ovcNOSQLDB_uri: mongodb://root:root@{{nosql_host}}:{{nosql_port}}/{{nosql_db}}?authSource={{nosql_db}}
   prod:
     name: prod
     url: prod.ovchosting.co.uk
@@ -39,3 +42,4 @@ environments:
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/Prod-Queue
     staff_discount_bucket: ovc-prod-filerepo
     ecommerce_host: ws.wickes-tills.co.uk
+    ovcNOSQLDB_uri: mongodb://root:root@{{nosql_host}}:{{nosql_port}}/{{nosql_db}}?authSource={{nosql_db}}
