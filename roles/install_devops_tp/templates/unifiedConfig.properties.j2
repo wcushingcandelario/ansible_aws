@@ -40,10 +40,10 @@ ovcDB.scheme=jdbc\:mysql
 ovcDB.username=root
 ovcNOSQLDB.connectTimeout=5000
 ovcNOSQLDB.connectionsPerHost=20
-ovcNOSQLDB.db={{ item.value.name }}_xdb
+ovcNOSQLDB.db={{ item.value.nosql_db }}
 ovcNOSQLDB.maxWaitTime=5000
 ovcNOSQLDB.socketTimeout=5000
-ovcNOSQLDB.uri={{item.value.ovcNOSQLDB_uri}}
+ovcNOSQLDB.uri=mongodb://root:root@{{ item.value.nosql_host }}:{{ item.value.nosql_port }}/{{ item.value.nosql_db }}?authSource={{ item.value.nosql_db }}
 ovcServer.host={{ item.value.url }}
 ovcServer.port=443
 ovcServer.scheme=https

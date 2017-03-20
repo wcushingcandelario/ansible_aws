@@ -8,7 +8,6 @@ environments:
     sqs_queue:
     staff_discount_bucket:
     ecommerce_host: qamysqlhybris.ovcdemo.com
-    ovcNOSQLDB_uri: mongodb://root:root@{{nosql_host}}:{{nosql_port}}/{{name}}_xdb?authSource={{name}}_xdb
   dev:
     name: dev
     url: mbdev.mb-ovc.co.uk
@@ -18,4 +17,3 @@ environments:
     sqs_queue:
     staff_discount_bucket:
     ecommerce_host: NONE
-    ovcNOSQLDB_uri: mongodb://root:root@{{nosql_host}}:{{nosql_port}}/{{name}}_xdb?authSource={{name}}_xdb
