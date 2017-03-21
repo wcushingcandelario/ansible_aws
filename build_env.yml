@@ -84,6 +84,7 @@
     _security_group: "{{ mongo_security_group }}"
     _subnet_id: "{{ mongo_subnet_id }}"
     _user_data: "{{ lookup('file', 'scripts/user_data_mongo.sh') }}"
+    delete_on_termination: false
   tags:
     - mongodb_cm
 
