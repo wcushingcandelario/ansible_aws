@@ -6,7 +6,6 @@ environments:
     nosql_host: nosql-nonprod.ovchosting.co.uk
     nosql_db: uat1_xdb
     nosql_port: 27000
-    sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
     staff_discount_bucket: ovc-uat1-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
   uat2:
@@ -16,7 +15,6 @@ environments:
     nosql_host: mongodb-uat2.ovchosting.co.uk
     nosql_db: xdb
     nosql_port: 27017
-    sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT2-Queue
     staff_discount_bucket: ovc-uat2-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
   preprod:
@@ -26,7 +24,6 @@ environments:
     nosql_host: mongodb-preprod01.ovchosting.co.uk
     nosql_db: xdb
     nosql_port: 27017
-    sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/PreProd-Queue
     staff_discount_bucket: ovc-cand-filerepo
     ecommerce_host: ws-cand1.dev.wickes-tills.co.uk
   prod:
@@ -36,6 +33,5 @@ environments:
     nosql_host: mongodb-prod01.ovchosting.co.uk
     nosql_db: xdb
     nosql_port: 27017
-    sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/Prod-Queue
     staff_discount_bucket: ovc-prod-filerepo
     ecommerce_host: ws.wickes-tills.co.uk

@@ -69,9 +69,3 @@ posMClientSyncUpdater_store: OvcStore
 ovc_dashboard_locale: America/New_York
 html_root: /var/www/html
 webserver_user: www-data
-
-sqs_endpoint: sqs.eu-west-1.amazonaws.com
-sqs_queue_url: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
-
-sqs_access_key_id: test
-sqs_access_secret_id: testsecret
