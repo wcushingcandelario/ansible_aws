@@ -81,7 +81,7 @@
 - name: template out the database/settings_var.php files
   lineinfile:
     line: "<Set name=\"extraClasspath\">/opt/ovc/lib/ext/TPExtensions-{{ tp_extension_version|default(5.13.1) }}.jar;/opt/ovc/lib/ext/TPPopulators-{{ tp_extension_version|default(5.13.1) }}.jar</Set>"
-    insertafter: <Set name="overrideDescriptor">/opt/jetty/webapps/pos.d/pos-override.xml</Set>
+    insertafter: <Set name="contextPath">/</Set>
   become: yes
   become_user: root
   with_dict: "{{ environments }}"
