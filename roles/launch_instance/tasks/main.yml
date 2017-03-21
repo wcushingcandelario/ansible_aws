@@ -16,6 +16,7 @@
     volumes:
       - device_name: /dev/xvda
         volume_size: 100
+        delete_on_termination: "{{ delete_on_termination }}"
 #        encrypted: "{{ encrypt_instance }}"
     exact_count: "{{ launch_exact_count }}"
     count_tag:
