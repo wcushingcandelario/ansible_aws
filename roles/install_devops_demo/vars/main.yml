@@ -10,7 +10,7 @@ environments:
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: crosschannel.ovcdemo.com
-    sns_topic: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   devmysql:
     name: devmysql
     url: devmysql.ovcdemo.com
@@ -22,7 +22,7 @@ environments:
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: crosschannel.ovcdemo.com
-    sns_topic: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   qamysql:
     name: qamysql
     url: qamysql.ovcdemo.com
@@ -34,7 +34,7 @@ environments:
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: crosschannel.ovcdemo.com
-    sns_topic: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   rcmysql:
     name: rcmysql
     url: rcmysql.ovcdemo.com
@@ -46,7 +46,7 @@ environments:
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: rccrosschannel.ovcdemo.com
-    sns_topic: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   tpdev:
     name: tpdev
     url: tpdev.ovcdemo.com
@@ -58,16 +58,16 @@ environments:
     store: 8971
     basesiteid: wickesStores
     crosschannel_alerts_host: crosschannel.ovcdemo.com
-    sns_topic: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
+    sqs_or_sns_config: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
   tpqa:
     name: tpqa
     url: tpqa.ovcdemo.com
     mysql_host: mysql-development.ovcdemo.com
     nosql_host: nosql-development.ovcdemo.com
     staff_discount_bucket:
-    ecommerce_host:
+    ecommerce_host: 192.168.98.160
     ovc_customer: tp-all
     basesiteid: wickesStores
     crosschannel_alerts_host: crosschannel.ovcdemo.com
     store: 8971
-    sns_topic: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
+    sqs_or_sns_config: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
