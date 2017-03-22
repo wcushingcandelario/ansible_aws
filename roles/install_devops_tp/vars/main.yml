@@ -14,8 +14,8 @@ environments:
     url: uat2.ovchosting.co.uk
     mysql_host: uat2-mysql.ovchosting.co.uk
     nosql_host: mongodb-uat2.ovchosting.co.uk
-    nosql_db: xdb
-    nosql_port: 27017
+    nosql_db: uat2_xdb
+    nosql_port: 27000
     sqs_queue: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT2-Queue
     staff_discount_bucket: ovc-uat2-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
