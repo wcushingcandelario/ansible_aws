@@ -1,3 +1,8 @@
+- set_fact:
+    demo_tag_release: "{{ ami_release }}"
+  when: ami_release == 'devops-autobuild'
+
+
 - name: Bundle AMI
   local_action:
     module: ec2_ami
@@ -10,7 +15,7 @@
     wait_timeout: 1500
     tags:
       customer: "{{ ami_customer }}"
-      release: "development"
+      release: "{{ demo_tag_release }}"
       source: "{{ source_ami }}"
       git_sha: "{{ ovc_git_sha }}"
       git_branch: "{{ ovc_circle_branch }}"

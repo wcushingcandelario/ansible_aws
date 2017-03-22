@@ -1,3 +1,4 @@
 ami_customer: ovc
 ovc_git_sha:
 ovc_circle_branch:
+demo_tag_release: "development"
