@@ -4,11 +4,8 @@ set +x
 echo $ANSIBLE_VAULT_PASSWORD > ~/.ssh/.vault_pass.txt
 
 OVC_VERSION='5.13.0'
-FIND_OVC_VERSION=${OVC_VERSION}
-EXT_VERSION="5.13.0-28-g0c05cd7"
 GIT_BRANCH='release-5.13.0'
 FIND_AMI_BRANCH=${GIT_BRANCH}
-GRADLE_BRANCH='rcs'
 GIT_SHA1='055aa62357d4e09dea4d030997f14ed7a41c106f'
 AMI_RELEASE='devops-autobuild'
 
@@ -22,7 +19,13 @@ AMI_RELEASE='devops-autobuild'
   --skip-tags=importers,startjetty,rds_util \
   -vv
 
-GIT_SHA1='0c05cd7db65221e9fd527929203aec29348c8f70'
+OVC_VERSION='5.13.1'
+FIND_OVC_VERSION='5.13.0'
+EXT_VERSION='5.13.1-56-gce59dd7'
+GIT_BRANCH='release-5.13.1'
+FIND_AMI_BRANCH='release-5.13.0'
+GRADLE_BRANCH='rcs'
+GIT_SHA1='ce59dd739d809548fe2a31bf79d2b26c0e6a8408'
 
 cd build/ansible/ansible
 ~/.local/bin/ansible-playbook build-new-ami.yml \
