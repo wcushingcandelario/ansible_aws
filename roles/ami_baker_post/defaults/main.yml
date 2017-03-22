@@ -2,3 +2,8 @@ ami_customer: ovc
 ami_release: alpha
 ovc_git_sha: unset
 ovc_circle_branch: unset
+
+source_tag_customer: unset
+source_tag_git_branch: unset
+source_tag_git_sha: unset
+source_tag_release: unset

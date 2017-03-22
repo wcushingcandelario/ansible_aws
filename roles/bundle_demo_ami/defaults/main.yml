@@ -2,3 +2,8 @@ ami_customer: ovc
 ovc_git_sha:
 ovc_circle_branch:
 demo_tag_release: "development"
+
+source_tag_customer: unset
+source_tag_git_branch: unset
+source_tag_git_sha: unset
+source_tag_release: unset

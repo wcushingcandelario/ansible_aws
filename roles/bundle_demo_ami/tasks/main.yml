@@ -19,6 +19,10 @@
       source: "{{ source_ami }}"
       git_sha: "{{ ovc_git_sha }}"
       git_branch: "{{ ovc_circle_branch }}"
+      source_customer: "{{ source_tag_customer }}"
+      source_git_branch: "{{ source_tag_git_branch }}"
+      source_git_sha: "{{ source_tag_git_sha }}"
+      source_release: "{{ source_tag_release }}"
   register: amioutput
 
 
