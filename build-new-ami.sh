@@ -7,7 +7,7 @@ OVC_VERSION='5.13.0'
 GIT_BRANCH='release-5.13.0'
 FIND_AMI_BRANCH=${GIT_BRANCH}
 GIT_SHA1='055aa62357d4e09dea4d030997f14ed7a41c106f'
-AMI_RELEASE='devops-autobuild'
+AMI_RELEASE='devops-temporary'
 
 ~/.local/bin/ansible-playbook build-new-ami.yml \
   -e @vars/vanilla.yml \

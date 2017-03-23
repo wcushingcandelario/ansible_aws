@@ -1,6 +1,6 @@
 - set_fact:
     demo_tag_release: "{{ ami_release }}"
-  when: ami_release == 'devops-autobuild'
+  when: ami_release == 'devops-temporary'
 
 
 - name: Bundle AMI
