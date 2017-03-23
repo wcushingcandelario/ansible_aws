@@ -28,6 +28,8 @@
       source_git_branch: "{{ source_tag_git_branch }}"
       source_git_sha: "{{ source_tag_git_sha }}"
       source_release: "{{ source_tag_release }}"
+      pos_version: "{{ source_tag_pos_version }}"
+      ext_version: "{{ source_tag_ext_version }}"
   register: amioutput
 
 - name: debug

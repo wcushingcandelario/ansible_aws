@@ -7,3 +7,5 @@ source_tag_customer: unset
 source_tag_git_branch: unset
 source_tag_git_sha: unset
 source_tag_release: unset
+source_tag_pos_version: "{{ ovc_version }}"
+source_tag_ext_version: unset
