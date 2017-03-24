@@ -46,6 +46,18 @@
   become: yes
   become_user: root
   with_dict: "{{ environments }}"
+  when: item.value.name != 'tpqa.ovcdemo.com' and item.value.name != 'tpdev.ovcdemo.com'
+
+- name: template out the context.xml files
+  template:
+    src: context.xml.j2
+    dest: "/opt/jetty/webapps/context.xml.{{ item.value.name }}"
+    owner: jetty
+    group: jetty
+  become: yes
+  become_user: root
+  with_dict: "{{ environments }}"
+  when: item.value.name == 'tpqa.ovcdemo.com' or item.value.name == 'tpdev.ovcdemo.com'
 
 - name: template out the database/settings_var.php files
   template:
@@ -77,12 +89,3 @@
     - cometd/web.xml.patch.*
   become: yes
   become_user: root
-
-- name: template out the database/settings_var.php files
-  lineinfile:
-    line: "<Set name=\"extraClasspath\">/opt/ovc/lib/ext/TPExtensions-{{ tp_extension_version|default(5.13.1) }}.jar;/opt/ovc/lib/ext/TPPopulators-{{ tp_extension_version|default(5.13.1) }}.jar</Set>"
-    insertafter: <Set name="contextPath">/</Set>
-  become: yes
-  become_user: root
-  with_dict: "{{ environments }}"
-  when: item.value.name == 'tpdev.ovcdemo.com' or item.value.name == 'tpqa.ovcdemo.com'
