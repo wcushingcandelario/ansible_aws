@@ -1,8 +1,0 @@
-init_config:
-
-instances:
-  - host: localhost
-    jmx_url: "service:jmx:rmi://localhost:1099/jndi/rmi://localhost:1099/jmxrmi"
-    conf:
-      - include:
-        domain_regex: org\.eclipse\.jetty.*

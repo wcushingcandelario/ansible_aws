@@ -1,4 +1,0 @@
-init_config:
-
-instances:
-  - apache_status_url: http://localhost:9080/server-status?auto
