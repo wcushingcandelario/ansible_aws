@@ -1,3 +1,8 @@
+- set_fact:
+    demo_tag_release: "{{ ami_release }}"
+  when: ami_release == 'devops-temporary'
+
+
 - name: Bundle AMI
   local_action:
     module: ec2_ami
@@ -10,10 +15,16 @@
     wait_timeout: 1500
     tags:
       customer: "{{ ami_customer }}"
-      release: "development"
+      release: "{{ demo_tag_release }}"
       source: "{{ source_ami }}"
       git_sha: "{{ ovc_git_sha }}"
       git_branch: "{{ ovc_circle_branch }}"
+      source_customer: "{{ source_tag_customer }}"
+      source_git_branch: "{{ source_tag_git_branch }}"
+      source_git_sha: "{{ source_tag_git_sha }}"
+      source_release: "{{ source_tag_release }}"
+      pos_version: "{{ source_tag_pos_version }}"
+      ext_version: "{{ source_tag_ext_version }}"
   register: amioutput
 
 

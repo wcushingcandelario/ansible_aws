@@ -25,6 +25,20 @@
   set_fact:
     source_ami: "{{ ami_find.results[0].ami_id }}"
 
+- name: Record some extra data for tagging
+  set_fact:
+    source_tag_customer: "{{ ami_find.results[0].tags.customer }}"
+    source_tag_git_branch: "{{ ami_find.results[0].tags.git_branch }}"
+    source_tag_git_sha: "{{ ami_find.results[0].tags.git_sha }}"
+    source_tag_release: "{{ ami_find.results[0].tags.release }}"
+  when: ami_find.results[0].tags.git_sha is defined
+
+- name: Record some extra data for tagging
+  set_fact:
+    source_tag_pos_version: "{{ ami_find.results[0].tags.pos_version }}"
+    source_tag_ext_version: "{{ tp_extension_version }}"
+  when: ami_find.results[0].tags.pos_version is defined
+
 - name: Set IP fact (public).
   set_fact:
     ssh_ip: "{{ ami_instance.tagged_instances.0.public_ip }}"
