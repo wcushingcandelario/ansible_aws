@@ -8,7 +8,6 @@
 	<Set name="extractWAR">false</Set>
 	<Set name="maxFormContentSize">20000000</Set>
 
-	<Set name="overrideDescriptor">/opt/jetty/webapps/pos.d/pos-override.xml</Set>
 	<Set name="extraClasspath">/opt/ovc/lib/ext/TPExtensions-{{ tp_extension_version }}.jar;/opt/ovc/lib/ext/TPPopulators-{{ tp_extension_version }}.jar</Set>
 
 	<Set name="securityHandler">
@@ -46,33 +45,6 @@
 				</Set>
 			</New>
 
-		</Arg>
-	</New>
-
-	<New id="jmsConnectionFactory" class="org.eclipse.jetty.plus.jndi.Resource">
-		<Arg>
-			<Ref id="demo"/>
-		</Arg>
-		<Arg>jms/connectionFactory</Arg>
-		<Arg>
-			<New class="org.skyscreamer.nevado.jms.NevadoConnectionFactory">
-				<Set name="sqsConnectorFactory">
-					<New class="org.skyscreamer.nevado.jms.connector.oneviewcommerce.ShadedNoCredPlainTextAmazonSQSConnectorFactory"/>
-				</Set>
-				<Set name="awsSQSEndpoint">sqs.eu-west-1.amazonaws.com</Set>
-			</New>
-		</Arg>
-	</New>
-	<New id="jmsQueue" class="org.eclipse.jetty.plus.jndi.Resource">
-		<Arg>
-			<Ref id="demo"/>
-		</Arg>
-		<Arg>jms/destination1</Arg>
-		<Arg>
-			<New class="org.skyscreamer.nevado.jms.destination.NevadoQueue">
-				<Arg>destination1</Arg>
-				<Set name="queueUrl">{{ item.value.sqs_queue }}</Set>
-			</New>
 		</Arg>
 	</New>
 
