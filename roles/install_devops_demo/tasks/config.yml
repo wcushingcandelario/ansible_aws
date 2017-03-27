@@ -14,7 +14,7 @@
   become: yes
   become_user: root
   with_dict: "{{ environments }}"
-  when: item.value.name != 'tpqa.ovcdemo.com' and item.value.name != 'tpdev.ovcdemo.com'
+  when: item.value.name != 'tpqa' and item.value.name != 'tpdev' and item.value.name != 'tpprod'
 
 - name: template out the unifiedConfig.properties files
   template:
@@ -25,7 +25,7 @@
   become: yes
   become_user: root
   with_dict: "{{ environments }}"
-  when: item.value.name == 'tpqa.ovcdemo.com' or item.value.name == 'tpdev.ovcdemo.com'
+  when: item.value.name == 'tpqa' or item.value.name == 'tpdev' or item.value.name == 'tpprod'
 
 - name: template out the tools.properties files
   template:
@@ -46,7 +46,7 @@
   become: yes
   become_user: root
   with_dict: "{{ environments }}"
-  when: item.value.name != 'tpqa.ovcdemo.com' and item.value.name != 'tpdev.ovcdemo.com'
+  when: item.value.name != 'tpqa' and item.value.name != 'tpdev' and item.value.name != 'tpprod'
 
 - name: template out the context.xml files
   template:
@@ -57,7 +57,7 @@
   become: yes
   become_user: root
   with_dict: "{{ environments }}"
-  when: item.value.name == 'tpqa.ovcdemo.com' or item.value.name == 'tpdev.ovcdemo.com'
+  when: item.value.name == 'tpqa' or item.value.name == 'tpdev' or item.value.name == 'tpprod'
 
 - name: template out the database/settings_var.php files
   template:

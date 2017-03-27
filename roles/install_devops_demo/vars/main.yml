@@ -71,3 +71,15 @@ environments:
     basesiteid: wickesStores
     crosschannel_alerts_host: crosschannel.ovcdemo.com
     store: 8971
+  tpprod:
+    name: tpprod
+    url: tpprod.ovcdemo.com
+    mysql_host: mysql-development.ovcdemo.com
+    nosql_host: nosql-development.ovcdemo.com
+    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
+    staff_discount_bucket:
+    ecommerce_host:
+    ovc_customer: tp-all
+    basesiteid: wickesStores
+    crosschannel_alerts_host: crosschannel.ovcdemo.com
+    store: 8971
