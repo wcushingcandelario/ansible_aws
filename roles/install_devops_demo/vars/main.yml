@@ -4,70 +4,70 @@ environments:
     url: sit99.ovcdemo.com
     mysql_host: mysql-development.ovcdemo.com
     nosql_host: nosql-development.ovcdemo.com
-    sqs_queue:
     staff_discount_bucket: bob-barker
     ecommerce_host: qamysqlhybris.ovcdemo.com
     ovc_customer: ovc-all
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: crosschannel.ovcdemo.com
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   devmysql:
     name: devmysql
     url: devmysql.ovcdemo.com
     mysql_host: mysql-development.ovcdemo.com
     nosql_host: nosql-development.ovcdemo.com
-    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
     staff_discount_bucket: ovc-tp-staffdiscount
     ecommerce_host: devmysqlhybris.ovcdemo.com
     ovc_customer: ovc-all
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: crosschannel.ovcdemo.com
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   qamysql:
     name: qamysql
     url: qamysql.ovcdemo.com
     mysql_host: mysql-development.ovcdemo.com
     nosql_host: nosql-development.ovcdemo.com
-    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
     staff_discount_bucket: ovc-tp-staffdiscount
     ecommerce_host: qamysqlhybris.ovcdemo.com
     ovc_customer: ovc-all
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: crosschannel.ovcdemo.com
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   rcmysql:
     name: rcmysql
     url: rcmysql.ovcdemo.com
     mysql_host: mysql-development.ovcdemo.com
     nosql_host: nosql-development.ovcdemo.com
-    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/ovctest
     staff_discount_bucket: ovc-tp-staffdiscount
     ecommerce_host: qamysqlhybris.ovcdemo.com
     ovc_customer: ovc-all
     store: OvcStore
     basesiteid: apparel-uk
     crosschannel_alerts_host: rccrosschannel.ovcdemo.com
+    sqs_or_sns_config: arn:aws:sns:us-east-1:748109554602:ovc-rc-sns
   tpdev:
     name: tpdev
     url: tpdev.ovcdemo.com
     mysql_host: mysql-development.ovcdemo.com
     nosql_host: nosql-development.ovcdemo.com
-    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
     staff_discount_bucket:
     ecommerce_host: 192.168.98.160
     ovc_customer: tp-all
     store: 8971
     basesiteid: wickesStores
     crosschannel_alerts_host: crosschannel.ovcdemo.com
+    sqs_or_sns_config: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
   tpqa:
     name: tpqa
     url: tpqa.ovcdemo.com
     mysql_host: mysql-development.ovcdemo.com
     nosql_host: nosql-development.ovcdemo.com
-    sqs_queue: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
     staff_discount_bucket:
-    ecommerce_host:
+    ecommerce_host: 192.168.98.160
     ovc_customer: tp-all
     basesiteid: wickesStores
     crosschannel_alerts_host: crosschannel.ovcdemo.com
     store: 8971
+    sqs_or_sns_config: https://sqs.us-east-1.amazonaws.com/748109554602/tpint

@@ -41,7 +41,6 @@ import.stock.port=3007
 import.stock.scheme=http
 import.stock.type=product
 import.stock.url=stockbalances
-jms.destination=jms/destination1
 mailServer.encrypted.password=RbNGPpJVCZ6CIIvlQ8d/cg\=\=
 mailServer.from=donotreply@oneviewcommerce.com
 mailServer.smtp.auth=True
@@ -77,3 +76,4 @@ secure.occhost.context=/rest
 store.finder.stock.url=/v2/%s/products/%s/stock
 stores.url=/v2/%s/stores
 username=customermanager
+comm.tlog.url={{ item.value.sqs_or_sns_config }}

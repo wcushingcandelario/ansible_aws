@@ -119,9 +119,9 @@
     replace_all_instances: yes
     health_check_type: ELB
     # Defaults to 500s which is 8.3 minutes, which is most of out 10 minute timeout
-    health_check_period: 90
+    health_check_period: 300
     # Faster replacement when the ASG/ELB decide to replace more than one instance
-    default_cooldown: 10
+    default_cooldown: 300
     # Don't replace instances which already have the right LC.
     lc_check: true
     min_size: 1
