@@ -145,6 +145,7 @@
   vars:
     launch_tag_role: "temporary"
     termination_protection: no
+    instance_initiated_shutdown_behavior: terminate
     instance_type: "{{ instance_type_single }}"
     _security_group: "{{ group_id }}"
     _subnet_id: "{{ vpc_subnet_id }}"

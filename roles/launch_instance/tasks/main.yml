@@ -11,6 +11,7 @@
     instance_profile_name: "{{ IAMROLE }}"
     user_data: "{{ _user_data }}"
     termination_protection: "{{ termination_protection }}"
+    instance_initiated_shutdown_behavior: "{{ instance_initiated_shutdown_behavior }}"
     wait: yes
     wait_timeout: 500
     volumes:
