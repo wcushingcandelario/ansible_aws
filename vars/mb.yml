@@ -12,7 +12,6 @@ ami_baker_instance_profile_name: S3_Release_Read
 ami_baker_region: us-east-1
 ami_target_region: eu-west-1
 ssl_certificate_id: arn:aws:acm:eu-west-1:020743871807:certificate/8c546f72-be23-4b11-8b32-8bc3c079acfe
-datadog_api_key:
 skip_ssl: No
 s3_bucket:
 use_public_ip: No

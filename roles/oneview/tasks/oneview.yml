@@ -154,13 +154,6 @@
   become: yes
   become_user: root
 
-- name: Create jetty pos-override.xml file
-  template:
-    src: pos-override.xml.j2
-    dest: "{{ jetty_dir }}/webapps/pos.d/pos-override.xml"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
 - name: Install OneView
   include: oneview-install-command.yml
   when: "upgrade_version_from is not defined"

@@ -11,7 +11,6 @@ ami_baker_vpc_subnet_public: subnet-9f8a92b7
 ami_baker_instance_profile_name: S3_Release_Read
 ami_baker_region: us-east-1
 ssl_certificate_id: "arn:aws:iam::063725663692:server-certificate/elbs-ovchosting-promo"
-datadog_api_key: "e4cbd7941e565adf937353883df89b2d"
 skip_ssl: No
 s3_bucket: ovc-travisperkins-releases
 use_public_ip: No

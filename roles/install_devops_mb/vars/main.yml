@@ -5,7 +5,6 @@ environments:
     mysql_host: mysql-mbsit99.ovcdemo.com
     nosql_host: mongodb-mbsit99.ovchosting.co.uk
     nosql_port: 27017
-    sqs_queue:
     staff_discount_bucket:
     ecommerce_host: qamysqlhybris.ovcdemo.com
   dev:
@@ -14,6 +13,5 @@ environments:
     mysql_host: mysql-dev.mb-ovc.co.uk
     nosql_host: mongodb-dev.mb-ovc.co.uk
     nosql_port: 27000
-    sqs_queue:
     staff_discount_bucket:
     ecommerce_host: NONE
