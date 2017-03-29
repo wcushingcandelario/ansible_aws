@@ -64,6 +64,8 @@ alters_files:
   - file: /opt/ovc/installFiles/OVC_Install/alters-data-import-5150.sql
     version: 5.15.0
   - file: /opt/ovc/installFiles/OVC_Install/alters-5160-mysql.sql
-    version: 5.15.0
+    version: 5.16.0
   - file: /opt/ovc/installFiles/OVC_Install/alters-data-import-5160.sql
-    version: 5.15.0
+    version: 5.16.0
+  - file: /opt/ovc/installFiles/OVC_Customizations/customerData/sql/tp-alters-5160-mysql.sql
+    version: 5.16.0
