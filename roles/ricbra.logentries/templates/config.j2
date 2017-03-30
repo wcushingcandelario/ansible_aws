@@ -15,11 +15,11 @@ path = {{ jetty_dir }}/logs/start.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Jetty
 
 [Importer Logs]
-path = {{ jetty_dir }}/logs/ip*.log
+path = {{ jetty_dir }}/logs/blahblah*.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Importers
 
 [Importer Logs]
-path = {{ jetty_dir }}/logs/quartz*.log
+path = {{ jetty_dir }}/logs/TESTING*.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Importers
 
 [Dashboard Error logs]
