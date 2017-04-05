@@ -50,7 +50,7 @@
 
 - name: template out the context.xml files
   template:
-    src: context.xml.j2
+    src: context.xml.tp.j2
     dest: "/opt/jetty/webapps/context.xml.{{ item.value.name }}"
     owner: jetty
     group: jetty
