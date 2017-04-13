@@ -104,5 +104,5 @@
     port: 22
     state: started
     timeout: 640
-  with_items: ami_instance.tagged_instances
+  with_items: "{{ ami_instance.tagged_instances }}"
   when: ami_instance.tagged_instances is defined and not use_public_ip
