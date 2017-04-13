@@ -70,3 +70,5 @@ alters_files:
   - file: /opt/ovc/installFiles/OVC_Customizations/customerData/sql/tp-alters-5160-mysql.sql
     version: 5.16.0
     customer: tp
+  - file: /opt/ovc/installFiles/OVC_Install/alters-5161-mysql.sql
+    version: 5.16.1
