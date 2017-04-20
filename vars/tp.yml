@@ -42,4 +42,6 @@ s3_bucket: ovc-travisperkins-releases
 ami_target_region: eu-west-1
 ami_temp_vpc_subnet_public: subnet-4f93d938
 newrelic_license_key: "{{ enc_newrelic_license_key }}"
+mmsGroupId: "{{ enc_mmsGroupId }}"
+mmsApiKey: "{{ enc_mmsApiKey }}"
 mysql_database: xdb
