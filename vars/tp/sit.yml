@@ -16,7 +16,7 @@ multirdszone: no
 # Mongo CM
 mongo_security_group: sg-5bbc1f3c,sg-22eef145
 mongo_subnet_id: subnet-0a75a06e
-
+mongo_instance_count: 3
 
 # AMI/ELB/ASG
 ovc_security_groups: ['sg-71bc1f16']
