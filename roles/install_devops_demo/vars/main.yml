@@ -1,3 +1,5 @@
+tp_extension_version: BAD_TEST_VALUE_UNSET_ON_CMDLINE
+
 environments:
   sit99:
     name: sit99

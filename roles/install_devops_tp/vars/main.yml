@@ -21,6 +21,17 @@ environments:
     sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT2-Queue
     staff_discount_bucket: ovc-uat2-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
+  sit:
+    name: sit
+    url: sit.ovchosting.co.uk
+    mysql_host: sit-mysql.ovchosting.co.uk
+    nosql_host: mongodb-sit01.ovchosting.co.uk
+    nosql_db: xdb
+    nosql_port: 27017
+    mongo_uri: mongodb://root:root@mongodb-sit01.ovchosting.co.uk:27017/xdb?authSource=xdb
+    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/PreProd-Queue
+    staff_discount_bucket: ovc-cand-filerepo
+    ecommerce_host: ws-cand1.dev.wickes-tills.co.uk
   preprod:
     name: preprod
     url: preprod.ovchosting.co.uk

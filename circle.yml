@@ -17,12 +17,12 @@ deployment:
     branch: develop
     commands:
       - ./gradlew publish --daemon
-      - pip install --user ansible
+      - pip install --user 'ansible<2.3.0'
       - pip install boto
       - ./build-new-ami.sh
   feature:
     branch: /DEVOPS-.*/
     commands:
-      - pip install --user ansible
+      - pip install --user 'ansible<2.3.0'
       - pip install boto
       - ./build-new-ami.sh
