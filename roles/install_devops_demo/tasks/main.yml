@@ -43,4 +43,4 @@
   replace:
     regexp: \-Xmx8G \-Xms4G
     replace: -Xmx4G -Xms2G
-    path: /etc/default/jetty
+    dest: /etc/default/jetty
