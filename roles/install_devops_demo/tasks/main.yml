@@ -38,3 +38,9 @@
     line: "license_key: '{{newrelic_license_key_demo}}'"
     regexp: "license_key:"
     name: "/etc/newrelic-infra.yml"
+
+- name: Reduce Jetty requirements
+  replace:
+    regexp: \-Xmx8G \-Xms4G
+    replace: -Xmx4G -Xms2G
+    dest: /etc/default/jetty
