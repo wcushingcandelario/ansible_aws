@@ -46,9 +46,9 @@
   become_user: root
   roles:
     # Basics for all AMIs and the Vanilla stuff for MPOS AMIs
-    - { role: common, when: customer == 'vanilla' and customer == 'dt' and ami_role == 'ami_builder' }
-    - { role: jetty, when: customer == 'vanilla' and customer == 'dt' and ami_role == 'ami_builder' }
-    - { role: oneview, when: customer == 'vanilla' and customer == 'dt' and ami_role == 'ami_builder' }
+    - { role: common, when: customer == 'vanilla' and ami_role == 'ami_builder' }
+    - { role: jetty, when: customer == 'vanilla' and ami_role == 'ami_builder' }
+    - { role: oneview, when: customer == 'vanilla' and ami_role == 'ami_builder' }
 
     # Mongo AMI
     - { role: mongo_cm_ami, when: ami_role == 'mongo_ami' }
