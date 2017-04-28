@@ -1,9 +1,0 @@
----
-
-- name: Restart Jetty
-  tags: startjetty
-  service:
-    name=jetty
-    state=restarted
-  become: yes
-  become_user: root
