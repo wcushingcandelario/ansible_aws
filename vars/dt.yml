@@ -1,0 +1,34 @@
+dns_zone_id: Z3OJ8O7GYA2B1G
+dns_domain: ovcdtc.com
+ansible_ssh_private_key_file: "~/.ssh/ovc-private.pem"
+region: us-west-2
+key: discounttire-ops
+ami_baker_key: ovc-private
+ami_baker_rds_security_group: sg-6387e207,sg-0591ee7f
+ami_baker_rds_subnet_group: "rds subnet"
+ami_baker_ovc_security_groups: sg-62fc7a06,sg-6387e207,sg-eeecf389
+ami_baker_vpc_subnet_public: subnet-9f8a92b7
+ami_baker_instance_profile_name: S3_Release_Read
+ami_baker_region: us-east-1
+ami_target_region: us-west-2
+ssl_certificate_id: arn:aws:acm:us-west-2:082361663398:certificate/eab75aa0-072e-433b-9e9c-e1cd0fbd7d8c
+skip_ssl: No
+s3_bucket:
+use_public_ip: No
+elb_scheme: internal
+skip_custom: No
+dns_private_zone: Yes
+solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
+alias_hosted_zone:
+vpc_id: vpc-f5c09992
+instance_type_pe: t2.medium
+beanstalk_iam_role:
+beanstalk_service_role:
+s3_bucket_docker: "ovc-github-access"
+customer_account_id: 082361663398
+customer: dt
+customer_long: DiscountTire
+ami_release: release
+ami_customer: dt
+ami_owner: 748109554602 # The OVC Demo account
+newrelic_license_key: "{{ enc_newrelic_license_key }}"
