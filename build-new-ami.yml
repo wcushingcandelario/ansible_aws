@@ -50,6 +50,11 @@
     - { role: jetty, when: customer == 'vanilla' and ami_role == 'ami_builder' }
     - { role: oneview, when: customer == 'vanilla' and ami_role == 'ami_builder' }
 
+    # Basics for DT AMIs
+    - { role: common, when: customer == 'dt' and ami_role == 'ami_builder' }
+    - { role: jetty, when: customer == 'dt' and ami_role == 'ami_builder' }
+    - { role: oneview, when: customer == 'dt' and ami_role == 'ami_builder' }
+
     # Mongo AMI
     - { role: mongo_cm_ami, when: ami_role == 'mongo_ami' }
 
