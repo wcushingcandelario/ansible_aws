@@ -1,6 +1,6 @@
 ami_customer: ovc
-ovc_git_sha:
-ovc_circle_branch:
+ovc_git_sha: unset
+ovc_circle_branch: unset
 demo_tag_release: "development"
 
 source_tag_customer: unset
