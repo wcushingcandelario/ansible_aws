@@ -54,7 +54,7 @@
     - { role: mongo_cm_ami, when: ami_role == 'mongo_ami' }
 
     # Custom JAR and data files
-    - { role: install_customizations_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
+  #  - { role: install_customizations_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
     - { role: install_customizations_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
 #    - { role: install_customizations_mb, when: customer == 'mb' }
     - { role: install_customizations_Gstar, when: customer == 'gs' and ami_role == 'ami_builder' }
