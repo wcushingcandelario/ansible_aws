@@ -54,7 +54,7 @@
     - { role: mongo_cm_ami, when: ami_role == 'mongo_ami' }
 
     # Custom JAR and data files
-    - { role: install_customizations_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
+#    - { role: install_customizations_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
     - { role: install_customizations_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
 #    - { role: install_customizations_mb, when: customer == 'mb' }
     - { role: install_customizations_Gstar, when: customer == 'gs' and ami_role == 'ami_builder' }
@@ -67,7 +67,7 @@
     - { role: newrelic_java, when: ami_role == 'ami_builder' }
 
     # DevOps customisations specific to a customer (SSL certs, configs, etc.)
-#    - { role: install_devops_dt, when: customer == 'dt' }
+    - { role: install_devops_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
     - { role: install_devops_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
     - { role: install_devops_mb, when: customer == 'mb' and ami_role == 'ami_builder' }
 #    - { role: install_devops_gstar, when: customer == 'gs' }
@@ -92,27 +92,6 @@
   connection: local
   roles:
     - ami_baker_post
-  vars:
-    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
-    region: "{{ ami_baker_region }}"
-    key: "{{ key }}"
-    ovc_security_groups: "{{ ami_baker_ovc_security_groups }}"
-    vpc_subnet_public: "{{ ami_baker_vpc_subnet_public }}"
-    instance_type: m4.large
-    jetty_user_login: jetty
-    jetty_dir: /opt/jetty
-    ovc_server_user_dir: /opt/ovc
-    webserver_user: www-data
-    s3install: true
-    ovcDB_host: "utility-mysql.{{ dns_domain }}"
-    ovcNOSQLDB_host: "mongodb-utility01.{{ dns_domain }}"
-
-- hosts: just_baked
-  remote_user: ec2-user
-  become: yes
-  become_user: root
-  roles:
-    - { role: install_devops_demo, when: ami_role == 'ami_builder' }
   vars:
     ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
     region: "{{ ami_baker_region }}"
