@@ -67,6 +67,8 @@
   unarchive:
     src: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
     dest: "{{ ovc_server_user_dir }}/installFiles/"
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_group_name }}"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
