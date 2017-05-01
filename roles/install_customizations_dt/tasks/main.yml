@@ -65,7 +65,7 @@
 
 - name: Extract contents of zip file to secondary location
   unarchive:
-    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
+    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}/*.zip"
     dest: "{{ ovc_server_user_dir }}/installFiles/"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
