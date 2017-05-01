@@ -146,15 +146,26 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
+    - { regexp: '^ecommerce.fromServer.occ.type=.*', line: 'ecommerce.fromServer.occ.type=1' }
+    - { regexp: '^secure.occhost.context=.*', line: 'secure.occhost.context=/extovcocc' }
     - { regexp: '^export.products.url=.*', line: 'export.products.url=v2/%s/ovc/products/paginated' }
     - { regexp: '^catalogs.url=.*', line: 'catalogs.url=/v2/%s/ovc/merchandisingGroups/All' }
     - { regexp: '^stores.url=.*', line: 'stores.url=/v2/%s/ovc/locations/All' }
     - { regexp: '^export.stock.url=.*', line: 'export.stock.url=v2/%s/ovc/storestock/%s' }
-    - { regexp: '^ecommerce.fromServer.occ.type=.*', line: 'ecommerce.fromServer.occ.type=1' }
+    - { regexp: '^customerDetails.url=.*', line: 'customerDetails.url=/v2/%s/users/%s' }
     - { regexp: '^oAuth.required=.*', line: 'oAuth.required=false' }
-    - { regexp: '^products.import.pageSize=.*', line: 'products.import.pageSize=1500' }
-    - { regexp: '^others.import.pageSize=.*', line: 'others.import.pageSize=1500' }
-    - { regexp: '^secure.occhost.context=.*', line: 'secure.occhost.context=/omnicommercewebservices' }
+    - { regexp: '^products.import.pageSize=.*', line: 'products.import.pageSize=2000' }
+    - { regexp: '^others.import.pageSize=.*', line: 'others.import.pageSize=2000' }
+    - { regexp: '^secure.occhost.context=.*', line: 'vehicles.url=/v2/%s/ovc/atv/vehicles' }
+    - { regexp: '^vehicles.url=.*', line: 'trims.url=/v2/%s/ovc/atv/trims' }
+    - { regexp: '^assemblies.url=.*', line: 'assemblies.url=/v2/%s/ovc/atv/assemblies' }
+    - { regexp: '^linkedProducts.url=.*', line: 'linkedProducts.url=/v2/%s/ovc/productrelation/paginated' }
+    - { regexp: '^vehicleAssemblies.url=.*', line: 'vehicleAssemblies.url=/v2/%s/ovc/atv/vehicleAssemblies' }
+    - { regexp: '^chassis.url=.*', line: 'chassis.url=/v2/%s/ovc/atv/chassis' }
+    - { regexp: '^certificateFeePriceRules.url=.*', line: 'certificateFeePriceRules.url=/v2/%s/ovc/productrelation/feePriceRules' }
+    - { regexp: '^export.product.catalog.name=.*', line: 'export.product.catalog.name=apparelProductCatalog' }
+    - { regexp: '^export.product.catalog.version=.*', line: 'export.product.catalog.version=Online' }
+
   become: yes
   become_user: "{{ jetty_user_login }}"
 
