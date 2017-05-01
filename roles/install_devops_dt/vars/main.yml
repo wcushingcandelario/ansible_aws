@@ -1,4 +1,14 @@
 environments:
+  dev:
+    name: dev
+    url: dtdev.ovcdtc.com
+    mysql_host: mysql-dev.ovcdtc.com
+    nosql_host: mongodb-dev.ovcdtc.com
+    nosql_port: 27000
+    mongo_uri: mongodb://root:root@nosql-nonprod.ovchosting.co.uk:27000/uat1_xdb?authSource=uat1_xdb
+    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
+    staff_discount_bucket:
+    ecommerce_host: dthybris.dtdev.com
   mbsit99:
     name: mbsit99
     url: mbsit99-dash.ovchosting.co.uk
