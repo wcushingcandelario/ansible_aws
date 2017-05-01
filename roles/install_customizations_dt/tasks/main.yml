@@ -104,6 +104,60 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+
+- name: Edit Jetty start.ini to add plus module
+  lineinfile:
+    dest: "{{ jetty_dir }}/start.ini"
+    line: "--module=plus"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Add configurations to jettys start.ini
+  lineinfile:
+    dest: "{{ jetty_dir}}/start.ini"
+    state: present
+    line: "{{ item.line }}"
+  with_items:
+    - { line: '-Dovc.tempfiles.cleanup=true'}
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Edit Jetty start.ini to add ext module
+  lineinfile:
+    dest: "{{ jetty_dir }}/start.ini"
+    line: "--module=ext"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Edit tools.properties
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+  with_items:
+    - { regexp: '^posMClientSyncUpdater.store.*', line: 'posMClientSyncUpdater.store=All' }
+    - { regexp: '^ovcServer.customer-all.*', line: 'ovcServer.customer-all=dt-all' }
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Update unifiedconfig.properties to include hybris OCC configs
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^export.products.url=.*', line: 'export.products.url=v2/%s/ovc/products/paginated' }
+    - { regexp: '^catalogs.url=.*', line: 'catalogs.url=/v2/%s/ovc/merchandisingGroups/All' }
+    - { regexp: '^stores.url=.*', line: 'stores.url=/v2/%s/ovc/locations/All' }
+    - { regexp: '^export.stock.url=.*', line: 'export.stock.url=v2/%s/ovc/storestock/%s' }
+    - { regexp: '^ecommerce.fromServer.occ.type=.*', line: 'ecommerce.fromServer.occ.type=1' }
+    - { regexp: '^oAuth.required=.*', line: 'oAuth.required=false' }
+    - { regexp: '^products.import.pageSize=.*', line: 'products.import.pageSize=1500' }
+    - { regexp: '^others.import.pageSize=.*', line: 'others.import.pageSize=1500' }
+    - { regexp: '^secure.occhost.context=.*', line: 'secure.occhost.context=/omnicommercewebservices' }
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
 - name: Copy devAll script
   copy:
     src: initOVCServer.sh
