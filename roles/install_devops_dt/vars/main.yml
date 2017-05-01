@@ -1,12 +1,12 @@
 environments:
-  mbsit99:
-    name: mbsit99
-    url: mbsit99-dash.ovchosting.co.uk
-    mysql_host: mysql-mbsit99.ovcdemo.com
-    nosql_host: mongodb-mbsit99.ovchosting.co.uk
+  dtsit99:
+    name: dtsit99
+    url: pos-rc.dtdev.com
+    mysql_host: 127.0.0.1
+    nosql_host: 127.0.0.1
     nosql_port: 27017
     staff_discount_bucket:
-    ecommerce_host: qamysqlhybris.ovcdemo.com
+    ecommerce_host: hybris.dtdev.com
   dev:
     name: dev
     url: dtdev.ovcdtc.com
