@@ -7,6 +7,7 @@
     group_id: "{{ ovc_security_groups }}"
     instance_type: "{{ instance_type }}"
     vpc_subnet_id: "{{ vpc_subnet_public }}"
+    user_data: "{{ _user_data }}"
     image: "{{ ami_find.results[0].ami_id }}"
     wait: yes
     instance_profile_name: "{{ ami_baker_instance_profile_name }}"
