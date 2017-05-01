@@ -30,59 +30,167 @@
   become: yes
   become_user: root
 
-- name: Unarchive Custom Data
-  unarchive: src={{item}}
-             dest="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
-  with_fileglob:  customdata-*.zip
+- name: Remove DT jars
+  file: path="{{ item }}" state=absent
+  with_fileglob:
+    - "{{ jetty_dir }}/lib/ext/DT*"
   become: yes
   become_user: root
+
+- name: Create OVC_Customizations
+  file:
+    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
+    state: directory
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Download full zip file
+  s3:
+    bucket: "{{ s3_bucket_customer }}"
+    object: "{{ s3_full_zip_prefix }}/{{ dt_extension_version }}/DTCustomPackage-{{ dt_extension_version }}.zip"
+    dest: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
+    mode: get
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
+- file:
+    path: "/tmp/DTCustomPackage-{{ dt_extension_version }}/"
+    state: directory
+
+- name: Extract contents of zip file
+  unarchive:
+    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
+    dest: "/tmp/DTCustomPackage-{{ dt_extension_version }}/"
+    remote_src: True
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
+- name: Extract contents of zip file to secondary location
+  unarchive:
+    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
+    dest: "{{ ovc_server_user_dir }}/installFiles/"
+    remote_src: True
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+
+- name: Copy dtdata.tar.gz into the right place
+  copy:
+    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}/OVC_Custom/dtdata.tar.gz"
+    dest: "{{ ovc_server_user_dir }}/installFiles/dtdata.tar.gz"
+    remote_src: True
+  when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
+  tags:
+    - separatedtdatazip
+
+- name: Download dtdata.tar.gz from S3
+  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/dtdata.tar.gz {{ ovc_server_user_dir }}/installFiles/dtdata.tar.gz"
+  when: s3install is defined and s3install and s3_full_zip_prefix is undefined and not s3_full_zip_prefix
+  become: yes
+  become_user: root
+  tags:
+    - separatedtdatazip
+
+- name: Make jetty user own dtdata.tar.gz when downloaded from S3
+  file:
+    path: "{{ ovc_server_user_dir }}/installFiles/dtdata.tar.gz"
+    mode: ug+rw
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_group_name }}"
+  when: s3install is defined and s3install
+  become: yes
+  become_user: root
+  tags:
+    - separatedtdatazip
+
+- name: Unarchive dtdata.tar.gz from S3
+  unarchive:
+    copy: no
+    src: "{{ ovc_server_user_dir }}/installFiles/dtdata.tar.gz"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_group_name }}"
+  when: s3install is defined and s3install
+  become: yes
+  become_user: root
+  tags:
+    - separatedtdatazip
+
+- name: Unarchive dtdata.tar.gz from local
+  unarchive:
+    src: dtdata.tar.gz
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
+  when: s3install is not defined or not s3install
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+  tags:
+    - separatedtdatazip
+
+- name: Unarchive Custom Data
+  unarchive: src:{{ ovc_install_dir }}/installFiles/OVC_Custom/customdata.zip"
+             dest="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
+  become: yes
+  become_user: root
+
 
 - name: Unarchive Import Files
-  unarchive: src={{item}}
-             dest="{{ ovc_install_dir }}/Base-Location-Import-Files"
-  with_fileglob:  importfiles-*.zip
-  become: yes
-  become_user: root
+  unarchive:
+    src: {{ ovc_install_dir }}/installFiles/OVC_Custom/importfiles.zip"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/"
+  when: s3install is not defined or not s3install
 
-- name: Create temp directory
-  file:
-    path: "{{ ovc_install_dir }}/TEMP"
-    state: directory
-    mode: 0775
-  become: yes
-  become_user: "{{ jetty_user_login }}"
 
 - name: Unarchive Config Files
-  unarchive: src={{item}}
-             dest="{{ ovc_install_dir }}/TEMP"
-  with_fileglob:  configs-*.zip
+  unarchive:
+    src: {{ ovc_install_dir }}/installFiles/OVC_Custom/configs.zip"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs/"
+  when: s3install is not defined or not s3install
+
+
+
+- name: Copy eCommerce Import Files
+  synchronize:
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
+  delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Copy staffDiscountImportFiles Files
+  synchronize:
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/staffDiscountImportFiles/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles"
+  delegate_to: "{{ inventory_hostname }}"
+
+
+- name: Copy importRootLocations Files
+  synchronize:
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/importRootLocations/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
+  delegate_to: "{{ inventory_hostname }}"
+
+
+
 - name: Copy appDataRegistry.config file
-  command:  cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/appDataRegistry.config" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/appDataRegistry.config"
+  command:  cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs/{{ config_folder_name }}/appDataRegistry.config" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/appDataRegistry.config"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
 - name: Copy locationWhiteList.ovccfg file
-  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/locationWhiteList.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationWhiteList.ovccfg"
+  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs//{{ config_folder_name }}/locationWhiteList.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationWhiteList.ovccfg"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
 - name: Copy locationGroupMapping.ovccfg file
-  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/locationGroupMapping.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationGroupMapping.ovccfg"
+  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs//{{ config_folder_name }}/locationGroupMapping.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationGroupMapping.ovccfg"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
 - name: Copy unifiedConfig.properties file
-  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/unifiedConfig.properties" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties"
+  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs//{{ config_folder_name }}/unifiedConfig.properties" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties"
   become: yes
   become_user: "{{ jetty_user_login }}"
   tags:
     - copyUnifiedProps
 
 - name: Copy tools.properties file
-  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/tools.properties" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
+  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs//{{ config_folder_name }}/tools.properties" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
   become: yes
   become_user: "{{ jetty_user_login }}"
   tags:
@@ -104,12 +212,84 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+
+- name: Edit Jetty start.ini to add plus module
+  lineinfile:
+    dest: "{{ jetty_dir }}/start.ini"
+    line: "--module=plus"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Add configurations to jettys start.ini
+  lineinfile:
+    dest: "{{ jetty_dir}}/start.ini"
+    state: present
+    line: "{{ item.line }}"
+  with_items:
+    - { line: '-Dovc.tempfiles.cleanup=true'}
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Edit Jetty start.ini to add ext module
+  lineinfile:
+    dest: "{{ jetty_dir }}/start.ini"
+    line: "--module=ext"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Edit tools.properties
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+  with_items:
+    - { regexp: '^posMClientSyncUpdater.store.*', line: 'posMClientSyncUpdater.store=All' }
+    - { regexp: '^ovcServer.customer-all.*', line: 'ovcServer.customer-all=dt-all' }
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Update unifiedconfig.properties to include hybris OCC configs
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^ecommerce.fromServer.occ.type=.*', line: 'ecommerce.fromServer.occ.type=1' }
+    - { regexp: '^secure.occhost.context=.*', line: 'secure.occhost.context=/extovcocc' }
+    - { regexp: '^export.products.url=.*', line: 'export.products.url=v2/%s/ovc/products/paginated' }
+    - { regexp: '^catalogs.url=.*', line: 'catalogs.url=/v2/%s/ovc/merchandisingGroups/All' }
+    - { regexp: '^stores.url=.*', line: 'stores.url=/v2/%s/ovc/locations/All' }
+    - { regexp: '^export.stock.url=.*', line: 'export.stock.url=v2/%s/ovc/storestock/%s' }
+    - { regexp: '^customerDetails.url=.*', line: 'customerDetails.url=/v2/%s/users/%s' }
+    - { regexp: '^oAuth.required=.*', line: 'oAuth.required=false' }
+    - { regexp: '^products.import.pageSize=.*', line: 'products.import.pageSize=2000' }
+    - { regexp: '^others.import.pageSize=.*', line: 'others.import.pageSize=2000' }
+    - { regexp: '^secure.occhost.context=.*', line: 'vehicles.url=/v2/%s/ovc/atv/vehicles' }
+    - { regexp: '^vehicles.url=.*', line: 'trims.url=/v2/%s/ovc/atv/trims' }
+    - { regexp: '^assemblies.url=.*', line: 'assemblies.url=/v2/%s/ovc/atv/assemblies' }
+    - { regexp: '^linkedProducts.url=.*', line: 'linkedProducts.url=/v2/%s/ovc/productrelation/paginated' }
+    - { regexp: '^vehicleAssemblies.url=.*', line: 'vehicleAssemblies.url=/v2/%s/ovc/atv/vehicleAssemblies' }
+    - { regexp: '^chassis.url=.*', line: 'chassis.url=/v2/%s/ovc/atv/chassis' }
+    - { regexp: '^certificateFeePriceRules.url=.*', line: 'certificateFeePriceRules.url=/v2/%s/ovc/productrelation/feePriceRules' }
+    - { regexp: '^export.product.catalog.name=.*', line: 'export.product.catalog.name=apparelProductCatalog' }
+    - { regexp: '^export.product.catalog.version=.*', line: 'export.product.catalog.version=Online' }
+
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
 - name: Copy devAll script
   copy:
     src: initOVCServer.sh
     dest: "{{ ovc_install_dir }}/bin/initOVCServer.sh"
     owner: jetty
     group: jetty
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Cleanup MIME files via devAll
+  lineinfile:
+    dest: "{{ ovc_install_dir }}/bin/initDevAll.sh"
+    line: 'find /tmp/ -type f -name "MIME*" -exec rm {} \;'
   become: yes
   become_user: "{{ jetty_user_login }}"
 
