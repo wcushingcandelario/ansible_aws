@@ -17,6 +17,8 @@ s3_bucket:
 use_public_ip: No
 elb_scheme: internal
 skip_custom: No
+ami_owner: 748109554602 # The OVC Demo account
+s3_bucket_customer: ovc-travisperkins-releases-not-defined
 dns_private_zone: Yes
 solution_stack_name: "64bit Amazon Linux 2016.09 v2.2.0 running Multi-container Docker 1.11.2 (Generic)"
 alias_hosted_zone:
