@@ -123,8 +123,9 @@
     - separatedtdatazip
 
 - name: Unarchive Custom Data
-  unarchive: src="{{ ovc_install_dir }}/installFiles/OVC_Custom/customdata.zip"
-             dest="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
+  unarchive:
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/customdata.zip"
+    dest: "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
   become: yes
   become_user: root
 
