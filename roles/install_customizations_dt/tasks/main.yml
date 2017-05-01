@@ -47,32 +47,32 @@
 - name: Download full zip file
   s3:
     bucket: "{{ s3_bucket_customer }}"
-    object: "{{ s3_full_zip_prefix }}/{{ dt_extension_version }}/DTCustomPackage-{{ dt_extension_version }}.zip"
-    dest: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
+    object: "{{ s3_full_zip_prefix }}/{{ dt_extension_version }}*/DTCustomPackage-{{ dt_extension_version }}*.zip"
+    dest: "/tmp/DTCustomPackage-{{ dt_extension_version }}*.zip"
     mode: get
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - file:
-    path: "/tmp/DTCustomPackage-{{ dt_extension_version }}/"
+    path: "/tmp/DTCustomPackage-{{ dt_extension_version }}*/"
     state: directory
 
 - name: Extract contents of zip file
   unarchive:
-    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
-    dest: "/tmp/DTCustomPackage-{{ dt_extension_version }}/"
+    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}*.zip"
+    dest: "/tmp/DTCustomPackage-{{ dt_extension_version }}*/"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Extract contents of zip file to secondary location
   unarchive:
-    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}.zip"
+    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}*.zip"
     dest: "{{ ovc_server_user_dir }}/installFiles/"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
 - name: Copy dtdata.tar.gz into the right place
   copy:
-    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}/OVC_Custom/dtdata.tar.gz"
+    src: "/tmp/DTCustomPackage-{{ dt_extension_version }}*/OVC_Custom/dtdata.tar.gz"
     dest: "{{ ovc_server_user_dir }}/installFiles/dtdata.tar.gz"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
