@@ -131,14 +131,14 @@
 
 - name: Unarchive Import Files
   unarchive:
-    src: {{ ovc_install_dir }}/installFiles/OVC_Custom/importfiles.zip"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/importfiles.zip"
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/"
   when: s3install is not defined or not s3install
 
 
 - name: Unarchive Config Files
   unarchive:
-    src: {{ ovc_install_dir }}/installFiles/OVC_Custom/configs.zip"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/configs.zip"
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs/"
   when: s3install is not defined or not s3install
 
