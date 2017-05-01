@@ -21,7 +21,7 @@
   become_user: root
 
 - name: Remove Server-Data
-  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/dt-al" state=absent
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/dt-all" state=absent
   become: yes
   become_user: root
 
@@ -80,7 +80,7 @@
     - separatedtdatazip
 
 - name: Download dtdata.tar.gz from S3
-  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/dtdata.tar.gz {{ ovc_server_user_dir }}/installFiles/dtdata.tar.gz"
+  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ s3_full_zip_prefix }}/dtdata.tar.gz {{ ovc_server_user_dir }}/installFiles/dtdata.tar.gz"
   when: s3install is defined and s3install and s3_full_zip_prefix is undefined and not s3_full_zip_prefix
   become: yes
   become_user: root
