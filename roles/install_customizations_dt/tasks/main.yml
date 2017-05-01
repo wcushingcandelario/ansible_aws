@@ -128,6 +128,7 @@
   unarchive:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/customdata.zip"
     dest: "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
+    remote_src: True
   become: yes
   become_user: root
 
@@ -136,6 +137,7 @@
   unarchive:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/importfiles.zip"
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/"
+    remote_src: True
   when: s3install is not defined or not s3install
 
 
@@ -143,6 +145,7 @@
   unarchive:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/configs.zip"
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs/"
+    remote_src: True
   when: s3install is not defined or not s3install
 
 
