@@ -10,52 +10,52 @@
 - name: template out the unifiedConfig.properties files
   template:
     src: unifiedConfig.properties.j2
-    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties.{{ item.value.name }}"
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties"
     owner: jetty
     group: www-data
   become: yes
   become_user: root
-  with_dict: "{{ environments }}"
+#  with_dict: "{{ environments }}"
 
 - name: template out the tools.properties files
   template:
     src: tools.properties.j2
-    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties.{{ item.value.name }}"
+    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
     owner: jetty
     group: www-data
   become: yes
   become_user: root
-  with_dict: "{{ environments }}"
+#  with_dict: "{{ environments }}"
 
 - name: template out the context.xml files
   template:
     src: context.xml.j2
-    dest: "/opt/jetty/webapps/context.xml.{{ item.value.name }}"
+    dest: "/opt/jetty/webapps/context.xml"
     owner: jetty
     group: jetty
   become: yes
   become_user: root
-  with_dict: "{{ environments }}"
+#  with_dict: "{{ environments }}"
 
 - name: template out the database/settings_var.php files
   template:
     src: database.php.j2
-    dest: "/var/www/html/ovcdashboard/app/Config/database.php.{{ item.value.name }}"
+    dest: "/var/www/html/ovcdashboard/app/Config/database.php"
     owner: www-data
     group: www-data
   become: yes
   become_user: root
-  with_dict: "{{ environments }}"
+#  with_dict: "{{ environments }}"
 
 - name: template out the database/settings_var.php files
   template:
     src: setting_var.php.j2
-    dest: "/var/www/html/ovcdashboard/app/Config/setting_var.php.{{ item.value.name }}"
+    dest: "/var/www/html/ovcdashboard/app/Config/setting_var.php"
     owner: www-data
     group: www-data
   become: yes
   become_user: root
-  with_dict: "{{ environments }}"
+#  with_dict: "{{ environments }}"
 
 - name: Copy the war.xml patch files
   copy:
