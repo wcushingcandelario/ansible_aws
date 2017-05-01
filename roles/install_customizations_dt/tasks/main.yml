@@ -6,22 +6,22 @@
   become_user: root
 
 - name: Remove App-Data
-  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/App-Data/{{ custom_data_name }}" state=absent
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/App-Data/dt-all" state=absent
   become: yes
   become_user: root
 
 - name: Remove Shared-Data
-  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Shared-Data/{{ custom_data_name }}" state=absent
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Shared-Data/dt-all" state=absent
   become: yes
   become_user: root
 
 - name: Remove Client-Data
-  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Client-Data/{{ custom_data_name }}" state=absent
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Client-Data/dt-all" state=absent
   become: yes
   become_user: root
 
 - name: Remove Server-Data
-  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/{{ custom_data_name }}" state=absent
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/dt-al" state=absent
   become: yes
   become_user: root
 
