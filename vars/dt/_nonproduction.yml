@@ -1,7 +1,7 @@
 clustered_environment: Yes
 
 # Common
-# deploy_type: dev
+deploy_type: dev
 region: us-west-2
 # key:
 ansible_ssh_private_key_file: "~/.ssh/discounttire-ops.pem"
