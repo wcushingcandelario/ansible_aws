@@ -341,10 +341,10 @@
   become: yes
   become_user: root
 
-- name: Executing clob tbl truncate
-  command: mysql -u root -proot xdb -e "truncate table xdb.clob_tbl"
-  become: yes
-  become_user: root
+#- name: Executing clob tbl truncate
+##  command: mysql -u root -proot xdb -e "truncate table xdb.clob_tbl"
+#  become: yes
+#  become_user: root
 
 - name: Run DT SQL
   shell: "mysql -u {{ ovcDB_username }} -p{{ ovcDB_password }} -h {{ ovcDB_host }} {{ ovcDB_db }} < {{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/sql/POSMClient/MySQL/dt-POSMClient-mysql.sql"
