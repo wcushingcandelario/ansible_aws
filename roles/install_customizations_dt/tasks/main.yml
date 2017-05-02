@@ -182,17 +182,17 @@
 
 
 - name: Copy appDataRegistry.config file
-  command:  cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs/{{ config_folder_name }}/appDataRegistry.config" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/appDataRegistry.config"
+  command:  cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/dtdev1/appDataRegistry.config" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/appDataRegistry.config"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
 - name: Copy locationWhiteList.ovccfg file
-  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs//{{ config_folder_name }}/locationWhiteList.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationWhiteList.ovccfg"
+  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/dtdev1/locationWhiteList.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationWhiteList.ovccfg"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
 - name: Copy locationGroupMapping.ovccfg file
-  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs//{{ config_folder_name }}/locationGroupMapping.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationGroupMapping.ovccfg"
+  command: cp "{{ ovc_install_dir }}/installFiles/OVC_Customizations/dtdev1/locationGroupMapping.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationGroupMapping.ovccfg"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
