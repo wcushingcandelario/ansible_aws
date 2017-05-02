@@ -212,19 +212,23 @@
 
 - name: Copy Tools jar to lib dir
   copy:
-    src: "{{item}}"
-    dest: "{{ ovc_install_dir }}/lib/POSMClient-Tools-DT*.jar"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/POSMClient-Tools-DT-{{ dt_extension_version | default(5.4.0) }}.jar"
+    dest: "{{ ovc_install_dir }}/lib/ext/POSMClient-Tools-DT-{{ dt_extension_version | default(5.4.0) }}.jar"
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_user_login }}"
     remote_src: True
-  with_fileglob:  "{{ ovc_install_dir }}/installFiles/OVC_Custom/POSMClient-Tools-DT*.jar"
+
   become: yes
   become_user: "{{ jetty_user_login }}"
 
 - name: Copy Extensions jar to lib dir
   copy:
-    src: "{{item}}"
-    dest: "{{ ovc_install_dir }}/lib/DTExtensions.jar"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/DTExtensions-{{ dt_extension_version | default(5.4.0) }}.jar"
+    dest: "{{ ovc_install_dir }}/lib/ext/DTExtensions-{{ dt_extension_version | default(5.4.0) }}.jar"
+    owner: "{{ jetty_user_login }}"
+    group: "{{ jetty_user_login }}"
+    mode: 0644
     remote_src: True
-  with_fileglob:  "{{ ovc_install_dir }}/installFiles/OVC_Custom/DTExtensions*.jar"
   become: yes
   become_user: "{{ jetty_user_login }}"
 
