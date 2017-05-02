@@ -136,7 +136,7 @@
 - name: Unarchive Import Files
   unarchive:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/importfiles.zip"
-    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles"
     remote_src: True
   become: yes
   become_user: root
@@ -146,7 +146,7 @@
 - name: Unarchive Config Files
   unarchive:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/configs.zip"
-    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs/"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs"
     remote_src: True
   become: yes
   become_user: root
@@ -157,7 +157,7 @@
 - name: Copy eCommerce Import Files
   synchronize:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -165,7 +165,7 @@
 - name: Copy staffDiscountImportFiles Files
   synchronize:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/staffDiscountImportFiles/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -174,7 +174,7 @@
 - name: Copy importRootLocations Files
   synchronize:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/importRootLocations/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
