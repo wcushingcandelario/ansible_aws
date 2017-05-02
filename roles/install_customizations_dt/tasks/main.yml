@@ -136,7 +136,7 @@
 - name: Unarchive Import Files
   unarchive:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/importfiles.zip"
-    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
     remote_src: True
   become: yes
   become_user: root
@@ -146,7 +146,7 @@
 - name: Unarchive Config Files
   unarchive:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Custom/configs.zip"
-    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/configs"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
     remote_src: True
   become: yes
   become_user: root
