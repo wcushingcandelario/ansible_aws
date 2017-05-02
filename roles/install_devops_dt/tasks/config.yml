@@ -15,7 +15,7 @@
     group: www-data
   become: yes
   become_user: root
-#  with_dict: "{{ environments }}"
+  with_dict: "{{ environments }}"
 
 - name: template out the tools.properties files
   template:
@@ -25,7 +25,7 @@
     group: www-data
   become: yes
   become_user: root
-#  with_dict: "{{ environments }}"
+  with_dict: "{{ environments }}"
 
 - name: template out the context.xml files
   template:
@@ -35,7 +35,7 @@
     group: jetty
   become: yes
   become_user: root
-#  with_dict: "{{ environments }}"
+  with_dict: "{{ environments }}"
 
 - name: template out the database/settings_var.php files
   template:
@@ -45,7 +45,7 @@
     group: www-data
   become: yes
   become_user: root
-#  with_dict: "{{ environments }}"
+  with_dict: "{{ environments }}"
 
 - name: template out the database/settings_var.php files
   template:
@@ -55,7 +55,7 @@
     group: www-data
   become: yes
   become_user: root
-#  with_dict: "{{ environments }}"
+  with_dict: "{{ environments }}"
 
 - name: Copy the war.xml patch files
   copy:
