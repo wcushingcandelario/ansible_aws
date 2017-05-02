@@ -156,7 +156,7 @@
 
 - name: Copy eCommerce Import Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles2/"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/eCommerceImportFiles2/"
     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
@@ -164,7 +164,7 @@
 
 - name: Copy staffDiscountImportFiles Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/staffDiscountImportFiles/"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/staffDiscountImportFiles/"
     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
@@ -173,7 +173,7 @@
 
 - name: Copy importRootLocations Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/importRootLocations/"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importRootLocations/"
     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
