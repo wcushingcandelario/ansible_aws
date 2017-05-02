@@ -140,7 +140,7 @@
     remote_src: True
   become: yes
   become_user: root
-  when: s3install is not defined or not s3install
+#  when: s3install is not defined or not s3install
 
 
 - name: Unarchive Config Files
@@ -150,7 +150,7 @@
     remote_src: True
   become: yes
   become_user: root
-  when: s3install is not defined or not s3install
+#  when: s3install is not defined or not s3install
 
 
 
