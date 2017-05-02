@@ -300,12 +300,12 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Cleanup MIME files via devAll
-  lineinfile:
+#- name: Cleanup MIME files via devAll
+#  lineinfile:
     dest: "{{ ovc_install_dir }}/bin/initDevAll.sh"
-    line: 'find /tmp/ -type f -name "MIME*" -exec rm {} \;'
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+#    line: 'find /tmp/ -type f -name "MIME*" -exec rm {} \;'
+#  become: yes
+#  become_user: "{{ jetty_user_login }}"
 
 # - name: Copy Tools jar to posWebapp
 #   copy:
