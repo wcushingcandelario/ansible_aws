@@ -40,7 +40,7 @@
 		<Arg>
 
 			<New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
-				<Set name="URL">jdbc:mysql://{{ mysql_host }}:3306/xdb</Set>
+				<Set name="URL">jdbc:mysql://{{ item.value.mysql_host }}:3306/xdb</Set>
 				<Set name="user">root</Set>
 				<Set name="password">
 					<Ref refid="password"/>
