@@ -156,7 +156,7 @@
 
 - name: Copy eCommerce Import Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles2/"
     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
