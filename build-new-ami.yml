@@ -53,9 +53,6 @@
     # Mongo AMI
     - { role: mongo_cm_ami, when: ami_role == 'mongo_ami' }
 
-    # DT local DB install
-    - { role: mysqldb, when: customer == 'dt' and ami_role == 'ami_builder' }
-
     # Custom JAR and data files
     - { role: install_customizations_dt, when: customer == 'dt' and ami_role == 'ami_builder' }
     - { role: install_customizations_tp, when: customer == 'tp' and ami_role == 'ami_builder' }
