@@ -107,7 +107,6 @@
     - find_ovc_ami
     - launch_ami
 
-
 - name: Add AMI ID to facts
   hosts: localhost
   connection: local
