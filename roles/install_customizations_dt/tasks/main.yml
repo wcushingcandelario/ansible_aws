@@ -179,6 +179,13 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
+- name: Copy standaloneImportFiles Files
+  synchronize:
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/standaloneImportFiles/"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/standaloneImportFiles"
+  delegate_to: "{{ inventory_hostname }}"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
 
 
 - name: Copy appDataRegistry.config file
