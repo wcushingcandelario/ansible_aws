@@ -157,7 +157,7 @@
 - name: Copy eCommerce Import Files
   synchronize:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/eCommerceImportFiles2/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/eCommerceImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -165,7 +165,7 @@
 - name: Copy staffDiscountImportFiles Files
   synchronize:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/staffDiscountImportFiles/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/staffDiscountImportFiles"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -174,7 +174,7 @@
 - name: Copy importRootLocations Files
   synchronize:
     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importRootLocations/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
+    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/importRootLocations"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -236,7 +236,7 @@
   lineinfile:
     dest: "{{ jetty_dir }}/webapps/context.xml"
     insertafter: '<Set name="maxFormContentSize">20000000</Set>'
-    line: '<Set name="extraClasspath">{{ ovc_install_dir }}/lib/POSMClient-Tools-DT.jar,{{ ovc_install_dir }}/lib/DTExtensions.jar</Set>'
+    line: '<Set name="extraClasspath">{{ ovc_install_dir }}/lib/POSMClient-Tools-DT-{{ dt_extension_version | default(5.4.0) }}.jar,{{ ovc_install_dir }}/lib/DTExtensions.jar</Set>'
   become: yes
   become_user: "{{ jetty_user_login }}"
 
