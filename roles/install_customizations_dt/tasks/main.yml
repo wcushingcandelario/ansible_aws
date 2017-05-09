@@ -239,16 +239,6 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Update Jetty context.xml to include DTTools,DTExtensions
-  lineinfile:
-    dest: "{{ jetty_dir }}/webapps/context.xml"
-    insertafter: '<Set name="maxFormContentSize">20000000</Set>'
-    line: '<Set name="extraClasspath">{{ ovc_install_dir }}/lib/POSMClient-Tools-DT-{{ dt_extension_version | default(5.4.0) }}.jar,{{ ovc_install_dir }}/lib/DTExtensions.jar</Set>'
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-
-
 - name: Edit Jetty start.ini to add plus module
   lineinfile:
     dest: "{{ jetty_dir }}/start.ini"
