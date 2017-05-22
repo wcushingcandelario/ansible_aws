@@ -3,7 +3,7 @@ user-key={{ logentries_account_key }}
 
 
 [Jetty Logs]
-path = {{ jetty_dir }}/logs/jetty.log
+path = {{ jetty_dir }}/logs/20*.log
 destination = {{ environment_name | default('TEST_environment_name') }}/Jetty
 
 [Jetty stderror Logs]
