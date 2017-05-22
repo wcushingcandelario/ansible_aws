@@ -3,6 +3,12 @@ test:
     - ./gradlew build --daemon
   post:
     - cp build/distributions/ansible-*.zip $CIRCLE_ARTIFACTS/
+  snapshot:
+    branch: develop
+    commands:
+    - cp build/distributions/ansible-*.zip $CIRCLE_ARTIFACTS/
+    - cp build/distributions/ansible-*.zip build/ansible-latest.zip
+    - aws s3 cp build/ansible-latest.zip s3://ovc-release-provisioner/ovc-server-rolling-builds/latest/ansible-latest.zip
 
 deployment:
   release:
