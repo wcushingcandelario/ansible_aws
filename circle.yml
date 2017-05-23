@@ -16,6 +16,8 @@ deployment:
   snapshot:
     branch: develop
     commands:
+      - cp build/distributions/ansible-*.zip build/ansible-latest.zip
+      - aws s3 cp build/ansible-latest.zip s3://ovc-release-provisioner/ovc-server-rolling-builds/latest/ansible-latest.zip
       - ./gradlew publish --daemon
       - pip install --user 'ansible<2.3.0'
       - pip install boto
