@@ -9,5 +9,5 @@ environments:
     sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/dtrc
     staff_discount_bucket:
     ecommerce_host: internal-epic-qa1-hyb-elb-313320281.us-west-2.elb.amazonaws.com
-    crosschannel_host: cc-dev.ovcdtc.com
+    crosschannel_host: dev-cc.ovcdtc.com
     port_host: devim.ovcdtc.com
