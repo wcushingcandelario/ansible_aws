@@ -1,0 +1,203 @@
+- name: Stop Jetty
+  service:
+    name: jetty
+    state: stopped
+  become: yes
+  become_user: root
+
+- name: Remove App-Data
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/App-Data/{{ custom_data_name }}" state=absent
+  become: yes
+  become_user: root
+
+- name: Remove Shared-Data
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Shared-Data/{{ custom_data_name }}" state=absent
+  become: yes
+  become_user: root
+
+- name: Remove Client-Data
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Client-Data/{{ custom_data_name }}" state=absent
+  become: yes
+  become_user: root
+
+- name: Remove Server-Data
+  file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/{{ custom_data_name }}" state=absent
+  become: yes
+  become_user: root
+
+- name: Remove ImportFiles
+  file: path="{{ ovc_install_dir }}/Base-Location-Import-Files/*" state=absent
+  become: yes
+  become_user: root
+
+- name: Unarchive Custom Data
+  unarchive: src={{item}}
+             dest="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
+  with_fileglob:  customdata-*.zip
+  become: yes
+  become_user: root
+
+- name: Unarchive Import Files
+  unarchive: src={{item}}
+             dest="{{ ovc_install_dir }}/Base-Location-Import-Files"
+  with_fileglob:  importfiles-*.zip
+  become: yes
+  become_user: root
+
+- name: Create temp directory
+  file:
+    path: "{{ ovc_install_dir }}/TEMP"
+    state: directory
+    mode: 0775
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Unarchive Config Files
+  unarchive: src={{item}}
+             dest="{{ ovc_install_dir }}/TEMP"
+  with_fileglob:  configs-*.zip
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Copy appDataRegistry.config file
+  command:  cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/appDataRegistry.config" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/appDataRegistry.config"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Copy locationWhiteList.ovccfg file
+  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/locationWhiteList.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationWhiteList.ovccfg"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Copy locationGroupMapping.ovccfg file
+  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/locationGroupMapping.ovccfg" "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/Server-Data/Client-grp-all/config/posMServer/locationGroupMapping.ovccfg"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Copy unifiedConfig.properties file
+  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/unifiedConfig.properties" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/unifiedConfig.properties"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+  tags:
+    - copyUnifiedProps
+
+- name: Copy tools.properties file
+  command: cp "{{ ovc_install_dir }}/TEMP/{{ config_folder_name }}/tools.properties" "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config/tools.properties"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+  tags:
+    - copyToolsProps
+
+- name: Copy Tools jar to lib dir
+  copy:
+    src: "{{item}}"
+    dest: "{{ ovc_install_dir }}/lib/POSMClient-Tools-MB.jar"
+  with_fileglob:  POSMClient-Tools-MB-*.jar
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Update Jetty context.xml to include MBTools
+  lineinfile:
+    dest: "{{ jetty_dir }}/webapps/context.xml"
+    insertafter: '<Set name="overrideDescriptor">.*'
+    line: '<Set name="extraClasspath">{{ ovc_install_dir }}/lib/POSMClient-Tools-MB.jar</Set>'
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Copy devAll script
+  copy:
+    src: initOVCServer.sh
+    dest: "{{ ovc_install_dir }}/bin/initOVCServer.sh"
+    owner: jetty
+    group: jetty
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+# - name: Copy Tools jar to posWebapp
+#   copy:
+#     src: POSMClient-Tools-MB-5.11.0.jar
+#     dest: "{{ ovc_install_dir }}/posWebapp/WEB-INF/lib"
+#   become: yes
+#   become_user: root
+
+
+
+#Dumps all databases to hostname.sql
+# - name: Backup DB
+#   mysql_db:
+#     state: dump
+#     name: xdb
+#     target: /opt/ovc/xdb_back.sql
+#     login_user: root
+#     login_password: root
+#   tags:
+#     - MBdbmodify
+#   become: yes
+#   become_user: root
+
+- name: Import DB
+  mysql_db:
+    state: import
+    name: xdb
+    target: /home/ec2-user/MySQL/xdb_MB.sql
+    login_user: root
+    login_password: root
+  tags:
+    - MBdbmodify
+  become: yes
+  become_user: root
+
+- name: Executing clob tbl truncate
+  command: mysql -u root -proot xdb -e "truncate table xdb.clob_tbl"
+  become: yes
+  become_user: root
+
+- name: Run MB SQL
+  shell: "mysql -u {{ ovcDB_username }} -p{{ ovcDB_password }} -h {{ ovcDB_host }} {{ ovcDB_db }} < {{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/sql/POSMClient/MySQL/mb-POSMClient-mysql.sql"
+  tags:
+    - import_custom_db
+
+- name: Remove temp Hash File
+  file: path="{{ ovc_install_dir }}/Platform-Dynamic-Objects/temp/" state=absent
+  tags:
+    - deleteTemp
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+
+- name: Make OVC directory own by Jetty
+  file:
+    owner: jetty
+    group: jetty
+    path: /opt/ovc
+  become: yes
+  become_user: root
+
+- name: Start Jetty
+  service:
+    name: jetty
+    state: started
+  tags:
+    - startjetty
+  become: yes
+  become_user: root
+  ignore_errors: yes
+
+- name: Make OVC init script executable
+  file:
+    path: "{{ ovc_install_dir }}/bin/initOVCServer.sh"
+    mode: ug+rwx
+    owner: jetty
+    group: jetty
+  become: yes
+  become_user: root
+
+- name: Initialize OneView Server
+  shell: "{{ ovc_install_dir }}/bin/initOVCServer.sh"
+  become: yes
+  become_user: "{{ jetty_user_login }}"
+  async:  12000
+  poll: 200
+  tags:
+    - importers
+    - MBimporters
+  notify: Restart Jetty
