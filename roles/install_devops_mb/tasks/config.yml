@@ -4,8 +4,6 @@
   file:
     dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config"
     state: directory
-  become: yes
-  become_user: root
 
 - name: template out the unifiedConfig.properties files
   template:
