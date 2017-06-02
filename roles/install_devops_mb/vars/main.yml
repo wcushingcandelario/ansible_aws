@@ -8,6 +8,5 @@ environments:
     nosql_port: 27000
     mongo_uri: mongodb://mongodb-dev.mb-ovc.co.uk:27000/dev_xdb
     ecommerce_host:
-#    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
-    #staff_discount_bucket: ovc-development-filerepo
-#    ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
+    sqs_or_sns_config:
+    staff_discount_bucket:
