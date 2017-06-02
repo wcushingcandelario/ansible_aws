@@ -30,7 +30,7 @@
   become: yes
   become_user: root
 
-- name: Remove TP jars
+- name: Remove MB jars
   file: path="{{ item }}" state=absent
   with_fileglob:
     - "{{ jetty_dir }}/lib/ext/MB*"
@@ -47,8 +47,8 @@
 - name: Download full zip file
   s3:
     bucket: "{{ s3_bucket_customer }}"
-    object: "{{ s3_full_zip_prefix }}/{{ mb_extension_version }}/DTCustomPackage-{{ mb_extension_version }}.zip"
-    dest: "/tmp/MBCustomPackage-{{ tp_extension_version }}.zip"
+    object: "{{ s3_full_zip_prefix }}/{{ mb_extension_version }}/MBCustomPackage-{{ mb_extension_version }}.zip"
+    dest: "/tmp/MBCustomPackage-{{ mb_extension_version }}.zip"
     mode: get
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
@@ -188,7 +188,7 @@
 
 - name: Copy MBPopulators into the right place
   copy:
-    src: "/tmp/MBCustomPackage-{{ tp_extension_version }}/OVC_Custom/MBPopulators-{{ mb_extension_version }}.jar"
+    src: "/tmp/MBCustomPackage-{{ mb_extension_version }}/OVC_Custom/MBPopulators-{{ mb_extension_version }}.jar"
     dest: "{{ ovc_install_dir }}/lib/ext/MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar"
     remote_src: True
     owner: "{{ jetty_user_login }}"
@@ -202,7 +202,7 @@
   become: yes
   become_user: jetty
 
-- name: Download TPPopulators from S3
+- name: Download MBPopulators from S3
   command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar {{ ovc_install_dir }}/lib/ext/MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar"
   when: s3install is defined and s3install and s3_full_zip_prefix is undefined and not s3_full_zip_prefix
   become: yes
