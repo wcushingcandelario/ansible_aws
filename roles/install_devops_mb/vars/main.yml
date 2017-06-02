@@ -3,10 +3,11 @@ environments:
     name: dev
     url: dev.mb-ovc.co.uk
     mysql_host: mysql-dev.mb-ovc.co.uk
-    nosql_host: nosql-dev.mb-ovc.co.uk
+    nosql_host: mongodb-dev.mb-ovc.co.uk
     nosql_db: dev_xdb
     nosql_port: 27000
-    mongo_uri: mongodb://nosql-dev.mb-ovc.co.uk:27000/dev_xdb
+    mongo_uri: mongodb://mongodb-dev.mb-ovc.co.uk:27000/dev_xdb
+    ecommerce_host:
 #    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
-    staff_discount_bucket: ovc-development-filerepo
+    #staff_discount_bucket: ovc-development-filerepo
 #    ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
