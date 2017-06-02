@@ -47,7 +47,7 @@
 - name: Download full zip file
   s3:
     bucket: "{{ s3_bucket_customer }}"
-    object: "{{ s3_full_zip_prefix }}/{{ mb_extension_version }}/DTCustomPackage-{{ mb_extension_version }}.zip"
+    object: "{{ s3_full_zip_prefix }}/{{ mb_extension_version }}/MBCustomPackage-{{ mb_extension_version }}.zip"
     dest: "/tmp/MBCustomPackage-{{ tp_extension_version }}.zip"
     mode: get
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
