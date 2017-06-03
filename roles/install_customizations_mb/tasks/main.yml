@@ -5,6 +5,7 @@
   become: yes
   become_user: root
 
+# test
 - name: Remove App-Data
   file: path="{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale/App-Data/mb-all" state=absent
   become: yes
