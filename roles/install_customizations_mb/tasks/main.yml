@@ -40,7 +40,7 @@
 
 - name: Create OVC_Customizations
   file:
-    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata"
+    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
     state: directory
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -91,7 +91,7 @@
   unarchive:
     copy: no
     src: "{{ ovc_server_user_dir }}/installFiles/mbcustomdata.zip"
-    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_group_name }}"
   when: s3install is defined and s3install
@@ -101,7 +101,7 @@
 - name: Unarchive mbcustomdata.zip from local
   unarchive:
     src: mbcustomdata.zip
-    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata"
+    dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
   when: s3install is not defined or not s3install
   become: yes
   become_user: "{{ jetty_user_login }}"
@@ -148,7 +148,7 @@
 
 - name: Copy customerData Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
     dest: "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
@@ -362,7 +362,7 @@
 
 - name: Stat if there are mb-alters
   stat:
-    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata/sql/mb-alters-{{ ovc_version | regex_replace('\\.', '') }}-mysql.sql"
+    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/sql/mb-alters-{{ ovc_version | regex_replace('\\.', '') }}-mysql.sql"
   register: custom_db_script
 
 # WORKS
