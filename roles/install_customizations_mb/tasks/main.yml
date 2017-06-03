@@ -373,20 +373,20 @@
   when: custom_db_script.stat.exists == True
   register: custom_db_import_result
 
-- name: Copy MBs custom CA cert
-  copy:
-    src: mb_int_ca3.cer
-    dest: /etc/mb_int_ca3.cer
-    owner: root
-    group: root
-    mode: 0644
-  become: yes
-  become_user: root
-
-- name: Add CA to the Java cacerts
-  command: keytool -keystore /etc/pki/java/cacerts -importcert -alias mb_int_ca3 -file /etc/mb_int_ca3.cer -noprompt -storepass changeit
-  become: yes
-  become_user: root
+# - name: Copy MBs custom CA cert
+#   copy:
+#     src: mb_int_ca3.cer
+#     dest: /etc/mb_int_ca3.cer
+#     owner: root
+#     group: root
+#     mode: 0644
+#   become: yes
+#   become_user: root
+#
+# - name: Add CA to the Java cacerts
+#   command: keytool -keystore /etc/pki/java/cacerts -importcert -alias mb_int_ca3 -file /etc/mb_int_ca3.cer -noprompt -storepass changeit
+#   become: yes
+#   become_user: root
 
 - debug: var=custom_db_import_result
 
