@@ -79,7 +79,7 @@
 
 - name: Make jetty user own mbcustomdata.zip when downloaded from S3
   file:
-    path: "{{ ovc_server_user_dir }}/installFiles/mbdata.tar.gz"
+    path: "{{ ovc_server_user_dir }}/installFiles/mbcustomdata.zip"
     mode: ug+rw
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_group_name }}"
