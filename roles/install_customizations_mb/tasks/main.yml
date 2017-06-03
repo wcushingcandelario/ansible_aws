@@ -40,7 +40,7 @@
 
 - name: Create OVC_Customizations
   file:
-    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
+    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata"
     state: directory
   become: yes
   become_user: "{{ jetty_user_login }}"
