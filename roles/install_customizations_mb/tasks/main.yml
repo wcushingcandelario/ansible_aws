@@ -64,22 +64,22 @@
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
-- name: Copy mbdata.tar.gz into the right place
+- name: Copy mbcustomdata.zip into the right place
   copy:
-    src: "/tmp/MBCustomPackage-{{ mb_extension_version }}/OVC_Custom/mbdata.tar.gz"
-    dest: "{{ ovc_server_user_dir }}/installFiles/mbdata.tar.gz"
+    src: "/tmp/MBCustomPackage-{{ mb_extension_version }}/OVC_Custom/customdata-{{ mb_extension_version }}.zip"
+    dest: "{{ ovc_server_user_dir }}/installFiles/mbcustomdata.zip"
     remote_src: True
   when: s3_full_zip_prefix is defined and s3_full_zip_prefix != 'false'
 
-- name: Download mbdata.tar.gz from S3
-  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/mbdata.tar.gz {{ ovc_server_user_dir }}/installFiles/mbdata.tar.gz"
+- name: Download mbcustomdata.zip from S3
+  command: "aws s3 cp s3://{{ s3_bucket_customer }}/{{ ovc_version }}/mbcustomdata.zip {{ ovc_server_user_dir }}/installFiles/mbcustomdata.zip"
   when: s3install is defined and s3install and s3_full_zip_prefix is undefined and not s3_full_zip_prefix
   become: yes
   become_user: root
 
-- name: Make jetty user own mbdata.tar.gz when downloaded from S3
+- name: Make jetty user own mbcustomdata.zip when downloaded from S3
   file:
-    path: "{{ ovc_server_user_dir }}/installFiles/mbdata.tar.gz"
+    path: "{{ ovc_server_user_dir }}/installFiles/mbcustomdata.zip"
     mode: ug+rw
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_group_name }}"
@@ -87,10 +87,10 @@
   become: yes
   become_user: root
 
-- name: Unarchive mbdata.tar.gz from S3
+- name: Unarchive mbcustomdata.zip from S3
   unarchive:
     copy: no
-    src: "{{ ovc_server_user_dir }}/installFiles/mbdata.tar.gz"
+    src: "{{ ovc_server_user_dir }}/installFiles/mbcustomdata.zip"
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_group_name }}"
@@ -98,9 +98,9 @@
   become: yes
   become_user: root
 
-- name: Unarchive mbdata.tar.gz from local
+- name: Unarchive mbcustomdata.zip from local
   unarchive:
-    src: mbdata.tar.gz
+    src: mbcustomdata.zip
     dest: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
   when: s3install is not defined or not s3install
   become: yes
