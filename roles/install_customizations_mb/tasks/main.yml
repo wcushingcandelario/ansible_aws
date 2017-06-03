@@ -148,7 +148,7 @@
 
 - name: Copy customerData Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/"
     dest: "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
