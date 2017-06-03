@@ -79,7 +79,7 @@
 
 - name: Make jetty user own mbcustomdata.zip when downloaded from S3
   file:
-    path: "{{ ovc_server_user_dir }}/installFiles/mbcustomdata.zip"
+    path: "{{ ovc_server_user_dir }}/installFiles/mbdata.tar.gz"
     mode: ug+rw
     owner: "{{ jetty_user_login }}"
     group: "{{ jetty_group_name }}"
@@ -106,49 +106,49 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Copy eCommerce Import Files
-  synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
-  delegate_to: "{{ inventory_hostname }}"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Copy eCommerce Import Files
+#   synchronize:
+#     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
+#     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
+#   delegate_to: "{{ inventory_hostname }}"
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
+#
+# - name: Copy eCommerce Import Files
+#   synchronize:
+#     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
+#     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
+#   delegate_to: "{{ inventory_hostname }}"
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
-- name: Copy eCommerce Import Files
-  synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/eCommerceImportFiles/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/eCommerceImportFiles"
-  delegate_to: "{{ inventory_hostname }}"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Copy staffDiscountImportFiles Files
+#   synchronize:
+#     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/staffDiscountImportFiles/"
+#     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles"
+#   delegate_to: "{{ inventory_hostname }}"
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
-- name: Copy staffDiscountImportFiles Files
-  synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/staffDiscountImportFiles/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/staffDiscountImportFiles"
-  delegate_to: "{{ inventory_hostname }}"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Copy importRootLocations Files
+#   synchronize:
+#     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/importRootLocations/"
+#     dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
+#   delegate_to: "{{ inventory_hostname }}"
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
-- name: Copy importRootLocations Files
-  synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/importFiles/importRootLocations/"
-    dest: "{{ ovc_install_dir }}/Base-Location-Import-Files/ovc-all-OvcStore/importRootLocations"
-  delegate_to: "{{ inventory_hostname }}"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-- name: Copy Platform-Dynamic-Objects/config Files
-  synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/deploy/config/mb-dev/"
-    dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config"
-  delegate_to: "{{ inventory_hostname }}"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Copy Platform-Dynamic-Objects/config Files
+#   synchronize:
+#     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/deploy/config/mb-dev/"
+#     dest: "{{ ovc_install_dir }}/Platform-Dynamic-Objects/config"
+#   delegate_to: "{{ inventory_hostname }}"
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
 - name: Copy customerData Files
   synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/"
+    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata-{{ mb_extension_version }}/"
     dest: "{{ ovc_install_dir }}/Application-Dynamic-Objects/Point-Of-Sale"
   delegate_to: "{{ inventory_hostname }}"
   become: yes
@@ -161,21 +161,21 @@
   become: yes
   become_user: root
 
-- name: Copy system_configs.php to ovcdashboard
-  synchronize:
-    src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/ovcdashboard/app/Config/system_configs.php"
-    dest: "{{ html_root }}/ovcdashboard/app/Config/"
-  delegate_to: "{{ inventory_hostname }}"
-  become: yes
-  become_user: "{{ webserver_user }}"
+# - name: Copy system_configs.php to ovcdashboard
+#   synchronize:
+#     src: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/ovcdashboard/app/Config/system_configs.php"
+#     dest: "{{ html_root }}/ovcdashboard/app/Config/"
+#   delegate_to: "{{ inventory_hostname }}"
+#   become: yes
+#   become_user: "{{ webserver_user }}"
 
-- name: Make system_configs.php owner {{ webserver_user }}
-  file:
-    path: "{{ html_root }}/ovcdashboard/app/Config/system_configs.php"
-    owner: "{{ webserver_user }}"
-    mode: 0777
-  become: yes
-  become_user: root
+# - name: Make system_configs.php owner {{ webserver_user }}
+#   file:
+#     path: "{{ html_root }}/ovcdashboard/app/Config/system_configs.php"
+#     owner: "{{ webserver_user }}"
+#     mode: 0777
+#   become: yes
+#   become_user: root
 
 - name: Copy MBExtensions into the right place
   copy:
@@ -220,22 +220,22 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Copy MBPopulators Jar to jetty
-  copy:
-    src: "MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar"
-    dest: "{{ ovc_install_dir }}/lib/ext/MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar"
-    owner: "{{ jetty_user_login }}"
-    group: "{{ jetty_user_login }}"
-    mode: 0644
-  when: ((s3install is not defined) or (s3install == false))
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Copy MBPopulators Jar to jetty
+#   copy:
+#     src: "MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar"
+#     dest: "{{ ovc_install_dir }}/lib/ext/MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar"
+#     owner: "{{ jetty_user_login }}"
+#     group: "{{ jetty_user_login }}"
+#     mode: 0644
+#   when: ((s3install is not defined) or (s3install == false))
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
-- name: Update Jetty context.xml to include MBExtensions and MBPopulators
+- name: Update Jetty context.xml to include MBExtensions
   lineinfile:
     dest: "{{ jetty_dir }}/webapps/context.xml"
     insertafter: '<Set name="overrideDescriptor">.*'
-    line: '<Set name="extraClasspath">{{ ovc_install_dir }}/lib/ext/MBExtensions-{{ mb_extension_version | default(5.4.0) }}.jar;{{ ovc_install_dir }}/lib/ext/MBPopulators-{{ mb_extension_version | default(5.4.0) }}.jar</Set>'
+    line: '<Set name="extraClasspath">{{ ovc_install_dir }}/lib/ext/MBExtensions-{{ mb_extension_version | default(5.4.0) }}.jar</Set>'
   become: yes
   become_user: "{{ jetty_user_login }}"
 
@@ -269,9 +269,9 @@
     line: "{{ item.line }}"
     regexp: "{{ item.regexp }}"
   with_items:
-    - { regexp: '^staffDiscount.protocol=.*', line: 'staffDiscount.protocol={{staffDiscount_protocol | default("https")}}' }
-    - { regexp: '^staffDiscount.region=.*', line: 'staffDiscount.region={{staffDiscount_region | default("eu-west-1")}}' }
-    - { regexp: '^staffDiscount.bucketName=.*', line: 'staffDiscount.bucketName={{staffDiscount_bucketName}}' }
+    # - { regexp: '^staffDiscount.protocol=.*', line: 'staffDiscount.protocol={{staffDiscount_protocol | default("https")}}' }
+    # - { regexp: '^staffDiscount.region=.*', line: 'staffDiscount.region={{staffDiscount_region | default("eu-west-1")}}' }
+    # - { regexp: '^staffDiscount.bucketName=.*', line: 'staffDiscount.bucketName={{staffDiscount_bucketName}}' }
     - { regexp: '^posMClientSyncUpdater.store.*', line: 'posMClientSyncUpdater.store=All' }
     - { regexp: '^ovcServer.customer-all.*', line: 'ovcServer.customer-all=mb-all' }
   become: yes
@@ -283,9 +283,9 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: '^export.products.url=.*', line: 'export.products.url=v2/%s/ovc/products/paginated' }
-    - { regexp: '^catalogs.url=.*', line: 'catalogs.url=/v2/%s/ovc/merchandisingGroups/All' }
-    - { regexp: '^stores.url=.*', line: 'stores.url=/v2/%s/ovc/locations/All' }
+    # - { regexp: '^export.products.url=.*', line: 'export.products.url=v2/%s/ovc/products/paginated' }
+    # - { regexp: '^catalogs.url=.*', line: 'catalogs.url=/v2/%s/ovc/merchandisingGroups/All' }
+    # - { regexp: '^stores.url=.*', line: 'stores.url=/v2/%s/ovc/locations/All' }
     - { regexp: '^export.stock.url=.*', line: 'export.stock.url=v2/%s/ovc/storestock/%s' }
     - { regexp: '^ecommerce.fromServer.occ.type=.*', line: 'ecommerce.fromServer.occ.type=1' }
     - { regexp: '^oAuth.required=.*', line: 'oAuth.required=false' }
@@ -312,39 +312,39 @@
   become: yes
   become_user: "{{ jetty_user_login }}"
 
-- name: Create eComRefresh.sh
-  command: "cp initOVCServer.sh eComRefresh.sh"
-  args:
-    chdir: "{{ ovc_install_dir }}/bin"
-    creates: "{{ ovc_install_dir }}/bin/eComRefresh.sh"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Create eComRefresh.sh
+#   command: "cp initOVCServer.sh eComRefresh.sh"
+#   args:
+#     chdir: "{{ ovc_install_dir }}/bin"
+#     creates: "{{ ovc_install_dir }}/bin/eComRefresh.sh"
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
+#
+# - name: Set eComRefresh.sh to run eComRefresh
+#   replace:
+#     dest: "{{ ovc_install_dir }}/bin/eComRefresh.sh"
+#     regexp: "eComInit"
+#     replace: "eComRefresh"
+#     backup: no
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
-- name: Set eComRefresh.sh to run eComRefresh
-  replace:
-    dest: "{{ ovc_install_dir }}/bin/eComRefresh.sh"
-    regexp: "eComInit"
-    replace: "eComRefresh"
-    backup: no
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-- name: Create initStaffDiscount.sh
-  command: "cp initOVCServer.sh initStaffDiscount.sh"
-  args:
-    chdir: "{{ ovc_install_dir }}/bin"
-    creates: "{{ ovc_install_dir }}/bin/initStaffDiscount.sh"
-  become: yes
-  become_user: "{{ jetty_user_login }}"
-
-- name: Set initStaffDiscount.sh to run staffData
-  replace:
-    dest: "{{ ovc_install_dir }}/bin/initStaffDiscount.sh"
-    regexp: "eComInit"
-    replace: "staffData"
-    backup: no
-  become: yes
-  become_user: "{{ jetty_user_login }}"
+# - name: Create initStaffDiscount.sh
+#   command: "cp initOVCServer.sh initStaffDiscount.sh"
+#   args:
+#     chdir: "{{ ovc_install_dir }}/bin"
+#     creates: "{{ ovc_install_dir }}/bin/initStaffDiscount.sh"
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
+#
+# - name: Set initStaffDiscount.sh to run staffData
+#   replace:
+#     dest: "{{ ovc_install_dir }}/bin/initStaffDiscount.sh"
+#     regexp: "eComInit"
+#     replace: "staffData"
+#     backup: no
+#   become: yes
+#   become_user: "{{ jetty_user_login }}"
 
 - name: Cleanup MIME files via devAll
   lineinfile:
@@ -362,7 +362,7 @@
 
 - name: Stat if there are mb-alters
   stat:
-    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customerData/sql/mb-alters-{{ ovc_version | regex_replace('\\.', '') }}-mysql.sql"
+    path: "{{ ovc_install_dir }}/installFiles/OVC_Customizations/customdata-{{ mb_extension_version }}/sql/mb-alters-{{ ovc_version | regex_replace('\\.', '') }}-mysql.sql"
   register: custom_db_script
 
 # WORKS
