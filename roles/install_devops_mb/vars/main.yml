@@ -1,17 +1,12 @@
 environments:
-  mbsit99:
-    name: mbsit99
-    url: mbsit99-dash.ovchosting.co.uk
-    mysql_host: mysql-mbsit99.ovcdemo.com
-    nosql_host: mongodb-mbsit99.ovchosting.co.uk
-    nosql_port: 27017
-    staff_discount_bucket:
-    ecommerce_host: qamysqlhybris.ovcdemo.com
   dev:
     name: dev
-    url: mbdev.mb-ovc.co.uk
+    url: dev.mb-ovc.co.uk
     mysql_host: mysql-dev.mb-ovc.co.uk
     nosql_host: mongodb-dev.mb-ovc.co.uk
+    nosql_db: dev_xdb
     nosql_port: 27000
+    mongo_uri: mongodb://mongodb-dev.mb-ovc.co.uk:27000/dev_xdb
+    ecommerce_host:
+    sqs_or_sns_config:
     staff_discount_bucket:
-    ecommerce_host: NONE
