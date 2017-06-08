@@ -7,7 +7,7 @@ environments:
     nosql_db: uat1_xdb
     nosql_port: 27000
     mongo_uri: mongodb://root:root@nosql-nonprod.ovchosting.co.uk:27000/uat1_xdb?authSource=uat1_xdb
-    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT1
+    sqs_or_sns_config: arn:aws:sqs:eu-west-1:063725663692:UAT1
     staff_discount_bucket: ovc-uat1-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
   uat2:
@@ -18,7 +18,7 @@ environments:
     nosql_db: xdb
     nosql_port: 27017
     mongo_uri: mongodb://root:root@mongodb-uat2.ovchosting.co.uk:27017/xdb?authSource=xdb
-    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/UAT2-Queue
+    sqs_or_sns_config: arn:aws:sqs:eu-west-1:063725663692:UAT2-Queue
     staff_discount_bucket: ovc-uat2-filerepo
     ecommerce_host: ws-uat1.dev.wickes-tills.co.uk
   sit:
@@ -40,7 +40,7 @@ environments:
     nosql_db: xdb
     nosql_port: 27017
     mongo_uri: mongodb://root:root@mongodb-preprod01.ovchosting.co.uk:27017/xdb?authSource=xdb
-    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/PreProd-Queue
+    sqs_or_sns_config: arn:aws:sqs:eu-west-1:063725663692:PreProd-Queue
     staff_discount_bucket: ovc-cand-filerepo
     ecommerce_host: ws-cand1.dev.wickes-tills.co.uk
   prod:
@@ -51,6 +51,6 @@ environments:
     nosql_db: xdb
     nosql_port: 27017
     mongo_uri: mongodb://root:root@mongodb-prod01.ovchosting.co.uk:27017,mongodb-prod02.ovchosting.co.uk:27017,mongodb-prod03.ovchosting.co.uk:27017/xdb?authSource=xdb
-    sqs_or_sns_config: https://sqs.eu-west-1.amazonaws.com/063725663692/Prod-Queue
+    sqs_or_sns_config: arn:aws:sqs:eu-west-1:063725663692:Prod-Queue
     staff_discount_bucket: ovc-prod-filerepo
     ecommerce_host: ws.wickes-tills.co.uk

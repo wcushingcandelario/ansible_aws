@@ -81,6 +81,12 @@ alters_files:
     version: 5.17.1
   - file: /opt/ovc/installFiles/OVC_Install/alters-data-import-5171.sql
     version: 5.17.1
-  - file: /opt/ovc/installFiles/OVC_Customizations/customerData/sql/tp-alters-5171-mysql.sql
-    version: 5.17.1
+  - file: /opt/ovc/installFiles/OVC_Install/alters-5172-mysql.sql
+    version: 5.17.2
+  - file: /opt/ovc/installFiles/OVC_Install/alters-manual-5180-mysql.sql
+    version: 5.18.0
+  - file: /opt/ovc/installFiles/OVC_Install/alters-5180-mysql.sql
+    version: 5.18.0
+  - file: /opt/ovc/installFiles/OVC_Customizations/customerData/sql/tp-alters-5180-mysql.sql
+    version: 5.18.0
     customer: tp
