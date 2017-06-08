@@ -6,6 +6,9 @@
 #Created as workaround to replace during deployment.
 #DT Urls extra
 #JMS
+#ARAccount
+ar.validateCreditBalance.target=http://esbqais.trtc.com:5555
+ar.validateCreditBalance.path=/ws/DTC_FINANCE_GET_AR_CUSTOMER_BALANCE_v1_QA/getCreditBalance/AR_Balance_AmountParameters(IV_MANDT='<SYSTEM_ID>',IV_KUNNR='<AR_CUSTOMER_ID>')/Results
 assemblies.url=/v2/%s/ovc/atv/assemblies
 cartDetails.url=/v2/%s/users/%s/carts
 catalogs.url=/v2/%s/ovc/merchandisingGroups/All
@@ -86,7 +89,7 @@ ovcServer.port=443
 ovcServer.scheme=https
 password=1234
 password=S9beBCmJbdLsitMzzpZ7qQ\=\=
-po.create.url=http://esbisld01.trtc.com:5555/ws/DtProcurement.PurchaseOrder.v1.ws.provider:PurchaseOrder/DtProcurement_PurchaseOrder_v1_ws_provider_PurchaseOrder_Port
+po.create.url=http://esbqais.trtc.com:5555/ws/DtProcurement.PurchaseOrder.v1.ws.provider:PurchaseOrder/DtProcurement_PurchaseOrder_v1_ws_provider_PurchaseOrder_Port
 products.import.pageSize=2000
 scope=extended
 secure.occhost.context=/extovcocc
@@ -97,6 +100,3 @@ trims.url=/v2/%s/ovc/atv/trims
 username=customermanager
 vehicleAssemblies.url=/v2/%s/ovc/atv/vehicleAssemblies
 vehicles.url=/v2/%s/ovc/atv/vehicles
-#ARAccount
-ar.validateCreditBalance.target=http://esbqais.trtc.com:5555
-ar.validateCreditBalance.path=/ws/DTC_FINANCE_GET_AR_CUSTOMER_BALANCE_v1_QA/getCreditBalance/AR_Balance_AmountParameters(IV_MANDT='<SYSTEM_ID>',IV_KUNNR='<AR_CUSTOMER_ID>')/Results
