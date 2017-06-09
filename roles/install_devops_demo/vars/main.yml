@@ -60,7 +60,7 @@ environments:
     store: 8971
     basesiteid: wickesStores
     crosschannel_alerts_host: crosschannel.ovcdemo.com
-    sqs_or_sns_config: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
+    sqs_or_sns_config: comm.tlog.url=arn:aws:sns:us-east-1:748109554602:tp-tlogs
   tpqa:
     name: tpqa
     url: tpqa.ovcdemo.com
@@ -71,7 +71,7 @@ environments:
     ovc_customer: tp-all
     basesiteid: wickesStores
     crosschannel_alerts_host: crosschannel.ovcdemo.com
-    sqs_or_sns_config: https://sqs.us-east-1.amazonaws.com/748109554602/tpint
+    sqs_or_sns_config: comm.tlog.url=arn:aws:sns:us-east-1:748109554602:tp-tlogs
     store: 8971
   tpprod:
     name: tpprod
