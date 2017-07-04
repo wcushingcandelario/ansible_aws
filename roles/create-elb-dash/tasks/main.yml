@@ -24,13 +24,13 @@
       enabled: yes
       expiration: 300
     health_check:
-      ping_protocol: tcp # options are http, https, ssl, tcp
+      ping_protocol: https # options are http, https, ssl, tcp
       ping_port: 443
       ping_path: "/ovcdashboard/login" # not required for tcp or ssl
       response_timeout: 5 # seconds
       interval: 30 # seconds
       unhealthy_threshold: 2
-      healthy_threshold: 10
+      healthy_threshold: 6
 #      access_logs:
 #        interval: 5 # minutes (defaults to 60)
 #        s3_location: "sglogs" # This value is required if access_logs is set
